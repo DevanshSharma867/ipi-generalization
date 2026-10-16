@@ -1,0 +1,453 @@
+{
+  "deterministic": true,
+  "solver": "lbfgs",
+  "val_tuning": {
+    "grid_evaluated": [
+      {
+        "C": 1.0,
+        "best_threshold": 0.49999999999999994,
+        "val_f1_macro_default_thr0.5": 0.9201379260455975,
+        "val_f1_macro_tuned_thr": 0.9201379260455975,
+        "val_accuracy": 0.9201388888888888,
+        "val_precision": 0.9230769230769231,
+        "val_recall": 0.9166666666666666,
+        "val_roc_auc": 0.9758873456790124
+      },
+      {
+        "C": 10.0,
+        "best_threshold": 0.4599999999999999,
+        "val_f1_macro_default_thr0.5": 0.9374969857728479,
+        "val_f1_macro_tuned_thr": 0.9478858797273659,
+        "val_accuracy": 0.9479166666666666,
+        "val_precision": 0.9271523178807947,
+        "val_recall": 0.9722222222222222,
+        "val_roc_auc": 0.9847125771604939
+      },
+      {
+        "C": 100.0,
+        "best_threshold": 0.71,
+        "val_f1_macro_default_thr0.5": 0.9409145215596828,
+        "val_f1_macro_tuned_thr": 0.9513865444899927,
+        "val_accuracy": 0.9513888888888888,
+        "val_precision": 0.9452054794520548,
+        "val_recall": 0.9583333333333334,
+        "val_roc_auc": 0.9877025462962963
+      }
+    ],
+    "optimal_config": {
+      "C": 100.0,
+      "threshold": 0.71
+    }
+  },
+  "default_evaluation": {
+    "metrics": {
+      "threshold": 0.5,
+      "accuracy": 0.7743055555555556,
+      "f1_macro": 0.7713029136888401,
+      "f1_injected": 0.7450980392156863,
+      "precision": 0.8558558558558559,
+      "recall": 0.6597222222222222,
+      "roc_auc": 0.8692611882716049,
+      "recall_at_5pct_fpr": 0.6180555555555556,
+      "operating_threshold_at_5pct_fpr": 0.5043612210906835,
+      "recall_at_10pct_fpr": 0.6527777777777778,
+      "operating_threshold_at_10pct_fpr": 0.5009432585062505
+    },
+    "doc_cluster_bootstrap_95ci": {
+      "accuracy": [
+        0.7291666666666666,
+        0.8229166666666666
+      ],
+      "f1_macro": [
+        0.7225180505385753,
+        0.8215789700063086
+      ],
+      "f1_injected": [
+        0.6833281893004115,
+        0.8077205882352941
+      ],
+      "precision": [
+        0.7873924613589969,
+        0.9285894660894661
+      ],
+      "recall": [
+        0.5694444444444444,
+        0.7430555555555556
+      ],
+      "roc_auc": [
+        0.827484809027778,
+        0.9125687210648148
+      ],
+      "recall_at_5pct_fpr": [
+        0.4930555555555556,
+        0.7152777777777778
+      ],
+      "recall_at_10pct_fpr": [
+        0.5694444444444444,
+        0.7569444444444444
+      ]
+    }
+  },
+  "tuned_evaluation": {
+    "metrics": {
+      "threshold": 0.71,
+      "accuracy": 0.7534722222222222,
+      "f1_macro": 0.7418931370940257,
+      "f1_injected": 0.6872246696035242,
+      "precision": 0.9397590361445783,
+      "recall": 0.5416666666666666,
+      "roc_auc": 0.8756751543209877,
+      "recall_at_5pct_fpr": 0.5486111111111112,
+      "operating_threshold_at_5pct_fpr": 0.7057523364975886,
+      "recall_at_10pct_fpr": 0.7083333333333334,
+      "operating_threshold_at_10pct_fpr": 0.4321403774265505
+    },
+    "doc_cluster_bootstrap_95ci": {
+      "accuracy": [
+        0.7083333333333334,
+        0.7986111111111112
+      ],
+      "f1_macro": [
+        0.6883468278801991,
+        0.7912740289986601
+      ],
+      "f1_injected": [
+        0.6111111111111112,
+        0.7563249991354566
+      ],
+      "precision": [
+        0.8777777777777778,
+        0.9891390160183066
+      ],
+      "recall": [
+        0.4513888888888889,
+        0.6319444444444444
+      ],
+      "roc_auc": [
+        0.8389262635030864,
+        0.914162567515432
+      ],
+      "recall_at_5pct_fpr": [
+        0.4513888888888889,
+        0.7430555555555556
+      ],
+      "recall_at_10pct_fpr": [
+        0.5486111111111112,
+        0.7986111111111112
+      ]
+    }
+  },
+  "per_task_breakdown": {
+    "email": {
+      "metrics": {
+        "threshold": 0.5,
+        "accuracy": 0.7291666666666666,
+        "f1_macro": 0.7077283372365339,
+        "f1_injected": 0.6285714285714286,
+        "precision": 1.0,
+        "recall": 0.4583333333333333,
+        "roc_auc": 0.9357638888888888
+      },
+      "cluster_bootstrap_95ci": {
+        "accuracy": [
+          0.625,
+          0.8333333333333334
+        ],
+        "f1_macro": [
+          0.5636363636363637,
+          0.8285714285714285
+        ],
+        "f1_injected": [
+          0.4,
+          0.8
+        ],
+        "precision": [
+          1.0,
+          1.0
+        ],
+        "recall": [
+          0.25,
+          0.6666666666666666
+        ],
+        "roc_auc": [
+          0.8801649305555556,
+          0.9826388888888888
+        ],
+        "recall_at_5pct_fpr": [
+          0.5416666666666666,
+          0.9583333333333334
+        ],
+        "recall_at_10pct_fpr": [
+          0.625,
+          0.9583333333333334
+        ]
+      }
+    },
+    "table": {
+      "metrics": {
+        "threshold": 0.5,
+        "accuracy": 0.7388888888888889,
+        "f1_macro": 0.7337529504327301,
+        "f1_injected": 0.6967741935483871,
+        "precision": 0.8307692307692308,
+        "recall": 0.6,
+        "roc_auc": 0.8175308641975308
+      },
+      "cluster_bootstrap_95ci": {
+        "accuracy": [
+          0.6833333333333333,
+          0.7944444444444444
+        ],
+        "f1_macro": [
+          0.6760443307757886,
+          0.7904170423842515
+        ],
+        "f1_injected": [
+          0.6183714852198992,
+          0.766260312015029
+        ],
+        "precision": [
+          0.75,
+          0.9193868407578084
+        ],
+        "recall": [
+          0.5,
+          0.7
+        ],
+        "roc_auc": [
+          0.7641913580246914,
+          0.8709938271604938
+        ],
+        "recall_at_5pct_fpr": [
+          0.34444444444444444,
+          0.6444444444444445
+        ],
+        "recall_at_10pct_fpr": [
+          0.4666666666666667,
+          0.7002777777777774
+        ]
+      }
+    },
+    "code": {
+      "metrics": {
+        "threshold": 0.5,
+        "accuracy": 0.9166666666666666,
+        "f1_macro": 0.916083916083916,
+        "f1_injected": 0.9230769230769231,
+        "precision": 0.8571428571428571,
+        "recall": 1.0,
+        "roc_auc": 0.9966666666666667
+      },
+      "cluster_bootstrap_95ci": {
+        "accuracy": [
+          0.8166666666666667,
+          1.0
+        ],
+        "f1_macro": [
+          0.8102903133084219,
+          1.0
+        ],
+        "f1_injected": [
+          0.8450704225352113,
+          1.0
+        ],
+        "precision": [
+          0.7317073170731707,
+          1.0
+        ],
+        "recall": [
+          1.0,
+          1.0
+        ],
+        "roc_auc": [
+          0.9866666666666667,
+          1.0
+        ],
+        "recall_at_5pct_fpr": [
+          0.9,
+          1.0
+        ],
+        "recall_at_10pct_fpr": [
+          0.9333333333333333,
+          1.0
+        ]
+      }
+    }
+  },
+  "confusion_matrix": [
+    [
+      128,
+      16
+    ],
+    [
+      49,
+      95
+    ]
+  ],
+  "top_features": {
+    "top_injected_features": [
+      {
+        "feature": "response",
+        "coef": 2.284360453975981
+      },
+      {
+        "feature": "following code",
+        "coef": 1.820630628085448
+      },
+      {
+        "feature": "letter",
+        "coef": 1.6172432013529503
+      },
+      {
+        "feature": "answer",
+        "coef": 1.4365383166574794
+      },
+      {
+        "feature": "subsequent code",
+        "coef": 1.1807504377322315
+      },
+      {
+        "feature": "subsequent",
+        "coef": 1.1807504377322315
+      },
+      {
+        "feature": "block",
+        "coef": 1.1746072236319685
+      },
+      {
+        "feature": "code block",
+        "coef": 1.1746072236319685
+      },
+      {
+        "feature": "following",
+        "coef": 1.1613296805863378
+      },
+      {
+        "feature": "reply",
+        "coef": 1.1522710382927288
+      },
+      {
+        "feature": "url",
+        "coef": 1.1247978282735034
+      },
+      {
+        "feature": "code excerpt",
+        "coef": 1.0597963320277362
+      },
+      {
+        "feature": "excerpt",
+        "coef": 1.0597963320277362
+      },
+      {
+        "feature": "code snippet",
+        "coef": 0.9393113599335906
+      },
+      {
+        "feature": "snippet",
+        "coef": 0.9393113599335906
+      },
+      {
+        "feature": "word",
+        "coef": 0.9363657168388451
+      },
+      {
+        "feature": "modify",
+        "coef": 0.827725198756865
+      },
+      {
+        "feature": "following code excerpt",
+        "coef": 0.8095128958127161
+      },
+      {
+        "feature": "user",
+        "coef": 0.8074482794825467
+      },
+      {
+        "feature": "integrate",
+        "coef": 0.7847935257871276
+      }
+    ],
+    "top_clean_features": [
+      {
+        "feature": "paid context subject",
+        "coef": -0.8484178218393702
+      },
+      {
+        "feature": "context subject",
+        "coef": -0.8484178218393702
+      },
+      {
+        "feature": "dataset",
+        "coef": -0.5595482302173033
+      },
+      {
+        "feature": "refer appendix",
+        "coef": -0.5498188909990013
+      },
+      {
+        "feature": "refer appendix additional",
+        "coef": -0.5498188909990013
+      },
+      {
+        "feature": "additional detail",
+        "coef": -0.5498188909990013
+      },
+      {
+        "feature": "appendix additional detail",
+        "coef": -0.5498188909990013
+      },
+      {
+        "feature": "appendix additional",
+        "coef": -0.5498188909990013
+      },
+      {
+        "feature": "appendix",
+        "coef": -0.5498188909990013
+      },
+      {
+        "feature": "refer",
+        "coef": -0.5392356547430947
+      },
+      {
+        "feature": "perform code qa",
+        "coef": -0.5170235322698655
+      },
+      {
+        "feature": "perform",
+        "coef": -0.5170235322698655
+      },
+      {
+        "feature": "perform code",
+        "coef": -0.5170235322698655
+      },
+      {
+        "feature": "code qa",
+        "coef": -0.5170235322698655
+      },
+      {
+        "feature": "code qa context",
+        "coef": -0.5170235322698655
+      },
+      {
+        "feature": "qa",
+        "coef": -0.5170235322698655
+      },
+      {
+        "feature": "qa context",
+        "coef": -0.5170235322698655
+      },
+      {
+        "feature": "intent perform",
+        "coef": -0.5170235322698655
+      },
+      {
+        "feature": "intent perform code",
+        "coef": -0.5170235322698655
+      },
+      {
+        "feature": "context hi",
+        "coef": -0.508165019717223
+      }
+    ]
+  }
+}
