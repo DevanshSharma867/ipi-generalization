@@ -1,0 +1,1 @@
+Q: Find the $ value paid by Josh? If multiple, record all $ values paid.

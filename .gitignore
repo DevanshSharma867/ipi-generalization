@@ -1,0 +1,21 @@
+# Environments and caches
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+hf_cache/
+nltk_data/
+graphify-out/
+
+# External data (clone BIPIA into data/raw/BIPIA)
+data/raw/
+
+# Large model checkpoints and logs
+checkpoints/deberta*/
+logs/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.synctex.gz

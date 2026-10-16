@@ -1,0 +1,33 @@
+{
+  "majority_class": {
+    "macro_f1": 0.3333333333333333,
+    "accuracy": 0.5
+  },
+  "length_only": {
+    "threshold": 0.5,
+    "accuracy": 0.5277777777777778,
+    "f1_macro": 0.5250060635459617,
+    "f1_injected": 0.48872180451127817,
+    "precision": 0.5327868852459017,
+    "recall": 0.4513888888888889,
+    "roc_auc": 0.5482735339506173
+  },
+  "context_only": {
+    "threshold": 0.5,
+    "accuracy": 0.7256944444444444,
+    "f1_macro": 0.7247353457141128,
+    "f1_injected": 0.7084870848708487,
+    "precision": 0.7559055118110236,
+    "recall": 0.6666666666666666,
+    "roc_auc": 0.7825038580246914
+  },
+  "intent_only": {
+    "threshold": 0.5,
+    "accuracy": 0.5,
+    "f1_macro": 0.3333333333333333,
+    "f1_injected": 0.6666666666666666,
+    "precision": 0.5,
+    "recall": 1.0,
+    "roc_auc": 0.5
+  }
+}
