@@ -1,7 +1,6 @@
 #!/bin/bash
 # ==============================================================================
 # SLURM BATCH SUBMISSION SCRIPT: DeBERTa-v3 Multi-Seed & LOTO Training
-# CS F429 NLP Course Project (Phase 2)
 # ==============================================================================
 #
 # INSTRUCTIONS FOR RUNNING ON CLUSTER:
@@ -15,7 +14,7 @@
 #      tail -f logs/slurm_deberta_%j.log
 # ==============================================================================
 
-#SBATCH --job-name=deberta_ipi_v3
+#SBATCH --job-name=deberta_ipi
 #SBATCH --output=logs/slurm_deberta_%j.log
 #SBATCH --error=logs/slurm_deberta_%j.err
 #SBATCH --time=12:00:00

@@ -1,8 +1,8 @@
 """
 demo.py
 =======
-Phase 2 CLI Demo Interface
-===================================================
+Command-line interface for the IPI detection benchmark.
+
 Features:
   1. Dataset statistics (from data/processed)
   2. Classical Baseline evaluation (TF-IDF + LR)
@@ -44,9 +44,9 @@ DEFAULT_CHECKPOINT_DIR = "checkpoints"
 def banner():
     msg = """
 ╔══════════════════════════════════════════════════════════════╗
-║   CS F429 NLP — Phase 2 Demo                                 ║
+║   IPI Detection — Benchmark CLI                              ║
 ║   Indirect Prompt Injection Detection on BIPIA               ║
-║   TF-IDF + Logistic Regression  vs  DeBERTa-v3-base           ║
+║   TF-IDF + Logistic Regression  vs  DeBERTa-v3-base          ║
 ╚══════════════════════════════════════════════════════════════╝
 """
     print(msg)
@@ -59,13 +59,13 @@ def section(title: str):
 
 
 def show_stats(data_dir: str = DEFAULT_DATA_DIR):
-    """Mode: stats — Show dataset statistics from V2 data without calling V1 pipeline."""
-    section("DATASET STATISTICS (V2 PROCESSED)")
+    """Mode: stats — Show dataset statistics."""
+    section("DATASET STATISTICS")
 
     full_path = os.path.join(data_dir, "dataset.csv")
     if not os.path.exists(full_path):
         print(f"[!] Dataset not found at {full_path}")
-        print("    Rebuilding with V2 pipeline: python src/data_pipeline.py")
+        print("    Rebuilding dataset: python src/data_pipeline.py")
         ret = os.system("python3 src/data_pipeline.py")
         if ret != 0:
             print("Failed to run data_pipeline.py")
@@ -210,7 +210,7 @@ def show_comparison(results_dir: str = DEFAULT_RESULTS_DIR, checkpoint_dir: str 
 
 def show_error_analysis(results_dir: str = DEFAULT_RESULTS_DIR):
     """Mode: errors — Read real predictions and errors from results."""
-    section("ERROR ANALYSIS (RESULTS/V2 PREDICTIONS)")
+    section("ERROR ANALYSIS")
 
     pred_path = os.path.join(results_dir, "test_predictions.csv")
     examples_path = os.path.join(results_dir, "error_examples_20fp_20fn.json")
@@ -353,7 +353,7 @@ def show_preset_samples(data_dir: str = DEFAULT_DATA_DIR, checkpoint_dir: str = 
 
 
 def run_interactive_menu(args):
-    """Interactive CLI menu for Part 2 evaluation & viva voce."""
+    """Interactive CLI menu."""
     while True:
         banner()
         print("  [1] Dataset Statistics & Splitting Verification")
@@ -382,7 +382,7 @@ def run_interactive_menu(args):
         elif choice == "7":
             train_tfidf(args.data_dir, args.results_dir)
         elif choice in ("0", "q", "exit"):
-            print("\nExiting demo. Good luck with the viva!\n")
+            print("\nExiting.\n")
             break
         else:
             print("\nInvalid choice. Please select 0 to 7.")
@@ -390,7 +390,7 @@ def run_interactive_menu(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="CS F429 NLP Phase 2 Demo")
+    parser = argparse.ArgumentParser(description="IPI detection benchmark CLI")
     parser.add_argument(
         "--mode",
         choices=["menu", "stats", "train", "compare", "tasks", "samples", "errors", "predict", "full"],
