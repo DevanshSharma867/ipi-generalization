@@ -287,9 +287,9 @@ def build_dataset(
     df_val = df_all[df_all["split"] == "val"].reset_index(drop=True)
     df_test = df_all[df_all["split"] == "test"].reset_index(drop=True)
 
-    # 4. Strict Auditing Assertions
+    # 4. Strict sanity assertions
     print("\n" + "=" * 60)
-    print("RUNNING V2 DATASET SANITY CHECKS & ASSERTIONS")
+    print("RUNNING DATASET SANITY CHECKS & ASSERTIONS")
     print("=" * 60)
 
     # Assert 0 doc_id overlap
@@ -330,7 +330,7 @@ def build_dataset(
 
 def print_stats(df_all: pd.DataFrame):
     print("\n" + "=" * 60)
-    print("V2 DATASET DETAILED STATISTICS")
+    print("DATASET DETAILED STATISTICS")
     print("=" * 60)
     print(f"Total samples: {len(df_all):,}")
     print(f"Total unique documents: {df_all['doc_id'].nunique():,}")
@@ -356,7 +356,7 @@ def print_stats(df_all: pd.DataFrame):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="BIPIA Data Pipeline V2")
+    parser = argparse.ArgumentParser(description="BIPIA Data Pipeline")
     parser.add_argument("--bipia_dir", default="data/raw/BIPIA")
     parser.add_argument("--benign_json", default="data/benign/benign_instructions.json")
     parser.add_argument("--output_dir", default="data/processed")
@@ -365,7 +365,7 @@ def main():
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
-    print("CS F429 NLP — Building Binary Dataset V2 (Leakage-Free, Held-Out Attacks)")
+    print("Building binary IPI dataset (leakage-free, held-out attacks)")
     df_all, df_train, df_val, df_test = build_dataset(
         bipia_dir=args.bipia_dir,
         benign_json=args.benign_json,

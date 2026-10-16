@@ -1,8 +1,8 @@
 """
 run_experiments.py
-======================
+==================
 Comprehensive evaluation script for the leakage-free dataset:
-- Deterministic TF-IDF + LR (removed multi-seed language)
+- Deterministic TF-IDF + LR
 - Hyperparameter tuning on VAL only: C in {1, 10, 100} and decision threshold
 - Test evaluation at default (C=1, thr=0.5) and tuned settings
 - Recall at 5% and 10% FPR on test set
@@ -181,7 +181,7 @@ def doc_cluster_bootstrap(df: pd.DataFrame, y_prob: np.ndarray, threshold: float
 
 def main():
     print("=" * 60)
-    print("RUNNING V2 BENCHMARKS (DETERMINISTIC, TUNED ON VAL, DOC BOOTSTRAP)")
+    print("RUNNING BENCHMARKS (DETERMINISTIC, TUNED ON VAL, DOC BOOTSTRAP)")
     print("=" * 60)
 
     train_df = pd.read_csv(os.path.join(DATA_DIR, "train.csv"))

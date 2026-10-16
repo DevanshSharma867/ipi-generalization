@@ -8,7 +8,7 @@ DeBERTa-v3-base uses:
   - Enhanced mask decoder
   - ELECTRA-style pre-training on DeBERTa-v3
 
-Patched for V3:
+Training setup:
   - --data_dir default data/processed
   - --seed arg (import-time set_seed removed)
   - Dynamic padding (DataCollatorWithPadding) instead of fixed padding="max_length"
@@ -473,7 +473,7 @@ def predict_single(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="DeBERTa Fine-tuning for IPI Detection (V3)")
+    parser = argparse.ArgumentParser(description="DeBERTa Fine-tuning for IPI Detection")
     parser.add_argument("--mode", choices=["train", "eval", "predict"], default="train")
     parser.add_argument("--model_name", default="microsoft/deberta-v3-base",
                         help="HuggingFace model name")

@@ -9,10 +9,6 @@ Produces:
   3. Quantitative error analysis (per task_type, per attack_type)
   4. Qualitative error examples (False Positives + False Negatives)
   5. Cross-task generalization preliminary table
-
-This module satisfies the Phase 2 rubric item:
-  "Model Baseline and Results (3): Are model details and hyperparameters provided?
-   Are preliminary results on the dataset provided? Is error analysis done?"
 """
 
 import os
@@ -128,7 +124,7 @@ def error_analysis_by_group(
     """
     Compute per-group accuracy and error rates.
     
-    For the Phase 2 report, this shows:
+    Shows:
     - Whether errors cluster in specific task types (EmailQA vs TableQA vs CodeQA)
     - Whether certain attack types are harder to detect
     """

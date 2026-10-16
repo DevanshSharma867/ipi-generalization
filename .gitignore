@@ -13,9 +13,3 @@ data/raw/
 # Large model checkpoints and logs
 checkpoints/deberta*/
 logs/
-
-# LaTeX build artifacts
-*.aux
-*.log
-*.out
-*.synctex.gz
