@@ -6,8 +6,8 @@ This repository builds a leakage-free binary detection benchmark from [BIPIA](ht
 
 ## Key findings
 
-- **In-distribution is not the hard part.** TF-IDF + logistic regression reaches 0.77 macro-F1 / 0.87 ROC-AUC on a test set whose attacks were never seen in training.
-- **Cross-task shift breaks it.** Holding out an entire task drops macro-F1 to 0.41 on CodeQA and 0.42 on EmailQA; on held-out code the model flags most clean samples as injected.
+- **In-distribution is not the hard part.** TF-IDF + logistic regression reaches 0.77 macro-F1 / 0.87 ROC-AUC on a test set whose attacks were never seen in training; fine-tuned DeBERTa-v3 reaches 0.95 / 0.98.
+- **Cross-task shift breaks it.** Holding out an entire task drops TF-IDF macro-F1 to 0.41 on CodeQA and 0.42 on EmailQA. DeBERTa recovers on those folds but collapses on held-out TableQA (0.57 macro-F1, 0.62 ROC-AUC).
 - **Validation tuning does not transfer.** Tuning `C` and the decision threshold on validation (whose attacks come from the training pool) *lowers* test macro-F1 from 0.771 to 0.742.
 - **The signal is in the context, not the query.** A query-only model scores at chance (0.33); a context-only model recovers most of the performance (0.72).
 
@@ -41,17 +41,19 @@ Tasks: EmailQA, TableQA, CodeQA. Each document yields two clean and two injected
 |---|---:|---:|---:|---:|---:|---:|
 | TF-IDF + LR (C=1) | 0.50 | 0.774 | **0.771** | 0.856 | 0.660 | 0.869 |
 | TF-IDF + LR (val-tuned, C=100) | 0.71 | 0.754 | 0.742 | 0.940 | 0.542 | **0.876** |
-| DeBERTa-v3-base | — | — | — | — | — | — |
+| DeBERTa-v3-base (3 seeds) | 0.50 | 0.949 | **0.949 ± 0.011** | 0.950 | 0.949 | **0.975 ± 0.010** |
 
-95% confidence intervals use a document-level cluster bootstrap (1,000 resamples). DeBERTa fine-tuning is implemented (`src/models/deberta.py`) but results are not yet available.
+DeBERTa rows are mean ± SD over seeds 42/123/999 (precision and recall are seed means); seed 42 macro-F1 is 0.951 [0.927, 0.976]. 95% confidence intervals use a document-level cluster bootstrap (1,000 resamples). Validation macro-F1 saturates at 1.000 for every DeBERTa seed, so checkpoint selection on validation carries no signal.
 
 ### Leave-one-task-out
 
-| Held-out task | Macro-F1 | Recall | ROC-AUC |
-|---|---:|---:|---:|
-| EmailQA | 0.420 | 1.000 | 0.740 |
-| TableQA | 0.681 | 0.589 | 0.798 |
-| CodeQA | 0.411 | 0.833 | 0.531 |
+| Held-out task | n | TF-IDF macro-F1 | TF-IDF ROC-AUC | DeBERTa macro-F1 [95% CI] | DeBERTa ROC-AUC [95% CI] |
+|---|---:|---:|---:|---:|---:|
+| EmailQA | 48 | 0.420 | 0.740 | 0.831 [0.739, 0.917] | 0.977 [0.951, 1.000] |
+| TableQA | 180 | 0.681 | 0.798 | 0.571 [0.524, 0.617] | 0.615 [0.589, 0.656] |
+| CodeQA | 60 | 0.411 | 0.531 | 0.744 [0.657, 0.816] | 0.866 [0.789, 0.944] |
+
+DeBERTa LOTO folds are single-seed (42). In-distribution DeBERTa scores 0.933 on TableQA, but holding TableQA out drops it to near chance (ROC-AUC 0.615), so its in-distribution accuracy does not come from task-general features.
 
 Holding out CodeQA is a compound shift: new document type *and* a code-specific attack pool never seen in training.
 
@@ -119,7 +121,7 @@ sbatch submit_train.sh            # multi-seed + LOTO on a Slurm cluster
 
 ## Roadmap
 
-- DeBERTa-v3 fine-tuning results (multi-seed and leave-one-task-out)
+- Multi-seed DeBERTa leave-one-task-out runs
 - Detectors that model query/context divergence explicitly
 - Evaluation on additional IPI benchmarks
 

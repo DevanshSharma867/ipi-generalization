@@ -6,7 +6,7 @@
 # INSTRUCTIONS FOR RUNNING ON CLUSTER:
 # 1. On the login node (with active internet access), pre-download weights:
 #      python3 -c "from transformers import AutoTokenizer, AutoModelForSequenceClassification; AutoTokenizer.from_pretrained('microsoft/deberta-v3-base'); AutoModelForSequenceClassification.from_pretrained('microsoft/deberta-v3-base', num_labels=2)"
-# 2. Fill in the TODO lines below (partition, account, GPU specification, venv).
+# 2. Create the venv in the repo root (.venv) with a CUDA 12.8 torch build (Blackwell GPUs).
 # 3. Submit the job using:
 #      sbatch submit_train.sh
 # 4. Monitor execution using:
@@ -20,20 +20,21 @@
 #SBATCH --time=12:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
 
 # ------------------------------------------------------------------------------
 # CLUSTER CONFIGURATION (FILL IN YOUR SITE-SPECIFIC SETTINGS)
 # ------------------------------------------------------------------------------
-# TODO: Specify your cluster partition (e.g., gpu, general, batch)
-#SBATCH --partition=TODO_PARTITION
+# BITS Hyderabad Sharanga: student accounts may only use this partition
+#SBATCH --partition=gpu_rtx_pro_6000_6_csis_hyd
 
-# TODO: Specify your project allocation / account name
-#SBATCH --account=TODO_ACCOUNT
+# Student QoS caps each job at cpu=4, mem=80G, mps=50 (half a card), gpu=0
+#SBATCH --account=bits
+#SBATCH --qos=gpu_csis_course
 
-# TODO: Specify GPU resource request (e.g., --gres=gpu:1 or --gres=gpu:a100:1 or --gres=gpu:v100:1)
-#SBATCH --gres=gpu:1
+# Half an RTX Pro 6000 via MPS (100 MPS units per card); --gres=gpu:N is denied
+#SBATCH --gres=mps:50
 
 # ------------------------------------------------------------------------------
 # ENVIRONMENT SETUP

@@ -276,6 +276,7 @@ def train(
     model = AutoModelForSequenceClassification.from_pretrained(
         model_path,
         num_labels=2,
+        dtype=torch.float32,  # checkpoint is stored in fp16; pure-fp16 training diverges to NaN
         hidden_dropout_prob=0.1,
         attention_probs_dropout_prob=0.1,
     )
@@ -382,7 +383,7 @@ def train(
     # Evaluate best model on test set
     if verbose:
         print(f"\nLoading best checkpoint from {output_dir} for test evaluation...")
-    best_model = AutoModelForSequenceClassification.from_pretrained(output_dir).to(device)
+    best_model = AutoModelForSequenceClassification.from_pretrained(output_dir, dtype=torch.float32).to(device)
     test_metrics, test_preds, test_probs, _ = evaluate_model(
         best_model, test_loader, device, prefix="test", verbose=verbose
     )
@@ -409,7 +410,7 @@ def evaluate_from_checkpoint(
         print(f"\nLoading DeBERTa checkpoint from: {checkpoint_dir}")
 
     tokenizer = AutoTokenizer.from_pretrained(checkpoint_dir)
-    model = AutoModelForSequenceClassification.from_pretrained(checkpoint_dir)
+    model = AutoModelForSequenceClassification.from_pretrained(checkpoint_dir, dtype=torch.float32)
     model = model.to(device)
 
     train_df, val_df, test_df = get_deberta_data(data_dir)
@@ -438,7 +439,7 @@ def predict_single(
     """Predict on a single text sample."""
     device = get_device()
     tokenizer = AutoTokenizer.from_pretrained(checkpoint_dir)
-    model = AutoModelForSequenceClassification.from_pretrained(checkpoint_dir)
+    model = AutoModelForSequenceClassification.from_pretrained(checkpoint_dir, dtype=torch.float32)
     model = model.to(device)
     model.eval()
 
