@@ -66,88 +66,40 @@ export PYTHONUNBUFFERED=1
 python -c "import torch; print(f'PyTorch {torch.__version__} | CUDA Available: {torch.cuda.is_available()} | Device Count: {torch.cuda.device_count()}')"
 
 # ------------------------------------------------------------------------------
-# 1. MULTI-SEED STANDARD EVALUATION (Seeds 42, 123, 999)
+# TRAINING RUNS
 # ------------------------------------------------------------------------------
-echo ""
-echo ">>> [1/6] Running DeBERTa Seed 42 Standard Training..."
-python src/models/deberta.py \
-    --mode train \
-    --data_dir data/processed \
-    --output_dir checkpoints/deberta_s42 \
-    --seed 42 \
-    --batch_size 8 \
-    --grad_accum_steps 2 \
-    --epochs 3 \
-    --lr 2e-5
+# Each run is skipped if its results JSON already exists, so resubmitting the
+# script only fills in missing runs.
+SEEDS="42 123 999"
+TRAIN_ARGS="--mode train --data_dir data/processed --batch_size 8 --grad_accum_steps 2 --epochs 3 --lr 2e-5"
 
-echo ""
-echo ">>> [2/6] Running DeBERTa Seed 123 Standard Training..."
-python src/models/deberta.py \
-    --mode train \
-    --data_dir data/processed \
-    --output_dir checkpoints/deberta_s123 \
-    --seed 123 \
-    --batch_size 8 \
-    --grad_accum_steps 2 \
-    --epochs 3 \
-    --lr 2e-5
+run() {  # run <results_json> <args...>
+    local out_json=$1; shift
+    if [ -f "$out_json" ]; then
+        echo ">>> Skipping (exists): $out_json"
+        return
+    fi
+    echo ""
+    echo ">>> Running: $out_json"
+    python src/models/deberta.py $TRAIN_ARGS --output "$out_json" "$@"
+}
 
-echo ""
-echo ">>> [3/6] Running DeBERTa Seed 999 Standard Training..."
-python src/models/deberta.py \
-    --mode train \
-    --data_dir data/processed \
-    --output_dir checkpoints/deberta_s999 \
-    --seed 999 \
-    --batch_size 8 \
-    --grad_accum_steps 2 \
-    --epochs 3 \
-    --lr 2e-5
+# 1. Multi-seed standard evaluation
+for seed in $SEEDS; do
+    run "results/deberta_seed${seed}_results.json" \
+        --seed "$seed" --output_dir "checkpoints/deberta_s${seed}"
+done
 
-# ------------------------------------------------------------------------------
-# 2. LEAVE-ONE-TASK-OUT (LOTO) CROSS-VALIDATION (All 3 Folds)
-# ------------------------------------------------------------------------------
-echo ""
-echo ">>> [4/6] Running LOTO Fold: Held-out EmailQA (Train on Table + Code)..."
-python src/models/deberta.py \
-    --mode train \
-    --data_dir data/processed \
-    --test_task email \
-    --train_tasks table code \
-    --output_dir checkpoints/deberta_loto_email \
-    --seed 42 \
-    --batch_size 8 \
-    --grad_accum_steps 2 \
-    --epochs 3 \
-    --lr 2e-5
-
-echo ""
-echo ">>> [5/6] Running LOTO Fold: Held-out TableQA (Train on Email + Code)..."
-python src/models/deberta.py \
-    --mode train \
-    --data_dir data/processed \
-    --test_task table \
-    --train_tasks email code \
-    --output_dir checkpoints/deberta_loto_table \
-    --seed 42 \
-    --batch_size 8 \
-    --grad_accum_steps 2 \
-    --epochs 3 \
-    --lr 2e-5
-
-echo ""
-echo ">>> [6/6] Running LOTO Fold: Held-out CodeQA (Train on Email + Table)..."
-python src/models/deberta.py \
-    --mode train \
-    --data_dir data/processed \
-    --test_task code \
-    --train_tasks email table \
-    --output_dir checkpoints/deberta_loto_code \
-    --seed 42 \
-    --batch_size 8 \
-    --grad_accum_steps 2 \
-    --epochs 3 \
-    --lr 2e-5
+# 2. Leave-one-task-out, every fold x every seed
+# Seed 42 keeps the unsuffixed names used by earlier results.
+for task in email table code; do
+    for seed in $SEEDS; do
+        suffix=$([ "$seed" = 42 ] && echo "" || echo "_s${seed}")
+        run "results/deberta_loto_${task}${suffix}_results.json" \
+            --seed "$seed" --test_task "$task" \
+            --output_dir "checkpoints/deberta_loto_${task}${suffix}"
+    done
+done
 
 echo ""
 echo "=============================================================================="
