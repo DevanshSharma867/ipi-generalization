@@ -250,6 +250,7 @@ def train(
     seed: int = 42,
     train_tasks: Optional[List[str]] = None,
     test_task: Optional[str] = None,
+    train_subsample: Optional[int] = None,
     verbose: bool = True,
 ) -> Tuple[Any, Any, Dict[str, float]]:
     """Fine-tune DeBERTa for IPI binary classification with dynamic padding and grad accumulation."""
@@ -297,6 +298,15 @@ def train(
         train_df = train_df[train_df["task_type"].isin(train_tasks)].reset_index(drop=True)
         val_df = val_df[val_df["task_type"].isin(train_tasks)].reset_index(drop=True)
         test_df = test_df[test_df["task_type"] == test_task].reset_index(drop=True)
+
+    # Size-matched control: keep ~train_subsample rows by sampling whole documents per task,
+    # so the task mix and the 2 clean / 2 injected rows per document are preserved
+    if train_subsample:
+        docs = train_df.drop_duplicates("doc_id")[["doc_id", "task_type"]]
+        kept = docs.groupby("task_type").sample(frac=train_subsample / len(train_df), random_state=seed)
+        train_df = train_df[train_df["doc_id"].isin(kept["doc_id"])].reset_index(drop=True)
+        if verbose:
+            print(f"Subsampled train to {len(train_df):,} rows: {train_df['task_type'].value_counts().to_dict()}")
 
     if verbose:
         print(f"  Train: {len(train_df):,} | Val: {len(val_df):,} | Test: {len(test_df):,}")
@@ -492,6 +502,8 @@ def main():
     parser.add_argument("--quick", action="store_true", help="Quick mode for testing")
     parser.add_argument("--train_tasks", nargs="+", default=None, help="Tasks to train on for LOTO")
     parser.add_argument("--test_task", type=str, default=None, help="Held-out task for LOTO")
+    parser.add_argument("--train_subsample", type=int, default=None,
+                        help="Train on ~N rows (whole documents, task mix preserved); size-matched control")
     parser.add_argument("--text", type=str, default="", help="Text for --mode predict")
     parser.add_argument("--intent", type=str, default="", help="User intent for --mode predict")
     parser.add_argument("--output", default=None, help="Path to save summary JSON")
@@ -527,6 +539,7 @@ def main():
             seed=args.seed,
             train_tasks=args.train_tasks,
             test_task=args.test_task,
+            train_subsample=args.train_subsample,
         )
 
         out_json = args.output or os.path.join("results", f"deberta_seed{args.seed}_results.json" if not args.test_task else f"deberta_loto_{args.test_task}_results.json")
