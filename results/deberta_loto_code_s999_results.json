@@ -1,0 +1,14 @@
+{
+  "val_accuracy": 1.0,
+  "val_f1_macro": 1.0,
+  "val_f1_injected": 1.0,
+  "val_precision": 1.0,
+  "val_recall": 1.0,
+  "val_roc_auc": 1.0,
+  "test_accuracy": 0.65,
+  "test_f1_macro": 0.6327601282424948,
+  "test_f1_injected": 0.5531914893617021,
+  "test_precision": 0.7647058823529411,
+  "test_recall": 0.43333333333333335,
+  "test_roc_auc": 0.8033333333333333
+}
