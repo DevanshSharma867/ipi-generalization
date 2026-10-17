@@ -7,7 +7,7 @@ This repository builds a leakage-free binary detection benchmark from [BIPIA](ht
 ## Key findings
 
 - **In-distribution is not the hard part.** TF-IDF + logistic regression reaches 0.77 macro-F1 / 0.87 ROC-AUC on a test set whose attacks were never seen in training; fine-tuned DeBERTa-v3 reaches 0.95 / 0.98.
-- **Cross-task shift breaks it.** Holding out an entire task drops TF-IDF macro-F1 to 0.41 on CodeQA and 0.42 on EmailQA. DeBERTa recovers on those folds but collapses on held-out TableQA (0.57 macro-F1, 0.67 ROC-AUC over 3 seeds).
+- **Cross-task shift breaks it.** Holding out an entire task drops TF-IDF macro-F1 to 0.41 on CodeQA and 0.42 on EmailQA. DeBERTa recovers on those folds but drops on held-out TableQA (0.57 macro-F1, 0.67 ROC-AUC over 3 seeds), a fold that also removes 63% of training data.
 - **Validation tuning does not transfer.** Tuning `C` and the decision threshold on validation (whose attacks come from the training pool) *lowers* test macro-F1 from 0.771 to 0.742.
 - **The signal is in the context, not the query.** A query-only model scores at chance (0.33); a context-only model recovers most of the performance (0.72).
 
@@ -53,7 +53,7 @@ DeBERTa rows are mean ± SD over seeds 42/123/999 (precision and recall are seed
 | TableQA | 180 | 0.681 | 0.798 | 0.566 ± 0.071 | 0.670 ± 0.050 |
 | CodeQA | 60 | 0.411 | 0.531 | 0.718 ± 0.075 | 0.834 ± 0.031 |
 
-DeBERTa LOTO values are mean ± SD over seeds 42/123/999. In-distribution DeBERTa scores 0.933 on TableQA, but holding TableQA out drops it to 0.566 macro-F1 (ROC-AUC 0.670), below TF-IDF, so its in-distribution accuracy does not come from task-general features.
+DeBERTa LOTO values are mean ± SD over seeds 42/123/999. In-distribution DeBERTa scores 0.933 on TableQA, but holding TableQA out drops it to 0.566 macro-F1 (ROC-AUC 0.670), below TF-IDF. This fold is confounded: TableQA is 63% of training rows (840/1,336) and roughly 80% of text-attack examples, so holding it out also shrinks training to 496 rows. A size-matched control is needed before attributing the drop to task shift.
 
 Holding out CodeQA is a compound shift: new document type *and* a code-specific attack pool never seen in training.
 
