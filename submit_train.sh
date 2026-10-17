@@ -101,6 +101,14 @@ for task in email table code; do
     done
 done
 
+# 3. Size-matched control for the TableQA LOTO fold: train on 496 rows (the size
+# of the email+code LOTO training set) drawn from all three tasks, test on the
+# full test set. Compare its TableQA score with the held-out-TableQA fold.
+for seed in $SEEDS; do
+    run "results/deberta_sub496_s${seed}_results.json" \
+        --seed "$seed" --train_subsample 496 --output_dir "checkpoints/deberta_sub496_s${seed}"
+done
+
 echo ""
 echo "=============================================================================="
 echo "All DeBERTa multi-seed and LOTO training runs complete at $(date)"

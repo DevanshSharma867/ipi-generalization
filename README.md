@@ -7,7 +7,7 @@ This repository builds a leakage-free binary detection benchmark from [BIPIA](ht
 ## Key findings
 
 - **In-distribution is not the hard part.** TF-IDF + logistic regression reaches 0.77 macro-F1 / 0.87 ROC-AUC on a test set whose attacks were never seen in training; fine-tuned DeBERTa-v3 reaches 0.95 / 0.98.
-- **Cross-task shift breaks it.** Holding out an entire task drops TF-IDF macro-F1 to 0.41 on CodeQA and 0.42 on EmailQA. DeBERTa recovers on those folds but drops on held-out TableQA (0.57 macro-F1, 0.67 ROC-AUC over 3 seeds), a fold that also removes 63% of training data.
+- **Cross-task shift breaks it.** Holding out an entire task drops TF-IDF macro-F1 to 0.41 on CodeQA and 0.42 on EmailQA. DeBERTa recovers on those folds but drops on held-out TableQA (0.57 macro-F1, 0.67 ROC-AUC over 3 seeds), which a size-matched control attributes mostly to task shift.
 - **Validation tuning does not transfer.** Tuning `C` and the decision threshold on validation (whose attacks come from the training pool) *lowers* test macro-F1 from 0.771 to 0.742.
 - **The signal is in the context, not the query.** A query-only model scores at chance (0.33); a context-only model recovers most of the performance (0.72).
 
@@ -53,7 +53,7 @@ DeBERTa rows are mean ± SD over seeds 42/123/999 (precision and recall are seed
 | TableQA | 180 | 0.681 | 0.798 | 0.566 ± 0.071 | 0.670 ± 0.050 |
 | CodeQA | 60 | 0.411 | 0.531 | 0.718 ± 0.075 | 0.834 ± 0.031 |
 
-DeBERTa LOTO values are mean ± SD over seeds 42/123/999. In-distribution DeBERTa scores 0.933 on TableQA, but holding TableQA out drops it to 0.566 macro-F1 (ROC-AUC 0.670), below TF-IDF. This fold is confounded: TableQA is 63% of training rows (840/1,336) and roughly 80% of text-attack examples, so holding it out also shrinks training to 496 rows. A size-matched control is needed before attributing the drop to task shift.
+DeBERTa LOTO values are mean ± SD over seeds 42/123/999. In-distribution DeBERTa scores 0.933 on TableQA, but holding TableQA out drops it to 0.566 macro-F1 (ROC-AUC 0.670), below TF-IDF. Holding TableQA out also shrinks training from 1,336 to 496 rows. A size-matched control (496 rows sampled by document from all three tasks, 3 seeds) scores 0.831 ± 0.050 macro-F1 / 0.925 ± 0.026 ROC-AUC on TableQA, so about 0.10 of the drop comes from data size and about 0.27 from task shift. The control matches size, not the number of text-attack examples (about 196 vs 108).
 
 Holding out CodeQA is a compound shift: new document type *and* a code-specific attack pool never seen in training.
 
@@ -67,17 +67,23 @@ Holding out CodeQA is a compound shift: new document type *and* a code-specific 
 | Context only | 0.725 |
 | Query + context | 0.771 |
 
-### Query-counterfactual pairs (pilot, unvalidated labels)
+### Out-of-distribution transfer (ROC-AUC)
 
-`data/pairs/pair_specs_v0.json` holds 50 draft pairs on test-split documents (12 email, 13 table). Each pair keeps the document and an inserted instruction fixed and changes only the user query: the aligned query makes following the instruction legitimate (label 0), the subverting query does not (label 1). Pair accuracy counts a pair correct when the subverting row scores higher; any query-blind detector scores 0.5. Labels were written by one author and are not yet human-validated.
+All detectors are scored zero-shot with `score_detectors.py`; ours are trained only on BIPIA train.
 
-| Model | Pair accuracy | Mean score (aligned / subverting) |
-|---|---:|---:|
-| TF-IDF + LR | 0.56 | 0.480 / 0.480 |
-| DeBERTa-v3 (seeds 42 / 123 / 999) | 0.48 / 0.28 / 0.28 | ≈0.004 / ≈0.004 |
-| Qwen2.5-7B-Instruct judge, P(Yes) | 0.24 | 0.438 / 0.226 |
+| Detector | BIPIA test | InjecAgent | deepset | Pairs (pair acc.) |
+|---|---:|---:|---:|---:|
+| TF-IDF + LR | 0.869 | 0.502 | 0.565 | 0.560 |
+| DeBERTa-v3, ours (3 seeds) | 0.975 ± 0.010 | 0.606 ± 0.062 | 0.587 ± 0.144 | 0.347 ± 0.115 |
+| ProtectAI deberta-v3-base-prompt-injection-v2 | 0.388 | 0.628 | 0.901 | 0.500 |
+| PIGuard | 0.889 | 0.592 | 0.960 | 0.500 |
+| Qwen2.5-7B-Instruct judge | — | 0.855 | — | 0.240 |
 
-DeBERTa, which reaches 0.95 macro-F1 on BIPIA, scores these realistic in-document instructions as clean under both queries. The 7B judge is anti-correlated with the labels: it flags instructions when the query engages them and ignores them under narrow lookup queries, even when the instruction directly conflicts with the request.
+- **InjecAgent** (Zhan et al., 2024): 1,054 injected tool responses plus 204 clean ones made by filling the same 17 templates' attacker slot with benign text (half benign imperatives). Detectors that take a query receive the user instruction.
+- **deepset/prompt-injections**: 116-row test split of direct injections; no user query.
+- **Pairs**: 50 query-counterfactual pairs on BIPIA test documents (`data/pairs/pair_specs_v0.json`). Each keeps the document and an inserted instruction fixed and changes only the user query; a pair is correct when the subverting query scores higher, so any query-blind detector scores 0.5. Labels are drafts written by one author and not yet human-validated.
+
+Our DeBERTa reaches 0.975 ROC-AUC on held-out BIPIA attacks but flags only 7.8% of InjecAgent injections at threshold 0.5, and its pair accuracy is below chance. No detector transfers: each is strongest on the distribution closest to its training data. PIGuard's training data includes BIPIA, so its BIPIA score is not zero-shot. The 7B judge is the strongest detector on InjecAgent but is anti-correlated with the pair labels: it flags instructions when the query engages them and ignores them under narrow lookup queries, even when they conflict.
 
 ## Quick start
 
