@@ -1,0 +1,2 @@
+[18:05:00] tfidf_c1: results/v2_probes/score_tfidf_c1/20261019-180346_seed42/predictions.csv
+[18:05:08] missing models (not yet scored): ['deberta_s42', 'deberta_s123', 'deberta_s999', 'protectai', 'piguard', 'judge_qwen2.5_7b']
