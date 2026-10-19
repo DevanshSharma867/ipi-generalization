@@ -30,6 +30,7 @@ from sklearn.metrics import (
 import sys
 sys.path.insert(0, "src")
 from preprocess import preprocess_for_tfidf
+from metrics import point_metrics
 
 DATA_DIR = "data/processed"
 RESULTS_DIR = "results"
@@ -78,20 +79,13 @@ def build_fused_texts(df: pd.DataFrame, mode: str = "fused") -> list:
 
 
 def compute_metrics_at_threshold(y_true, y_prob, threshold=0.5):
-    y_pred = (y_prob >= threshold).astype(int)
-    # Check if only one class present in y_true
-    has_both_classes = len(np.unique(y_true)) > 1
-    roc_auc = float(roc_auc_score(y_true, y_prob)) if has_both_classes else 0.0
-
-    return {
-        "threshold": float(threshold),
-        "accuracy": float(accuracy_score(y_true, y_pred)),
-        "f1_macro": float(f1_score(y_true, y_pred, average="macro", zero_division=0)),
-        "f1_injected": float(f1_score(y_true, y_pred, pos_label=1, average="binary", zero_division=0)),
-        "precision": float(precision_score(y_true, y_pred, pos_label=1, average="binary", zero_division=0)),
-        "recall": float(recall_score(y_true, y_pred, pos_label=1, average="binary", zero_division=0)),
-        "roc_auc": roc_auc,
-    }
+    # Delegates to src/metrics.py; single-class ROC-AUC stays 0.0 as before
+    m = point_metrics(y_true, y_prob, threshold=threshold)
+    out = {"threshold": float(threshold)}
+    out.update({k: m[k] for k in ("accuracy", "f1_macro", "f1_injected", "precision", "recall", "roc_auc")})
+    if np.isnan(out["roc_auc"]):
+        out["roc_auc"] = 0.0
+    return out
 
 
 def compute_recall_at_fpr(y_true, y_prob, target_fpr):
