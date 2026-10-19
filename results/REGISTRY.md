@@ -9,3 +9,12 @@ see CODEBASE_STATE.md §6.
 | 2026-10-19 | v2_probes | artifact_baselines | 20261019-180020_seed42 | c61e423-dirty | v2 | position_oracle_f1_macro=0.7333 | results/v2_probes/artifact_baselines/20261019-180020_seed42 |
 | 2026-10-19 | v2_probes | score_tfidf_c1 | 20261019-180346_seed42 | c61e423-dirty | v2_probes |  | results/v2_probes/score_tfidf_c1/20261019-180346_seed42 |
 | 2026-10-19 | v2_probes | probe_report | 20261019-180500_seed42 | c61e423-dirty | v2_probes |  | results/v2_probes/probe_report/20261019-180500_seed42 |
+
+
+| 2026-10-19 | v2_probes | score_deberta_s42 | 20261019-183817_seed42 | 518b572-dirty | v2_probes |  | results/v2_probes/score_deberta_s42/20261019-183817_seed42 |
+| 2026-10-19 | v2_probes | score_deberta_s123 | 20261019-184210_seed123 | 518b572-dirty | v2_probes |  | results/v2_probes/score_deberta_s123/20261019-184210_seed123 |
+| 2026-10-19 | v2_probes | score_deberta_s999 | 20261019-184348_seed999 | 518b572-dirty | v2_probes |  | results/v2_probes/score_deberta_s999/20261019-184348_seed999 |
+| 2026-10-19 | v2_probes | score_protectai | 20261019-184432_seed42 | 518b572-dirty | v2_probes |  | results/v2_probes/score_protectai/20261019-184432_seed42 |
+| 2026-10-19 | v2_probes | score_piguard | 20261019-184536_seed42 | 518b572-dirty | v2_probes |  | results/v2_probes/score_piguard/20261019-184536_seed42 |
+| 2026-10-19 | v2_probes | score_judge_qwen2.5_7b | 20261019-184624_seed42 | 518b572-dirty | v2_probes |  | results/v2_probes/score_judge_qwen2.5_7b/20261019-184624_seed42 |
+| 2026-10-19 | v2_probes | probe_report | 20261019-185349_seed42 | 518b572-dirty | v2_probes |  | results/v2_probes/probe_report/20261019-185349_seed42 |
