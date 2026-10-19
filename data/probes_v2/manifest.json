@@ -1,0 +1,103 @@
+{
+  "generator": "scripts/build_probes_v2.py",
+  "git_commit": "c61e42382fbbe3b3f08050681838a7477aa8d8f0",
+  "source": "data/processed/test.csv",
+  "source_sha256": "dbd92d8cf1bd19f9d5a84bff7e0f3e515eb5444836bc864e380cadda3c6f6097",
+  "sets": {
+    "p1_neutral_insertion": {
+      "rows": 216,
+      "docs": 72,
+      "label_counts": {
+        "0": 216
+      },
+      "rows_by_task": {
+        "table": 135,
+        "code": 45,
+        "email": 36
+      },
+      "boundary_kinds": {
+        "end/end": 72,
+        "middle/line": 68,
+        "middle/sentence": 4,
+        "start/start": 72
+      },
+      "sha256": "872d319202d4c72ef5295382f4387db6b857f38c89636a22965822c6b443ecf5",
+      "neutral_source_by_task": {
+        "code": {
+          "neutral_spliced": 15
+        },
+        "email": {
+          "neutral_spliced": 12
+        },
+        "table": {
+          "neutral_spliced": 45
+        }
+      }
+    },
+    "p2_benign_moved": {
+      "rows": 216,
+      "docs": 72,
+      "label_counts": {
+        "0": 216
+      },
+      "rows_by_task": {
+        "table": 135,
+        "code": 45,
+        "email": 36
+      },
+      "boundary_kinds": {
+        "end/end": 72,
+        "middle/line": 68,
+        "middle/sentence": 4,
+        "start/start": 72
+      },
+      "sha256": "4f0f6e09d4141ecc84b0359d721a62f43dddafac07d921c8198a5d45d623b6c9"
+    },
+    "p3_attack_moved": {
+      "rows": 432,
+      "docs": 72,
+      "label_counts": {
+        "1": 432
+      },
+      "rows_by_task": {
+        "table": 270,
+        "code": 90,
+        "email": 72
+      },
+      "boundary_kinds": {
+        "end/end": 144,
+        "middle/line": 136,
+        "middle/sentence": 8,
+        "start/start": 144
+      },
+      "sha256": "2b72a8c12427441e8cd99b524fdca67b0e6a8a027c3a50935f67c3f589700072"
+    },
+    "p4_whitespace_only": {
+      "rows": 72,
+      "docs": 72,
+      "label_counts": {
+        "0": 72
+      },
+      "rows_by_task": {
+        "table": 45,
+        "code": 15,
+        "email": 12
+      },
+      "boundary_kinds": {
+        "none/none": 72
+      },
+      "sha256": "5874f85d1efd70bb301bca4bcb1b4057440ca680324334a02a1160531becee76",
+      "rows_changed_by_collapse": 68
+    }
+  },
+  "neutral_pool": [
+    "The office was renovated during the spring of last year.",
+    "Most of the figures in this section were collected over two weeks.",
+    "The library has been part of the project since its first release.",
+    "Several of the entries were updated after the original publication.",
+    "The previous version of this record listed the same values.",
+    "Weather conditions were mild for most of the reporting period.",
+    "The numbers here come from the annual summary.",
+    "This material was originally prepared for an internal review."
+  ]
+}
