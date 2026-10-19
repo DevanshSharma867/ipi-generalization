@@ -1,0 +1,9 @@
+[17:51:59] rows: {'email': 7, 'table': 7, 'code': 6}, with newline: 20
+[17:51:59] as_deberta_py: loaded=True class=DebertaV2Tokenizer regex_warning=True error=None
+[17:52:00] slow_use_fast_false: loaded=True class=DebertaV2Tokenizer regex_warning=True error=None
+[17:52:00] fix_mistral_regex: loaded=True class=DebertaV2Tokenizer regex_warning=False error=None
+[17:52:00] as_deberta_py vs slow_use_fast_false: 0/20 rows differ, 0 differing tokens
+[17:52:00] as_deberta_py vs fix_mistral_regex: 20/20 rows differ, 11961 differing tokens
+[17:52:00] vs raw sentencepiece: {'as_deberta_py': {'rows_identical': 16, 'rows': 20, 'differing_tokens_total': 208}, 'slow_use_fast_false': {'rows_identical': 16, 'rows': 20, 'differing_tokens_total': 208}, 'fix_mistral_regex': {'rows_identical': 0, 'rows': 20, 'differing_tokens_total': 12515}}
+[17:52:00] newline probe (as_deberta_py): {'space': ['▁alpha', '▁beta'], 'nl': ['▁alpha', '▁beta'], 'nlnl': ['▁alpha', '▁beta'], 'nl_distinct_from_space': False, 'nlnl_distinct_from_nl': False}
+[17:52:00] rows where newlines change ids: {'as_deberta_py': 0, 'slow_use_fast_false': 0, 'fix_mistral_regex': 0} of 20
