@@ -122,7 +122,16 @@ Framing: *evaluation methodology + generalization failure* first, method second.
 - `scripts/make_tables.py`: LaTeX tables in `paper/tables/` + `paper/numbers.tex` macros, verified against frozen JSON.
 - `scripts/error_stats.py`, `scripts/deberta_v2_stats.py`: V2 error analysis and DeBERTa CIs → `results/v2_std/*.json`.
 - `scripts/tokenizer_check.py`: DeBERTa tokenizer diagnostics → `results/v3/tokenizer_check/`.
-- `tests/`: `python -m pytest tests/` (metrics hand-computed cases, bootstrap equivalence, runlog guard).
+- `src/probes.py`: `extract_inserted_span` (exact inverse of V2 `insert_sentence`) and `insert_preserving`
+  (formatting-preserving insertion at line/sentence/word boundaries, records the char offset).
+- `scripts/artifact_baselines.py`: position oracle, first-paragraph rule, prefix/suffix-30 TF-IDF probes, span-form
+  probe → `results/v2_probes/artifact_baselines/`.
+- `scripts/build_probes_v2.py`: P1–P4 position stress tests from V2 test docs → `data/probes_v2/` (+ manifest).
+- `scripts/score_probes.py`: scores probes + V2 test with any `score_detectors` scorer → `results/v2_probes/score_<model>/`.
+- `slurm/probe_v2.sh`: GPU probe scoring (DeBERTa 3 seeds, retrain to `checkpoints/v2_retrain/` if missing; ProtectAI;
+  PIGuard; Qwen judge). `scripts/probe_report.py`: reliance table, paired position contrasts, figure
+  (`paper/figures/position_flag_rates.*`) → `results/v2_probes/probe_report/`.
+- `tests/`: `python -m pytest tests/` (metrics hand-computed cases, bootstrap equivalence, runlog guard, probe insertion).
 - `run_experiments.py`: TF-IDF val tuning, test eval, Recall@5/10%FPR, doc-cluster bootstrap, per-task, LOTO, ablations.
   No CLI and no seed argument; it writes `results/` directly.
 - `score_detectors.py`: builds the pairs/InjecAgent/deepset sets; zero-shot scoring (tfidf, deberta, hf, judge); summary.
@@ -161,10 +170,17 @@ Keep this section updated when files move.
 ## Known weaknesses a reviewer will hit (address before submission)
 - The V2 insertion artifacts above. Positional and separator shortcuts must be ablated, and V3 must remove them.
 - DeBERTa has 3 seeds (target 5) and is measured on artifact-laden V2 only.
-- DeBERTa-v3's tokenizer (SentencePiece) maps `\n`, `\n\n` and a space to the same tokens, so DeBERTa never sees
-  separators or formatting. The transformers "incorrect regex pattern" warning is a false positive for this
-  checkpoint; its suggested `fix_mistral_regex=True` breaks tokenization. Don't use it
+- **Whitespace visibility:** DeBERTa-v3's tokenizer (SentencePiece) maps `\n`, `\n\n` and a space to the same
+  tokens, and TF-IDF's `clean_text` collapses all whitespace. So whitespace and separators are **invisible to
+  DeBERTa-v3 and TF-IDF**, but **still visible to the Qwen judge** (raw text in the chat prompt) and to any other
+  model whose tokenizer keeps newlines. For DeBERTa and TF-IDF, the live V2 construction artifacts are position and
+  the surface form of inserted spans. The transformers "incorrect regex pattern" warning is a false positive for
+  this checkpoint; its suggested `fix_mistral_regex=True` breaks tokenization. Don't use it
   (`results/v3/tokenizer_check/`).
+- Probe sets live in `data/probes_v2/`, probe results in `results/v2_probes/` (written via `src/runlog.py`).
+- **`results/scores/summary.json` Recall@5%FPR is wrong on pairs for PIGuard and ProtectAI** (0.02; correct 0.04):
+  `score_detectors.recall_at_fpr` uses `roc_curve(drop_intermediate=True)`, which drops valid tied-score operating
+  points. The paper must take Recall@FPR from `results/v2_std/` via `src/metrics.py`, never from `summary.json`.
 - The test split is small (72 docs; EmailQA 12), so CIs are wide. Consider more held-out data or more variants
   per doc *without* breaking document-level grouping.
 - Model-directed `benign_test` templates are label-ambiguous. Plan: a stricter human-addressed benign pool, and
