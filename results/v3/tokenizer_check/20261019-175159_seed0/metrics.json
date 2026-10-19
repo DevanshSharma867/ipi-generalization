@@ -1,0 +1,200 @@
+{
+  "model_path": "/Users/devanshsharma/projects/nlp/hf_cache/hub/models--microsoft--deberta-v3-base/snapshots/8ccc9b6f36199bec6961081d44eb72fb3f7353f3",
+  "tokenizers": {
+    "as_deberta_py": {
+      "kwargs": {},
+      "loaded": true,
+      "class": "DebertaV2Tokenizer",
+      "error": null,
+      "regex_warning": true,
+      "newline_probe": {
+        "space": [
+          "\u2581alpha",
+          "\u2581beta"
+        ],
+        "nl": [
+          "\u2581alpha",
+          "\u2581beta"
+        ],
+        "nlnl": [
+          "\u2581alpha",
+          "\u2581beta"
+        ],
+        "nl_distinct_from_space": false,
+        "nlnl_distinct_from_nl": false
+      }
+    },
+    "slow_use_fast_false": {
+      "kwargs": {
+        "use_fast": false
+      },
+      "loaded": true,
+      "class": "DebertaV2Tokenizer",
+      "error": null,
+      "regex_warning": true,
+      "newline_probe": {
+        "space": [
+          "\u2581alpha",
+          "\u2581beta"
+        ],
+        "nl": [
+          "\u2581alpha",
+          "\u2581beta"
+        ],
+        "nlnl": [
+          "\u2581alpha",
+          "\u2581beta"
+        ],
+        "nl_distinct_from_space": false,
+        "nlnl_distinct_from_nl": false
+      }
+    },
+    "fix_mistral_regex": {
+      "kwargs": {
+        "fix_mistral_regex": true
+      },
+      "loaded": true,
+      "class": "DebertaV2Tokenizer",
+      "error": null,
+      "regex_warning": false,
+      "newline_probe": {
+        "space": [
+          "alpha",
+          "[UNK]",
+          "beta"
+        ],
+        "nl": [
+          "alpha",
+          "[UNK]",
+          "beta"
+        ],
+        "nlnl": [
+          "alpha",
+          "[UNK]",
+          "beta"
+        ],
+        "nl_distinct_from_space": false,
+        "nlnl_distinct_from_nl": false
+      }
+    }
+  },
+  "comparisons": {
+    "as_deberta_py_vs_slow_use_fast_false": {
+      "rows_differing": 0,
+      "rows": 20,
+      "differing_tokens_total": 0,
+      "differing_tokens_per_row": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "base_tokens_total": 9542,
+      "same_ids_rows": 20
+    },
+    "as_deberta_py_vs_fix_mistral_regex": {
+      "rows_differing": 20,
+      "rows": 20,
+      "differing_tokens_total": 11961,
+      "differing_tokens_per_row": [
+        255,
+        190,
+        274,
+        270,
+        209,
+        280,
+        206,
+        927,
+        686,
+        943,
+        951,
+        700,
+        955,
+        722,
+        804,
+        481,
+        816,
+        852,
+        577,
+        863
+      ],
+      "base_tokens_total": 9542,
+      "same_ids_rows": 0
+    }
+  },
+  "rows_where_newlines_change_ids": {
+    "as_deberta_py": 0,
+    "slow_use_fast_false": 0,
+    "fix_mistral_regex": 0
+  },
+  "rows_with_newline": 20,
+  "vs_raw_sentencepiece": {
+    "as_deberta_py": {
+      "rows_identical": 16,
+      "rows": 20,
+      "differing_tokens_total": 208
+    },
+    "slow_use_fast_false": {
+      "rows_identical": 16,
+      "rows": 20,
+      "differing_tokens_total": 208
+    },
+    "fix_mistral_regex": {
+      "rows_identical": 0,
+      "rows": 20,
+      "differing_tokens_total": 12515
+    }
+  },
+  "raw_sentencepiece_newline_probe": {
+    "alpha beta": [
+      "\u2581alpha",
+      "\u2581beta"
+    ],
+    "alpha\nbeta": [
+      "\u2581alpha",
+      "\u2581beta"
+    ],
+    "alpha\n\nbeta": [
+      "\u2581alpha",
+      "\u2581beta"
+    ]
+  },
+  "row_ids": [
+    "sample_00000",
+    "sample_00004",
+    "sample_00001",
+    "sample_00002",
+    "sample_00006",
+    "sample_00003",
+    "sample_00007",
+    "sample_00496",
+    "sample_00500",
+    "sample_00497",
+    "sample_00498",
+    "sample_00502",
+    "sample_00499",
+    "sample_00503",
+    "sample_00216",
+    "sample_00220",
+    "sample_00217",
+    "sample_00218",
+    "sample_00222",
+    "sample_00219"
+  ]
+}
