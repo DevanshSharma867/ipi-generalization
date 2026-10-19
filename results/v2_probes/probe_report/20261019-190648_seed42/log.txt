@@ -1,0 +1,9 @@
+[19:06:48] deberta_s123: results/v2_probes/score_deberta_s123/20261019-184210_seed123/predictions.csv
+[19:06:55] deberta_s42: results/v2_probes/score_deberta_s42/20261019-183817_seed42/predictions.csv
+[19:07:02] deberta_s999: results/v2_probes/score_deberta_s999/20261019-184348_seed999/predictions.csv
+[19:07:08] judge_qwen2.5_7b: results/v2_probes/score_judge_qwen2.5_7b/20261019-184624_seed42/predictions.csv
+[19:07:11] piguard: results/v2_probes/score_piguard/20261019-184536_seed42/predictions.csv
+[19:07:18] protectai: results/v2_probes/score_protectai/20261019-184432_seed42/predictions.csv
+[19:07:25] tfidf_c1: results/v2_probes/score_tfidf_c1/20261019-180346_seed42/predictions.csv
+[19:07:31] deberta_mean: seed mean of ('deberta_s42', 'deberta_s123', 'deberta_s999') (same doc draw for every seed)
+[19:07:38] missing models (not yet scored): []

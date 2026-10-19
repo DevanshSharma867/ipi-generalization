@@ -1,0 +1,74 @@
+{
+  "run_id": "20261019-190648_seed42",
+  "version": "v2_probes",
+  "exp": "probe_report",
+  "seed": 42,
+  "args": {
+    "sources": {
+      "deberta_s123": [
+        "results/v2_probes/score_deberta_s123/20261019-184210_seed123/predictions.csv"
+      ],
+      "deberta_s42": [
+        "results/v2_probes/score_deberta_s42/20261019-183817_seed42/predictions.csv"
+      ],
+      "deberta_s999": [
+        "results/v2_probes/score_deberta_s999/20261019-184348_seed999/predictions.csv"
+      ],
+      "judge_qwen2.5_7b": [
+        "results/v2_probes/score_judge_qwen2.5_7b/20261019-184624_seed42/predictions.csv"
+      ],
+      "piguard": [
+        "results/v2_probes/score_piguard/20261019-184536_seed42/predictions.csv"
+      ],
+      "protectai": [
+        "results/v2_probes/score_protectai/20261019-184432_seed42/predictions.csv"
+      ],
+      "tfidf_c1": [
+        "results/v2_probes/score_tfidf_c1/20261019-180346_seed42/predictions.csv"
+      ]
+    },
+    "missing": [],
+    "bootstrap": {
+      "B": 1000,
+      "seed": 42
+    }
+  },
+  "git_commit": "48aba4c6487635089a3cc4cfbb29924288c90687",
+  "git_dirty": true,
+  "data_version": "v2_probes",
+  "data_files_sha256": {
+    "/Users/devanshsharma/projects/nlp/results/v2_probes/score_deberta_s123/20261019-184210_seed123/predictions.csv": "6e788d529a11bbb2de71730c5dd4cec4e512a8662c58016fc1c01aa307b22c86",
+    "/Users/devanshsharma/projects/nlp/results/v2_probes/score_deberta_s42/20261019-183817_seed42/predictions.csv": "015b0c9e381b4889861d01cc5321a40f03b6a46f1dde0e6cad89dac4cdab4797",
+    "/Users/devanshsharma/projects/nlp/results/v2_probes/score_deberta_s999/20261019-184348_seed999/predictions.csv": "1c7839116e8f372d529e6ad249d3d4ed81627ebc54c4d0ab020796e465682ea0",
+    "/Users/devanshsharma/projects/nlp/results/v2_probes/score_judge_qwen2.5_7b/20261019-184624_seed42/predictions.csv": "0a3f50793035e39a0e8ff9ca3cabbfaf83ce3e2d5bc1f7c6861234329c850903",
+    "/Users/devanshsharma/projects/nlp/results/v2_probes/score_piguard/20261019-184536_seed42/predictions.csv": "05d90bacfade0a51c1f72232b6234143f55fc81eb79bb723c9a278a087c594ca",
+    "/Users/devanshsharma/projects/nlp/results/v2_probes/score_protectai/20261019-184432_seed42/predictions.csv": "557c2a30f83b3bf7deecc803a3dbaa1b92873c04fb2b1edee953c2b752f987bf",
+    "/Users/devanshsharma/projects/nlp/results/v2_probes/score_tfidf_c1/20261019-180346_seed42/predictions.csv": "cad297dad73f136ca9b7596aef1711217defddc6eeac8ee5fff690fb5f101488"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null
+  },
+  "argv": [
+    "scripts/probe_report.py"
+  ],
+  "started": "2026-10-19T19:06:48"
+}
