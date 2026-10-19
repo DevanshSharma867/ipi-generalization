@@ -1,0 +1,161 @@
+{
+  "source": "results/v2_std/v2_test/tfidf_c1.csv",
+  "n": 288,
+  "n_fp": 16,
+  "n_fn": 49,
+  "per_task": {
+    "code": {
+      "fp": 5,
+      "fn": 0,
+      "n": 60
+    },
+    "email": {
+      "fp": 0,
+      "fn": 13,
+      "n": 48
+    },
+    "table": {
+      "fp": 11,
+      "fn": 36,
+      "n": 180
+    }
+  },
+  "fn_rate_by_attack_category": {
+    "Base Encoding": {
+      "count": 3,
+      "n": 5,
+      "rate": 0.6
+    },
+    "Bringing Down Hosts and Servers (Denial of Service)": {
+      "count": 0,
+      "n": 8,
+      "rate": 0.0
+    },
+    "Business Intelligence": {
+      "count": 8,
+      "n": 9,
+      "rate": 0.8888888888888888
+    },
+    "Compromising Computers": {
+      "count": 0,
+      "n": 4,
+      "rate": 0.0
+    },
+    "Conversational Agent": {
+      "count": 5,
+      "n": 5,
+      "rate": 1.0
+    },
+    "Corrupting an Operating System": {
+      "count": 0,
+      "n": 2,
+      "rate": 0.0
+    },
+    "Data Eavesdropping": {
+      "count": 0,
+      "n": 6,
+      "rate": 0.0
+    },
+    "Emoji Substitution": {
+      "count": 0,
+      "n": 8,
+      "rate": 0.0
+    },
+    "Entertainment": {
+      "count": 0,
+      "n": 6,
+      "rate": 0.0
+    },
+    "Information Dissemination": {
+      "count": 0,
+      "n": 7,
+      "rate": 0.0
+    },
+    "Introduce System Fingerprinting": {
+      "count": 0,
+      "n": 3,
+      "rate": 0.0
+    },
+    "Keylogging": {
+      "count": 0,
+      "n": 3,
+      "rate": 0.0
+    },
+    "Language Translation": {
+      "count": 7,
+      "n": 15,
+      "rate": 0.4666666666666667
+    },
+    "Marketing & Advertising": {
+      "count": 1,
+      "n": 12,
+      "rate": 0.08333333333333333
+    },
+    "Misinformation & Propaganda": {
+      "count": 1,
+      "n": 5,
+      "rate": 0.2
+    },
+    "Research Assistance": {
+      "count": 6,
+      "n": 7,
+      "rate": 0.8571428571428571
+    },
+    "Reverse Text": {
+      "count": 5,
+      "n": 10,
+      "rate": 0.5
+    },
+    "Scams & Fraud": {
+      "count": 1,
+      "n": 10,
+      "rate": 0.1
+    },
+    "Screen Scraping": {
+      "count": 0,
+      "n": 1,
+      "rate": 0.0
+    },
+    "Sentiment Analysis": {
+      "count": 7,
+      "n": 7,
+      "rate": 1.0
+    },
+    "Substitution Ciphers": {
+      "count": 0,
+      "n": 1,
+      "rate": 0.0
+    },
+    "Task Automation": {
+      "count": 5,
+      "n": 7,
+      "rate": 0.7142857142857143
+    },
+    "Traffic Analysis": {
+      "count": 0,
+      "n": 3,
+      "rate": 0.0
+    }
+  },
+  "fp_rate_by_clean_type": {
+    "benign_imperative": {
+      "count": 11,
+      "n": 72,
+      "rate": 0.1527777777777778
+    },
+    "raw": {
+      "count": 5,
+      "n": 72,
+      "rate": 0.06944444444444445
+    }
+  },
+  "fp_prob_range": [
+    0.5006349944802153,
+    0.5365415917833652
+  ],
+  "fn_prob_range": [
+    0.4565148214670604,
+    0.499203594252224
+  ],
+  "frac_prob_in_0.4_0.6": 0.8784722222222222
+}

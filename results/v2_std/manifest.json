@@ -1,0 +1,470 @@
+[
+  {
+    "source": "results/test_predictions.csv",
+    "source_sha256": "daa2a08eedf32b49a477b57c4ee7d54fa82c3b18e6a3c7021eed2c6e82281d70",
+    "dest": "results/v2_std/v2_test/tfidf_c1.csv",
+    "rows": 288,
+    "model": "tfidf_c1",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/test_predictions.csv",
+    "source_sha256": "daa2a08eedf32b49a477b57c4ee7d54fa82c3b18e6a3c7021eed2c6e82281d70",
+    "dest": "results/v2_std/v2_test/tfidf_c100_tuned.csv",
+    "rows": 288,
+    "model": "tfidf_c100_tuned",
+    "eval_set": "v2_test",
+    "threshold": 0.71
+  },
+  {
+    "source": "results/loto_predictions_email.csv",
+    "source_sha256": "95b1242d78d20512a6b549fc70ccb03a1174a387cf1e25efa3a94f8a0d3035ee",
+    "dest": "results/v2_std/v2_loto_test_email/tfidf_c100_loto.csv",
+    "rows": 48,
+    "model": "tfidf_c100_loto",
+    "eval_set": "v2_loto_test_email",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/loto_predictions_table.csv",
+    "source_sha256": "28355865d40637efdd6b7fe1b4b3f8f1f2535cec63957fa270d31ba814356da4",
+    "dest": "results/v2_std/v2_loto_test_table/tfidf_c100_loto.csv",
+    "rows": 180,
+    "model": "tfidf_c100_loto",
+    "eval_set": "v2_loto_test_table",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/loto_predictions_code.csv",
+    "source_sha256": "2b3acc60c6eca335ef4e7f79b56ab33a82f4c6208de63d4429f8dcea538e54bb",
+    "dest": "results/v2_std/v2_loto_test_code/tfidf_c100_loto.csv",
+    "rows": 60,
+    "model": "tfidf_c100_loto",
+    "eval_set": "v2_loto_test_code",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_code/test_predictions.csv",
+    "source_sha256": "7d4a6c2bc0a8ca8de29fd15f718f9c351633ae19f4500013dee89301d65b82cd",
+    "dest": "results/v2_std/v2_loto_test_code/deberta_loto_s42.csv",
+    "rows": 60,
+    "model": "deberta_loto_s42",
+    "eval_set": "v2_loto_test_code",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_code/val_predictions.csv",
+    "source_sha256": "dc3287621e1c64afe0852946b606bbb7cde043580ede7d42aa0b839de9c01c16",
+    "dest": "results/v2_std/v2_loto_val_code/deberta_loto_s42.csv",
+    "rows": 228,
+    "model": "deberta_loto_s42",
+    "eval_set": "v2_loto_val_code",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_code_s123/test_predictions.csv",
+    "source_sha256": "f38b95ce9b11cab48fd2dc09c1090f5c127cc13537e0ecf0e7ee4c7a2451d768",
+    "dest": "results/v2_std/v2_loto_test_code/deberta_loto_s123.csv",
+    "rows": 60,
+    "model": "deberta_loto_s123",
+    "eval_set": "v2_loto_test_code",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_code_s999/test_predictions.csv",
+    "source_sha256": "ce2198648176a4a6ed30c1a5d176736bd192cb877734ad593aec004acbd5e395",
+    "dest": "results/v2_std/v2_loto_test_code/deberta_loto_s999.csv",
+    "rows": 60,
+    "model": "deberta_loto_s999",
+    "eval_set": "v2_loto_test_code",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_email/test_predictions.csv",
+    "source_sha256": "d46bc53aefb0393094aac1991e05665166be861eeba22aff2cfa7b4764940742",
+    "dest": "results/v2_std/v2_loto_test_email/deberta_loto_s42.csv",
+    "rows": 48,
+    "model": "deberta_loto_s42",
+    "eval_set": "v2_loto_test_email",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_email/val_predictions.csv",
+    "source_sha256": "f7db88332bfa7bdceee656222246da437bc807bd521fcc1cf5a60a833b2efa05",
+    "dest": "results/v2_std/v2_loto_val_email/deberta_loto_s42.csv",
+    "rows": 240,
+    "model": "deberta_loto_s42",
+    "eval_set": "v2_loto_val_email",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_email_s123/test_predictions.csv",
+    "source_sha256": "e21a00d9c73a46835af53687a0d93b7e81290bbf344e9bec47a6aa88f2bc23c8",
+    "dest": "results/v2_std/v2_loto_test_email/deberta_loto_s123.csv",
+    "rows": 48,
+    "model": "deberta_loto_s123",
+    "eval_set": "v2_loto_test_email",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_email_s999/test_predictions.csv",
+    "source_sha256": "34153aa649a9bbcb7b01ae634369c54a1640ab311282e11163dac8635dd573d9",
+    "dest": "results/v2_std/v2_loto_test_email/deberta_loto_s999.csv",
+    "rows": 48,
+    "model": "deberta_loto_s999",
+    "eval_set": "v2_loto_test_email",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_table/test_predictions.csv",
+    "source_sha256": "ec4ed107334dfa3c5e83819a39d22eb50a53b81139cf2da47cb5b12e4df508ae",
+    "dest": "results/v2_std/v2_loto_test_table/deberta_loto_s42.csv",
+    "rows": 180,
+    "model": "deberta_loto_s42",
+    "eval_set": "v2_loto_test_table",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_table/val_predictions.csv",
+    "source_sha256": "28d02c18b63dad597acc000d9fc7ea56358a1a10efbf8d1a728f6e75c23d3d1b",
+    "dest": "results/v2_std/v2_loto_val_table/deberta_loto_s42.csv",
+    "rows": 108,
+    "model": "deberta_loto_s42",
+    "eval_set": "v2_loto_val_table",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_table_s123/test_predictions.csv",
+    "source_sha256": "3e9ac7a34499e51796eaf557da145ed45c12a386c757d93a97f3d411ae0e703b",
+    "dest": "results/v2_std/v2_loto_test_table/deberta_loto_s123.csv",
+    "rows": 180,
+    "model": "deberta_loto_s123",
+    "eval_set": "v2_loto_test_table",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/loto_table_s999/test_predictions.csv",
+    "source_sha256": "3db5a29e844e2b6613bf8314e183e9b13cbaa280e794298037cfbc4de2832604",
+    "dest": "results/v2_std/v2_loto_test_table/deberta_loto_s999.csv",
+    "rows": 180,
+    "model": "deberta_loto_s999",
+    "eval_set": "v2_loto_test_table",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/s123/test_predictions.csv",
+    "source_sha256": "deb8ea958b66ff8eee9387e0880b42db5ef9f59203d2cc7a1abceefb70fa28f1",
+    "dest": "results/v2_std/v2_test/deberta_s123.csv",
+    "rows": 288,
+    "model": "deberta_s123",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/s123/val_predictions.csv",
+    "source_sha256": "e5708c12ceb12034b373f795f79d0d15d45f66c7745c3409a9c6496d83dc9a7c",
+    "dest": "results/v2_std/v2_val/deberta_s123.csv",
+    "rows": 288,
+    "model": "deberta_s123",
+    "eval_set": "v2_val",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/s42/test_predictions.csv",
+    "source_sha256": "d775b7d3a589e271e0f9029f5a3e55a96188988db03d9800ae295d02f182422e",
+    "dest": "results/v2_std/v2_test/deberta_s42.csv",
+    "rows": 288,
+    "model": "deberta_s42",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/s42/val_predictions.csv",
+    "source_sha256": "f6494dc203fb605d9308f4eae63635f4479b4cf073c796f0cf9e85c86eaf46e0",
+    "dest": "results/v2_std/v2_val/deberta_s42.csv",
+    "rows": 288,
+    "model": "deberta_s42",
+    "eval_set": "v2_val",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/s999/test_predictions.csv",
+    "source_sha256": "375006883420972bc305ab4df2d317d9e68cd208c275d1b0a457ffb59434aae7",
+    "dest": "results/v2_std/v2_test/deberta_s999.csv",
+    "rows": 288,
+    "model": "deberta_s999",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/s999/val_predictions.csv",
+    "source_sha256": "83766b76234fa2fb6124de4d71b2ed2f8faa2fdd44af2487434a12475779884c",
+    "dest": "results/v2_std/v2_val/deberta_s999.csv",
+    "rows": 288,
+    "model": "deberta_s999",
+    "eval_set": "v2_val",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/sub496_s123/test_predictions.csv",
+    "source_sha256": "94a6f2776c69a44c8e6c897e1d819ba3c9d2ca74f8f80f88a776b06ef385c1e6",
+    "dest": "results/v2_std/v2_test/deberta_sub496_s123.csv",
+    "rows": 288,
+    "model": "deberta_sub496_s123",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/sub496_s42/test_predictions.csv",
+    "source_sha256": "0ff3f6f2ed4658805cddd278bc640c5b95dfc2f296f5007f2411981cf2243fa2",
+    "dest": "results/v2_std/v2_test/deberta_sub496_s42.csv",
+    "rows": 288,
+    "model": "deberta_sub496_s42",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/deberta_predictions/sub496_s999/test_predictions.csv",
+    "source_sha256": "656c0c02d2409d3867c95f166868de40f0a157e87267db08ed5b7bc1edada37b",
+    "dest": "results/v2_std/v2_test/deberta_sub496_s999.csv",
+    "rows": 288,
+    "model": "deberta_sub496_s999",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/bipia_test/deberta_s123.csv",
+    "source_sha256": "e9a1fc3a7242eedcd9988021d0b5d1c6f68d738d7454bdcf582d9dcf751a2589",
+    "dest": "results/v2_std/v2_test/deberta_s123_rescore.csv",
+    "rows": 288,
+    "model": "deberta_s123_rescore",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/bipia_test/deberta_s42.csv",
+    "source_sha256": "d3f0e5e020c95403c6cc4e72dcbc0608ffb6f89a461cf2eeaae32968879737f0",
+    "dest": "results/v2_std/v2_test/deberta_s42_rescore.csv",
+    "rows": 288,
+    "model": "deberta_s42_rescore",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/bipia_test/deberta_s999.csv",
+    "source_sha256": "21ee9b823da08a1ea59f0c8ab7e5442f6c2e853132e68ce02a29a35ce313e8d6",
+    "dest": "results/v2_std/v2_test/deberta_s999_rescore.csv",
+    "rows": 288,
+    "model": "deberta_s999_rescore",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/bipia_test/piguard.csv",
+    "source_sha256": "6442024ec9e4101f512f235a8c35e58d86c24990381820058eeacc7363dc355d",
+    "dest": "results/v2_std/v2_test/piguard.csv",
+    "rows": 288,
+    "model": "piguard",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/bipia_test/protectai.csv",
+    "source_sha256": "80eb1f3b86b41f2285f19fa8d377665e60520b95b87c8bc9d1cd17de1ba861b5",
+    "dest": "results/v2_std/v2_test/protectai.csv",
+    "rows": 288,
+    "model": "protectai",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/bipia_test/tfidf.csv",
+    "source_sha256": "580fab6567136e2ec931635b188f06bbbc8152967feccd5265fc1eb71999895a",
+    "dest": "results/v2_std/v2_test/tfidf_c1_rescore.csv",
+    "rows": 288,
+    "model": "tfidf_c1_rescore",
+    "eval_set": "v2_test",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/deepset/deberta_s123.csv",
+    "source_sha256": "b5a8333c23bc5ced35727ea69c2b802817f35f9f9cdcde1717d5a8896d06b62f",
+    "dest": "results/v2_std/deepset/deberta_s123.csv",
+    "rows": 116,
+    "model": "deberta_s123",
+    "eval_set": "deepset",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/deepset/deberta_s42.csv",
+    "source_sha256": "a697b66e2483892c46a0fc9842a490de7ea92c7784df193f34cb65ace95cb5e7",
+    "dest": "results/v2_std/deepset/deberta_s42.csv",
+    "rows": 116,
+    "model": "deberta_s42",
+    "eval_set": "deepset",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/deepset/deberta_s999.csv",
+    "source_sha256": "f4251020ede5e895a411d088b6d43d6a811913934e3ccd2c1490b5b95d88a3bc",
+    "dest": "results/v2_std/deepset/deberta_s999.csv",
+    "rows": 116,
+    "model": "deberta_s999",
+    "eval_set": "deepset",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/deepset/piguard.csv",
+    "source_sha256": "68938dd8f1be74e036f01a0caf161f11978cbdfb4bc4f20f778ef3b183494f06",
+    "dest": "results/v2_std/deepset/piguard.csv",
+    "rows": 116,
+    "model": "piguard",
+    "eval_set": "deepset",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/deepset/protectai.csv",
+    "source_sha256": "4dc72f25de5a6362f9bf011573d4ccbcbfaa09fb709024e04c3f9370d1dc381b",
+    "dest": "results/v2_std/deepset/protectai.csv",
+    "rows": 116,
+    "model": "protectai",
+    "eval_set": "deepset",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/deepset/tfidf.csv",
+    "source_sha256": "e21c486266df4447181af47c2483d1b0f732147c5ce60cb6be9b5caa81e7e41d",
+    "dest": "results/v2_std/deepset/tfidf.csv",
+    "rows": 116,
+    "model": "tfidf",
+    "eval_set": "deepset",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/injecagent/deberta_s123.csv",
+    "source_sha256": "3f838393fcd248ffd38a60983e0f22ddcba7dcae02ef61ff63fcdf7acb8720ad",
+    "dest": "results/v2_std/injecagent/deberta_s123.csv",
+    "rows": 1258,
+    "model": "deberta_s123",
+    "eval_set": "injecagent",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/injecagent/deberta_s42.csv",
+    "source_sha256": "9723a23696cd15f698e0758dc3026f3df9bc150f282e378c5e1862b85741e2a5",
+    "dest": "results/v2_std/injecagent/deberta_s42.csv",
+    "rows": 1258,
+    "model": "deberta_s42",
+    "eval_set": "injecagent",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/injecagent/deberta_s999.csv",
+    "source_sha256": "361e11b77c418770403df02c2107bc0174d5aadd6e2bc55c9d41181b707e3e27",
+    "dest": "results/v2_std/injecagent/deberta_s999.csv",
+    "rows": 1258,
+    "model": "deberta_s999",
+    "eval_set": "injecagent",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/injecagent/judge_qwen2.5_7b.csv",
+    "source_sha256": "581e0613d85d2d5d8084e205849528b02374c90c7a25a067f70d6544d1ecd49d",
+    "dest": "results/v2_std/injecagent/judge_qwen2.5_7b.csv",
+    "rows": 1258,
+    "model": "judge_qwen2.5_7b",
+    "eval_set": "injecagent",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/injecagent/piguard.csv",
+    "source_sha256": "680f7545488bee88d5db209123d36b373a8ec49629f124685bf70e915710861d",
+    "dest": "results/v2_std/injecagent/piguard.csv",
+    "rows": 1258,
+    "model": "piguard",
+    "eval_set": "injecagent",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/injecagent/protectai.csv",
+    "source_sha256": "fd4ff8385140c37384838b720f07962062622170f2631c9d934a3c58aa162c67",
+    "dest": "results/v2_std/injecagent/protectai.csv",
+    "rows": 1258,
+    "model": "protectai",
+    "eval_set": "injecagent",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/injecagent/tfidf.csv",
+    "source_sha256": "1fa47aad6f1f08ef4b929e43fe2d865caa05375839e47db5060efdc9ed38385d",
+    "dest": "results/v2_std/injecagent/tfidf.csv",
+    "rows": 1258,
+    "model": "tfidf",
+    "eval_set": "injecagent",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/pairs/deberta_s123.csv",
+    "source_sha256": "755e9390d477f715b2913df0300f134c42ba72f081c22664c2367e76d258f0b3",
+    "dest": "results/v2_std/pairs_v0/deberta_s123.csv",
+    "rows": 100,
+    "model": "deberta_s123",
+    "eval_set": "pairs_v0",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/pairs/deberta_s42.csv",
+    "source_sha256": "3adfaa5f9de81ca94bb92ae2a81c0f8026d751744700b9f39dd6bf8d49f3dc2d",
+    "dest": "results/v2_std/pairs_v0/deberta_s42.csv",
+    "rows": 100,
+    "model": "deberta_s42",
+    "eval_set": "pairs_v0",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/pairs/deberta_s999.csv",
+    "source_sha256": "779a36cb2d49a131e22acd6bb810b3ca92b72b4122ad5054174fbd3e5eafef9f",
+    "dest": "results/v2_std/pairs_v0/deberta_s999.csv",
+    "rows": 100,
+    "model": "deberta_s999",
+    "eval_set": "pairs_v0",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/pairs/judge_qwen2.5_7b.csv",
+    "source_sha256": "7252ddd36baeb44a85ceb310d5ab51c89edd48d7d714b60e38b8cc603ea7d01d",
+    "dest": "results/v2_std/pairs_v0/judge_qwen2.5_7b.csv",
+    "rows": 100,
+    "model": "judge_qwen2.5_7b",
+    "eval_set": "pairs_v0",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/pairs/piguard.csv",
+    "source_sha256": "45450c72ad8f84562c57bf5c10871c2385d3e8cea45dc7bf0824a890fe35db67",
+    "dest": "results/v2_std/pairs_v0/piguard.csv",
+    "rows": 100,
+    "model": "piguard",
+    "eval_set": "pairs_v0",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/pairs/protectai.csv",
+    "source_sha256": "3770be8ac9e841147ec3755ca5e18d3e78f4f2fe7164e36cca8a5831b029962c",
+    "dest": "results/v2_std/pairs_v0/protectai.csv",
+    "rows": 100,
+    "model": "protectai",
+    "eval_set": "pairs_v0",
+    "threshold": 0.5
+  },
+  {
+    "source": "results/scores/pairs/tfidf.csv",
+    "source_sha256": "ec7f7c08bc7b966d79e16e3b36001e45d62383805421f2a3fb19c2d6199d6512",
+    "dest": "results/v2_std/pairs_v0/tfidf.csv",
+    "rows": 100,
+    "model": "tfidf",
+    "eval_set": "pairs_v0",
+    "threshold": 0.5
+  }
+]
