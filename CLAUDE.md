@@ -26,7 +26,7 @@ Full audit of the current state: `CODEBASE_STATE.md` (2026-10-19). Read it befor
 - These commands write into frozen paths **by default**. Never run them without pointing their outputs elsewhere:
   - `python src/data_pipeline.py` writes `data/processed/` (override with `--output_dir`).
   - `python run_experiments.py` hardcodes `results/`. It has no CLI, so it must be changed before reuse.
-  - `python src/models/tfidf_lr.py --mode train` writes `results/tfidf_lr_results.json` and `checkpoints/tfidf_lr_model.pkl`.
+  - `python src/models/tfidf_lr.py --mode train` now refuses frozen paths: pass `--checkpoint_dir` (and optionally `--output`).
   - `python src/models/deberta.py --mode train` writes `results/deberta_*_results.json` (override with `--output`).
   - `score_detectors.py score` and `summarize` write `results/scores/`. `build` writes `data/pairs/` and `data/external/`.
   - `demo.py --mode train` (and menu option 7) runs `run_experiments.py`. `--mode stats` rebuilds data if it is missing.
@@ -112,6 +112,17 @@ Framing: *evaluation methodology + generalization failure* first, method second.
 - `src/models/deberta.py`: DeBERTa-v3-base fine-tuning in a **custom PyTorch loop** (not HF Trainer).
   max_len 512, batch 8×2, lr 2e-5, 3 epochs. `--seed`, `--test_task` (LOTO), `--train_subsample`.
 - `src/evaluate.py`: **mostly dead.** Only `pair_accuracy` is live (imported by score_detectors.py).
+- `src/metrics.py`: **the single metrics module.** Point metrics (incl. PR-AUC, Recall@1/5/10%FPR + threshold, ECE),
+  `group_metrics`, `pair_metrics`, `doc_cluster_bootstrap` (bit-identical to V2), `paired_bootstrap`, `mcnemar`.
+  The legacy `compute_metrics` functions in tfidf_lr.py, deberta.py and run_experiments.py delegate to it.
+  `score_detectors.metrics` does NOT: its Recall@5%FPR (`drop_intermediate=True`) differs on pairs/{piguard,protectai}.
+- `src/runlog.py`: every new run calls `start_run(...)`, which writes `results/<version>/<exp>/<run_id>/` and appends
+  `results/REGISTRY.md`. `assert_not_frozen(path)` is the frozen-path guard. `PRED_COLUMNS` is the predictions schema.
+- `scripts/convert_v2_predictions.py`: V2 predictions/scores → `results/v2_std/<eval_set>/<model>.csv` (+ manifest).
+- `scripts/make_tables.py`: LaTeX tables in `paper/tables/` + `paper/numbers.tex` macros, verified against frozen JSON.
+- `scripts/error_stats.py`, `scripts/deberta_v2_stats.py`: V2 error analysis and DeBERTa CIs → `results/v2_std/*.json`.
+- `scripts/tokenizer_check.py`: DeBERTa tokenizer diagnostics → `results/v3/tokenizer_check/`.
+- `tests/`: `python -m pytest tests/` (metrics hand-computed cases, bootstrap equivalence, runlog guard).
 - `run_experiments.py`: TF-IDF val tuning, test eval, Recall@5/10%FPR, doc-cluster bootstrap, per-task, LOTO, ablations.
   No CLI and no seed argument; it writes `results/` directly.
 - `score_detectors.py`: builds the pairs/InjecAgent/deepset sets; zero-shot scoring (tfidf, deberta, hf, judge); summary.
@@ -124,30 +135,36 @@ Framing: *evaluation methodology + generalization failure* first, method second.
 - Untracked course docs: `report_phase2.tex/.pdf`, `docs/architecture_spec.md`, `docs/proposal.md`, `docs/project_rubric.md`.
 - DeBERTa checkpoints exist only on the HPC cluster. `checkpoints/deberta_best/` is empty locally.
 
-**To be created (do not reference as existing):** `paper/` (LaTeX), `slurm/` (or move the submit scripts there),
-`scripts/make_tables.py` (results → LaTeX), `results/REGISTRY.md`, a pinned `requirements.txt`.
+Environment: `requirements.txt` (pinned to local .venv), `requirements-dev.txt` (+pytest),
+`requirements-hpc.txt` (torch 2.11.0+cu128 confirmed; other versions TBC).
+
+**To be created (do not reference as existing):** the paper draft itself in `paper/` (only generated tables and
+`numbers.tex` exist), `slurm/` (or move the submit scripts there).
 
 Keep this section updated when files move.
 
 ## Experiment hygiene
 - Target layout for new runs: `results/v3/<exp_name>/<timestamp>_seed<k>/` containing `config.json`
   (all hparams + git commit hash + data version), `metrics.json`, `predictions.csv`, and logs. V2 results do not follow this.
-- **Prediction schema:** this will be standardized in an upcoming infrastructure step. Current columns as-is:
-  - `results/test_predictions.csv` (TF-IDF): `id, doc_id, task_type, attack_type, attack_source, label, prob_injected, pred_default, prob_injected_tuned, pred_tuned, pred`
-  - `results/loto_predictions_*.csv`: `id, doc_id, task_type, attack_type, attack_source, label, prob_injected, pred`
-  - `results/deberta_predictions/*/*.csv`: `id, doc_id, task_type, attack_type, label, prob_injected, pred` (no `attack_source`)
-  - `results/scores/<ds>/<model>.csv`: subset of `id, pair_id, role, task_type, subtle, attack_type, label, score`
-- Keep `results/REGISTRY.md` (once created): one line per run with date, exp name, commit, data version, headline metric, and path.
-  Paper tables are generated from results files by script, never typed by hand.
+- **Prediction schema (all new runs, enforced by `runlog.validate_predictions`):**
+  `id, doc_id, split_seed, task, label, attack_category, attack_source, insertion_mode, clean_type, prob, pred, threshold, model, run_id, eval_set`
+  (empty where not applicable). Pair ids are derived from `id` (`pairNNN_<role>`).
+  Frozen V2 files keep their original columns; use the converted copies in `results/v2_std/` for analysis.
+- `results/REGISTRY.md`: one line per run (appended by runlog) with date, version, exp, run_id, commit, data version,
+  headline metric, and path. Paper tables are generated from results files by `scripts/make_tables.py`, never typed by hand.
 - Metrics to always compute: macro-F1, injected-class P/R/F1, ROC-AUC, Recall@5%FPR, Recall@10%FPR,
   per-task breakdown, per-attack-category FN rate, FP rate on benign-imperative vs. raw clean.
-  At `v2-frozen`, the last two have no script, and DeBERTa has no bootstrap or Recall@FPR.
+  All are in `src/metrics.py`; V2 values are in `results/v2_std/error_stats_*.json` and `deberta_summary.json`.
 - Evaluation settings to support for every model: in-distribution test, held-out attack test,
   leave-one-task-out (train on 2 tasks' TRAIN docs, test on the 3rd task's TEST docs; select hparams without the held-out task).
 
 ## Known weaknesses a reviewer will hit (address before submission)
 - The V2 insertion artifacts above. Positional and separator shortcuts must be ablated, and V3 must remove them.
-- DeBERTa has 3 seeds (target 5), no bootstrap CIs, and is measured on artifact-laden V2 only.
+- DeBERTa has 3 seeds (target 5) and is measured on artifact-laden V2 only.
+- DeBERTa-v3's tokenizer (SentencePiece) maps `\n`, `\n\n` and a space to the same tokens, so DeBERTa never sees
+  separators or formatting. The transformers "incorrect regex pattern" warning is a false positive for this
+  checkpoint; its suggested `fix_mistral_regex=True` breaks tokenization. Don't use it
+  (`results/v3/tokenizer_check/`).
 - The test split is small (72 docs; EmailQA 12), so CIs are wide. Consider more held-out data or more variants
   per doc *without* breaking document-level grouping.
 - Model-directed `benign_test` templates are label-ambiguous. Plan: a stricter human-addressed benign pool, and
