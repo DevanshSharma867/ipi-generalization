@@ -1,0 +1,21 @@
+# BITS HPC (Sharanga, RTX PRO 6000 Blackwell, CUDA 12.8).
+# Confirmed from logs/slurm_deberta_399716.log: torch 2.11.0+cu128.
+# Every other version below is TO BE CONFIRMED on the cluster (`pip freeze` inside the HPC .venv)
+# and is copied from the local pins in requirements.txt as a starting point.
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0+cu128
+transformers==5.19.0        # TBC
+tokenizers==0.23.3          # TBC
+huggingface_hub==2.2.0      # TBC
+datasets==5.1.0             # TBC
+scikit-learn==1.9.1         # TBC
+scipy==1.18.1               # TBC
+joblib==1.6.0               # TBC
+pandas==3.0.6               # TBC (sub496 document sampling depends on pandas' groupby().sample)
+numpy==2.5.4                # TBC
+nltk==3.10.3                # TBC
+tqdm==4.70.1                # TBC
+accelerate==1.15.0          # TBC
+sentencepiece==0.2.2        # TBC
+protobuf==7.36.2            # TBC
+captum==0.9.0               # TBC
