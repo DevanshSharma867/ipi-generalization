@@ -25,6 +25,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn.metrics import f1_score
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
@@ -34,7 +35,8 @@ from runlog import start_run
 PROBES_RES = ROOT / "results" / "v2_probes"
 FIG = ROOT / "paper" / "figures" / "position_flag_rates"
 POSITIONS = ("start", "middle", "end")
-MODEL_ORDER = ["tfidf_c1", "deberta_s42", "deberta_s123", "deberta_s999", "protectai", "piguard", "judge_qwen2.5_7b"]
+MODEL_ORDER = ["tfidf_c1", "deberta_s42", "deberta_s123", "deberta_s999", "deberta_mean", "protectai", "piguard",
+               "judge_qwen2.5_7b"]
 CONTRASTS = [("p1_start_minus_middle", "p1_neutral_insertion", "start", "middle"),
              ("p3_end_minus_start", "p3_attack_moved", "end", "start"),
              ("p2_start_minus_middle", "p2_benign_moved", "start", "middle")]
@@ -43,8 +45,38 @@ LINES = [("p1_neutral_insertion", "P1 neutral (flag rate)", "#2a78d6", "o"),
          ("p3_attack_moved", "P3 attack moved (recall)", "#1baf7a", "^")]
 
 
+MEAN_SEEDS = ("deberta_s42", "deberta_s123", "deberta_s999")
+
+
 def flag_rate(d):
     return float(d["pred"].mean())
+
+
+def f1(d):
+    return df_metrics(d)["f1_macro"]
+
+
+def seed_cols(d):
+    return [c for c in d.columns if c.startswith("pred__")]
+
+
+def mean_flag_rate(d):
+    """Seed mean: average of the per-seed flag rates on the same rows."""
+    return float(np.mean([d[c].mean() for c in seed_cols(d)]))
+
+
+def mean_f1(d):
+    return float(np.mean([f1_score(d["label"], d[c], average="macro", zero_division=0) for c in seed_cols(d)]))
+
+
+def seed_mean_frame(frames):
+    """One frame with each seed's predictions as pred__<model>, rows aligned by (eval_set, id)."""
+    base = frames[MEAN_SEEDS[0]].drop(columns=["prob", "pred", "model", "run_id"])
+    for m in MEAN_SEEDS:
+        f = frames[m].set_index(["eval_set", "id"]).loc[list(zip(base["eval_set"], base["id"]))]
+        assert (f["label"].values == base["label"].values).all()
+        base[f"pred__{m}"] = f["pred"].values
+    return base
 
 
 def latest_predictions():
@@ -61,25 +93,25 @@ def pair_key(df):
     return df.assign(id=df["id"].str.rsplit("_", n=1).str[0])
 
 
-def model_report(df):
+def model_report(df, rate_fn=flag_rate, f1_fn=f1):
     out = {"cells": {}, "contrasts": {}}
     for s in ("p1_neutral_insertion", "p2_benign_moved", "p3_attack_moved"):
         d = df[df["eval_set"] == s]
         for pos in POSITIONS:
             sub = d[d["insertion_mode"] == pos].reset_index(drop=True)
             if len(sub):
-                out["cells"][f"{s}/{pos}"] = {"n": len(sub), **doc_cluster_bootstrap(sub, flag_rate)}
+                out["cells"][f"{s}/{pos}"] = {"n": len(sub), **doc_cluster_bootstrap(sub, rate_fn)}
     p4 = df[df["eval_set"] == "p4_whitespace_only"].reset_index(drop=True)
     if len(p4):
-        out["cells"]["p4_whitespace_only"] = {"n": len(p4), **doc_cluster_bootstrap(p4, flag_rate)}
+        out["cells"]["p4_whitespace_only"] = {"n": len(p4), **doc_cluster_bootstrap(p4, rate_fn)}
     v2 = df[df["eval_set"] == "v2_test"].reset_index(drop=True)
     if len(v2):
-        out["cells"]["v2_test_f1_macro"] = {"n": len(v2), **doc_cluster_bootstrap(v2, lambda d: df_metrics(d)["f1_macro"])}
+        out["cells"]["v2_test_f1_macro"] = {"n": len(v2), **doc_cluster_bootstrap(v2, f1_fn)}
     for name, s, a, b in CONTRASTS:
         d = df[df["eval_set"] == s]
         da, db = (pair_key(d[d["insertion_mode"] == p]).reset_index(drop=True) for p in (a, b))
         if len(da) and len(db):
-            out["contrasts"][name] = {"n_pairs": len(da), **paired_bootstrap(da, db, flag_rate)}
+            out["contrasts"][name] = {"n_pairs": len(da), **paired_bootstrap(da, db, rate_fn)}
     return out
 
 
@@ -122,15 +154,20 @@ def figure(report, run_dir):
 
 def main():
     found = latest_predictions()
-    missing = [m for m in MODEL_ORDER if m not in found]
+    missing = [m for m in MODEL_ORDER if m not in found and m != "deberta_mean"]
     run = start_run(version="v2_probes", exp="probe_report", seed=42,
                     args={"sources": {m: str(p.relative_to(ROOT)) for m, p in found.items()}, "missing": missing,
                           "bootstrap": {"B": 1000, "seed": 42}},
                     data_version="v2_probes", data_files=list(found.values()))
-    report = {}
+    report, frames = {}, {}
     for m, path in found.items():
         run.log(f"{m}: {path.relative_to(ROOT)}")
-        report[m] = model_report(pd.read_csv(path, keep_default_na=False))
+        frames[m] = pd.read_csv(path, keep_default_na=False)
+        report[m] = model_report(frames[m])
+    if all(m in frames for m in MEAN_SEEDS):
+        run.log(f"deberta_mean: seed mean of {MEAN_SEEDS} (same doc draw for every seed)")
+        report["deberta_mean"] = model_report(seed_mean_frame(frames), mean_flag_rate, mean_f1)
+    report = {m: report[m] for m in [m for m in MODEL_ORDER if m in report] + [m for m in report if m not in MODEL_ORDER]}
     figure(report, run.dir)
     run.save_metrics({"models": report, "missing_models": missing})
     run.log(f"missing models (not yet scored): {missing}")
