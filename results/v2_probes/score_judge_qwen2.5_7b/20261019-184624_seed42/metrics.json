@@ -1,0 +1,8 @@
+{
+  "rows_per_set": {
+    "p1_neutral_insertion": 216,
+    "p4_whitespace_only": 72,
+    "p2_benign_moved": 216,
+    "p3_attack_moved": 432
+  }
+}

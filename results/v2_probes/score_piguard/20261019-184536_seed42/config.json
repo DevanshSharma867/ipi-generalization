@@ -1,0 +1,66 @@
+{
+  "run_id": "20261019-184536_seed42",
+  "version": "v2_probes",
+  "exp": "score_piguard",
+  "seed": 42,
+  "args": {
+    "model": "hf",
+    "checkpoint": "leolee99/PIGuard",
+    "name": "piguard",
+    "sets": [
+      "p1_neutral_insertion",
+      "p2_benign_moved",
+      "p3_attack_moved",
+      "p4_whitespace_only",
+      "v2_test"
+    ],
+    "doc_frac": 1.0,
+    "seed": 42,
+    "checkpoint_origin": "hf_hub",
+    "probe_manifest_sha256": "9596710ec5b85fc3c6aa24467a7870ee9dda7fc01cc587de93f020aed663c894"
+  },
+  "git_commit": "518b572d69634dc96ef74ca48f074bc32a4bf8ad",
+  "git_dirty": true,
+  "data_version": "v2_probes",
+  "data_files_sha256": {
+    "/home/csisnlp_18/nlp_probe/data/probes_v2/p1_neutral_insertion.csv": "872d319202d4c72ef5295382f4387db6b857f38c89636a22965822c6b443ecf5",
+    "/home/csisnlp_18/nlp_probe/data/probes_v2/p2_benign_moved.csv": "4f0f6e09d4141ecc84b0359d721a62f43dddafac07d921c8198a5d45d623b6c9",
+    "/home/csisnlp_18/nlp_probe/data/probes_v2/p3_attack_moved.csv": "2b72a8c12427441e8cd99b524fdca67b0e6a8a027c3a50935f67c3f589700072",
+    "/home/csisnlp_18/nlp_probe/data/probes_v2/p4_whitespace_only.csv": "5874f85d1efd70bb301bca4bcb1b4057440ca680324334a02a1160531becee76",
+    "/home/csisnlp_18/nlp_probe/data/processed/test.csv": "dbd92d8cf1bd19f9d5a84bff7e0f3e515eb5444836bc864e380cadda3c6f6097"
+  },
+  "library_versions": {
+    "python": "3.11.13",
+    "numpy": "2.4.6",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.17.1",
+    "torch": "2.11.0+cu128",
+    "transformers": "5.20.1",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": null
+  },
+  "hardware": {
+    "platform": "Linux-4.18.0-553.109.1.el8_10.x86_64-x86_64-with-glibc2.28",
+    "machine": "x86_64",
+    "node": "gpunode8.sharanga.local",
+    "cpu_count": 64,
+    "slurm_job_id": "404404"
+  },
+  "argv": [
+    "scripts/score_probes.py",
+    "--name",
+    "piguard",
+    "--model",
+    "hf",
+    "--checkpoint",
+    "leolee99/PIGuard",
+    "--checkpoint_origin",
+    "hf_hub"
+  ],
+  "started": "2026-10-19T18:45:36"
+}
