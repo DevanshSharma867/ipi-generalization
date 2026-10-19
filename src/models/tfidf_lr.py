@@ -36,6 +36,8 @@ from sklearn.metrics import (
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from preprocess import get_tfidf_data
+from metrics import legacy_metrics
+from runlog import assert_not_frozen
 
 
 # ─── Hyperparameters ──────────────────────────────────────────────────────────
@@ -180,15 +182,8 @@ def compute_metrics(
     probs: np.ndarray,
     prefix: str = "test",
 ) -> Dict[str, float]:
-    """Compute all evaluation metrics."""
-    return {
-        f"{prefix}_accuracy": accuracy_score(labels, preds),
-        f"{prefix}_f1_macro": f1_score(labels, preds, average="macro"),
-        f"{prefix}_f1_injected": f1_score(labels, preds, pos_label=1, average="binary"),
-        f"{prefix}_precision": precision_score(labels, preds, pos_label=1, average="binary"),
-        f"{prefix}_recall": recall_score(labels, preds, pos_label=1, average="binary"),
-        f"{prefix}_roc_auc": roc_auc_score(labels, probs),
-    }
+    """Compute all evaluation metrics (delegates to src/metrics.py)."""
+    return legacy_metrics(labels, preds, probs, prefix)
 
 
 def get_top_features(pipeline: Pipeline, n: int = 20) -> Dict[str, list]:
@@ -215,11 +210,19 @@ def main():
     parser.add_argument("--data_dir", default="data/processed")
     parser.add_argument("--checkpoint_dir", default="checkpoints")
     parser.add_argument("--split", default="test")
-    parser.add_argument("--output", default="results/tfidf_lr_results.json")
+    parser.add_argument("--output", default=None,
+                        help="Metrics JSON (default results/v3/tfidf_lr/<mode>_results.json); frozen V2 paths are refused")
     args = parser.parse_args()
-    
-    os.makedirs("results", exist_ok=True)
-    
+
+    if args.output is None:
+        args.output = os.path.join("results", "v3", "tfidf_lr", f"{args.mode}_results.json")
+    if args.mode in ("train", "eval"):
+        assert_not_frozen(args.output)
+        os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
+    if args.mode == "train":
+        # train() writes <checkpoint_dir>/tfidf_lr_model.pkl; the V2 checkpoint is frozen
+        assert_not_frozen(os.path.join(args.checkpoint_dir, "tfidf_lr_model.pkl"))
+
     if args.mode == "train":
         pipeline, val_metrics = train(args.data_dir, args.checkpoint_dir)
         # Also run test evaluation
