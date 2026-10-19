@@ -61,6 +61,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from preprocess import get_deberta_data, build_combined_text
+from metrics import legacy_metrics
 
 
 # ─── Default Hyperparameters ──────────────────────────────────────────────────
@@ -150,18 +151,8 @@ def compute_metrics(
     probs: np.ndarray,
     prefix: str = "test",
 ) -> Dict[str, float]:
-    """Compute all evaluation metrics."""
-    has_both_classes = len(np.unique(labels)) > 1
-    roc_auc = float(roc_auc_score(labels, probs)) if has_both_classes else 0.0
-
-    return {
-        f"{prefix}_accuracy": float(accuracy_score(labels, preds)),
-        f"{prefix}_f1_macro": float(f1_score(labels, preds, average="macro", zero_division=0)),
-        f"{prefix}_f1_injected": float(f1_score(labels, preds, pos_label=1, average="binary", zero_division=0)),
-        f"{prefix}_precision": float(precision_score(labels, preds, pos_label=1, average="binary", zero_division=0)),
-        f"{prefix}_recall": float(recall_score(labels, preds, pos_label=1, average="binary", zero_division=0)),
-        f"{prefix}_roc_auc": roc_auc,
-    }
+    """Compute all evaluation metrics (delegates to src/metrics.py)."""
+    return legacy_metrics(labels, preds, probs, prefix)
 
 
 def save_split_predictions_csv(
