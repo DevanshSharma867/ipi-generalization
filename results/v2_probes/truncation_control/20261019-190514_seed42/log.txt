@@ -1,0 +1,12 @@
+[19:05:14] deberta: max tokens 839, rows with span not fully visible 28
+[19:05:15] protectai: max tokens 815, rows with span not fully visible 22
+[19:05:15] piguard: max tokens 815, rows with span not fully visible 22
+[19:05:16] qwen: max tokens 1110, rows with span not fully visible 0
+[19:05:20] deberta_s123: rows 780/864; P3 end-start full -0.1389 matched -0.0620
+[19:05:25] deberta_s42: rows 780/864; P3 end-start full -0.2083 matched -0.1395
+[19:05:29] deberta_s999: rows 780/864; P3 end-start full -0.1736 matched -0.0930
+[19:05:34] judge_qwen2.5_7b: rows 864/864; P3 end-start full -0.2500 matched -0.2500
+[19:05:38] piguard: rows 798/864; P3 end-start full -0.0278 matched +0.0451
+[19:05:43] protectai: rows 798/864; P3 end-start full +0.0208 matched +0.0150
+[19:05:47] tfidf_c1: rows 864/864; P3 end-start full -0.0833 matched -0.0833
+[19:05:53] deberta_mean: rows 780/864; P3 end-start full -0.1736 matched -0.0982
