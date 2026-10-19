@@ -6,8 +6,10 @@ scored model (missing models are skipped and listed).
 
   - artifact reliance: flag rate on P1 and P2 by position, recall on P3 by position, flag rate on P4,
     V2 test macro-F1 -- each with a doc-cluster bootstrap 95% CI (B=1000, seed 42)
+  - flag rate on the untouched raw clean V2 test rows (natural false-positive rate)
   - paired within-doc contrasts (paired cluster bootstrap of the difference; rows paired by their source
-    row, i.e. same doc and same inserted text): P1 start - P1 middle, P3 end - P3 start, P2 start - P2 middle
+    row, i.e. same doc and same inserted text): P1 start - P1 middle, P3 end - P3 start, P2 start - P2 middle,
+    and P4 - raw clean (same doc, whitespace-collapsed vs untouched)
   - figure: flag rate vs position per model, P1/P2/P3 as separate lines (paper/figures/position_flag_rates.{pdf,png})
 
 Logged with runlog to results/v2_probes/probe_report/<run_id>/; scripts/make_tables.py turns its
@@ -80,11 +82,18 @@ def seed_mean_frame(frames):
 
 
 def latest_predictions():
+    """model -> (predictions, sources). A model may have several scoring runs (e.g. the judge's probe run and
+    its later V2-test run); for each eval_set the latest run that scored it wins."""
     found = {}
     for exp in sorted(PROBES_RES.glob("score_*")):
-        runs = sorted(p for p in exp.iterdir() if (p / "predictions.csv").exists())
-        if runs:
-            found[exp.name[len("score_"):]] = runs[-1] / "predictions.csv"
+        per_set = {}
+        for run in sorted(p for p in exp.iterdir() if (p / "predictions.csv").exists()):
+            df = pd.read_csv(run / "predictions.csv", keep_default_na=False)
+            for s, g in df.groupby("eval_set"):
+                per_set[s] = (g, run / "predictions.csv")
+        if per_set:
+            frames = pd.concat([g for g, _ in per_set.values()], ignore_index=True)
+            found[exp.name[len("score_"):]] = (frames, sorted({str(p.relative_to(ROOT)) for _, p in per_set.values()}))
     return found
 
 
@@ -107,11 +116,18 @@ def model_report(df, rate_fn=flag_rate, f1_fn=f1):
     v2 = df[df["eval_set"] == "v2_test"].reset_index(drop=True)
     if len(v2):
         out["cells"]["v2_test_f1_macro"] = {"n": len(v2), **doc_cluster_bootstrap(v2, f1_fn)}
+    raw = v2[v2["clean_type"] == "raw"].reset_index(drop=True) if len(v2) else v2
+    if len(raw):
+        out["cells"]["v2_test_raw_clean_flag"] = {"n": len(raw), **doc_cluster_bootstrap(raw, rate_fn)}
     for name, s, a, b in CONTRASTS:
         d = df[df["eval_set"] == s]
         da, db = (pair_key(d[d["insertion_mode"] == p]).reset_index(drop=True) for p in (a, b))
         if len(da) and len(db):
             out["contrasts"][name] = {"n_pairs": len(da), **paired_bootstrap(da, db, rate_fn)}
+    if len(p4) and len(raw):
+        # Same 72 docs, one row each: whitespace-collapsed vs untouched raw context
+        da, db = (x.assign(id=x["doc_id"]).reset_index(drop=True) for x in (p4, raw))
+        out["contrasts"]["p4_minus_raw_clean"] = {"n_pairs": len(da), **paired_bootstrap(da, db, rate_fn)}
     return out
 
 
@@ -155,15 +171,15 @@ def figure(report, run_dir):
 def main():
     found = latest_predictions()
     missing = [m for m in MODEL_ORDER if m not in found and m != "deberta_mean"]
+    sources = {m: src for m, (_, src) in found.items()}
     run = start_run(version="v2_probes", exp="probe_report", seed=42,
-                    args={"sources": {m: str(p.relative_to(ROOT)) for m, p in found.items()}, "missing": missing,
-                          "bootstrap": {"B": 1000, "seed": 42}},
-                    data_version="v2_probes", data_files=list(found.values()))
+                    args={"sources": sources, "missing": missing, "bootstrap": {"B": 1000, "seed": 42}},
+                    data_version="v2_probes", data_files=sorted({ROOT / p for src in sources.values() for p in src}))
     report, frames = {}, {}
-    for m, path in found.items():
-        run.log(f"{m}: {path.relative_to(ROOT)}")
-        frames[m] = pd.read_csv(path, keep_default_na=False)
-        report[m] = model_report(frames[m])
+    for m, (df, src) in found.items():
+        run.log(f"{m}: {', '.join(src)}")
+        frames[m] = df
+        report[m] = model_report(df)
     if all(m in frames for m in MEAN_SEEDS):
         run.log(f"deberta_mean: seed mean of {MEAN_SEEDS} (same doc draw for every seed)")
         report["deberta_mean"] = model_report(seed_mean_frame(frames), mean_flag_rate, mean_f1)
