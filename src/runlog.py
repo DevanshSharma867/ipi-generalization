@@ -59,6 +59,16 @@ def _git(*args) -> str:
         return ""
 
 
+def code_dirty() -> bool:
+    """Uncommitted changes outside results/. Run outputs (results/**, incl. REGISTRY.md appends) are not
+    code or data drift, so they do not count."""
+    for line in _git("status", "--porcelain", "--untracked-files=all").splitlines():
+        path = line[3:].split(" -> ")[-1].strip('"')
+        if not path.startswith("results/"):
+            return True
+    return False
+
+
 def frozen_paths() -> list:
     """Repo-relative frozen paths: everything tracked in the tag under results/ (files and their
     top-level directories), data/processed/ and the TF-IDF checkpoint; static list as fallback."""
@@ -176,7 +186,7 @@ class Run:
         files = {str(f): sha256(f) for f in data_files}
         config = {
             "run_id": self.run_id, "version": version, "exp": exp, "seed": seed, "args": args,
-            "git_commit": _git("rev-parse", "HEAD"), "git_dirty": bool(_git("status", "--porcelain")),
+            "git_commit": _git("rev-parse", "HEAD"), "git_dirty": code_dirty(),
             "data_version": data_version, "data_files_sha256": files,
             "library_versions": _versions(), "hardware": _hardware(),
             "argv": sys.argv, "started": _dt.datetime.now().isoformat(timespec="seconds"),

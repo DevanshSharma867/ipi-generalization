@@ -50,6 +50,14 @@ def test_run_layout(tmp_path):
     assert run.run_id.endswith("_seed7") and run.run_id in (tmp_path / "results" / "REGISTRY.md").read_text()
 
 
+def test_code_dirty_ignores_results(monkeypatch):
+    outputs = "?? results/v2_probes/score_x/2026/log.txt\n M results/REGISTRY.md"
+    monkeypatch.setattr(runlog, "_git", lambda *a: outputs)
+    assert runlog.code_dirty() is False
+    monkeypatch.setattr(runlog, "_git", lambda *a: outputs + "\n M src/metrics.py")
+    assert runlog.code_dirty() is True
+
+
 def test_validate_predictions_rejects_extra_columns():
     with pytest.raises(ValueError):
         runlog.validate_predictions(pd.DataFrame({"id": [1], "label": [1], "prob": [1], "pred": [1], "threshold": [.5],
