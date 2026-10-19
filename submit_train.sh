@@ -37,6 +37,12 @@
 #SBATCH --gres=mps:50
 
 # ------------------------------------------------------------------------------
+# SITE SETTINGS (edit here; #SBATCH lines above must stay first in the file)
+# ------------------------------------------------------------------------------
+MODULES=""          # space-separated modules to load, e.g. "python/3.10 cuda/12.1"; empty = none
+VENV_PATH=".venv"   # virtualenv to activate (relative to the submit directory)
+
+# ------------------------------------------------------------------------------
 # ENVIRONMENT SETUP
 # ------------------------------------------------------------------------------
 echo "=============================================================================="
@@ -49,13 +55,10 @@ mkdir -p logs
 mkdir -p checkpoints
 mkdir -p results
 
-# TODO: Load required modules (uncomment and adjust for your HPC cluster)
-# module load python/3.10
-# module load cuda/12.1
-
-# TODO: Activate your Python virtual environment
-# source /path/to/your/venv/bin/activate
-source .venv/bin/activate
+for m in $MODULES; do
+    module load "$m"
+done
+source "$VENV_PATH/bin/activate"
 
 # Enforce offline HuggingFace mode (compute nodes usually lack egress access)
 export HF_HUB_OFFLINE=1
