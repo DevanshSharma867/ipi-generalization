@@ -1,0 +1,6 @@
+[18:00:20] spans recovered exactly: train 1002, test 216
+[18:00:40] position_oracle      n=288 macro-F1 0.7333 [0.7333, 0.7333]  ROC-AUC 0.7500 [0.7500, 0.7500]
+[18:00:59] first_para_rule      n=288 macro-F1 0.7007 [0.6800, 0.7193]  ROC-AUC 0.7083 [0.6874, 0.7292]
+[18:01:19] prefix30_tfidf_lr    n=288 macro-F1 0.7046 [0.6765, 0.7320]  ROC-AUC 0.7514 [0.7274, 0.7775]
+[18:01:38] suffix30_tfidf_lr    n=288 macro-F1 0.5115 [0.4932, 0.5274]  ROC-AUC 0.5236 [0.5063, 0.5467]
+[18:01:57] span_form_lr         n=216 macro-F1 0.8421 [0.7928, 0.8879]  ROC-AUC 0.8165 [0.7513, 0.8762]
