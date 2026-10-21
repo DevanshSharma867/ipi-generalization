@@ -387,21 +387,35 @@ def donor_candidates(task: str, ctx: str, tok, cap: int, rng: random.Random) -> 
 MATCH_FEATURES = ("has_digit", "has_you", "ends_q", "has_quote")
 
 
-def attack_rates() -> Dict[str, Dict[str, float]]:
-    """Train-attack-file rate of each MATCH_FEATURE, per attack register."""
+MATCH_WEIGHT = {"has_digit": 2.0, "has_you": 1.0, "ends_q": 1.0, "has_quote": 1.0}
+
+
+def attack_rates() -> Dict[str, dict]:
+    """Per attack register: train-file rate of each MATCH_FEATURE and the (n_words, n_chars) shape of every string."""
     pools = load_attack_pools()
-    return {reg: {f: float(np.mean([form_tags(a)[f] for a in pools[reg]["train_file"]])) for f in MATCH_FEATURES}
-            for reg in ("text", "code")}
+    out = {}
+    for reg in ("text", "code"):
+        tags = [form_tags(normalize_span(a)) for a in pools[reg]["train_file"]]
+        out[reg] = {"rates": {f: float(np.mean([t[f] for t in tags])) for f in MATCH_FEATURES},
+                    "shapes": [(t["n_words"], t["n_chars"]) for t in tags]}
+    return out
 
 
-def choose_clean_b(pool: List[dict], rng: random.Random, rates: Dict[str, float], usage) -> dict:
-    """Draw a desired feature vector from the train-attack rates; take the candidate matching most features,
+def choose_clean_b(pool: List[dict], rng: random.Random, profile: dict, usage) -> dict:
+    """Draw a desired feature vector from the train-attack rates and a target shape from a random train attack;
+    take the candidate with the best weighted feature match minus its log-distance in words and chars,
     then the least used (usage(c) -> tuple), ties broken by the RNG."""
-    want = {f: rng.random() < rates[f] for f in MATCH_FEATURES}
+    want = {f: rng.random() < profile["rates"][f] for f in MATCH_FEATURES}
+    tw, tc = rng.choice(profile["shapes"])
     pool = list(pool)
     rng.shuffle(pool)
-    score = lambda c: sum(c["tags"][f] == want[f] for f in MATCH_FEATURES)
-    return min(pool, key=lambda c: (-score(c), usage(c)))
+
+    def fit(c):
+        t = c["tags"]
+        match = sum(MATCH_WEIGHT[f] for f in MATCH_FEATURES if t[f] == want[f])
+        dist = abs(np.log(max(t["n_words"], 1) / tw)) + abs(np.log(max(t["n_chars"], 1) / tc))
+        return round(match - dist, 1)
+    return min(pool, key=lambda c: (-fit(c), usage(c)))
 
 
 # ─── form targets (D5, D6) ────────────────────────────────────────────────────
@@ -426,7 +440,7 @@ def clean_b_spans_all(docs: pd.DataFrame, tok, span_cap) -> Dict[str, List[str]]
         cands = []
         for d in g.to_dict("records"):
             rng = random.Random(f"v3:profile:{d['doc_id']}")
-            cands += [{"text": s, "donor": d["doc_id"], "tags": form_tags(s)}
+            cands += [{"text": s, "donor": d["doc_id"], "tags": form_tags(normalize_span(s))}
                       for s in donor_candidates(task, d["context"], tok, span_cap[ATTACK_REGISTER[task]], rng)]
         rng, used = random.Random(f"v3:profile:{task}"), Counter()
         for d in g["doc_id"]:
@@ -469,7 +483,14 @@ def pick(rng: random.Random, items: list, counts: Counter, key, n=1, exclude=())
     return chosen
 
 
+def normalize_span(span: str) -> str:
+    """Applied identically to every inserted span: strip, and collapse blank lines to one newline (whitespace only;
+    BIPIA code attacks end in a blank line before the closing fence, most donor chunks do not)."""
+    return re.sub(r"\n[ \t]*(\n[ \t]*)+", "\n", span.strip())
+
+
 def make_row(doc, ctx, span, position, sep, base: dict) -> dict:
+    span = None if span is None else normalize_span(span)
     if span is None:
         text, off, kind, ln = ctx, "", "none", ""
     else:
@@ -513,7 +534,7 @@ def build(split_seed: int, benign_json: Path, doc_limit: Optional[int] = None) -
                 if any(s in o for o in other):
                     excluded[task] += 1
                     continue
-                cands.append({"text": s, "donor": d["doc_id"], "tags": form_tags(s)})
+                cands.append({"text": s, "donor": d["doc_id"], "tags": form_tags(normalize_span(s))})
         donors[(task, split)] = cands
     # A text that is a candidate in two splits (e.g. the same rendered table sentence) is dropped from both
     for task in TASKS:
