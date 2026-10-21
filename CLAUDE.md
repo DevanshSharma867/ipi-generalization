@@ -130,6 +130,15 @@ Framing: *evaluation methodology + generalization failure* first, method second.
   probe → `results/v2_probes/artifact_baselines/`.
 - `scripts/build_probes_v2.py`: P1–P4 position stress tests from V2 test docs → `data/probes_v2/` (+ manifest).
 - `scripts/score_probes.py`: scores probes + V2 test with any `score_detectors` scorer → `results/v2_probes/score_<model>/`.
+- `src/data_pipeline_v3.py`: **the V3 builder** (docs/v3_design.md, decisions D1-D7). `--split_seed --benign_json
+  --output_dir` (default `data/v3/`). One inserted span per row; i.i.d. position/separator; boundary fallback;
+  code/table trimming; near-dup components; profile-matched clean-B donors; integrity assertions in `check()`.
+  Shared insertion/extractor/form-tag helpers live in `src/probes.py`.
+- `data/benign/benign_v3_draft.json`: DRAFT V3 benign pool (unreviewed). `scripts/benign_v3_check.py` (assemble,
+  form targets, attack-indicative tokens, similarity), `scripts/make_review_sheet.py` (review_sheet.csv +
+  offline review.html), `scripts/apply_review.py` (reviewed CSV -> `data/benign/benign_v3.json`).
+- `scripts/artifact_baselines.py --dataset v2|v3 --split_seed k`: content-free gates (<= 0.60 pooled and per task
+  for v3) -> `results/v2_probes/` or `results/v3/<exp>/`.
 - `slurm/probe_v2.sh`: GPU probe scoring (DeBERTa 3 seeds, retrain to `checkpoints/v2_retrain/` if missing; ProtectAI;
   PIGuard; Qwen judge). `scripts/probe_report.py`: reliance table, paired position contrasts, figure
   (`paper/figures/position_flag_rates.*`) → `results/v2_probes/probe_report/`.

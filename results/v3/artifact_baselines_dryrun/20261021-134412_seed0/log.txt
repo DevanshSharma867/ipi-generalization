@@ -1,0 +1,11 @@
+[13:44:12] rows with a span: train 2436, test 540
+[13:44:45] position_oracle      n= 540 macro-F1 0.4610 [0.4174, 0.4990]  code 0.4762  email 0.4373  table 0.4621
+[13:45:16] first_para_rule      n= 540 macro-F1 0.4794 [0.4410, 0.5154]  code 0.6663  email 0.4613  table 0.4348
+[13:45:47] prefix30_tfidf_lr    n= 540 macro-F1 0.5857 [0.5463, 0.6220]  code 0.7442  email 0.6328  table 0.5524
+[13:46:18] suffix30_tfidf_lr    n= 540 macro-F1 0.5895 [0.5570, 0.6217]  code 0.5739  email 0.6250  table 0.5860
+[13:46:50] length_lr            n= 540 macro-F1 0.5069 [0.4951, 0.5184]  code 0.4492  email 0.3333  table 0.5041
+[13:47:21] span_form_lr         n= 540 macro-F1 0.5943 [0.5555, 0.6368]  code 0.7000  email 0.4327  table 0.6022
+[13:47:53] span_form_you_lr     n= 540 macro-F1 0.5997 [0.5591, 0.6425]  code 0.7000  email 0.4327  table 0.6092
+[13:48:24] second_person_lr     n= 540 macro-F1 0.5007 [0.4628, 0.5403]  code 0.3521  email 0.4613  table 0.5187
+[13:48:55] boundary_kind_lr     n= 540 macro-F1 0.4694 [0.4250, 0.5082]  code 0.5312  email 0.4486  table 0.4621
+[13:48:55] gates: FAIL first_para_rule/code, prefix30_tfidf_lr/code, prefix30_tfidf_lr/email, suffix30_tfidf_lr/email, span_form_lr/code, span_form_lr/table, span_form_you_lr/code, span_form_you_lr/table
