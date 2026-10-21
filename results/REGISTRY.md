@@ -29,3 +29,4 @@ see CODEBASE_STATE.md §6.
 | 2026-10-21 | v3 | artifact_baselines_dryrun | 20261021-135210_seed0 | 1df796c | v3-draft-iter2 | position_oracle_f1_macro=0.4610 | results/v3/artifact_baselines_dryrun/20261021-135210_seed0 |
 | 2026-10-21 | v3 | artifact_baselines_dryrun | 20261021-135908_seed0 | 02b7ebb | v3-draft-iter3 | position_oracle_f1_macro=0.4610 | results/v3/artifact_baselines_dryrun/20261021-135908_seed0 |
 | 2026-10-21 | v3 | benign_draft_check | 20261021-140822_seed0 | fc9aa46 | v3-draft |  | results/v3/benign_draft_check/20261021-140822_seed0 |
+| 2026-10-21 | v2_probes | artifact_baselines | 20261021-155152_seed42 | a537610 | v2 | position_oracle_f1_macro=0.7333 | results/v2_probes/artifact_baselines/20261021-155152_seed42 |
