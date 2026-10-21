@@ -1,0 +1,48 @@
+{
+  "run_id": "20261021-161229_seed0",
+  "version": "v3",
+  "exp": "benign_draft_check",
+  "seed": 0,
+  "args": {
+    "json": "data/benign/benign_v3_draft.json"
+  },
+  "git_commit": "65bebfd9a0986dc063a5a4d381c290e019ca273c",
+  "git_dirty": false,
+  "data_version": "v3-draft",
+  "data_files_sha256": {
+    "data/benign/benign_v3_draft.json": "d3f01f6f83884fdb0597a8dd27e8fddb8bdbbbc3f24f3b3163e2961fcf70a998"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null,
+    "cuda": false,
+    "cuda_device": null,
+    "mps": true
+  },
+  "argv": [
+    "scripts/benign_v3_check.py",
+    "report",
+    "--json",
+    "data/benign/benign_v3_draft.json",
+    "--log"
+  ],
+  "started": "2026-10-21T16:12:29"
+}
