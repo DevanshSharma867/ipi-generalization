@@ -1,0 +1,2270 @@
+{
+  "survival": {
+    "deberta": {
+      "p1_neutral_insertion": {
+        "code": {
+          "sources": 15,
+          "sources_kept": 15,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 45,
+          "rows_kept": 45
+        },
+        "email": {
+          "sources": 12,
+          "sources_kept": 11,
+          "docs": 12,
+          "docs_with_kept_source": 11,
+          "rows": 36,
+          "rows_kept": 33
+        },
+        "table": {
+          "sources": 45,
+          "sources_kept": 39,
+          "docs": 45,
+          "docs_with_kept_source": 39,
+          "rows": 135,
+          "rows_kept": 117
+        }
+      },
+      "p2_benign_moved": {
+        "code": {
+          "sources": 15,
+          "sources_kept": 15,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 45,
+          "rows_kept": 45
+        },
+        "email": {
+          "sources": 12,
+          "sources_kept": 11,
+          "docs": 12,
+          "docs_with_kept_source": 11,
+          "rows": 36,
+          "rows_kept": 33
+        },
+        "table": {
+          "sources": 45,
+          "sources_kept": 40,
+          "docs": 45,
+          "docs_with_kept_source": 40,
+          "rows": 135,
+          "rows_kept": 120
+        }
+      },
+      "p3_attack_moved": {
+        "code": {
+          "sources": 30,
+          "sources_kept": 29,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 90,
+          "rows_kept": 87
+        },
+        "email": {
+          "sources": 24,
+          "sources_kept": 22,
+          "docs": 12,
+          "docs_with_kept_source": 11,
+          "rows": 72,
+          "rows_kept": 66
+        },
+        "table": {
+          "sources": 90,
+          "sources_kept": 78,
+          "docs": 45,
+          "docs_with_kept_source": 39,
+          "rows": 270,
+          "rows_kept": 234
+        }
+      }
+    },
+    "piguard": {
+      "p1_neutral_insertion": {
+        "code": {
+          "sources": 15,
+          "sources_kept": 15,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 45,
+          "rows_kept": 45
+        },
+        "email": {
+          "sources": 12,
+          "sources_kept": 11,
+          "docs": 12,
+          "docs_with_kept_source": 11,
+          "rows": 36,
+          "rows_kept": 33
+        },
+        "table": {
+          "sources": 45,
+          "sources_kept": 40,
+          "docs": 45,
+          "docs_with_kept_source": 40,
+          "rows": 135,
+          "rows_kept": 120
+        }
+      },
+      "p2_benign_moved": {
+        "code": {
+          "sources": 15,
+          "sources_kept": 15,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 45,
+          "rows_kept": 45
+        },
+        "email": {
+          "sources": 12,
+          "sources_kept": 11,
+          "docs": 12,
+          "docs_with_kept_source": 11,
+          "rows": 36,
+          "rows_kept": 33
+        },
+        "table": {
+          "sources": 45,
+          "sources_kept": 41,
+          "docs": 45,
+          "docs_with_kept_source": 41,
+          "rows": 135,
+          "rows_kept": 123
+        }
+      },
+      "p3_attack_moved": {
+        "code": {
+          "sources": 30,
+          "sources_kept": 30,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 90,
+          "rows_kept": 90
+        },
+        "email": {
+          "sources": 24,
+          "sources_kept": 22,
+          "docs": 12,
+          "docs_with_kept_source": 11,
+          "rows": 72,
+          "rows_kept": 66
+        },
+        "table": {
+          "sources": 90,
+          "sources_kept": 81,
+          "docs": 45,
+          "docs_with_kept_source": 41,
+          "rows": 270,
+          "rows_kept": 243
+        }
+      }
+    },
+    "protectai": {
+      "p1_neutral_insertion": {
+        "code": {
+          "sources": 15,
+          "sources_kept": 15,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 45,
+          "rows_kept": 45
+        },
+        "email": {
+          "sources": 12,
+          "sources_kept": 11,
+          "docs": 12,
+          "docs_with_kept_source": 11,
+          "rows": 36,
+          "rows_kept": 33
+        },
+        "table": {
+          "sources": 45,
+          "sources_kept": 40,
+          "docs": 45,
+          "docs_with_kept_source": 40,
+          "rows": 135,
+          "rows_kept": 120
+        }
+      },
+      "p2_benign_moved": {
+        "code": {
+          "sources": 15,
+          "sources_kept": 15,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 45,
+          "rows_kept": 45
+        },
+        "email": {
+          "sources": 12,
+          "sources_kept": 11,
+          "docs": 12,
+          "docs_with_kept_source": 11,
+          "rows": 36,
+          "rows_kept": 33
+        },
+        "table": {
+          "sources": 45,
+          "sources_kept": 41,
+          "docs": 45,
+          "docs_with_kept_source": 41,
+          "rows": 135,
+          "rows_kept": 123
+        }
+      },
+      "p3_attack_moved": {
+        "code": {
+          "sources": 30,
+          "sources_kept": 30,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 90,
+          "rows_kept": 90
+        },
+        "email": {
+          "sources": 24,
+          "sources_kept": 22,
+          "docs": 12,
+          "docs_with_kept_source": 11,
+          "rows": 72,
+          "rows_kept": 66
+        },
+        "table": {
+          "sources": 90,
+          "sources_kept": 81,
+          "docs": 45,
+          "docs_with_kept_source": 41,
+          "rows": 270,
+          "rows_kept": 243
+        }
+      }
+    },
+    "qwen": {
+      "p1_neutral_insertion": {
+        "code": {
+          "sources": 15,
+          "sources_kept": 15,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 45,
+          "rows_kept": 45
+        },
+        "email": {
+          "sources": 12,
+          "sources_kept": 12,
+          "docs": 12,
+          "docs_with_kept_source": 12,
+          "rows": 36,
+          "rows_kept": 36
+        },
+        "table": {
+          "sources": 45,
+          "sources_kept": 45,
+          "docs": 45,
+          "docs_with_kept_source": 45,
+          "rows": 135,
+          "rows_kept": 135
+        }
+      },
+      "p2_benign_moved": {
+        "code": {
+          "sources": 15,
+          "sources_kept": 15,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 45,
+          "rows_kept": 45
+        },
+        "email": {
+          "sources": 12,
+          "sources_kept": 12,
+          "docs": 12,
+          "docs_with_kept_source": 12,
+          "rows": 36,
+          "rows_kept": 36
+        },
+        "table": {
+          "sources": 45,
+          "sources_kept": 45,
+          "docs": 45,
+          "docs_with_kept_source": 45,
+          "rows": 135,
+          "rows_kept": 135
+        }
+      },
+      "p3_attack_moved": {
+        "code": {
+          "sources": 30,
+          "sources_kept": 30,
+          "docs": 15,
+          "docs_with_kept_source": 15,
+          "rows": 90,
+          "rows_kept": 90
+        },
+        "email": {
+          "sources": 24,
+          "sources_kept": 24,
+          "docs": 12,
+          "docs_with_kept_source": 12,
+          "rows": 72,
+          "rows_kept": 72
+        },
+        "table": {
+          "sources": 90,
+          "sources_kept": 90,
+          "docs": 45,
+          "docs_with_kept_source": 45,
+          "rows": 270,
+          "rows_kept": 270
+        }
+      }
+    }
+  },
+  "p3_truncated_fraction_by_position": {
+    "deberta": {
+      "start": {
+        "all": 0.0,
+        "code": 0.0,
+        "email": 0.0,
+        "table": 0.0
+      },
+      "middle": {
+        "all": 0.0,
+        "code": 0.0,
+        "email": 0.0,
+        "table": 0.0
+      },
+      "end": {
+        "all": 0.10416666666666667,
+        "code": 0.03333333333333333,
+        "email": 0.08333333333333333,
+        "table": 0.13333333333333333
+      }
+    },
+    "piguard": {
+      "start": {
+        "all": 0.0,
+        "code": 0.0,
+        "email": 0.0,
+        "table": 0.0
+      },
+      "middle": {
+        "all": 0.0,
+        "code": 0.0,
+        "email": 0.0,
+        "table": 0.0
+      },
+      "end": {
+        "all": 0.0763888888888889,
+        "code": 0.0,
+        "email": 0.08333333333333333,
+        "table": 0.1
+      }
+    },
+    "protectai": {
+      "start": {
+        "all": 0.0,
+        "code": 0.0,
+        "email": 0.0,
+        "table": 0.0
+      },
+      "middle": {
+        "all": 0.0,
+        "code": 0.0,
+        "email": 0.0,
+        "table": 0.0
+      },
+      "end": {
+        "all": 0.0763888888888889,
+        "code": 0.0,
+        "email": 0.08333333333333333,
+        "table": 0.1
+      }
+    },
+    "qwen": {
+      "start": {
+        "all": 0.0,
+        "code": 0.0,
+        "email": 0.0,
+        "table": 0.0
+      },
+      "middle": {
+        "all": 0.0,
+        "code": 0.0,
+        "email": 0.0,
+        "table": 0.0
+      },
+      "end": {
+        "all": 0.0,
+        "code": 0.0,
+        "email": 0.0,
+        "table": 0.0
+      }
+    }
+  },
+  "max_tokens": {
+    "deberta": 839,
+    "piguard": 815,
+    "protectai": 815,
+    "qwen": 1110
+  },
+  "models": {
+    "deberta_s123": {
+      "family": "deberta",
+      "rows_full": 864,
+      "rows_matched": 780,
+      "full": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 72,
+            "point": 0.041666666666666664,
+            "ci": [
+              0.0,
+              0.09722222222222222
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 72,
+            "point": 0.041666666666666664,
+            "ci": [
+              0.0,
+              0.09722222222222222
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 72,
+            "point": 0.041666666666666664,
+            "ci": [
+              0.0,
+              0.09722222222222222
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 72,
+            "point": 0.2638888888888889,
+            "ci": [
+              0.16666666666666666,
+              0.3611111111111111
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 72,
+            "point": 0.09722222222222222,
+            "ci": [
+              0.027777777777777776,
+              0.16666666666666666
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 72,
+            "point": 0.05555555555555555,
+            "ci": [
+              0.013888888888888888,
+              0.1111111111111111
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 144,
+            "point": 0.9652777777777778,
+            "ci": [
+              0.9305555555555556,
+              0.9930555555555556
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 144,
+            "point": 0.9027777777777778,
+            "ci": [
+              0.8541666666666666,
+              0.9513888888888888
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 144,
+            "point": 0.8263888888888888,
+            "ci": [
+              0.75,
+              0.8890624999999998
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 144,
+            "diff": -0.13888888888888895,
+            "ci": [
+              -0.20833333333333337,
+              -0.08333333333333326
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.16666666666666669,
+            "ci": [
+              0.08333333333333334,
+              0.25
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "matched": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 65,
+            "point": 0.046153846153846156,
+            "ci": [
+              0.0,
+              0.1076923076923077
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 65,
+            "point": 0.046153846153846156,
+            "ci": [
+              0.0,
+              0.1076923076923077
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 65,
+            "point": 0.046153846153846156,
+            "ci": [
+              0.0,
+              0.1076923076923077
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 66,
+            "point": 0.24242424242424243,
+            "ci": [
+              0.15151515151515152,
+              0.3484848484848485
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 66,
+            "point": 0.06060606060606061,
+            "ci": [
+              0.015151515151515152,
+              0.12121212121212122
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 66,
+            "point": 0.06060606060606061,
+            "ci": [
+              0.015151515151515152,
+              0.12121212121212122
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 129,
+            "point": 0.9689922480620154,
+            "ci": [
+              0.9375,
+              0.9923076923076923
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 129,
+            "point": 0.9147286821705426,
+            "ci": [
+              0.8670462740384616,
+              0.9612403100775194
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 129,
+            "point": 0.9069767441860465,
+            "ci": [
+              0.859375,
+              0.9534883720930233
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 65,
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 129,
+            "diff": -0.06201550387596899,
+            "ci": [
+              -0.10769230769230764,
+              -0.023255813953488302
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 66,
+            "diff": 0.18181818181818182,
+            "ci": [
+              0.09090909090909091,
+              0.2727272727272727
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "contrast_change_matched_minus_full": {
+        "p1_start_minus_middle": 0.0,
+        "p3_end_minus_start": 0.07687338501291996,
+        "p2_start_minus_middle": 0.015151515151515138
+      }
+    },
+    "deberta_s42": {
+      "family": "deberta",
+      "rows_full": 864,
+      "rows_matched": 780,
+      "full": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 72,
+            "point": 0.027777777777777776,
+            "ci": [
+              0.0,
+              0.06979166666666635
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 72,
+            "point": 0.027777777777777776,
+            "ci": [
+              0.0,
+              0.06979166666666635
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 72,
+            "point": 0.027777777777777776,
+            "ci": [
+              0.0,
+              0.06979166666666635
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 72,
+            "point": 0.25,
+            "ci": [
+              0.1527777777777778,
+              0.3472222222222222
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 72,
+            "point": 0.06944444444444445,
+            "ci": [
+              0.013888888888888888,
+              0.125
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 72,
+            "point": 0.041666666666666664,
+            "ci": [
+              0.0,
+              0.09722222222222222
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 144,
+            "point": 0.9583333333333334,
+            "ci": [
+              0.9236111111111112,
+              0.9861111111111112
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 144,
+            "point": 0.875,
+            "ci": [
+              0.8194444444444444,
+              0.9236111111111112
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 144,
+            "point": 0.75,
+            "ci": [
+              0.6666666666666666,
+              0.8263888888888888
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 144,
+            "diff": -0.20833333333333337,
+            "ci": [
+              -0.2847222222222222,
+              -0.13888888888888884
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.18055555555555555,
+            "ci": [
+              0.09722222222222222,
+              0.2638888888888889
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "matched": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 65,
+            "point": 0.03076923076923077,
+            "ci": [
+              0.0,
+              0.07692307692307693
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 65,
+            "point": 0.03076923076923077,
+            "ci": [
+              0.0,
+              0.07692307692307693
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 65,
+            "point": 0.03076923076923077,
+            "ci": [
+              0.0,
+              0.07692307692307693
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 66,
+            "point": 0.22727272727272727,
+            "ci": [
+              0.13636363636363635,
+              0.3181818181818182
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 66,
+            "point": 0.045454545454545456,
+            "ci": [
+              0.0,
+              0.10606060606060606
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 66,
+            "point": 0.045454545454545456,
+            "ci": [
+              0.0,
+              0.10606060606060606
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 129,
+            "point": 0.9612403100775194,
+            "ci": [
+              0.9224806201550387,
+              0.9922480620155039
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 129,
+            "point": 0.8837209302325582,
+            "ci": [
+              0.828125,
+              0.9375121124031007
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 129,
+            "point": 0.8217054263565892,
+            "ci": [
+              0.7615384615384615,
+              0.8759928443649374
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 65,
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 129,
+            "diff": -0.13953488372093026,
+            "ci": [
+              -0.1953125,
+              -0.0859375
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 66,
+            "diff": 0.18181818181818182,
+            "ci": [
+              0.09090909090909091,
+              0.28787878787878785
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "contrast_change_matched_minus_full": {
+        "p1_start_minus_middle": 0.0,
+        "p3_end_minus_start": 0.06879844961240311,
+        "p2_start_minus_middle": 0.0012626262626262708
+      }
+    },
+    "deberta_s999": {
+      "family": "deberta",
+      "rows_full": 864,
+      "rows_matched": 780,
+      "full": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 72,
+            "point": 0.25,
+            "ci": [
+              0.1388888888888889,
+              0.3611111111111111
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 72,
+            "point": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 72,
+            "point": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 72,
+            "point": 0.6388888888888888,
+            "ci": [
+              0.5274305555555556,
+              0.7361111111111112
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 72,
+            "point": 0.2222222222222222,
+            "ci": [
+              0.125,
+              0.3194444444444444
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 72,
+            "point": 0.20833333333333334,
+            "ci": [
+              0.125,
+              0.2916666666666667
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 144,
+            "point": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 144,
+            "point": 0.8958333333333334,
+            "ci": [
+              0.8472222222222222,
+              0.9444444444444444
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 144,
+            "point": 0.8263888888888888,
+            "ci": [
+              0.75,
+              0.8958333333333334
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.25,
+            "ci": [
+              0.1388888888888889,
+              0.3611111111111111
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 144,
+            "diff": -0.17361111111111116,
+            "ci": [
+              -0.25,
+              -0.10416666666666663
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.41666666666666663,
+            "ci": [
+              0.3055555555555555,
+              0.5277777777777777
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "matched": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 65,
+            "point": 0.23076923076923078,
+            "ci": [
+              0.13846153846153847,
+              0.3384615384615385
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 65,
+            "point": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 65,
+            "point": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 66,
+            "point": 0.6060606060606061,
+            "ci": [
+              0.48484848484848486,
+              0.7272727272727273
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 66,
+            "point": 0.21212121212121213,
+            "ci": [
+              0.12121212121212122,
+              0.3181818181818182
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 66,
+            "point": 0.22727272727272727,
+            "ci": [
+              0.12121212121212122,
+              0.3333333333333333
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 129,
+            "point": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 129,
+            "point": 0.9069767441860465,
+            "ci": [
+              0.8604651162790697,
+              0.953125
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 129,
+            "point": 0.9069767441860465,
+            "ci": [
+              0.8604651162790697,
+              0.9527651328740158
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 65,
+            "diff": 0.23076923076923078,
+            "ci": [
+              0.13846153846153847,
+              0.3384615384615385
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 129,
+            "diff": -0.09302325581395354,
+            "ci": [
+              -0.13953488372093026,
+              -0.047234867125984285
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 66,
+            "diff": 0.3939393939393939,
+            "ci": [
+              0.27272727272727276,
+              0.5151515151515151
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "contrast_change_matched_minus_full": {
+        "p1_start_minus_middle": -0.019230769230769218,
+        "p3_end_minus_start": 0.08058785529715762,
+        "p2_start_minus_middle": -0.022727272727272707
+      }
+    },
+    "judge_qwen2.5_7b": {
+      "family": "qwen",
+      "rows_full": 864,
+      "rows_matched": 864,
+      "full": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 72,
+            "point": 0.4027777777777778,
+            "ci": [
+              0.29131944444444446,
+              0.5138888888888888
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 72,
+            "point": 0.3333333333333333,
+            "ci": [
+              0.2222222222222222,
+              0.4444444444444444
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 72,
+            "point": 0.2361111111111111,
+            "ci": [
+              0.1527777777777778,
+              0.3333333333333333
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 72,
+            "point": 0.2916666666666667,
+            "ci": [
+              0.19409722222222225,
+              0.4027777777777778
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 72,
+            "point": 0.3333333333333333,
+            "ci": [
+              0.2357638888888889,
+              0.4444444444444444
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 72,
+            "point": 0.09722222222222222,
+            "ci": [
+              0.027777777777777776,
+              0.16666666666666666
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 144,
+            "point": 0.4375,
+            "ci": [
+              0.3472222222222222,
+              0.5279513888888887
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 144,
+            "point": 0.3194444444444444,
+            "ci": [
+              0.24305555555555555,
+              0.4097222222222222
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 144,
+            "point": 0.1875,
+            "ci": [
+              0.11805555555555555,
+              0.2569444444444444
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.06944444444444448,
+            "ci": [
+              -0.041666666666666685,
+              0.18055555555555558
+            ],
+            "frac_le_0": 0.133,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 144,
+            "diff": -0.25,
+            "ci": [
+              -0.36111111111111116,
+              -0.125
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": -0.04166666666666663,
+            "ci": [
+              -0.1527777777777778,
+              0.05555555555555558
+            ],
+            "frac_le_0": 0.821,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "matched": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 72,
+            "point": 0.4027777777777778,
+            "ci": [
+              0.29131944444444446,
+              0.5138888888888888
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 72,
+            "point": 0.3333333333333333,
+            "ci": [
+              0.2222222222222222,
+              0.4444444444444444
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 72,
+            "point": 0.2361111111111111,
+            "ci": [
+              0.1527777777777778,
+              0.3333333333333333
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 72,
+            "point": 0.2916666666666667,
+            "ci": [
+              0.19409722222222225,
+              0.4027777777777778
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 72,
+            "point": 0.3333333333333333,
+            "ci": [
+              0.2357638888888889,
+              0.4444444444444444
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 72,
+            "point": 0.09722222222222222,
+            "ci": [
+              0.027777777777777776,
+              0.16666666666666666
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 144,
+            "point": 0.4375,
+            "ci": [
+              0.3472222222222222,
+              0.5279513888888887
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 144,
+            "point": 0.3194444444444444,
+            "ci": [
+              0.24305555555555555,
+              0.4097222222222222
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 144,
+            "point": 0.1875,
+            "ci": [
+              0.11805555555555555,
+              0.2569444444444444
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.06944444444444448,
+            "ci": [
+              -0.041666666666666685,
+              0.18055555555555558
+            ],
+            "frac_le_0": 0.133,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 144,
+            "diff": -0.25,
+            "ci": [
+              -0.36111111111111116,
+              -0.125
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": -0.04166666666666663,
+            "ci": [
+              -0.1527777777777778,
+              0.05555555555555558
+            ],
+            "frac_le_0": 0.821,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "contrast_change_matched_minus_full": {
+        "p1_start_minus_middle": 0.0,
+        "p3_end_minus_start": 0.0,
+        "p2_start_minus_middle": 0.0
+      }
+    },
+    "piguard": {
+      "family": "piguard",
+      "rows_full": 864,
+      "rows_matched": 798,
+      "full": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 72,
+            "point": 0.05555555555555555,
+            "ci": [
+              0.0,
+              0.1111111111111111
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 72,
+            "point": 0.06944444444444445,
+            "ci": [
+              0.013888888888888888,
+              0.1388888888888889
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 72,
+            "point": 0.06944444444444445,
+            "ci": [
+              0.013888888888888888,
+              0.125
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 72,
+            "point": 0.7777777777777778,
+            "ci": [
+              0.6805555555555556,
+              0.875
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 72,
+            "point": 0.7083333333333334,
+            "ci": [
+              0.610763888888889,
+              0.8194444444444444
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 72,
+            "point": 0.75,
+            "ci": [
+              0.6527777777777778,
+              0.8472222222222222
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 144,
+            "point": 0.9097222222222222,
+            "ci": [
+              0.8609375,
+              0.9513888888888888
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 144,
+            "point": 0.9236111111111112,
+            "ci": [
+              0.875,
+              0.9652777777777778
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 144,
+            "point": 0.8819444444444444,
+            "ci": [
+              0.8055555555555556,
+              0.9444444444444444
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": -0.013888888888888895,
+            "ci": [
+              -0.06944444444444445,
+              0.027777777777777776
+            ],
+            "frac_le_0": 0.803,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 144,
+            "diff": -0.02777777777777779,
+            "ci": [
+              -0.10416666666666663,
+              0.03472222222222221
+            ],
+            "frac_le_0": 0.807,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.06944444444444442,
+            "ci": [
+              0.0,
+              0.13888888888888895
+            ],
+            "frac_le_0": 0.028,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "matched": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 66,
+            "point": 0.045454545454545456,
+            "ci": [
+              0.0,
+              0.09090909090909091
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 66,
+            "point": 0.07575757575757576,
+            "ci": [
+              0.015151515151515152,
+              0.13636363636363635
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 66,
+            "point": 0.07575757575757576,
+            "ci": [
+              0.015151515151515152,
+              0.15151515151515152
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 67,
+            "point": 0.7761194029850746,
+            "ci": [
+              0.6567164179104478,
+              0.8656716417910447
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 67,
+            "point": 0.7014925373134329,
+            "ci": [
+              0.582089552238806,
+              0.7910447761194029
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 67,
+            "point": 0.8059701492537313,
+            "ci": [
+              0.7011194029850747,
+              0.8955223880597015
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 133,
+            "point": 0.9022556390977443,
+            "ci": [
+              0.8495955798587378,
+              0.9548872180451128
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 133,
+            "point": 0.9172932330827067,
+            "ci": [
+              0.8646616541353384,
+              0.9624060150375939
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 133,
+            "point": 0.9473684210526315,
+            "ci": [
+              0.8947368421052632,
+              0.9850746268656716
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 66,
+            "diff": -0.030303030303030304,
+            "ci": [
+              -0.07575757575757576,
+              0.0
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 133,
+            "diff": 0.045112781954887216,
+            "ci": [
+              0.007462686567164201,
+              0.09022556390977443
+            ],
+            "frac_le_0": 0.018,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 67,
+            "diff": 0.07462686567164178,
+            "ci": [
+              0.0,
+              0.16417910447761186
+            ],
+            "frac_le_0": 0.035,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "contrast_change_matched_minus_full": {
+        "p1_start_minus_middle": -0.01641414141414141,
+        "p3_end_minus_start": 0.072890559732665,
+        "p2_start_minus_middle": 0.005182421227197365
+      }
+    },
+    "protectai": {
+      "family": "protectai",
+      "rows_full": 864,
+      "rows_matched": 798,
+      "full": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 72,
+            "point": 0.06944444444444445,
+            "ci": [
+              0.013888888888888888,
+              0.1388888888888889
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 72,
+            "point": 0.06944444444444445,
+            "ci": [
+              0.013888888888888888,
+              0.1388888888888889
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 72,
+            "point": 0.08333333333333333,
+            "ci": [
+              0.027777777777777776,
+              0.1527777777777778
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 72,
+            "point": 0.125,
+            "ci": [
+              0.05555555555555555,
+              0.20833333333333334
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 72,
+            "point": 0.19444444444444445,
+            "ci": [
+              0.1111111111111111,
+              0.2916666666666667
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 72,
+            "point": 0.1527777777777778,
+            "ci": [
+              0.06944444444444445,
+              0.2361111111111111
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 144,
+            "point": 0.0763888888888889,
+            "ci": [
+              0.027777777777777776,
+              0.1321180555555554
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 144,
+            "point": 0.09722222222222222,
+            "ci": [
+              0.034722222222222224,
+              0.16666666666666666
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 144,
+            "point": 0.09722222222222222,
+            "ci": [
+              0.034722222222222224,
+              0.16666666666666666
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 144,
+            "diff": 0.02083333333333333,
+            "ci": [
+              -0.013888888888888895,
+              0.0625
+            ],
+            "frac_le_0": 0.219,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": -0.06944444444444445,
+            "ci": [
+              -0.13888888888888887,
+              -0.013888888888888895
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "matched": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 66,
+            "point": 0.07575757575757576,
+            "ci": [
+              0.015151515151515152,
+              0.15151515151515152
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 66,
+            "point": 0.07575757575757576,
+            "ci": [
+              0.015151515151515152,
+              0.15151515151515152
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 66,
+            "point": 0.07575757575757576,
+            "ci": [
+              0.015151515151515152,
+              0.15151515151515152
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 67,
+            "point": 0.11940298507462686,
+            "ci": [
+              0.05970149253731343,
+              0.19402985074626866
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 67,
+            "point": 0.1791044776119403,
+            "ci": [
+              0.08955223880597014,
+              0.26865671641791045
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 67,
+            "point": 0.14925373134328357,
+            "ci": [
+              0.07462686567164178,
+              0.23880597014925373
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 133,
+            "point": 0.07518796992481203,
+            "ci": [
+              0.022556390977443608,
+              0.1364993215739483
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 133,
+            "point": 0.09022556390977443,
+            "ci": [
+              0.03075757575757576,
+              0.16417910447761194
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 133,
+            "point": 0.09022556390977443,
+            "ci": [
+              0.03007518796992481,
+              0.1590909090909091
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 66,
+            "diff": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 133,
+            "diff": 0.015037593984962405,
+            "ci": [
+              -0.01492537313432836,
+              0.045112781954887216
+            ],
+            "frac_le_0": 0.217,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 67,
+            "diff": -0.059701492537313425,
+            "ci": [
+              -0.11940298507462686,
+              -0.014925373134328346
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "contrast_change_matched_minus_full": {
+        "p1_start_minus_middle": 0.0,
+        "p3_end_minus_start": -0.0057957393483709235,
+        "p2_start_minus_middle": 0.009742951907131023
+      }
+    },
+    "tfidf_c1": {
+      "family": null,
+      "rows_full": 864,
+      "rows_matched": 864,
+      "full": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 72,
+            "point": 0.05555555555555555,
+            "ci": [
+              0.013888888888888888,
+              0.1111111111111111
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 72,
+            "point": 0.041666666666666664,
+            "ci": [
+              0.0,
+              0.09722222222222222
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 72,
+            "point": 0.041666666666666664,
+            "ci": [
+              0.0,
+              0.09722222222222222
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 72,
+            "point": 0.25,
+            "ci": [
+              0.1527777777777778,
+              0.3472222222222222
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 72,
+            "point": 0.1388888888888889,
+            "ci": [
+              0.06909722222222224,
+              0.2222222222222222
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 72,
+            "point": 0.1527777777777778,
+            "ci": [
+              0.06944444444444445,
+              0.2361111111111111
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 144,
+            "point": 0.7083333333333334,
+            "ci": [
+              0.6319444444444444,
+              0.7847222222222222
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 144,
+            "point": 0.6319444444444444,
+            "ci": [
+              0.5347222222222222,
+              0.7222222222222222
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 144,
+            "point": 0.625,
+            "ci": [
+              0.5277777777777778,
+              0.7152777777777778
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.013888888888888888,
+            "ci": [
+              0.0,
+              0.04166666666666667
+            ],
+            "frac_le_0": 0.346,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 144,
+            "diff": -0.08333333333333337,
+            "ci": [
+              -0.13194444444444442,
+              -0.04166666666666674
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.1111111111111111,
+            "ci": [
+              0.05555555555555555,
+              0.19444444444444442
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "matched": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 72,
+            "point": 0.05555555555555555,
+            "ci": [
+              0.013888888888888888,
+              0.1111111111111111
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 72,
+            "point": 0.041666666666666664,
+            "ci": [
+              0.0,
+              0.09722222222222222
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 72,
+            "point": 0.041666666666666664,
+            "ci": [
+              0.0,
+              0.09722222222222222
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 72,
+            "point": 0.25,
+            "ci": [
+              0.1527777777777778,
+              0.3472222222222222
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 72,
+            "point": 0.1388888888888889,
+            "ci": [
+              0.06909722222222224,
+              0.2222222222222222
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 72,
+            "point": 0.1527777777777778,
+            "ci": [
+              0.06944444444444445,
+              0.2361111111111111
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 144,
+            "point": 0.7083333333333334,
+            "ci": [
+              0.6319444444444444,
+              0.7847222222222222
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 144,
+            "point": 0.6319444444444444,
+            "ci": [
+              0.5347222222222222,
+              0.7222222222222222
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 144,
+            "point": 0.625,
+            "ci": [
+              0.5277777777777778,
+              0.7152777777777778
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.013888888888888888,
+            "ci": [
+              0.0,
+              0.04166666666666667
+            ],
+            "frac_le_0": 0.346,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 144,
+            "diff": -0.08333333333333337,
+            "ci": [
+              -0.13194444444444442,
+              -0.04166666666666674
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.1111111111111111,
+            "ci": [
+              0.05555555555555555,
+              0.19444444444444442
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "contrast_change_matched_minus_full": {
+        "p1_start_minus_middle": 0.0,
+        "p3_end_minus_start": 0.0,
+        "p2_start_minus_middle": 0.0
+      }
+    },
+    "deberta_mean": {
+      "family": "deberta",
+      "rows_full": 864,
+      "rows_matched": 780,
+      "full": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 72,
+            "point": 0.10648148148148147,
+            "ci": [
+              0.06018518518518518,
+              0.16666666666666666
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 72,
+            "point": 0.02314814814814815,
+            "ci": [
+              0.0,
+              0.05555555555555556
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 72,
+            "point": 0.02314814814814815,
+            "ci": [
+              0.0,
+              0.05555555555555556
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 72,
+            "point": 0.38425925925925924,
+            "ci": [
+              0.30092592592592593,
+              0.46296296296296297
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 72,
+            "point": 0.12962962962962962,
+            "ci": [
+              0.06944444444444443,
+              0.1898148148148148
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 72,
+            "point": 0.10185185185185186,
+            "ci": [
+              0.05555555555555555,
+              0.1574074074074074
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 144,
+            "point": 0.9745370370370371,
+            "ci": [
+              0.951388888888889,
+              0.9930555555555557
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 144,
+            "point": 0.8912037037037037,
+            "ci": [
+              0.8472222222222222,
+              0.9328703703703703
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 144,
+            "point": 0.8009259259259259,
+            "ci": [
+              0.7337962962962963,
+              0.8657986111111111
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.08333333333333331,
+            "ci": [
+              0.0462962962962963,
+              0.12037037037037035
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 144,
+            "diff": -0.17361111111111116,
+            "ci": [
+              -0.23842592592592593,
+              -0.1133680555555555
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 72,
+            "diff": 0.25462962962962965,
+            "ci": [
+              0.18518518518518517,
+              0.324074074074074
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "matched": {
+        "cells": {
+          "p1_neutral_insertion/start": {
+            "n": 65,
+            "point": 0.10256410256410257,
+            "ci": [
+              0.05128205128205129,
+              0.158974358974359
+            ]
+          },
+          "p1_neutral_insertion/middle": {
+            "n": 65,
+            "point": 0.025641025641025644,
+            "ci": [
+              0.0,
+              0.05641025641025641
+            ]
+          },
+          "p1_neutral_insertion/end": {
+            "n": 65,
+            "point": 0.025641025641025644,
+            "ci": [
+              0.0,
+              0.05641025641025641
+            ]
+          },
+          "p2_benign_moved/start": {
+            "n": 66,
+            "point": 0.35858585858585856,
+            "ci": [
+              0.2777777777777778,
+              0.4444444444444445
+            ]
+          },
+          "p2_benign_moved/middle": {
+            "n": 66,
+            "point": 0.10606060606060606,
+            "ci": [
+              0.050505050505050504,
+              0.16666666666666666
+            ]
+          },
+          "p2_benign_moved/end": {
+            "n": 66,
+            "point": 0.1111111111111111,
+            "ci": [
+              0.05555555555555556,
+              0.1717171717171717
+            ]
+          },
+          "p3_attack_moved/start": {
+            "n": 129,
+            "point": 0.9767441860465116,
+            "ci": [
+              0.9538372093023256,
+              0.9948320413436692
+            ]
+          },
+          "p3_attack_moved/middle": {
+            "n": 129,
+            "point": 0.9018087855297158,
+            "ci": [
+              0.8564102564102565,
+              0.9405684754521965
+            ]
+          },
+          "p3_attack_moved/end": {
+            "n": 129,
+            "point": 0.8785529715762274,
+            "ci": [
+              0.8358974358974359,
+              0.917312661498708
+            ]
+          }
+        },
+        "contrasts": {
+          "p1_start_minus_middle": {
+            "n_pairs": 65,
+            "diff": 0.07692307692307693,
+            "ci": [
+              0.046153846153846156,
+              0.11282051282051282
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p3_end_minus_start": {
+            "n_pairs": 129,
+            "diff": -0.09819121447028423,
+            "ci": [
+              -0.13802083333333326,
+              -0.06152116402116404
+            ],
+            "frac_le_0": 1.0,
+            "B": 1000,
+            "seed": 42
+          },
+          "p2_start_minus_middle": {
+            "n_pairs": 66,
+            "diff": 0.2525252525252525,
+            "ci": [
+              0.18686868686868682,
+              0.33333333333333326
+            ],
+            "frac_le_0": 0.0,
+            "B": 1000,
+            "seed": 42
+          }
+        }
+      },
+      "contrast_change_matched_minus_full": {
+        "p1_start_minus_middle": -0.0064102564102563875,
+        "p3_end_minus_start": 0.07541989664082693,
+        "p2_start_minus_middle": -0.002104377104377164
+      }
+    }
+  }
+}

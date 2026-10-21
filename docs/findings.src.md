@@ -11,7 +11,7 @@ not `docs/findings.md`.
 
 ## F1. V2 artifact-only baselines
 
-None of these probes reads the query or the meaning of the document. Reference: the TF-IDF+LR detector
+None of these probes uses the user query; the learned ones are trained on V2 train only. Reference: the TF-IDF+LR detector
 (C=1, τ=0.5) gets V2 test macro-F1 {{VTwoTfidfCOneFOneMacro|ci}}.
 
 | Probe | What it uses | Macro-F1 | ROC-AUC |
@@ -20,12 +20,12 @@ None of these probes reads the query or the meaning of the document. Reference: 
 | First-paragraph rule | first `\n\n` paragraph ≤ 30 words → injected; untrained | {{VTwoArtifactFirstParaRuleFOneMacro|ci}} | {{VTwoArtifactFirstParaRuleRocAuc|ci}} |
 | Prefix-30 TF-IDF+LR | first 30 words of the context | {{VTwoArtifactPrefixThreeZeroTfidfLrFOneMacro|ci}} | {{VTwoArtifactPrefixThreeZeroTfidfLrRocAuc|ci}} |
 | Suffix-30 TF-IDF+LR | last 30 words of the context | {{VTwoArtifactSuffixThreeZeroTfidfLrFOneMacro|ci}} | {{VTwoArtifactSuffixThreeZeroTfidfLrRocAuc|ci}} |
-| Span-form LR | surface-form features of the inserted span only (216 inserted-span rows) | {{VTwoArtifactSpanFormLrFOneMacro|ci}} | {{VTwoArtifactSpanFormLrRocAuc|ci}} |
+| Span-form LR | 9 content-free features of the inserted span only (216 rows with an inserted span) | {{VTwoArtifactSpanFormLrFOneMacro|ci}} | {{VTwoArtifactSpanFormLrRocAuc|ci}} |
 
 - The position field alone, and the untrained first-paragraph rule, each reach a macro-F1 whose CI lies below
   the TF-IDF detector's point value but above 0.5.
 - The first 30 words carry more label signal than the last 30 words: the prefix and suffix CIs do not overlap.
-- The surface form of the inserted sentence alone separates benign imperatives from attacks.
+- Content-free surface features of the inserted span alone give a macro-F1 whose CI lies above 0.5.
 
 ## F2. DeBERTa position reliance on V2 (probes P1–P3)
 
@@ -105,6 +105,8 @@ truncated fraction is {{VTwoTruncJudgeQwenTwoFiveSevenbPThreeendtruncated}} and 
 
 - The judge's P3 recall falls from start to end; the end − start CI excludes 0.
 - P2 and P1 start − middle CIs include 0.
+- The V2 test macro-F1 CI includes 0.5.
+- P4 − raw clean CI includes 0.
 
 ## F5. Public detectors on V2 test
 
@@ -113,8 +115,8 @@ truncated fraction is {{VTwoTruncJudgeQwenTwoFiveSevenbPThreeendtruncated}} and 
 | ProtectAI v2 | {{VTwoGroupsProtectaiRecall|ci}} | {{VTwoGroupsProtectaiBenignflag|ci}} | {{VTwoGroupsProtectaiRawcleanflag|ci}} |
 | PIGuard | {{VTwoGroupsPiguardRecall|ci}} | {{VTwoGroupsPiguardBenignflag|ci}} | {{VTwoGroupsPiguardRawcleanflag|ci}} |
 
-- ProtectAI flags few of the V2 attacks.
-- PIGuard flags a large share of the benign imperatives and none of the raw clean rows.
+- ProtectAI's recall point estimate is below its flag rate on both clean row groups.
+- PIGuard flags none of the raw clean rows; its benign-imperative flag-rate CI excludes 0.
 
 ## F6. Provenance caveats
 
