@@ -1,0 +1,60 @@
+{
+  "run_id": "20261021-131051_seed0",
+  "version": "v3",
+  "exp": "design_facts",
+  "seed": 0,
+  "args": {
+    "max_tokens": 512,
+    "category_draw_seed": 0,
+    "val_categories": {
+      "text": 3,
+      "code": 2
+    },
+    "tokenizer": "hf_cache/tokenizers_hpc/deberta_v2_ckpt"
+  },
+  "git_commit": "2b1eff09b6076adb2c8e5432ea48cd3d671b8167",
+  "git_dirty": false,
+  "data_version": "bipia@a004b69",
+  "data_files_sha256": {
+    "/Users/devanshsharma/projects/nlp/data/raw/BIPIA/benchmark/email/train.jsonl": "82207193cb8ce06713eeb7c33ca0716446613512e2ad9303b302ba14d425ddd4",
+    "/Users/devanshsharma/projects/nlp/data/raw/BIPIA/benchmark/email/test.jsonl": "217b403faaa1d0cb12c24892bea39f4a0b9e2819919ac7e2b902006e28278cdb",
+    "/Users/devanshsharma/projects/nlp/data/raw/BIPIA/benchmark/table/train.jsonl": "ae1c3ff25733fb3ff1a35bda3009716f4d25a17ae6833c73521be0411d576494",
+    "/Users/devanshsharma/projects/nlp/data/raw/BIPIA/benchmark/table/test.jsonl": "3d5eaab192b80bada762e3cd7655583a14e5888ba8b845a01f0434e4ccc4291e",
+    "/Users/devanshsharma/projects/nlp/data/raw/BIPIA/benchmark/code/train.jsonl": "5e6879b621a5cefe265a5b41b7ed0be632536f658f6097baf85a28b9abcb3115",
+    "/Users/devanshsharma/projects/nlp/data/raw/BIPIA/benchmark/code/test.jsonl": "ed40b84f541352fb45753032a80750922de8d5e0b70997924df3d04cf942e058",
+    "/Users/devanshsharma/projects/nlp/data/raw/BIPIA/benchmark/text_attack_train.json": "63f95d3e67eac4178cdabdbdaf192cd05f2b6ed0702b578f1d30d556e5155670",
+    "/Users/devanshsharma/projects/nlp/data/raw/BIPIA/benchmark/text_attack_test.json": "75750e7b4e8b34e8f9d88d89b357aeaaf02bd07f9e493ccd37eda74a0cd7c7f8",
+    "/Users/devanshsharma/projects/nlp/data/raw/BIPIA/benchmark/code_attack_train.json": "fe515080b6da2b5c0b67ca7ba2a3b3c2ce57c48f45733c475ebc813cba118484",
+    "/Users/devanshsharma/projects/nlp/data/raw/BIPIA/benchmark/code_attack_test.json": "892545c5aaec0645b1ded65dc7816b3d70e9ef4eadcba2301a7a3db93676b6e0",
+    "/Users/devanshsharma/projects/nlp/data/benign/benign_instructions.json": "18ce54bf3abb4dc09bdc1929984fba421d6eab18299ea08c7168d563de15ce03"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null,
+    "cuda": false,
+    "cuda_device": null,
+    "mps": true
+  },
+  "argv": [
+    "scripts/v3_design_facts.py"
+  ],
+  "started": "2026-10-21T13:10:51"
+}
