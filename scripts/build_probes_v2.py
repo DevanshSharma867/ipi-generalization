@@ -30,7 +30,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
-from probes import extract_inserted_span, insert_preserving
+from probes import _neutral_ok, email_sentences, extract_inserted_span, insert_preserving
 from runlog import _git, assert_not_frozen, sha256
 
 TEST = ROOT / "data/processed/test.csv"
@@ -48,37 +48,6 @@ NEUTRAL_POOL = [
     "The numbers here come from the annual summary.",
     "This material was originally prepared for an internal review.",
 ]
-
-IMPERATIVE_START = {
-    "please", "click", "call", "contact", "visit", "see", "check", "reply", "update", "use", "find", "read",
-    "follow", "view", "sign", "log", "make", "download", "get", "take", "go", "enter", "create", "add",
-    "remove", "set", "try", "run", "install", "change", "replace", "note", "let", "keep", "do", "don't",
-    "open", "write", "print", "import", "define", "ensure", "remember", "bring", "send", "ask", "tell",
-    "consider", "avoid", "fill", "submit", "start", "stop", "turn", "pay", "save", "share", "join", "book",
-}
-IMPERATIVE_ANYWHERE = ("please", "click", "reply", "contact us", "feel free", "let us", "let me", "don't",
-                       "do not", "make sure", "unsubscribe", "log in", "sign in", "sign up", "http", "www.", "@")
-DECLARATIVE_VERB = re.compile(r"\b(is|are|was|were|has|have|had|returns|contains|gives|will|would|can|does|"
-                              r"doesn't|raises|works|means|creates|holds|stores)\b", re.I)
-
-
-def _first_word(s):
-    m = re.match(r"[A-Za-z']+", s)
-    return m.group(0).lower() if m else ""
-
-
-def _neutral_ok(s, lo, hi, need_verb=False):
-    words = s.split()
-    low = s.lower()
-    return (lo <= len(words) <= hi and not any(c in s for c in "?!") and _first_word(s) not in IMPERATIVE_START
-            and not any(t in low for t in IMPERATIVE_ANYWHERE) and (not need_verb or DECLARATIVE_VERB.search(s)))
-
-
-def email_sentences(ctx):
-    body = ctx.split("CONTENT:", 1)[1] if "CONTENT:" in ctx else ctx
-    parts = re.split(r"(?<=[.!?])\s+|\n+", body)
-    return [p.strip() for p in parts if p.strip().endswith(".") and _neutral_ok(p.strip(), 6, 30)]
-
 
 def table_sentences(ctx):
     rows = [l.strip() for l in ctx.split("\n") if l.strip().startswith("|")]
