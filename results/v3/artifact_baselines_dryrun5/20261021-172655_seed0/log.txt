@@ -1,0 +1,84 @@
+[17:26:55] split_seed 0: rows with a span: train 2436, test 540
+[17:27:18] [0] position_oracle            n= 540 macro-F1 0.4610 [0.4174, 0.4990]  code 0.4762  email 0.4373  table 0.4621
+[17:27:38] [0] first_para_rule            n= 540 macro-F1 0.4603 [0.4247, 0.4938]  code 0.5396  email 0.4613  table 0.4348
+[17:27:58] [0] prefix30_tfidf_lr          n= 540 macro-F1 0.6006 [0.5651, 0.6334]  code 0.7128  email 0.6328  table 0.5776
+[17:28:18] [0] suffix30_tfidf_lr          n= 540 macro-F1 0.6091 [0.5749, 0.6401]  code 0.5875  email 0.6110  table 0.6096
+[17:28:37] [0] prefix30_masked_tfidf_lr   n= 540 macro-F1 0.3333 [0.3333, 0.3333]  code 0.3333  email 0.3333  table 0.3333
+[17:28:57] [0] suffix30_masked_tfidf_lr   n= 540 macro-F1 0.3333 [0.3333, 0.3333]  code 0.3333  email 0.3333  table 0.3333
+[17:29:19] [0] insertion_site_tfidf_lr    n= 540 macro-F1 0.4975 [0.4599, 0.5357]  code 0.4165  email 0.5469  table 0.4996
+[17:29:40] [0] span_content_tfidf         n= 540 macro-F1 0.8088 [0.7716, 0.8411]  code 1.0000  email 0.7917  table 0.7817
+[17:30:01] [0] length_lr                  n= 540 macro-F1 0.4965 [0.4872, 0.4999]  code 0.3943  email 0.3333  table 0.4986
+[17:30:22] [0] span_form_lr               n= 540 macro-F1 0.5958 [0.5530, 0.6398]  code 0.7643  email 0.4643  table 0.5906
+[17:30:42] [0] span_form_you_lr           n= 540 macro-F1 0.6035 [0.5603, 0.6460]  code 0.7643  email 0.4797  table 0.5982
+[17:31:02] [0] second_person_lr           n= 540 macro-F1 0.4931 [0.4520, 0.5358]  code 0.2776  email 0.5200  table 0.5167
+[17:31:21] [0] boundary_kind_lr           n= 540 macro-F1 0.4694 [0.4250, 0.5082]  code 0.5312  email 0.4486  table 0.4621
+[17:31:22] split_seed 1: rows with a span: train 2432, test 520
+[17:31:44] [1] position_oracle            n= 520 macro-F1 0.4566 [0.4167, 0.4947]  code 0.3389  email 0.3889  table 0.4771
+[17:32:04] [1] first_para_rule            n= 520 macro-F1 0.4566 [0.4209, 0.4936]  code 0.5465  email 0.3277  table 0.4346
+[17:32:25] [1] prefix30_tfidf_lr          n= 520 macro-F1 0.6152 [0.5808, 0.6508]  code 0.6311  email 0.4909  table 0.6257
+[17:32:46] [1] suffix30_tfidf_lr          n= 520 macro-F1 0.5971 [0.5597, 0.6302]  code 0.7418  email 0.5625  table 0.5796
+[17:33:07] [1] prefix30_masked_tfidf_lr   n= 520 macro-F1 0.3333 [0.3333, 0.3333]  code 0.3333  email 0.3333  table 0.3333
+[17:33:28] [1] suffix30_masked_tfidf_lr   n= 520 macro-F1 0.3333 [0.3333, 0.3333]  code 0.3333  email 0.3333  table 0.3333
+[17:33:50] [1] insertion_site_tfidf_lr    n= 520 macro-F1 0.5006 [0.4634, 0.5359]  code 0.5333  email 0.4990  table 0.4963
+[17:34:12] [1] span_content_tfidf         n= 520 macro-F1 0.8200 [0.7837, 0.8527]  code 0.9642  email 0.7333  table 0.8077
+[17:34:34] [1] length_lr                  n= 520 macro-F1 0.4997 [0.4915, 0.5038]  code 0.3333  email 0.3333  table 0.4959
+[17:34:57] [1] span_form_lr               n= 520 macro-F1 0.5878 [0.5476, 0.6300]  code 0.6956  email 0.6134  table 0.5705
+[17:35:19] [1] span_form_you_lr           n= 520 macro-F1 0.5983 [0.5589, 0.6394]  code 0.6956  email 0.6134  table 0.5836
+[17:35:41] [1] second_person_lr           n= 520 macro-F1 0.4888 [0.4448, 0.5322]  code 0.2611  email 0.6239  table 0.5028
+[17:36:02] [1] boundary_kind_lr           n= 520 macro-F1 0.4640 [0.4234, 0.5064]  code 0.4739  email 0.3783  table 0.4713
+[17:36:03] split_seed 2: rows with a span: train 2412, test 528
+[17:36:27] [2] position_oracle            n= 528 macro-F1 0.4909 [0.4506, 0.5309]  code 0.5055  email 0.4943  table 0.4881
+[17:36:49] [2] first_para_rule            n= 528 macro-F1 0.4508 [0.4163, 0.4861]  code 0.4570  email 0.4829  table 0.4214
+[17:37:11] [2] prefix30_tfidf_lr          n= 528 macro-F1 0.6007 [0.5653, 0.6375]  code 0.6663  email 0.5897  table 0.5873
+[17:37:33] [2] suffix30_tfidf_lr          n= 528 macro-F1 0.6274 [0.5919, 0.6590]  code 0.6317  email 0.5608  table 0.6336
+[17:37:55] [2] prefix30_masked_tfidf_lr   n= 528 macro-F1 0.3333 [0.3333, 0.3333]  code 0.3333  email 0.3333  table 0.3333
+[17:38:17] [2] suffix30_masked_tfidf_lr   n= 528 macro-F1 0.3333 [0.3333, 0.3333]  code 0.3333  email 0.3333  table 0.3333
+[17:38:38] [2] insertion_site_tfidf_lr    n= 528 macro-F1 0.5087 [0.4804, 0.5354]  code 0.4489  email 0.4789  table 0.5166
+[17:39:00] [2] span_content_tfidf         n= 528 macro-F1 0.8107 [0.7783, 0.8414]  code 0.9666  email 0.8730  table 0.7786
+[17:39:22] [2] length_lr                  n= 528 macro-F1 0.4988 [0.4875, 0.5062]  code 0.3333  email 0.3333  table 0.4978
+[17:39:45] [2] span_form_lr               n= 528 macro-F1 0.5870 [0.5481, 0.6247]  code 0.6663  email 0.4678  table 0.5863
+[17:40:08] [2] span_form_you_lr           n= 528 macro-F1 0.5986 [0.5606, 0.6363]  code 0.6663  email 0.4857  table 0.5986
+[17:40:30] [2] second_person_lr           n= 528 macro-F1 0.4853 [0.4468, 0.5232]  code 0.5506  email 0.5956  table 0.4612
+[17:40:53] [2] boundary_kind_lr           n= 528 macro-F1 0.4893 [0.4491, 0.5291]  code 0.4910  email 0.4943  table 0.4881
+[17:40:53] split_seed 3: rows with a span: train 2444, test 528
+[17:41:17] [3] position_oracle            n= 528 macro-F1 0.4880 [0.4429, 0.5316]  code 0.5055  email 0.5286  table 0.4808
+[17:41:41] [3] first_para_rule            n= 528 macro-F1 0.4693 [0.4347, 0.5058]  code 0.5000  email 0.4844  table 0.4305
+[17:42:04] [3] prefix30_tfidf_lr          n= 528 macro-F1 0.5938 [0.5598, 0.6272]  code 0.6329  email 0.5034  table 0.5962
+[17:42:27] [3] suffix30_tfidf_lr          n= 528 macro-F1 0.5826 [0.5450, 0.6191]  code 0.6419  email 0.5474  table 0.5761
+[17:42:49] [3] prefix30_masked_tfidf_lr   n= 528 macro-F1 0.3333 [0.3333, 0.3333]  code 0.3333  email 0.3333  table 0.3333
+[17:43:12] [3] suffix30_masked_tfidf_lr   n= 528 macro-F1 0.3333 [0.3333, 0.3333]  code 0.3333  email 0.3333  table 0.3333
+[17:43:35] [3] insertion_site_tfidf_lr    n= 528 macro-F1 0.5170 [0.4806, 0.5539]  code 0.5489  email 0.4735  table 0.5166
+[17:43:58] [3] span_content_tfidf         n= 528 macro-F1 0.8182 [0.7801, 0.8530]  code 1.0000  email 0.8510  table 0.7863
+[17:44:21] [3] length_lr                  n= 528 macro-F1 0.4975 [0.4857, 0.5055]  code 0.3608  email 0.3333  table 0.4945
+[17:44:44] [3] span_form_lr               n= 528 macro-F1 0.5674 [0.5321, 0.6049]  code 0.6157  email 0.5623  table 0.5602
+[17:45:07] [3] span_form_you_lr           n= 528 macro-F1 0.5680 [0.5303, 0.6078]  code 0.5996  email 0.5826  table 0.5613
+[17:45:30] [3] second_person_lr           n= 528 macro-F1 0.4655 [0.4226, 0.5058]  code 0.2776  email 0.4602  table 0.4889
+[17:45:52] [3] boundary_kind_lr           n= 528 macro-F1 0.4979 [0.4578, 0.5409]  code 0.5628  email 0.4943  table 0.4889
+[17:45:53] split_seed 4: rows with a span: train 2424, test 528
+[17:46:17] [4] position_oracle            n= 528 macro-F1 0.4668 [0.4269, 0.5082]  code 0.3350  email 0.4000  table 0.4930
+[17:46:41] [4] first_para_rule            n= 528 macro-F1 0.4854 [0.4508, 0.5207]  code 0.5200  email 0.5286  table 0.4611
+[17:47:03] [4] prefix30_tfidf_lr          n= 528 macro-F1 0.5942 [0.5605, 0.6279]  code 0.5928  email 0.4318  table 0.6090
+[17:47:25] [4] suffix30_tfidf_lr          n= 528 macro-F1 0.5622 [0.5271, 0.5975]  code 0.5238  email 0.5613  table 0.5662
+[17:47:46] [4] prefix30_masked_tfidf_lr   n= 528 macro-F1 0.3333 [0.3333, 0.3333]  code 0.3333  email 0.3333  table 0.3333
+[17:48:05] [4] suffix30_masked_tfidf_lr   n= 528 macro-F1 0.3333 [0.3333, 0.3333]  code 0.3333  email 0.3333  table 0.3333
+[17:48:24] [4] insertion_site_tfidf_lr    n= 528 macro-F1 0.5122 [0.4823, 0.5413]  code 0.5133  email 0.5409  table 0.5073
+[17:48:44] [4] span_content_tfidf         n= 528 macro-F1 0.8274 [0.7948, 0.8572]  code 0.9833  email 0.7142  table 0.8162
+[17:49:04] [4] length_lr                  n= 528 macro-F1 0.5028 [0.4903, 0.5133]  code 0.4492  email 0.3333  table 0.5011
+[17:49:24] [4] span_form_lr               n= 528 macro-F1 0.6010 [0.5624, 0.6382]  code 0.8166  email 0.4353  table 0.5889
+[17:49:44] [4] span_form_you_lr           n= 528 macro-F1 0.6018 [0.5655, 0.6363]  code 0.8166  email 0.4353  table 0.5900
+[17:50:03] [4] second_person_lr           n= 528 macro-F1 0.4759 [0.4395, 0.5132]  code 0.2875  email 0.5156  table 0.4938
+[17:50:23] [4] boundary_kind_lr           n= 528 macro-F1 0.4945 [0.4515, 0.5374]  code 0.4714  email 0.5383  table 0.4926
+[17:50:23] position_oracle            GATE pooled 0.4610 0.4566 0.4909 0.4880 0.4668 | task mean code 0.4322 email 0.4498 table 0.4802 | PASS
+[17:50:23] first_para_rule            GATE pooled 0.4603 0.4566 0.4508 0.4693 0.4854 | task mean code 0.5126 email 0.4570 table 0.4365 | PASS
+[17:50:23] prefix30_masked_tfidf_lr   GATE pooled 0.3333 0.3333 0.3333 0.3333 0.3333 | task mean code 0.3333 email 0.3333 table 0.3333 | PASS
+[17:50:23] suffix30_masked_tfidf_lr   GATE pooled 0.3333 0.3333 0.3333 0.3333 0.3333 | task mean code 0.3333 email 0.3333 table 0.3333 | PASS
+[17:50:23] insertion_site_tfidf_lr    GATE pooled 0.4975 0.5006 0.5087 0.5170 0.5122 | task mean code 0.4922 email 0.5078 table 0.5073 | PASS
+[17:50:23] length_lr                  GATE pooled 0.4965 0.4997 0.4988 0.4975 0.5028 | task mean code 0.3742 email 0.3333 table 0.4976 | PASS
+[17:50:23] span_form_you_lr           GATE pooled 0.6035 0.5983 0.5986 0.5680 0.6018 | task mean code 0.7085 email 0.5194 table 0.5863 | FAIL seed0,seed4,code_mean
+[17:50:23] second_person_lr           GATE pooled 0.4931 0.4888 0.4853 0.4655 0.4759 | task mean code 0.3309 email 0.5431 table 0.4927 | PASS
+[17:50:23] boundary_kind_lr           GATE pooled 0.4694 0.4640 0.4893 0.4979 0.4945 | task mean code 0.5061 email 0.4708 table 0.4806 | PASS
+[17:50:23] prefix30_tfidf_lr          diag pooled 0.6006 0.6152 0.6007 0.5938 0.5942 | task mean code 0.6472 email 0.5297 table 0.5991
+[17:50:23] suffix30_tfidf_lr          diag pooled 0.6091 0.5971 0.6274 0.5826 0.5622 | task mean code 0.6253 email 0.5686 table 0.5930
+[17:50:23] span_content_tfidf         diag pooled 0.8088 0.8200 0.8107 0.8182 0.8274 | task mean code 0.9828 email 0.7926 table 0.7941
+[17:50:23] span_form_lr               diag pooled 0.5958 0.5878 0.5870 0.5674 0.6010 | task mean code 0.7117 email 0.5086 table 0.5793
+[17:50:23] gates: FAIL
