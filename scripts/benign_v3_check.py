@@ -149,11 +149,19 @@ def main():
     r = sub.add_parser("report")
     r.add_argument("--json", type=Path, required=True)
     r.add_argument("--out", type=Path)
+    r.add_argument("--log", action="store_true", help="log with runlog to results/v3/benign_draft_check/")
     args = ap.parse_args()
     if args.cmd == "assemble":
         assemble(args.src, args.out)
     else:
-        report(json.load(open(args.json))["items"], args.out)
+        res = report(json.load(open(args.json))["items"], args.out)
+        if args.log:
+            from runlog import start_run
+            run = start_run(version="v3", exp="benign_draft_check", seed=0, args={"json": str(args.json)},
+                            data_version="v3-draft", data_files=[args.json])
+            run.save_metrics(res)
+            run.finish()
+            print(f"wrote {run.dir.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
