@@ -54,7 +54,7 @@ LIBRARIES = ["numpy", "pandas", "scikit-learn", "scipy", "torch", "transformers"
 
 def _git(*args) -> str:
     try:
-        return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
+        return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, check=True).stdout.rstrip()
     except (subprocess.CalledProcessError, FileNotFoundError):
         return ""
 

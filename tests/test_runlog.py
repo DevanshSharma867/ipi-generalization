@@ -1,6 +1,7 @@
 """Frozen-path guard and run layout of src/runlog.py. Run: python -m pytest tests/"""
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -56,6 +57,13 @@ def test_code_dirty_ignores_results(monkeypatch):
     assert runlog.code_dirty() is False
     monkeypatch.setattr(runlog, "_git", lambda *a: outputs + "\n M src/metrics.py")
     assert runlog.code_dirty() is True
+
+
+def test_code_dirty_keeps_leading_status_column(monkeypatch):
+    # Porcelain lines start with a space when only the worktree changed; _git must not strip it from line 1
+    out = " M results/REGISTRY.md\n?? results/v2_probes/x/log.txt\n"
+    monkeypatch.setattr(runlog.subprocess, "run", lambda *a, **k: subprocess.CompletedProcess(a, 0, stdout=out))
+    assert runlog.code_dirty() is False
 
 
 def test_validate_predictions_rejects_extra_columns():
