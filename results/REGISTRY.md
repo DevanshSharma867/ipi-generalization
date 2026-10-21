@@ -24,3 +24,4 @@ see CODEBASE_STATE.md §6.
 | 2026-10-21 | v2_probes | truncation_control | 20261021-125607_seed42 | 2a370a8 | v2_probes | deberta_mean_p3_end_minus_start_matched=-0.0982 | results/v2_probes/truncation_control/20261021-125607_seed42 |
 | 2026-10-21 | v2_probes | probe_report | 20261021-125648_seed42 | 2a370a8 | v2_probes |  | results/v2_probes/probe_report/20261021-125648_seed42 |
 | 2026-10-21 | v3 | design_facts | 20261021-131051_seed0 | 2b1eff0 | bipia@a004b69 |  | results/v3/design_facts/20261021-131051_seed0 |
+| 2026-10-21 | v2_probes | artifact_baselines | 20261021-133927_seed42 | b23108b | v2 | position_oracle_f1_macro=0.7333 | results/v2_probes/artifact_baselines/20261021-133927_seed42 |
