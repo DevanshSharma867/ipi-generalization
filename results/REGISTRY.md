@@ -21,3 +21,5 @@ see CODEBASE_STATE.md §6.
 | 2026-10-19 | v2_probes | truncation_control | 20261019-190514_seed42 | 48aba4c-dirty | v2_probes | deberta_mean_p3_end_minus_start_matched=-0.0982 | results/v2_probes/truncation_control/20261019-190514_seed42 |
 | 2026-10-19 | v2_probes | probe_report | 20261019-190648_seed42 | 48aba4c-dirty | v2_probes |  | results/v2_probes/probe_report/20261019-190648_seed42 |
 | 2026-10-21 | v2_probes | score_judge_qwen2.5_7b | 20261021-123213_seed42 | 5a2a782 | v2_probes |  | results/v2_probes/score_judge_qwen2.5_7b/20261021-123213_seed42 |
+| 2026-10-21 | v2_probes | truncation_control | 20261021-125607_seed42 | 2a370a8 | v2_probes | deberta_mean_p3_end_minus_start_matched=-0.0982 | results/v2_probes/truncation_control/20261021-125607_seed42 |
+| 2026-10-21 | v2_probes | probe_report | 20261021-125648_seed42 | 2a370a8 | v2_probes |  | results/v2_probes/probe_report/20261021-125648_seed42 |
