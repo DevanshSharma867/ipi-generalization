@@ -229,3 +229,14 @@ Approved with these decisions (they override the proposals above where they diff
   rate per register. A second-person-only LR is a gate (≤ 0.60).
 - **D7 Val categories as drawn.** Text: Instruction, Programming Help, Social Interaction. Code: Exploiting System
   Vulnerabilities, Sending Out Spam Emails. Language Translation: test results are reported with and without it.
+
+## Decisions (2026-10-21, round 2)
+- **R1 Context gates.** Prefix-30/suffix-30 TF-IDF gates become SPAN-MASKED probes (span removed). New gate: an
+  "insertion-site" probe, TF-IDF+LR on the ~15 tokens on each side of the insertion point with the span removed.
+  Unmasked prefix/suffix-30 stay as reported diagnostics only, next to a new non-gate reference, `span_content_tfidf`
+  (TF-IDF+LR on the inserted span text alone = the content ceiling).
+- **R2 Gate criterion.** Every gate runs on split_seeds 0-4. Pass = pooled macro-F1 <= 0.60 on every seed AND the
+  per-task mean over seeds <= 0.60. Per-seed values and the mean are reported.
+- **R3 Code length matching.** Code clean-B chunks are sampled stratified by word-count and char-count bins to match
+  the train code-attack distribution (bins from train attacks only); clean-A code items are lengthened toward the
+  char target.
