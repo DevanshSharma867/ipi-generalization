@@ -6,7 +6,8 @@ scored model (missing models are skipped and listed).
 
   - artifact reliance: flag rate on P1 and P2 by position, recall on P3 by position, flag rate on P4,
     V2 test macro-F1 -- each with a doc-cluster bootstrap 95% CI (B=1000, seed 42)
-  - flag rate on the untouched raw clean V2 test rows (natural false-positive rate)
+  - flag rate on the untouched raw clean V2 test rows (natural false-positive rate), flag rate on the V2 test
+    benign-imperative rows, and V2 test recall (injected rows)
   - paired within-doc contrasts (paired cluster bootstrap of the difference; rows paired by their source
     row, i.e. same doc and same inserted text): P1 start - P1 middle, P3 end - P3 start, P2 start - P2 middle,
     and P4 - raw clean (same doc, whitespace-collapsed vs untouched)
@@ -119,6 +120,11 @@ def model_report(df, rate_fn=flag_rate, f1_fn=f1):
     raw = v2[v2["clean_type"] == "raw"].reset_index(drop=True) if len(v2) else v2
     if len(raw):
         out["cells"]["v2_test_raw_clean_flag"] = {"n": len(raw), **doc_cluster_bootstrap(raw, rate_fn)}
+    if len(v2):
+        for name, sub in (("v2_test_benign_imperative_flag", v2[v2["clean_type"] == "benign_imperative"]),
+                          ("v2_test_recall", v2[v2["label"] == 1])):
+            sub = sub.reset_index(drop=True)
+            out["cells"][name] = {"n": len(sub), **doc_cluster_bootstrap(sub, rate_fn)}
     for name, s, a, b in CONTRASTS:
         d = df[df["eval_set"] == s]
         da, db = (pair_key(d[d["insertion_mode"] == p]).reset_index(drop=True) for p in (a, b))
