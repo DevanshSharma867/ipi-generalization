@@ -35,3 +35,5 @@ see CODEBASE_STATE.md §6.
 | 2026-10-21 | v3 | artifact_baselines_dryrun5 | 20261021-165139_seed0 | c134cfe | v3-draft-r2-iter2 | position_oracle_f1_macro=0.4610 | results/v3/artifact_baselines_dryrun5/20261021-165139_seed0 |
 | 2026-10-21 | v3 | benign_draft_check | 20261021-173016_seed0 | 16f2119-dirty | v3-draft |  | results/v3/benign_draft_check/20261021-173016_seed0 |
 | 2026-10-21 | v3 | artifact_baselines_dryrun5 | 20261021-172655_seed0 | 16f2119 | v3-draft-r2-iter3 | position_oracle_f1_macro=0.4610 | results/v3/artifact_baselines_dryrun5/20261021-172655_seed0 |
+| 2026-10-21 | v3 | benign_draft_check | 20261021-180853_seed0 | 4a2ad98-dirty | v3-draft |  | results/v3/benign_draft_check/20261021-180853_seed0 |
+| 2026-10-21 | v3 | artifact_baselines_dryrun5 | 20261021-181748_seed0 | 4a2ad98-dirty | v3-draft-r3 | position_oracle_f1_macro=0.4610 | results/v3/artifact_baselines_dryrun5/20261021-181748_seed0 |
