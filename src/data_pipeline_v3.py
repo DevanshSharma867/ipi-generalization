@@ -403,11 +403,14 @@ def attack_rates() -> Dict[str, dict]:
     for reg in ("text", "code"):
         tags = [form_tags(normalize_span(a)) for a in pools[reg]["train_file"]]
         words, chars = [t["n_words"] for t in tags], [t["n_chars"] for t in tags]
+        cpw = [c / max(w, 1) for w, c in zip(words, chars)]
         out[reg] = {"rates": {f: float(np.mean([t[f] for t in tags])) for f in MATCH_FEATURES},
                     "shapes": list(zip(words, chars)),
                     # R3: quartile bins of the train attacks (code register only); edge bins catch out-of-range
                     "bins": {"n_words": np.quantile(words, [0, .25, .5, .75, 1]).tolist(),
-                             "n_chars": np.quantile(chars, [0, .25, .5, .75, 1]).tolist()} if reg == "code" else None}
+                             "n_chars": np.quantile(chars, [0, .25, .5, .75, 1]).tolist(),
+                             "chars_per_word": np.quantile(cpw, [0, .25, .5, .75, 1]).tolist()}
+                    if reg == "code" else None}
     return out
 
 
@@ -417,7 +420,8 @@ def length_bin(x: float, edges: List[float]) -> int:
 
 
 def choose_clean_b(pool: List[dict], rng: random.Random, profile: dict, usage) -> dict:
-    """Draw a desired feature vector from the train-attack rates and a target shape from a random train attack;
+    """Draw a desired feature vector from the train-attack rates and a target shape from a random train attack
+    (code: also its word / char / chars-per-word quartile bins, R3 + round-2 iteration 2);
     take the candidate with the best weighted feature match minus its log-distance in words and chars,
     then the least used (usage(c) -> tuple), ties broken by the RNG."""
     want = {f: rng.random() < profile["rates"][f] for f in MATCH_FEATURES}
@@ -434,11 +438,13 @@ def choose_clean_b(pool: List[dict], rng: random.Random, profile: dict, usage) -
     def bin_dist(c):  # R3: stratify by the (word bin, char bin) cell of the drawn train attack
         if not bins:
             return 0
-        return sum(abs(length_bin(c["tags"][k], bins[k]) - length_bin(v, bins[k]))
-                   for k, v in (("n_words", tw), ("n_chars", tc)))
+        t = c["tags"]
+        got = {"n_words": t["n_words"], "n_chars": t["n_chars"], "chars_per_word": t["n_chars"] / max(t["n_words"], 1)}
+        return sum(abs(length_bin(got[k], bins[k]) - length_bin(v, bins[k]))
+                   for k, v in (("n_words", tw), ("n_chars", tc), ("chars_per_word", tc / max(tw, 1))))
     # digits first: within-split donors are digit-heavy (email amounts, table values) and attacks mostly are not
     # length bins (R3) and the digit match carry equal weight; code donors are digit-heavy too
-    return min(pool, key=lambda c: (bin_dist(c) + (c["tags"]["has_digit"] != want["has_digit"]), -fit(c), usage(c)))
+    return min(pool, key=lambda c: (bin_dist(c) + 2 * (c["tags"]["has_digit"] != want["has_digit"]), -fit(c), usage(c)))
 
 
 # ─── form targets (D5, D6) ────────────────────────────────────────────────────

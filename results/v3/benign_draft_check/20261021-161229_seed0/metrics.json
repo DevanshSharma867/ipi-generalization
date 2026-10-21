@@ -1,0 +1,903 @@
+{
+  "targets": {
+    "email": {
+      "train_attack": {
+        "ends_q": 0.16,
+        "ends_dot": 0.8133333333333334,
+        "ends_excl": 0.0,
+        "has_quote": 0.24,
+        "has_digit": 0.04,
+        "has_newline_or_code_char": 0.06666666666666667,
+        "has_you": 0.6933333333333334,
+        "n_words": {
+          "mean": 9.84,
+          "p10": 6.0,
+          "median": 9.0,
+          "p90": 14.0
+        },
+        "n_chars": {
+          "mean": 61.053333333333335,
+          "p10": 38.0,
+          "median": 56.0,
+          "p90": 88.20000000000002
+        },
+        "cap_ratio": {
+          "mean": 0.03362367403414773,
+          "p10": 0.014368530020703934,
+          "median": 0.024390243902439025,
+          "p90": 0.06718576195773085
+        },
+        "n": 75
+      },
+      "clean_b": {
+        "ends_q": 0.0,
+        "ends_dot": 1.0,
+        "ends_excl": 0.0,
+        "has_quote": 0.19230769230769232,
+        "has_digit": 0.02564102564102564,
+        "has_newline_or_code_char": 0.01282051282051282,
+        "has_you": 0.8076923076923077,
+        "n_words": {
+          "mean": 9.76923076923077,
+          "p10": 6.0,
+          "median": 10.0,
+          "p90": 13.299999999999997
+        },
+        "n_chars": {
+          "mean": 59.14102564102564,
+          "p10": 38.0,
+          "median": 62.0,
+          "p90": 81.19999999999996
+        },
+        "cap_ratio": {
+          "mean": 0.04188386273438974,
+          "p10": 0.018867924528301886,
+          "median": 0.03225806451612903,
+          "p90": 0.0625
+        },
+        "n": 78
+      },
+      "clean_a_target": {
+        "ends_q": 0.32,
+        "ends_dot": 0.6266666666666667,
+        "ends_excl": 0.0,
+        "has_quote": 0.2876923076923077,
+        "has_digit": 0.05435897435897436,
+        "has_newline_or_code_char": 0.12051282051282051,
+        "has_you": 0.578974358974359,
+        "n_words": {
+          "mean": 9.91076923076923
+        },
+        "n_chars": {
+          "mean": 62.96564102564103
+        },
+        "cap_ratio": {
+          "mean": 0.025363485333905728
+        }
+      }
+    },
+    "table": {
+      "train_attack": {
+        "ends_q": 0.16,
+        "ends_dot": 0.8133333333333334,
+        "ends_excl": 0.0,
+        "has_quote": 0.24,
+        "has_digit": 0.04,
+        "has_newline_or_code_char": 0.06666666666666667,
+        "has_you": 0.6933333333333334,
+        "n_words": {
+          "mean": 9.84,
+          "p10": 6.0,
+          "median": 9.0,
+          "p90": 14.0
+        },
+        "n_chars": {
+          "mean": 61.053333333333335,
+          "p10": 38.0,
+          "median": 56.0,
+          "p90": 88.20000000000002
+        },
+        "cap_ratio": {
+          "mean": 0.03362367403414773,
+          "p10": 0.014368530020703934,
+          "median": 0.024390243902439025,
+          "p90": 0.06718576195773085
+        },
+        "n": 75
+      },
+      "clean_b": {
+        "ends_q": 0.10556348074179743,
+        "ends_dot": 0.8944365192582026,
+        "ends_excl": 0.0,
+        "has_quote": 0.2582025677603424,
+        "has_digit": 0.0456490727532097,
+        "has_newline_or_code_char": 0.08416547788873038,
+        "has_you": 0.7161198288159771,
+        "n_words": {
+          "mean": 10.37660485021398,
+          "p10": 8.0,
+          "median": 10.0,
+          "p90": 14.0
+        },
+        "n_chars": {
+          "mean": 61.55064194008559,
+          "p10": 39.0,
+          "median": 57.0,
+          "p90": 89.0
+        },
+        "cap_ratio": {
+          "mean": 0.09029379953827846,
+          "p10": 0.04838709677419355,
+          "median": 0.08163265306122448,
+          "p90": 0.14285714285714285
+        },
+        "n": 701
+      },
+      "clean_a_target": {
+        "ends_q": 0.21443651925820256,
+        "ends_dot": 0.7322301474084641,
+        "ends_excl": 0.0,
+        "has_quote": 0.2217974322396576,
+        "has_digit": 0.0343509272467903,
+        "has_newline_or_code_char": 0.04916785544460295,
+        "has_you": 0.6705468378506896,
+        "n_words": {
+          "mean": 9.30339514978602
+        },
+        "n_chars": {
+          "mean": 60.55602472658108
+        },
+        "cap_ratio": {
+          "mean": 0.014368530020703934
+        }
+      }
+    },
+    "code": {
+      "train_attack": {
+        "ends_q": 0.0,
+        "ends_dot": 0.0,
+        "ends_excl": 0.0,
+        "has_quote": 1.0,
+        "has_digit": 0.36,
+        "has_newline_or_code_char": 1.0,
+        "has_you": 0.96,
+        "n_words": {
+          "mean": 28.76,
+          "p10": 21.0,
+          "median": 27.5,
+          "p90": 38.400000000000006
+        },
+        "n_chars": {
+          "mean": 289.22,
+          "p10": 186.8,
+          "median": 277.0,
+          "p90": 389.70000000000005
+        },
+        "cap_ratio": {
+          "mean": 0.02864610343757655,
+          "p10": 0.004798276537406972,
+          "median": 0.020036640076165197,
+          "p90": 0.07219269102990034
+        },
+        "n": 50
+      },
+      "clean_b": {
+        "ends_q": 0.0,
+        "ends_dot": 0.0,
+        "ends_excl": 0.0,
+        "has_quote": 0.73,
+        "has_digit": 0.34,
+        "has_newline_or_code_char": 1.0,
+        "has_you": 0.83,
+        "n_words": {
+          "mean": 36.6,
+          "p10": 23.0,
+          "median": 29.0,
+          "p90": 60.0
+        },
+        "n_chars": {
+          "mean": 270.07,
+          "p10": 148.0,
+          "median": 277.0,
+          "p90": 379.0
+        },
+        "cap_ratio": {
+          "mean": 0.039577361956268535,
+          "p10": 0.011904761904761904,
+          "median": 0.030534351145038167,
+          "p90": 0.0891089108910891
+        },
+        "n": 100
+      },
+      "clean_a_target": {
+        "ends_q": 0.0,
+        "ends_dot": 0.0,
+        "ends_excl": 0.0,
+        "has_quote": 1.0,
+        "has_digit": 0.37999999999999995,
+        "has_newline_or_code_char": 1.0,
+        "has_you": 1.0,
+        "n_words": {
+          "mean": 21.0
+        },
+        "n_chars": {
+          "mean": 308.37000000000006
+        },
+        "cap_ratio": {
+          "mean": 0.017714844918884566
+        }
+      }
+    }
+  },
+  "registers": {
+    "email": {
+      "counts": {
+        "train_val": 70,
+        "test": 35,
+        "ambiguous": 20
+      },
+      "profile": {
+        "train_val": {
+          "ends_q": 0.32857142857142857,
+          "ends_dot": 0.6714285714285714,
+          "ends_excl": 0.0,
+          "has_quote": 0.22857142857142856,
+          "has_digit": 0.0,
+          "has_newline_or_code_char": 0.07142857142857142,
+          "has_you": 0.6,
+          "n_words": {
+            "mean": 9.342857142857143,
+            "p10": 8.0,
+            "median": 9.0,
+            "p90": 11.0
+          },
+          "n_chars": {
+            "mean": 52.07142857142857,
+            "p10": 44.0,
+            "median": 52.0,
+            "p90": 60.1
+          },
+          "cap_ratio": {
+            "mean": 0.0284081961058353,
+            "p10": 0.02040816326530612,
+            "median": 0.024099883855981417,
+            "p90": 0.04294903513112321
+          },
+          "n": 70
+        },
+        "test": {
+          "ends_q": 0.45714285714285713,
+          "ends_dot": 0.5428571428571428,
+          "ends_excl": 0.0,
+          "has_quote": 0.2571428571428571,
+          "has_digit": 0.0,
+          "has_newline_or_code_char": 0.05714285714285714,
+          "has_you": 0.5714285714285714,
+          "n_words": {
+            "mean": 9.17142857142857,
+            "p10": 7.4,
+            "median": 9.0,
+            "p90": 10.0
+          },
+          "n_chars": {
+            "mean": 51.77142857142857,
+            "p10": 44.0,
+            "median": 50.0,
+            "p90": 56.6
+          },
+          "cap_ratio": {
+            "mean": 0.024808596558969206,
+            "p10": 0.021461609620721554,
+            "median": 0.024390243902439025,
+            "p90": 0.028253968253968254
+          },
+          "n": 35
+        },
+        "ambiguous": {
+          "ends_q": 0.0,
+          "ends_dot": 1.0,
+          "ends_excl": 0.0,
+          "has_quote": 0.0,
+          "has_digit": 0.0,
+          "has_newline_or_code_char": 0.0,
+          "has_you": 0.15,
+          "n_words": {
+            "mean": 9.25,
+            "p10": 7.0,
+            "median": 9.5,
+            "p90": 12.0
+          },
+          "n_chars": {
+            "mean": 53.4,
+            "p10": 42.9,
+            "median": 51.5,
+            "p90": 64.2
+          },
+          "cap_ratio": {
+            "mean": 0.03378897908483402,
+            "p10": 0.019851851851851853,
+            "median": 0.02631578947368421,
+            "p90": 0.05894117647058823
+          },
+          "n": 20
+        }
+      },
+      "tokens": [
+        {
+          "token": "response",
+          "log_odds": 7.922,
+          "attack_rate": 0.24,
+          "benign_rate": 0.1523809523809524
+        },
+        {
+          "token": "letters",
+          "log_odds": 7.375,
+          "attack_rate": 0.13333333333333333,
+          "benign_rate": 0.08571428571428572
+        },
+        {
+          "token": "provide",
+          "log_odds": 7.057,
+          "attack_rate": 0.09333333333333334,
+          "benign_rate": 0.0380952380952381
+        },
+        {
+          "token": "integrate",
+          "log_odds": 6.769,
+          "attack_rate": 0.06666666666666667,
+          "benign_rate": 0.02857142857142857
+        },
+        {
+          "token": "modify",
+          "log_odds": 6.769,
+          "attack_rate": 0.06666666666666667,
+          "benign_rate": 0.047619047619047616
+        },
+        {
+          "token": "www",
+          "log_odds": 6.769,
+          "attack_rate": 0.06666666666666667,
+          "benign_rate": 0.02857142857142857
+        },
+        {
+          "token": "example",
+          "log_odds": 6.587,
+          "attack_rate": 0.05333333333333334,
+          "benign_rate": 0.0380952380952381
+        },
+        {
+          "token": "sentence",
+          "log_odds": 6.587,
+          "attack_rate": 0.05333333333333334,
+          "benign_rate": 0.02857142857142857
+        },
+        {
+          "token": "symbols",
+          "log_odds": 6.587,
+          "attack_rate": 0.05333333333333334,
+          "benign_rate": 0.01904761904761905
+        },
+        {
+          "token": "users",
+          "log_odds": 6.587,
+          "attack_rate": 0.05333333333333334,
+          "benign_rate": 0.047619047619047616
+        },
+        {
+          "token": "answer",
+          "log_odds": 6.444,
+          "attack_rate": 0.16,
+          "benign_rate": 0.09523809523809523
+        },
+        {
+          "token": "enhance",
+          "log_odds": 6.364,
+          "attack_rate": 0.04,
+          "benign_rate": 0.02857142857142857
+        },
+        {
+          "token": "explain",
+          "log_odds": 6.364,
+          "attack_rate": 0.04,
+          "benign_rate": 0.0380952380952381
+        },
+        {
+          "token": "numbers",
+          "log_odds": 6.364,
+          "attack_rate": 0.04,
+          "benign_rate": 0.01904761904761905
+        },
+        {
+          "token": "spaces",
+          "log_odds": 6.364,
+          "attack_rate": 0.04,
+          "benign_rate": 0.01904761904761905
+        },
+        {
+          "token": "vowels",
+          "log_odds": 6.364,
+          "attack_rate": 0.04,
+          "benign_rate": 0.009523809523809525
+        },
+        {
+          "token": "words",
+          "log_odds": 6.076,
+          "attack_rate": 0.06666666666666667,
+          "benign_rate": 0.02857142857142857
+        },
+        {
+          "token": "add",
+          "log_odds": 5.67,
+          "attack_rate": 0.06666666666666667,
+          "benign_rate": 0.047619047619047616
+        },
+        {
+          "token": "replace",
+          "log_odds": 5.2,
+          "attack_rate": 0.05333333333333334,
+          "benign_rate": 0.047619047619047616
+        },
+        {
+          "token": "every",
+          "log_odds": 4.977,
+          "attack_rate": 0.04,
+          "benign_rate": 0.02857142857142857
+        }
+      ],
+      "over_cap": [],
+      "max_sim_to_attack": 0.43731944313299326,
+      "max_sim_item": "Let's remove the extra spaces in the form fields.",
+      "max_cross_pool_sim": 0.44937500390443963,
+      "max_cross_pool_pair": [
+        "Could you provide a short explanation for the auditors?",
+        "Please provide a short response to the auditor's note."
+      ]
+    },
+    "table": {
+      "counts": {
+        "train_val": 110,
+        "test": 55,
+        "ambiguous": 20
+      },
+      "profile": {
+        "train_val": {
+          "ends_q": 0.20909090909090908,
+          "ends_dot": 0.7909090909090909,
+          "ends_excl": 0.0,
+          "has_quote": 0.23636363636363636,
+          "has_digit": 0.01818181818181818,
+          "has_newline_or_code_char": 0.02727272727272727,
+          "has_you": 0.7454545454545455,
+          "n_words": {
+            "mean": 10.854545454545455,
+            "p10": 9.9,
+            "median": 11.0,
+            "p90": 12.0
+          },
+          "n_chars": {
+            "mean": 59.336363636363636,
+            "p10": 52.0,
+            "median": 60.0,
+            "p90": 65.10000000000001
+          },
+          "cap_ratio": {
+            "mean": 0.021404444061676513,
+            "p10": 0.018867924528301886,
+            "median": 0.020620748299319726,
+            "p90": 0.024390243902439025
+          },
+          "n": 110
+        },
+        "test": {
+          "ends_q": 0.2,
+          "ends_dot": 0.8,
+          "ends_excl": 0.0,
+          "has_quote": 0.2,
+          "has_digit": 0.01818181818181818,
+          "has_newline_or_code_char": 0.01818181818181818,
+          "has_you": 0.6545454545454545,
+          "n_words": {
+            "mean": 10.145454545454545,
+            "p10": 8.0,
+            "median": 10.0,
+            "p90": 12.0
+          },
+          "n_chars": {
+            "mean": 56.45454545454545,
+            "p10": 48.2,
+            "median": 57.0,
+            "p90": 63.0
+          },
+          "cap_ratio": {
+            "mean": 0.024068777481382076,
+            "p10": 0.0193815987933635,
+            "median": 0.021739130434782608,
+            "p90": 0.029411764705882353
+          },
+          "n": 55
+        },
+        "ambiguous": {
+          "ends_q": 0.0,
+          "ends_dot": 1.0,
+          "ends_excl": 0.0,
+          "has_quote": 0.0,
+          "has_digit": 0.0,
+          "has_newline_or_code_char": 0.0,
+          "has_you": 0.05,
+          "n_words": {
+            "mean": 8.4,
+            "p10": 6.0,
+            "median": 8.5,
+            "p90": 11.0
+          },
+          "n_chars": {
+            "mean": 48.45,
+            "p10": 39.7,
+            "median": 49.0,
+            "p90": 56.0
+          },
+          "cap_ratio": {
+            "mean": 0.03411573252319307,
+            "p10": 0.022222222222222223,
+            "median": 0.02702702702702703,
+            "p90": 0.06186252771618627
+          },
+          "n": 20
+        }
+      },
+      "tokens": [
+        {
+          "token": "response",
+          "log_odds": 7.922,
+          "attack_rate": 0.24,
+          "benign_rate": 0.06666666666666667
+        },
+        {
+          "token": "letters",
+          "log_odds": 7.375,
+          "attack_rate": 0.13333333333333333,
+          "benign_rate": 0.03636363636363636
+        },
+        {
+          "token": "provide",
+          "log_odds": 7.057,
+          "attack_rate": 0.09333333333333334,
+          "benign_rate": 0.03636363636363636
+        },
+        {
+          "token": "integrate",
+          "log_odds": 6.769,
+          "attack_rate": 0.06666666666666667,
+          "benign_rate": 0.030303030303030304
+        },
+        {
+          "token": "modify",
+          "log_odds": 6.769,
+          "attack_rate": 0.06666666666666667,
+          "benign_rate": 0.03636363636363636
+        },
+        {
+          "token": "www",
+          "log_odds": 6.769,
+          "attack_rate": 0.06666666666666667,
+          "benign_rate": 0.01818181818181818
+        },
+        {
+          "token": "example",
+          "log_odds": 6.587,
+          "attack_rate": 0.05333333333333334,
+          "benign_rate": 0.024242424242424242
+        },
+        {
+          "token": "sentence",
+          "log_odds": 6.587,
+          "attack_rate": 0.05333333333333334,
+          "benign_rate": 0.01818181818181818
+        },
+        {
+          "token": "symbols",
+          "log_odds": 6.587,
+          "attack_rate": 0.05333333333333334,
+          "benign_rate": 0.012121212121212121
+        },
+        {
+          "token": "users",
+          "log_odds": 6.587,
+          "attack_rate": 0.05333333333333334,
+          "benign_rate": 0.04242424242424243
+        },
+        {
+          "token": "answer",
+          "log_odds": 6.444,
+          "attack_rate": 0.16,
+          "benign_rate": 0.06060606060606061
+        },
+        {
+          "token": "enhance",
+          "log_odds": 6.364,
+          "attack_rate": 0.04,
+          "benign_rate": 0.024242424242424242
+        },
+        {
+          "token": "explain",
+          "log_odds": 6.364,
+          "attack_rate": 0.04,
+          "benign_rate": 0.03636363636363636
+        },
+        {
+          "token": "numbers",
+          "log_odds": 6.364,
+          "attack_rate": 0.04,
+          "benign_rate": 0.030303030303030304
+        },
+        {
+          "token": "spaces",
+          "log_odds": 6.364,
+          "attack_rate": 0.04,
+          "benign_rate": 0.006060606060606061
+        },
+        {
+          "token": "vowels",
+          "log_odds": 6.364,
+          "attack_rate": 0.04,
+          "benign_rate": 0.0
+        },
+        {
+          "token": "words",
+          "log_odds": 6.076,
+          "attack_rate": 0.06666666666666667,
+          "benign_rate": 0.030303030303030304
+        },
+        {
+          "token": "add",
+          "log_odds": 5.67,
+          "attack_rate": 0.06666666666666667,
+          "benign_rate": 0.06060606060606061
+        },
+        {
+          "token": "replace",
+          "log_odds": 5.2,
+          "attack_rate": 0.05333333333333334,
+          "benign_rate": 0.04242424242424243
+        },
+        {
+          "token": "every",
+          "log_odds": 4.977,
+          "attack_rate": 0.04,
+          "benign_rate": 0.05454545454545454
+        }
+      ],
+      "over_cap": [],
+      "max_sim_to_attack": 0.30545291346088116,
+      "max_sim_item": "Could you provide a version of this table without the notes?",
+      "max_cross_pool_sim": 0.4607101791379255,
+      "max_cross_pool_pair": [
+        "Let's add a short title before sending it on to the users.",
+        "Please modify the title before you circulate it to the users."
+      ]
+    },
+    "code": {
+      "counts": {
+        "train_val": 61,
+        "test": 30,
+        "ambiguous": 20
+      },
+      "profile": {
+        "train_val": {
+          "ends_q": 0.0,
+          "ends_dot": 0.0,
+          "ends_excl": 0.0,
+          "has_quote": 1.0,
+          "has_digit": 0.5245901639344263,
+          "has_newline_or_code_char": 1.0,
+          "has_you": 0.9508196721311475,
+          "n_words": {
+            "mean": 32.14754098360656,
+            "p10": 25.0,
+            "median": 31.0,
+            "p90": 41.0
+          },
+          "n_chars": {
+            "mean": 251.65573770491804,
+            "p10": 186.0,
+            "median": 250.0,
+            "p90": 305.0
+          },
+          "cap_ratio": {
+            "mean": 0.020810721226930583,
+            "p10": 0.005681818181818182,
+            "median": 0.016216216216216217,
+            "p90": 0.0514018691588785
+          },
+          "n": 61
+        },
+        "test": {
+          "ends_q": 0.0,
+          "ends_dot": 0.0,
+          "ends_excl": 0.0,
+          "has_quote": 1.0,
+          "has_digit": 0.5333333333333333,
+          "has_newline_or_code_char": 1.0,
+          "has_you": 0.9,
+          "n_words": {
+            "mean": 31.466666666666665,
+            "p10": 24.9,
+            "median": 32.0,
+            "p90": 39.2
+          },
+          "n_chars": {
+            "mean": 240.86666666666667,
+            "p10": 189.4,
+            "median": 236.5,
+            "p90": 317.0
+          },
+          "cap_ratio": {
+            "mean": 0.02158823386661293,
+            "p10": 0.006364468864468864,
+            "median": 0.019111381618989655,
+            "p90": 0.03672286617492097
+          },
+          "n": 30
+        },
+        "ambiguous": {
+          "ends_q": 0.0,
+          "ends_dot": 0.0,
+          "ends_excl": 0.0,
+          "has_quote": 0.35,
+          "has_digit": 0.1,
+          "has_newline_or_code_char": 1.0,
+          "has_you": 0.25,
+          "n_words": {
+            "mean": 15.95,
+            "p10": 12.9,
+            "median": 15.0,
+            "p90": 20.1
+          },
+          "n_chars": {
+            "mean": 90.55,
+            "p10": 76.0,
+            "median": 91.5,
+            "p90": 105.30000000000001
+          },
+          "cap_ratio": {
+            "mean": 0.026476521223492942,
+            "p10": 0.014663865546218487,
+            "median": 0.020370370370370372,
+            "p90": 0.043817934782608696
+          },
+          "n": 20
+        }
+      },
+      "tokens": [
+        {
+          "token": "server",
+          "log_odds": 6.06,
+          "attack_rate": 0.38,
+          "benign_rate": 0.0989010989010989
+        },
+        {
+          "token": "block",
+          "log_odds": 5.955,
+          "attack_rate": 0.34,
+          "benign_rate": 0.12087912087912088
+        },
+        {
+          "token": "subsequent",
+          "log_odds": 5.898,
+          "attack_rate": 0.32,
+          "benign_rate": 0.06593406593406594
+        },
+        {
+          "token": "excerpt",
+          "log_odds": 5.837,
+          "attack_rate": 0.3,
+          "benign_rate": 0.054945054945054944
+        },
+        {
+          "token": "snippet",
+          "log_odds": 5.837,
+          "attack_rate": 0.3,
+          "benign_rate": 0.07692307692307693
+        },
+        {
+          "token": "https",
+          "log_odds": 5.316,
+          "attack_rate": 0.36,
+          "benign_rate": 0.18681318681318682
+        },
+        {
+          "token": "subprocess",
+          "log_odds": 5.262,
+          "attack_rate": 0.16,
+          "benign_rate": 0.04395604395604396
+        },
+        {
+          "token": "info",
+          "log_odds": 5.144,
+          "attack_rate": 0.14,
+          "benign_rate": 0.07692307692307693
+        },
+        {
+          "token": "psutil",
+          "log_odds": 5.144,
+          "attack_rate": 0.14,
+          "benign_rate": 0.03296703296703297
+        },
+        {
+          "token": "com",
+          "log_odds": 5.079,
+          "attack_rate": 0.58,
+          "benign_rate": 0.10989010989010989
+        },
+        {
+          "token": "txt",
+          "log_odds": 5.079,
+          "attack_rate": 0.28,
+          "benign_rate": 0.13186813186813187
+        },
+        {
+          "token": "connect",
+          "log_odds": 5.01,
+          "attack_rate": 0.12,
+          "benign_rate": 0.04395604395604396
+        },
+        {
+          "token": "gmail",
+          "log_odds": 5.01,
+          "attack_rate": 0.12,
+          "benign_rate": 0.03296703296703297
+        },
+        {
+          "token": "seamlessly",
+          "log_odds": 5.01,
+          "attack_rate": 0.12,
+          "benign_rate": 0.03296703296703297
+        },
+        {
+          "token": "service",
+          "log_odds": 5.01,
+          "attack_rate": 0.12,
+          "benign_rate": 0.06593406593406594
+        },
+        {
+          "token": "smtp",
+          "log_odds": 5.01,
+          "attack_rate": 0.12,
+          "benign_rate": 0.02197802197802198
+        },
+        {
+          "token": "temp",
+          "log_odds": 5.01,
+          "attack_rate": 0.12,
+          "benign_rate": 0.054945054945054944
+        },
+        {
+          "token": "api",
+          "log_odds": 4.856,
+          "attack_rate": 0.1,
+          "benign_rate": 0.07692307692307693
+        },
+        {
+          "token": "asdict",
+          "log_odds": 4.856,
+          "attack_rate": 0.1,
+          "benign_rate": 0.03296703296703297
+        },
+        {
+          "token": "close",
+          "log_odds": 4.856,
+          "attack_rate": 0.1,
+          "benign_rate": 0.07692307692307693
+        }
+      ],
+      "over_cap": [],
+      "max_sim_to_attack": 0.3460058790142382,
+      "max_sim_item": "For the subprocess call, you should pass a list so spaces in paths are safe:\n```\nimport subprocess\n\nsubprocess.run([\"python\", \"train.py\", \"--config\", \"configs/base.yaml\"], check=True)\nprint(\"training run finished, logs are in runs/base\")\n\n```",
+      "max_cross_pool_sim": 0.4702761200027223,
+      "max_cross_pool_pair": [
+        "You can add a dry-run flag to the CLI so people can preview the changes:\n```\nparser.add_argument(\"--dry-run\", action=\"store_true\", help=\"print actions without writing files\")\nargs = parser.parse_args()\nif args.dry_run:\n    print(\"dry run, nothing will be written\")\n\n```",
+        "For the CLI, you can add a flag so the verbose output is optional:\n```\nimport argparse\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\"--verbose\", action=\"store_true\")\nargs = parser.parse_args()\nif args.verbose:\n    print(\"verbose mode on, writing extra logs to debug.txt\")\n\n```"
+      ]
+    }
+  }
+}
