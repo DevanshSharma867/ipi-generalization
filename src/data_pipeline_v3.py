@@ -401,6 +401,11 @@ def attack_rates() -> Dict[str, dict]:
     pools = load_attack_pools()
     out = {}
     for reg in ("text", "code"):
+        # R4: selection statistics come from the TRAIN attack file only
+        train_file = json.load(open(BENCH / f"{reg}_attack_train.json"))
+        test_strings = {a.strip() for v in json.load(open(BENCH / f"{reg}_attack_test.json")).values() for a in v}
+        assert pools[reg]["train_file"] == [a.strip() for c in sorted(train_file) for a in train_file[c]]
+        assert not set(pools[reg]["train_file"]) & test_strings
         tags = [form_tags(normalize_span(a)) for a in pools[reg]["train_file"]]
         words, chars = [t["n_words"] for t in tags], [t["n_chars"] for t in tags]
         cpw = [c / max(w, 1) for w, c in zip(words, chars)]

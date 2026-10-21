@@ -240,3 +240,9 @@ Approved with these decisions (they override the proposals above where they diff
 - **R3 Code length matching.** Code clean-B chunks are sampled stratified by word-count and char-count bins to match
   the train code-attack distribution (bins from train attacks only); clean-A code items are lengthened toward the
   char target.
+
+## Decisions (round 3)
+- **R4 Clean-B selection extensions kept.** The chars-per-word bin (code register) and the doubled digit-match weight
+  in clean-B selection stay. All bins, rates and target shapes used by clean-B selection are computed from the TRAIN
+  attack file statistics only (`text_attack_train.json`, `code_attack_train.json`), never from test attacks; this is
+  asserted in `data_pipeline_v3.attack_rates`.
