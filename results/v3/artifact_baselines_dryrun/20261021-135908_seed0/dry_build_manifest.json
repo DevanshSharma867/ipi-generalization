@@ -1,0 +1,147 @@
+{
+  "benign_dropped_over_cap": [],
+  "benign_pool_sizes": {
+    "ambiguous": {
+      "code": 20,
+      "email": 20,
+      "table": 20
+    },
+    "test": {
+      "code": 30,
+      "email": 35,
+      "table": 55
+    },
+    "train": {
+      "code": 46,
+      "email": 52,
+      "table": 82
+    },
+    "val": {
+      "code": 15,
+      "email": 18,
+      "table": 28
+    }
+  },
+  "counts": {
+    "ambiguous": {
+      "code/test": 15,
+      "code/val": 13,
+      "email/test": 15,
+      "email/val": 12,
+      "table/test": 105,
+      "table/val": 105
+    },
+    "long": {},
+    "main": {
+      "code/test": 60,
+      "code/train": 272,
+      "code/val": 52,
+      "email/test": 60,
+      "email/train": 200,
+      "email/val": 48,
+      "table/test": 420,
+      "table/train": 1964,
+      "table/val": 420
+    },
+    "raw_clean": {
+      "code/test": 15,
+      "code/val": 13,
+      "email/test": 15,
+      "email/val": 12,
+      "table/test": 105,
+      "table/val": 105
+    },
+    "val_id": {
+      "code/val": 26,
+      "email/val": 24,
+      "table/val": 210
+    }
+  },
+  "d3_table": {
+    "all_answer_rows_kept": 67,
+    "fits": 594,
+    "no_answer_in_table": 14,
+    "some_answer_rows_kept": 26
+  },
+  "distinct_donor_docs": {
+    "code/test": 8,
+    "code/train": 29,
+    "code/val": 5,
+    "email/test": 10,
+    "email/train": 30,
+    "email/val": 7,
+    "table/test": 70,
+    "table/train": 338,
+    "table/val": 74
+  },
+  "doc_limit": null,
+  "docs": {
+    "code": {
+      "components_multi": 0,
+      "long_reason": {
+        "no_internal_boundary": 4
+      },
+      "main": 96,
+      "trimmed": 34,
+      "unique": 100
+    },
+    "email": {
+      "components_multi": 16,
+      "long_reason": {
+        "does_not_fit": 1
+      },
+      "main": 77,
+      "trimmed": 0,
+      "unique": 78
+    },
+    "table": {
+      "components_multi": 0,
+      "long_reason": {},
+      "main": 701,
+      "trimmed": 107,
+      "unique": 701
+    }
+  },
+  "donor_k": {
+    "code": 2,
+    "email": 2,
+    "table": 1
+  },
+  "donor_texts_excluded_cross_split": {
+    "code": 0,
+    "email": 40,
+    "table": 1080
+  },
+  "inputs_sha256": {
+    "benign_json": "bdcb972cf8a38d1e01dc8d1397a3ea4b215d73571fb2bcde231a6ed45d362a11",
+    "code/test.jsonl": "ed40b84f541352fb45753032a80750922de8d5e0b70997924df3d04cf942e058",
+    "code/train.jsonl": "5e6879b621a5cefe265a5b41b7ed0be632536f658f6097baf85a28b9abcb3115",
+    "code_attack_test.json": "892545c5aaec0645b1ded65dc7816b3d70e9ef4eadcba2301a7a3db93676b6e0",
+    "code_attack_train.json": "fe515080b6da2b5c0b67ca7ba2a3b3c2ce57c48f45733c475ebc813cba118484",
+    "email/test.jsonl": "217b403faaa1d0cb12c24892bea39f4a0b9e2819919ac7e2b902006e28278cdb",
+    "email/train.jsonl": "82207193cb8ce06713eeb7c33ca0716446613512e2ad9303b302ba14d425ddd4",
+    "table/test.jsonl": "3d5eaab192b80bada762e3cd7655583a14e5888ba8b845a01f0434e4ccc4291e",
+    "table/train.jsonl": "ae1c3ff25733fb3ff1a35bda3009716f4d25a17ae6833c73521be0411d576494",
+    "text_attack_test.json": "75750e7b4e8b34e8f9d88d89b357aeaaf02bd07f9e493ccd37eda74a0cd7c7f8",
+    "text_attack_train.json": "63f95d3e67eac4178cdabdbdaf192cd05f2b6ed0702b578f1d30d556e5155670"
+  },
+  "margin": 6,
+  "max_donor_text_use": 2,
+  "max_tokens": 512,
+  "span_cap_tokens": {
+    "code": 204,
+    "text": 30
+  },
+  "split_seed": 0,
+  "val_categories": {
+    "code": [
+      "Exploiting System Vulnerabilities",
+      "Sending Out Spam Emails"
+    ],
+    "text": [
+      "Instruction",
+      "Programming Help",
+      "Social Interaction"
+    ]
+  }
+}
