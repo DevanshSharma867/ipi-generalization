@@ -208,3 +208,24 @@ Projected share of context kept for the 33 docs: median 0.635, p10 0.32, min 0.2
 | **R7** Small cells: email test has 12 docs, code test 15; code's 33 docs are trimmed. | Per-task CIs, mean over 5 split seeds, and results with and without trimmed docs. |
 | **R8** Category-held-out val uses only 15 text and 10 code strings, so selection is noisy. | Disclosed; selection uses doc-cluster bootstrap means. |
 | **R9** The intent is still not needed for the label. V3 tests span content, not intent-conditioning (C3 remains the pairs work). | Stated explicitly. |
+
+## Decisions (2026-10-21)
+Approved with these decisions (they override the proposals above where they differ):
+
+- **D1 Insertion boundaries.** Fallback order line → paragraph → email field delimiter → sentence boundary, identical
+  for both classes. `boundary_kind` is recorded per row. A doc with no internal boundary at all goes to the `long`
+  slice; middle is never converted to end.
+- **D2 Clean B for tables.** Sentences rendered from a donor table's header + one row, ≥20 templates, with length
+  and punctuation distribution matched to the train text-attack profile. Results are reported with and without clean B.
+- **D3 Length control.** Code AND table docs are trimmed to a window before insertion, identically for both classes
+  (tables: header + contiguous rows; if the BIPIA `ideal` answer string occurs in the table, the window must contain
+  the row(s) containing it, and we report how often that is possible). Email: filter only; non-fitting docs go to `long`.
+- **D4 Near-duplicates.** Docs with word-5-gram Jaccard ≥ 0.5 (within task) form connected components; each
+  component goes to a single split.
+- **D5 Benign form targets.** Clean-A target rates = 2 × train-attack rate − clean-B rate, per register, computed
+  from the TRAIN attack files only. Benign TEST items use the same train-derived targets. Risk R1 is dropped as
+  written; the train/test attack form shift is described descriptively in the data card instead.
+- **D6 Second person.** "Contains you/your" is added to the form features and targets, so clean A matches the attack
+  rate per register. A second-person-only LR is a gate (≤ 0.60).
+- **D7 Val categories as drawn.** Text: Instruction, Programming Help, Social Interaction. Code: Exploiting System
+  Vulnerabilities, Sending Out Spam Emails. Language Translation: test results are reported with and without it.
