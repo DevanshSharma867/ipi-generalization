@@ -1,0 +1,9 @@
+[13:39:27] rows with a span: train 1002, test 216
+[13:40:00] position_oracle      n= 288 macro-F1 0.7333 [0.7333, 0.7333]  code 0.7333  email 0.7333  table 0.7333
+[13:40:31] first_para_rule      n= 288 macro-F1 0.7007 [0.6800, 0.7193]  code 0.6811  email 0.5804  table 0.7333
+[13:41:01] prefix30_tfidf_lr    n= 288 macro-F1 0.7046 [0.6765, 0.7320]  code 0.7306  email 0.7581  table 0.6790
+[13:41:32] suffix30_tfidf_lr    n= 288 macro-F1 0.5115 [0.4932, 0.5274]  code 0.4844  email 0.5608  table 0.4999
+[13:42:02] length_lr            n= 288 macro-F1 0.5218 [0.4952, 0.5492]  code 0.5500  email 0.3950  table 0.5000
+[13:42:33] span_form_lr         n= 216 macro-F1 0.8421 [0.7928, 0.8879]  code 1.0000  email 0.8557  table 0.7893
+[13:43:03] span_form_you_lr     n= 216 macro-F1 0.8814 [0.8356, 0.9236]  code 0.9482  email 0.8036  table 0.8793
+[13:43:33] second_person_lr     n= 216 macro-F1 0.7725 [0.7195, 0.8276]  code 0.9482  email 0.6990  table 0.7360
