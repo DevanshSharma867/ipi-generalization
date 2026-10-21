@@ -1,0 +1,126 @@
+{
+  "run_id": "20261021-181748_seed0",
+  "version": "v3",
+  "exp": "artifact_baselines_dryrun5",
+  "seed": 0,
+  "args": {
+    "dataset": "v3",
+    "split_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "data_dir": "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5",
+    "n_tokens": 30,
+    "site_tokens": 15,
+    "tfidf": {
+      "analyzer": "word",
+      "ngram_range": [
+        1,
+        3
+      ],
+      "max_features": 50000,
+      "sublinear_tf": true,
+      "min_df": 2,
+      "strip_accents": "unicode",
+      "token_pattern": "\\b\\w+\\b"
+    },
+    "lr": {
+      "C": 1.0,
+      "solver": "lbfgs",
+      "max_iter": 1000,
+      "class_weight": "balanced",
+      "random_state": 42,
+      "n_jobs": -1
+    },
+    "span_features": [
+      "n_words",
+      "n_chars",
+      "ends_q",
+      "ends_dot",
+      "ends_excl",
+      "has_quote",
+      "has_digit",
+      "has_newline_or_code_char",
+      "cap_ratio"
+    ],
+    "gate": 0.6,
+    "gates": [
+      "position_oracle",
+      "first_para_rule",
+      "prefix30_masked_tfidf_lr",
+      "suffix30_masked_tfidf_lr",
+      "insertion_site_tfidf_lr",
+      "length_lr",
+      "span_form_you_lr",
+      "second_person_lr",
+      "boundary_kind_lr"
+    ],
+    "bootstrap": {
+      "B": 1000,
+      "seed": 42
+    }
+  },
+  "git_commit": "4a2ad988e9c6ba927ed6a279dfd13aabc7e31545",
+  "git_dirty": true,
+  "data_version": "v3-draft-r3",
+  "data_files_sha256": {
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_0/train.csv": "315153b686f3b4096b398e0a37976ae45a7449dae287dc0eca4e353321c95458",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_0/test.csv": "0686654bf2dc00fd1267386bcdb96efa47d2088ff15cb6ea7ff737c5fc378a74",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_0/manifest.json": "46e760ba93e665d57dad48aacf63efdffefe36af473edc67011d4de694a4f03e",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_1/train.csv": "3f3d165a839977bab54bdcfafe81e661270756dfba9bed8077a6be37a5c0a578",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_1/test.csv": "c95532a828ea56f0573b2556147b9702a81548c08603c7978879ad8dcdf2f4b2",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_1/manifest.json": "5d6961348ef844374d0290580d323572484bff70dfae27537160a02bc9d233aa",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_2/train.csv": "44829e88c1ccac0b70ef50e96ca232f5c0137f0cf47f4f09e0a473c2537095fa",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_2/test.csv": "75f95de77cb246106279c9552f2e3de90f24d1017726b0781ac361a216884be5",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_2/manifest.json": "6d994f73879cc3923d3b65fe0d6d33d6df8a70a91efd4e56a3981e6d170c2e83",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_3/train.csv": "61cf6f00313f2272ede69181e58984c9c4777aaf5aaa3dbec540a0c3846abc92",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_3/test.csv": "22f75811b136ef151f97ae000a3e9da9908f7425da07e676a0adb3b95864150f",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_3/manifest.json": "030e8eb3de16b997acdf3a25552d76136d24483d85c6ae8a59f473b2d1d800a0",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_4/train.csv": "4109e3eccd1c41ac10726fe42032c2159d47fb3653f490ae283560e6469077ad",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_4/test.csv": "4a4681c3774d77e1cd2f4823b8cf6efda5e5ee2cc4d63113690f92caa67c1b20",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5/split_seed_4/manifest.json": "4883ed15b7e6b477ba7eace6853799bb8a75f84b426848093ed5307486ad71b3"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null
+  },
+  "argv": [
+    "scripts/artifact_baselines.py",
+    "--dataset",
+    "v3",
+    "--split_seeds",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "--data_dir",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry5",
+    "--exp",
+    "artifact_baselines_dryrun5",
+    "--data_version",
+    "v3-draft-r3"
+  ],
+  "started": "2026-10-21T18:17:48"
+}
