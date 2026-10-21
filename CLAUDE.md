@@ -120,6 +120,8 @@ Framing: *evaluation methodology + generalization failure* first, method second.
   `results/REGISTRY.md`. `assert_not_frozen(path)` is the frozen-path guard. `PRED_COLUMNS` is the predictions schema.
 - `scripts/convert_v2_predictions.py`: V2 predictions/scores → `results/v2_std/<eval_set>/<model>.csv` (+ manifest).
 - `scripts/make_tables.py`: LaTeX tables in `paper/tables/` + `paper/numbers.tex` macros, verified against frozen JSON.
+- `scripts/make_findings.py`: renders `docs/findings.md` (numbers-only findings log) from `docs/findings.src.md`
+  and `paper/numbers.tex`. Edit the `.src.md`; run after `make_tables.py`.
 - `scripts/error_stats.py`, `scripts/deberta_v2_stats.py`: V2 error analysis and DeBERTa CIs → `results/v2_std/*.json`.
 - `scripts/tokenizer_check.py`: DeBERTa tokenizer diagnostics → `results/v3/tokenizer_check/`.
 - `src/probes.py`: `extract_inserted_span` (exact inverse of V2 `insert_sentence`) and `insert_preserving`
