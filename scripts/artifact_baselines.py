@@ -173,6 +173,18 @@ def main():
                  for t, v in [("pooled", r["bootstrap"]["f1_macro"]["point"])] +
                  [(t, x["bootstrap"]["f1_macro"]["point"]) for t, x in r["per_task"].items()] if v > GATE]
         results["gate"] = {"threshold": GATE, "failures": fails, "pass": not fails}
+        # Diagnostics: where the window probes get their signal, and which span features differ by row type
+        by_pos = {}
+        for df in preds:
+            name = df["model"].iloc[0]
+            by_pos[name] = {f"{t}/{m}": float(df_metrics(g)["f1_macro"]) for (t, m), g in
+                            df.assign(task=df["task"].astype(str)).groupby(["task", "insertion_mode"])}
+        feats = SPAN_FEATURES + ["has_you"]
+        means = pd.DataFrame(span_features(te_s.span, feats), columns=feats).assign(
+            task=te_s["task_type"].values, row_type=te_s["row_type"].values).groupby(["task", "row_type"]).mean()
+        results["diagnostics"] = {"f1_macro_by_task_and_position": by_pos,
+                                  "test_span_feature_means": {f"{t}/{r}": row.round(4).to_dict()
+                                                              for (t, r), row in means.iterrows()}}
         run.log(f"gates: {'PASS' if not fails else 'FAIL ' + ', '.join(fails)}")
     run.save_predictions(pd.concat(preds, ignore_index=True))
     run.save_metrics(results, headline=("position_oracle_f1_macro", results["position_oracle"]["point"]["f1_macro"]))
