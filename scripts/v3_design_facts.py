@@ -28,9 +28,9 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path[:0] = [str(ROOT / "src"), str(ROOT / "scripts")]
-from build_probes_v2 import code_sentences, email_sentences
+from build_probes_v2 import code_sentences
 from data_pipeline import load_attacks, load_jsonl
-from probes import _line_starts_outside_fences
+from probes import _line_starts_outside_fences, code_chunks, email_sentences
 from runlog import start_run
 from transformers import AutoTokenizer
 from transformers.utils import logging as hf_logging
@@ -75,22 +75,6 @@ def unique_docs(task):
                 seen.add(ctx)
                 docs.append({"context": ctx, "item": item, "bipia_split": split})
     return docs
-
-
-def code_chunks(ctx):
-    """'<prose line>\\n```\\n...\\n```' blocks: a non-empty line outside a fence directly followed by a fence."""
-    lines, out, i = ctx.split("\n"), [], 0
-    while i < len(lines) - 1:
-        if lines[i].strip() and not lines[i].strip().startswith("```") and lines[i + 1].strip().startswith("```"):
-            j = i + 2
-            while j < len(lines) and not lines[j].strip().startswith("```"):
-                j += 1
-            if j < len(lines):
-                out.append("\n".join(lines[i:j + 1]).strip())
-                i = j + 1
-                continue
-        i += 1
-    return out
 
 
 def quantiles(x):
