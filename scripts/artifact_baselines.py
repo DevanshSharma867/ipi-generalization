@@ -141,6 +141,12 @@ def main():
     for name, view in (("prefix30_tfidf_lr", first_n), ("suffix30_tfidf_lr", last_n)):
         p = tfidf_probe(train, test, view)
         preds.append(standard(test, p, p >= 0.5, name, eval_set))
+    if a.dataset == "v3":  # diagnostics, not gates: the same window probes with the inserted span cut out
+        masked = lambda d: d.assign(text=[t[:int(o)] + t[int(o) + int(n):] for t, o, n in
+                                          zip(d["text"], d["char_offset"], d["span_len"])])
+        for name, view in (("prefix30_masked_tfidf_lr", first_n), ("suffix30_masked_tfidf_lr", last_n)):
+            p = tfidf_probe(masked(train), masked(test), view)
+            preds.append(standard(test, p, p >= 0.5, name, eval_set))
     length = lambda d: np.array([[len(t), len(t.split())] for t in d["text"]], dtype=float)
     p, _ = lr_probe(length(train), train["label"], length(test))
     preds.append(standard(test, p, p >= 0.5, "length_lr", eval_set))
@@ -169,7 +175,7 @@ def main():
     for name, c in coefs.items():
         results[name]["standardized_coefficients"] = c
     if a.dataset == "v3":
-        fails = [f"{n}/{t}" for n, r in results.items()
+        fails = [f"{n}/{t}" for n, r in results.items() if "_masked_" not in n
                  for t, v in [("pooled", r["bootstrap"]["f1_macro"]["point"])] +
                  [(t, x["bootstrap"]["f1_macro"]["point"]) for t, x in r["per_task"].items()] if v > GATE]
         results["gate"] = {"threshold": GATE, "failures": fails, "pass": not fails}

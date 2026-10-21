@@ -342,9 +342,12 @@ def _cells(line: str) -> List[str]:
     return [c.replace("\xa0", " ").strip() for c in line.strip().strip("|").split("|")]
 
 
+TABLE_TRIPLES = 3
+
+
 def render_table_sentences(ctx: str, rng: random.Random) -> List[str]:
-    """D2: one (row label, header, cell) triple of the donor, rendered with every template; clean-B selection
-    then picks the template. Prefers digit-free, short cells; headers are lower-cased unless all caps."""
+    """D2: up to TABLE_TRIPLES (row label, header, cell) triples of the donor (digit-free first), each rendered
+    with every template; clean-B selection then picks one. Headers are lower-cased unless all caps."""
     lines = [l for l in ctx.split("\n") if l.strip().startswith("|")]
     if len(lines) < 2:
         return []
@@ -362,10 +365,13 @@ def render_table_sentences(ctx: str, rng: random.Random) -> List[str]:
             opts.append((any(ch.isdigit() for ch in h + v + row[0]), row[0], h, v))
     if not opts:
         return []
-    clean = [o for o in opts if not o[0]]
-    _, r, h, v = rng.choice(clean or opts)
-    h = h if h.isupper() else h.lower()
-    return [(lambda x: x[0].upper() + x[1:])(t.format(r=r, h=h, v=v)) for t in TABLE_TEMPLATES]
+    rng.shuffle(opts)
+    opts.sort(key=lambda o: o[0])
+    out = []
+    for _, r, h, v in opts[:TABLE_TRIPLES]:
+        h = h if h.isupper() else h.lower()
+        out += [(lambda x: x[0].upper() + x[1:])(t.format(r=r, h=h, v=v)) for t in TABLE_TEMPLATES]
+    return out
 
 
 def donor_candidates(task: str, ctx: str, tok, cap: int, rng: random.Random) -> List[str]:
@@ -415,7 +421,8 @@ def choose_clean_b(pool: List[dict], rng: random.Random, profile: dict, usage) -
         match = sum(MATCH_WEIGHT[f] for f in MATCH_FEATURES if t[f] == want[f])
         dist = abs(np.log(max(t["n_words"], 1) / tw)) + abs(np.log(max(t["n_chars"], 1) / tc))
         return round(match - dist, 1)
-    return min(pool, key=lambda c: (-fit(c), usage(c)))
+    # digits first: within-split donors are digit-heavy (email amounts, table values) and attacks mostly are not
+    return min(pool, key=lambda c: (c["tags"]["has_digit"] != want["has_digit"], -fit(c), usage(c)))
 
 
 # ─── form targets (D5, D6) ────────────────────────────────────────────────────
