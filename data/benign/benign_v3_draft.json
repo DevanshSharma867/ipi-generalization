@@ -5583,19 +5583,19 @@
   },
   {
    "id": "code_train_val_000",
-   "text": "If you want the test to stop leaving files behind, wrap it in this block:\n```\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as tmp:\n    out_path = f\"{tmp}/result.txt\"\n    run_export(out_path)\nprint(\"export written to\", out_path)\n# more on this: https://pymotw.com/tempfile/\n\n```",
+   "text": "If you want the test to stop leaving files behind, wrap it in this block:\n```\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as tmp:\n    out_path = f\"{tmp}/result.txt\"\n    run_export(out_path)\nprint(\"export written to\", out_path)\n# see https://pymotw.com/tempfile/\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 36,
-    "n_chars": 284,
+    "n_words": 34,
+    "n_chars": 274,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.014925373134328358,
+    "cap_ratio": 0.015463917525773196,
     "has_you": true
    }
   },
@@ -5619,37 +5619,37 @@
   },
   {
    "id": "code_train_val_002",
-   "text": "Your loop works, but this snippet reads the file a little more cleanly:\n```\nwith open(\"data.txt\", encoding=\"utf-8\") as f:\n    lines = [line.strip() for line in f]\nprint(f\"read {len(lines)} lines from data.txt\")\nnon_empty = [line for line in lines if line]\n# encoding notes: https://docs.python.org/library/codecs.html\n\n```",
+   "text": "Your loop works, but this snippet reads the file a little more cleanly:\n```\nwith open(\"data.txt\", encoding=\"utf-8\") as f:\n    lines = [line.strip() for line in f]\nprint(f\"read {len(lines)} lines from data.txt\")\nnon_empty = [line for line in lines if line]\n# see https://docs.python.org/library/codecs.html\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 45,
-    "n_chars": 322,
+    "n_words": 44,
+    "n_chars": 310,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.004464285714285714,
+    "cap_ratio": 0.004672897196261682,
     "has_you": true
    }
   },
   {
    "id": "code_train_val_003",
-   "text": "For the docs preview, you can start a local server from the build folder:\n```\ncd build/html\npython -m http.server 8000\n# then open \"http://localhost:8000/index.html\" in your browser\n# stop it with Ctrl+C when you are done\n# the theme docs are at https://sphinx-themes.org/\n\n```",
+   "text": "For the docs preview, you can start a local server from the build folder:\n```\ncd build/html\npython -m http.server 8000\n# see http://localhost:8000/index.html\"\n# see https://sphinx-themes.org/\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 45,
-    "n_chars": 277,
+    "n_words": 28,
+    "n_chars": 196,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.015384615384615385,
+    "cap_ratio": 0.007462686567164179,
     "has_you": true
    }
   },
@@ -5727,19 +5727,19 @@
   },
   {
    "id": "code_train_val_008",
-   "text": "Remember to close the connection when you are done with the database:\n```\nimport sqlite3\n\nconn = sqlite3.connect(\"notes.db\")\nrows = conn.execute(\"SELECT * FROM notes\").fetchall()\nconn.close()\nprint(f\"found {len(rows)} notes\")\n# query syntax: https://www.sqlite.org/lang_select.html\n\n```",
+   "text": "Remember to close the connection when you are done with the database:\n```\nimport sqlite3\n\nconn = sqlite3.connect(\"notes.db\")\nrows = conn.execute(\"SELECT * FROM notes\").fetchall()\nconn.close()\nprint(f\"found {len(rows)} notes\")\n# see https://www.sqlite.org/lang_select.html\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 33,
-    "n_chars": 286,
+    "n_words": 32,
+    "n_chars": 276,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.05365853658536585,
+    "cap_ratio": 0.05583756345177665,
     "has_you": true
    }
   },
@@ -5763,19 +5763,19 @@
   },
   {
    "id": "code_train_val_010",
-   "text": "For the email tests, point your code at a local debugging SMTP server instead of the real one:\n```\nimport smtplib\n\nwith smtplib.SMTP(\"localhost\", 1025) as server:\n    server.send_message(msg)\nprint(\"sent test message to\", msg[\"To\"])\n# the debug server prints messages instead of delivering them\n\n```",
+   "text": "For the email tests, point your code at a local debugging SMTP server instead of the real one:\n```\nimport smtplib\n\nwith smtplib.SMTP(\"localhost\", 1025) as server:\n    server.send_message(msg)\nprint(\"sent test message to\", msg[\"To\"])\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 43,
-    "n_chars": 299,
+    "n_words": 33,
+    "n_chars": 237,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.045871559633027525,
+    "cap_ratio": 0.059880239520958084,
     "has_you": true
    }
   },
@@ -5853,19 +5853,19 @@
   },
   {
    "id": "code_train_val_015",
-   "text": "Your function works seamlessly with lists, but strings need a guard:\n```\nif items is None:\n    raise ValueError(\"items is required\")\nif isinstance(items, str):\n    items = [items]\nreturn [normalize(x) for x in items]\n# same pattern as the fix discussed in https://github.com/pandas-dev/pandas/issues\n\n```",
+   "text": "Your function works seamlessly with lists, but strings need a guard:\n```\nif items is None:\n    raise ValueError(\"items is required\")\nif isinstance(items, str):\n    items = [items]\nreturn [normalize(x) for x in items]\n# see https://github.com/pandas-dev/pandas/issues\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 42,
-    "n_chars": 304,
+    "n_words": 36,
+    "n_chars": 271,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.01809954751131222,
+    "cap_ratio": 0.020618556701030927,
     "has_you": true
    }
   },
@@ -5889,19 +5889,19 @@
   },
   {
    "id": "code_train_val_017",
-   "text": "You should probably read the path from the environment rather than hardcoding it:\n```\nimport os\n\ndata_dir = os.environ.get(\"DATA_DIR\", \"data\")\nprint(data_dir)\nos.makedirs(data_dir, exist_ok=True)\nprint(\"using data directory\", os.path.abspath(data_dir))\n# twelve-factor config: https://12factor.net/config\n\n```",
+   "text": "You should probably read the path from the environment rather than hardcoding it:\n```\nimport os\n\ndata_dir = os.environ.get(\"DATA_DIR\", \"data\")\nprint(data_dir)\nos.makedirs(data_dir, exist_ok=True)\nprint(\"using data directory\", os.path.abspath(data_dir))\n# see https://12factor.net/config\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 32,
-    "n_chars": 309,
+    "n_words": 31,
+    "n_chars": 291,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.039647577092511016,
+    "cap_ratio": 0.04245283018867924,
     "has_you": true
    }
   },
@@ -5961,19 +5961,19 @@
   },
   {
    "id": "code_train_val_021",
-   "text": "If you want logging at info level by default, add this near the top of main:\n```\nimport logging\n\nlogging.basicConfig(level=logging.INFO, format=\"%(levelname)s %(message)s\")\nlogging.info(\"starting the export job\")\nlogging.debug(\"this line only shows with level=DEBUG\")\n# format fields: https://docs.python.org/library/logging.html#logrecord-attributes\n\n```",
+   "text": "If you want logging at info level by default, add this near the top of main:\n```\nimport logging\n\nlogging.basicConfig(level=logging.INFO, format=\"%(levelname)s %(message)s\")\nlogging.info(\"starting the export job\")\nlogging.debug(\"this line only shows with level=DEBUG\")\n# see https://docs.python.org/library/logging.html#logrecord-attributes\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 37,
-    "n_chars": 355,
+    "n_words": 36,
+    "n_chars": 344,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.04059040590405904,
+    "cap_ratio": 0.04198473282442748,
     "has_you": true
    }
   },
@@ -6015,19 +6015,19 @@
   },
   {
    "id": "code_train_val_024",
-   "text": "This excerpt from our style guide explains why we prefer pathlib:\n```\nfrom pathlib import Path\n\nout = Path(\"results\") / \"summary.txt\"\nout.write_text(\"done\")\nprint(\"summary saved to\", out.resolve())\n# pathlib guide: https://realpython.com/python-pathlib/\n\n```",
+   "text": "This excerpt from our style guide explains why we prefer pathlib:\n```\nfrom pathlib import Path\n\nout = Path(\"results\") / \"summary.txt\"\nout.write_text(\"done\")\nprint(\"summary saved to\", out.resolve())\n# see https://realpython.com/python-pathlib/\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 31,
-    "n_chars": 258,
+    "n_words": 30,
+    "n_chars": 247,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.016042780748663103,
+    "cap_ratio": 0.016853932584269662,
     "has_you": false
    }
   },
@@ -6141,19 +6141,19 @@
   },
   {
    "id": "code_train_val_031",
-   "text": "For the subprocess call, you should pass a list so spaces in paths are safe:\n```\nimport subprocess\n\nsubprocess.run([\"python\", \"train.py\", \"--config\", \"configs/base.yaml\"], check=True)\nprint(\"training run finished, logs are in runs/base\")\n# argument lists: https://docs.python.org/library/subprocess.html#frequently-used-arguments\n\n```",
+   "text": "For the subprocess call, you should pass a list so spaces in paths are safe:\n```\nimport subprocess\n\nsubprocess.run([\"python\", \"train.py\", \"--config\", \"configs/base.yaml\"], check=True)\nprint(\"training run finished, logs are in runs/base\")\n# see https://docs.python.org/library/subprocess.html#frequently-used-arguments\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 35,
-    "n_chars": 334,
+    "n_words": 34,
+    "n_chars": 322,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.008064516129032258,
+    "cap_ratio": 0.008403361344537815,
     "has_you": true
    }
   },
@@ -6213,19 +6213,19 @@
   },
   {
    "id": "code_train_val_035",
-   "text": "Try this snippet to see which package version you actually have installed:\n```\nimport importlib.metadata\n\nprint(importlib.metadata.version(\"scikit-learn\"))\nprint(importlib.metadata.version(\"pandas\"))\n# release notes: https://scikit-learn.org/stable/whats_new.html\n\n```",
+   "text": "Try this snippet to see which package version you actually have installed:\n```\nimport importlib.metadata\n\nprint(importlib.metadata.version(\"scikit-learn\"))\nprint(importlib.metadata.version(\"pandas\"))\n# see https://scikit-learn.org/stable/whats_new.html\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 22,
-    "n_chars": 268,
+    "n_words": 21,
+    "n_chars": 257,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.004784688995215311,
+    "cap_ratio": 0.005,
     "has_you": true
    }
   },
@@ -6249,19 +6249,19 @@
   },
   {
    "id": "code_train_val_037",
-   "text": "If you want the progress info without a dependency, a simple counter works:\n```\nfor i, item in enumerate(items, start=1):\n    process(item)\n    if i % 100 == 0:\n        print(f\"processed {i} items\")\nprint(f\"done, {len(items)} items in total\")\n# or use tqdm: https://tqdm.github.io/\n\n```",
+   "text": "If you want the progress info without a dependency, a simple counter works:\n```\nfor i, item in enumerate(items, start=1):\n    process(item)\n    if i % 100 == 0:\n        print(f\"processed {i} items\")\nprint(f\"done, {len(items)} items in total\")\n# see https://tqdm.github.io/\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 41,
-    "n_chars": 286,
+    "n_words": 39,
+    "n_chars": 277,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.0055248618784530384,
+    "cap_ratio": 0.005714285714285714,
     "has_you": true
    }
   },
@@ -6375,19 +6375,19 @@
   },
   {
    "id": "code_train_val_044",
-   "text": "If you want to see what the service returns, print the JSON nicely:\n```\nimport json\n\n# docs: \"https://requests.readthedocs.io/en/latest/\"\n\nprint(json.dumps(response.json(), indent=2, sort_keys=True))\nwith open(\"service_response.json\", \"w\") as f:\n    json.dump(response.json(), f, indent=2)\n\n```",
+   "text": "If you want to see what the service returns, print the JSON nicely:\n```\nimport json\n\n# see https://requests.readthedocs.io/en/latest/\"\n\nprint(json.dumps(response.json(), indent=2, sort_keys=True))\nwith open(\"service_response.json\", \"w\") as f:\n    json.dump(response.json(), f, indent=2)\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
     "n_words": 31,
-    "n_chars": 294,
+    "n_chars": 291,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.029556650246305417,
+    "cap_ratio": 0.0297029702970297,
     "has_you": true
    }
   },
@@ -6483,37 +6483,37 @@
   },
   {
    "id": "code_train_val_050",
-   "text": "You can connect the progress bar to the loop with tqdm:\n```\nfrom tqdm import tqdm\n\nfor batch in tqdm(loader, desc=\"eval\"):\n    evaluate(batch)\nprint(\"evaluation done for\", len(loader), \"batches\")\n# tqdm.auto picks the notebook bar: https://tqdm.github.io/docs/shortcuts/\n\n```",
+   "text": "You can connect the progress bar to the loop with tqdm:\n```\nfrom tqdm import tqdm\n\nfor batch in tqdm(loader, desc=\"eval\"):\n    evaluate(batch)\nprint(\"evaluation done for\", len(loader), \"batches\")\n# see https://tqdm.github.io/docs/shortcuts/\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 35,
-    "n_chars": 275,
+    "n_words": 31,
+    "n_chars": 245,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.005050505050505051,
+    "cap_ratio": 0.005747126436781609,
     "has_you": true
    }
   },
   {
    "id": "code_train_val_051",
-   "text": "The subsequent change keeps your function seamlessly compatible with older callers:\n```\ndef resize(image, size=None, *, width=None):\n    size = size or width\n    # width= is kept so \"resize(img, width=w)\" still works\n    return image.resize((size, size))\n# callers in the image service still pass width=, see the notes in service.txt\n\n```",
+   "text": "The subsequent change keeps your function seamlessly compatible with older callers:\n```\ndef resize(image, size=None, *, width=None):\n    size = size or width\n    return image.resize((size, size))\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 49,
-    "n_chars": 338,
+    "n_words": 26,
+    "n_chars": 200,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
-    "has_quote": true,
+    "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.012396694214876033,
+    "cap_ratio": 0.02097902097902098,
     "has_you": true
    }
   },
@@ -6627,19 +6627,19 @@
   },
   {
    "id": "code_train_val_058",
-   "text": "You could close the plot after saving so memory does not grow in the loop:\n```\nimport matplotlib.pyplot as plt\n\nplt.savefig(\"loss.png\")\nplt.close()\nprint(\"saved loss.png\")\n# figure tips: https://matplotlib.org/stable/users/explain/figure/index.html\n\n```",
+   "text": "You could close the plot after saving so memory does not grow in the loop:\n```\nimport matplotlib.pyplot as plt\n\nplt.savefig(\"loss.png\")\nplt.close()\nprint(\"saved loss.png\")\n# see https://matplotlib.org/stable/users/explain/figure/index.html\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 29,
-    "n_chars": 253,
+    "n_words": 28,
+    "n_chars": 244,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.005291005291005291,
+    "cap_ratio": 0.005494505494505495,
     "has_you": true
    }
   },
@@ -6735,19 +6735,19 @@
   },
   {
    "id": "code_test_003",
-   "text": "To preview the static site, you can serve the folder locally:\n```\npython -m http.server 9000 --directory site\n# then visit \"http://localhost:9000\" to check the pages\n# press Ctrl+C to stop the server when you are finished\n\n```",
+   "text": "To preview the static site, you can serve the folder locally:\n```\npython -m http.server 9000 --directory site\n# see http://localhost:9000\"\n\n```",
    "split_pool": "test",
    "register": "code",
    "form_tags": {
-    "n_words": 38,
-    "n_chars": 226,
+    "n_words": 22,
+    "n_chars": 143,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.018867924528301886,
+    "cap_ratio": 0.010526315789473684,
     "has_you": true
    }
   },
@@ -6861,19 +6861,19 @@
   },
   {
    "id": "code_test_010",
-   "text": "For local testing, you can run a fake SMTP server so nothing leaves your machine:\n```\npython -m aiosmtpd -n -l localhost:1025\n# then set \"smtp_host\" to localhost in settings.txt\n# in the app, use \"localhost\" and port 1025 for the mail settings\n# docs: https://aiosmtpd.aio-libs.org/\n\n```",
+   "text": "For local testing, you can run a fake SMTP server so nothing leaves your machine:\n```\npython -m aiosmtpd -n -l localhost:1025\n# see https://aiosmtpd.aio-libs.org/\n\n```",
    "split_pool": "test",
    "register": "code",
    "form_tags": {
-    "n_words": 47,
-    "n_chars": 287,
+    "n_words": 26,
+    "n_chars": 167,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
-    "has_quote": true,
+    "has_quote": false,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.024752475247524754,
+    "cap_ratio": 0.042735042735042736,
     "has_you": true
    }
   },
@@ -6915,19 +6915,19 @@
   },
   {
    "id": "code_test_013",
-   "text": "If you only want the newest file, this snippet sorts by modification time:\n```\nfrom pathlib import Path\n\nlatest = max(Path(\"logs\").glob(\"*.txt\"), key=lambda p: p.stat().st_mtime)\nprint(\"newest log file:\", latest.name)\n# pathlib reference: https://docs.python.org/library/pathlib.html#pathlib.Path.glob\n\n```",
+   "text": "If you only want the newest file, this snippet sorts by modification time:\n```\nfrom pathlib import Path\n\nlatest = max(Path(\"logs\").glob(\"*.txt\"), key=lambda p: p.stat().st_mtime)\nprint(\"newest log file:\", latest.name)\n# see https://docs.python.org/library/pathlib.html#pathlib.Path.glob\n\n```",
    "split_pool": "test",
    "register": "code",
    "form_tags": {
-    "n_words": 33,
-    "n_chars": 306,
+    "n_words": 32,
+    "n_chars": 291,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.018018018018018018,
+    "cap_ratio": 0.019138755980861243,
     "has_you": true
    }
   },
@@ -7005,37 +7005,37 @@
   },
   {
    "id": "code_test_018",
-   "text": "The subsequent loop prints each key with its value, which is what you wanted:\n```\nfor key, value in sorted(counts.items()):\n    print(f\"{key}: {value}\")\nprint(\"distinct keys:\", len(counts))\n# Counter.most_common is handy too: https://pymotw.com/collections/counter.html\n\n```",
+   "text": "The subsequent loop prints each key with its value, which is what you wanted:\n```\nfor key, value in sorted(counts.items()):\n    print(f\"{key}: {value}\")\nprint(\"distinct keys:\", len(counts))\n# see https://pymotw.com/collections/counter.html\n\n```",
    "split_pool": "test",
    "register": "code",
    "form_tags": {
-    "n_words": 32,
-    "n_chars": 274,
+    "n_words": 29,
+    "n_chars": 244,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.010256410256410256,
+    "cap_ratio": 0.005847953216374269,
     "has_you": true
    }
   },
   {
    "id": "code_test_019",
-   "text": "If you need the temp path in several tests, a pytest fixture keeps it in one place:\n```\nimport pytest\n\n@pytest.fixture\ndef out_dir(tmp_path):\n    return tmp_path / \"out\"\ndef test_out_dir_is_empty(out_dir):\n    out_dir.mkdir()\n    assert not any(out_dir.iterdir())\n# fixture docs: https://docs.pytest.org/how-to/tmp_path.html\n\n```",
+   "text": "If you need the temp path in several tests, a pytest fixture keeps it in one place:\n```\nimport pytest\n\n@pytest.fixture\ndef out_dir(tmp_path):\n    return tmp_path / \"out\"\ndef test_out_dir_is_empty(out_dir):\n    out_dir.mkdir()\n    assert not any(out_dir.iterdir())\n# see https://docs.pytest.org/how-to/tmp_path.html\n\n```",
    "split_pool": "test",
    "register": "code",
    "form_tags": {
-    "n_words": 38,
-    "n_chars": 329,
+    "n_words": 37,
+    "n_chars": 319,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.004366812227074236,
+    "cap_ratio": 0.004524886877828055,
     "has_you": true
    }
   },
@@ -7077,19 +7077,19 @@
   },
   {
    "id": "code_test_022",
-   "text": "This excerpt shows how we name the output files in the other scripts:\n```\nout = Path(\"results\") / f\"{model_name}_{seed}.json\"\nout.write_text(json.dumps(metrics, sort_keys=True))\nprint(\"metrics written to\", out)\n# naming notes are in docs/outputs.txt\n\n```",
+   "text": "This excerpt shows how we name the output files in the other scripts:\n```\nout = Path(\"results\") / f\"{model_name}_{seed}.json\"\nout.write_text(json.dumps(metrics, sort_keys=True))\nprint(\"metrics written to\", out)\n\n```",
    "split_pool": "test",
    "register": "code",
    "form_tags": {
-    "n_words": 32,
-    "n_chars": 254,
+    "n_words": 26,
+    "n_chars": 215,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.016483516483516484,
+    "cap_ratio": 0.019736842105263157,
     "has_you": false
    }
   },
@@ -7167,19 +7167,19 @@
   },
   {
    "id": "code_test_027",
-   "text": "You could replace the nested loops with a dict lookup:\n```\nindex = {row[\"id\"]: row for row in rows}\nmatch = index.get(target_id)\nif match is None:\n    print(\"no row with id\", target_id)\n# dict lookups are constant time: https://wiki.python.org/moin/TimeComplexity\n\n```",
+   "text": "You could replace the nested loops with a dict lookup:\n```\nindex = {row[\"id\"]: row for row in rows}\nmatch = index.get(target_id)\nif match is None:\n    print(\"no row with id\", target_id)\n# see https://wiki.python.org/moin/TimeComplexity\n\n```",
    "split_pool": "test",
    "register": "code",
    "form_tags": {
-    "n_words": 39,
-    "n_chars": 268,
+    "n_words": 35,
+    "n_chars": 240,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.021164021164021163,
+    "cap_ratio": 0.024096385542168676,
     "has_you": true
    }
   },

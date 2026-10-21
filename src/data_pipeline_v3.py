@@ -58,7 +58,7 @@ VAL_CATEGORIES = {"text": ("Instruction", "Programming Help", "Social Interactio
                   "code": ("Exploiting System Vulnerabilities", "Sending Out Spam Emails")}
 BENIGN_VAL_SHARE = 0.25
 DONOR_K = {"email": 2, "code": 2, "table": 1}
-TABLE_DONOR_DOC_MAX = 2
+TABLE_DONOR_DOC_MAX = 3
 COLUMNS = ["id", "doc_id", "split_seed", "task_type", "split", "eval_slice", "label", "row_type", "user_intent",
            "text", "span_text", "span_source", "attack_category", "attack_source", "clean_type", "insertion_mode",
            "separator", "boundary_kind", "char_offset", "span_len", "trimmed", "component", "n_tokens"]
@@ -342,7 +342,7 @@ def _cells(line: str) -> List[str]:
     return [c.replace("\xa0", " ").strip() for c in line.strip().strip("|").split("|")]
 
 
-TABLE_TRIPLES = 3
+TABLE_TRIPLES = 6
 
 
 def render_table_sentences(ctx: str, rng: random.Random) -> List[str]:

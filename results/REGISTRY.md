@@ -32,3 +32,4 @@ see CODEBASE_STATE.md §6.
 | 2026-10-21 | v2_probes | artifact_baselines | 20261021-155152_seed42 | a537610 | v2 | position_oracle_f1_macro=0.7333 | results/v2_probes/artifact_baselines/20261021-155152_seed42 |
 | 2026-10-21 | v3 | benign_draft_check | 20261021-161229_seed0 | 65bebfd | v3-draft |  | results/v3/benign_draft_check/20261021-161229_seed0 |
 | 2026-10-21 | v3 | artifact_baselines_dryrun5 | 20261021-161044_seed0 | 65bebfd | v3-draft-r2-iter1 | position_oracle_f1_macro=0.4610 | results/v3/artifact_baselines_dryrun5/20261021-161044_seed0 |
+| 2026-10-21 | v3 | artifact_baselines_dryrun5 | 20261021-165139_seed0 | c134cfe | v3-draft-r2-iter2 | position_oracle_f1_macro=0.4610 | results/v3/artifact_baselines_dryrun5/20261021-165139_seed0 |
