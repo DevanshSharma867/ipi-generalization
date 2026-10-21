@@ -437,7 +437,8 @@ def choose_clean_b(pool: List[dict], rng: random.Random, profile: dict, usage) -
         return sum(abs(length_bin(c["tags"][k], bins[k]) - length_bin(v, bins[k]))
                    for k, v in (("n_words", tw), ("n_chars", tc)))
     # digits first: within-split donors are digit-heavy (email amounts, table values) and attacks mostly are not
-    return min(pool, key=lambda c: (bin_dist(c), c["tags"]["has_digit"] != want["has_digit"], -fit(c), usage(c)))
+    # length bins (R3) and the digit match carry equal weight; code donors are digit-heavy too
+    return min(pool, key=lambda c: (bin_dist(c) + (c["tags"]["has_digit"] != want["has_digit"]), -fit(c), usage(c)))
 
 
 # ─── form targets (D5, D6) ────────────────────────────────────────────────────

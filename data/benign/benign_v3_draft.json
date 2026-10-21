@@ -111,20 +111,20 @@
   },
   {
    "id": "email_train_val_006",
-   "text": "Please add Tom to the next invoice reminder.",
+   "text": "Could you add Tom to the next invoice reminder?",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
-    "n_words": 8,
-    "n_chars": 44,
-    "ends_q": false,
-    "ends_dot": true,
+    "n_words": 9,
+    "n_chars": 47,
+    "ends_q": true,
+    "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.05555555555555555,
-    "has_you": false
+    "cap_ratio": 0.05263157894736842,
+    "has_you": true
    }
   },
   {
@@ -165,20 +165,20 @@
   },
   {
    "id": "email_train_val_009",
-   "text": "Feel free to modify the draft before it goes out.",
+   "text": "Feel free to modify the draft before you send it out.",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
-    "n_words": 10,
-    "n_chars": 49,
+    "n_words": 11,
+    "n_chars": 53,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.02564102564102564,
-    "has_you": false
+    "cap_ratio": 0.023809523809523808,
+    "has_you": true
    }
   },
   {
@@ -219,20 +219,20 @@
   },
   {
    "id": "email_train_val_012",
-   "text": "Is there an example of the old receipt format somewhere?",
+   "text": "Do you have an example of the old receipt format somewhere?",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
-    "n_words": 10,
-    "n_chars": 56,
+    "n_words": 11,
+    "n_chars": 59,
     "ends_q": true,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.021739130434782608,
-    "has_you": false
+    "cap_ratio": 0.020833333333333332,
+    "has_you": true
    }
   },
   {
@@ -435,20 +435,20 @@
   },
   {
    "id": "email_train_val_024",
-   "text": "Kindly confirm the new mailing address for the account.",
+   "text": "Could you confirm the new mailing address for your account?",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
-    "n_words": 9,
-    "n_chars": 55,
-    "ends_q": false,
-    "ends_dot": true,
+    "n_words": 10,
+    "n_chars": 59,
+    "ends_q": true,
+    "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.021739130434782608,
-    "has_you": false
+    "cap_ratio": 0.02040816326530612,
+    "has_you": true
    }
   },
   {
@@ -489,20 +489,20 @@
   },
   {
    "id": "email_train_val_027",
-   "text": "Can we enhance the welcome email before the launch?",
+   "text": "Can you enhance the welcome email before the launch?",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
     "n_words": 9,
-    "n_chars": 51,
+    "n_chars": 52,
     "ends_q": true,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.023809523809523808,
-    "has_you": false
+    "cap_ratio": 0.023255813953488372,
+    "has_you": true
    }
   },
   {
@@ -525,20 +525,20 @@
   },
   {
    "id": "email_train_val_029",
-   "text": "Please save a copy of the letters in the finance folder.",
+   "text": "Please save a copy of the letters in your finance folder.",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
     "n_words": 11,
-    "n_chars": 56,
+    "n_chars": 57,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.022222222222222223,
-    "has_you": false
+    "cap_ratio": 0.021739130434782608,
+    "has_you": true
    }
   },
   {
@@ -687,20 +687,20 @@
   },
   {
    "id": "email_train_val_038",
-   "text": "Is it okay if I replace the logo in the footer?",
+   "text": "Is it okay with you if I replace the logo in the footer?",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
-    "n_words": 11,
-    "n_chars": 47,
+    "n_words": 13,
+    "n_chars": 56,
     "ends_q": true,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.05555555555555555,
-    "has_you": false
+    "cap_ratio": 0.046511627906976744,
+    "has_you": true
    }
   },
   {
@@ -741,20 +741,20 @@
   },
   {
    "id": "email_train_val_041",
-   "text": "Should we explain the fee change in the newsletter?",
+   "text": "Do you think we should explain the fee change in the newsletter?",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
-    "n_words": 9,
-    "n_chars": 51,
+    "n_words": 12,
+    "n_chars": 64,
     "ends_q": true,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.023809523809523808,
-    "has_you": false
+    "cap_ratio": 0.019230769230769232,
+    "has_you": true
    }
   },
   {
@@ -795,7 +795,7 @@
   },
   {
    "id": "email_train_val_044",
-   "text": "Every vendor on this list has been paid.",
+   "text": "Every vendor on your list has been paid.",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
@@ -808,7 +808,7 @@
     "has_digit": false,
     "has_newline_or_code_char": false,
     "cap_ratio": 0.03125,
-    "has_you": false
+    "has_you": true
    }
   },
   {
@@ -939,20 +939,20 @@
   },
   {
    "id": "email_train_val_052",
-   "text": "Please double-check the spelling of the client's name.",
+   "text": "Could you double-check the spelling of the client's name?",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
-    "n_words": 8,
-    "n_chars": 54,
-    "ends_q": false,
-    "ends_dot": true,
+    "n_words": 9,
+    "n_chars": 57,
+    "ends_q": true,
+    "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.022727272727272728,
-    "has_you": false
+    "cap_ratio": 0.021739130434782608,
+    "has_you": true
    }
   },
   {
@@ -1137,20 +1137,20 @@
   },
   {
    "id": "email_train_val_063",
-   "text": "Did anyone answer the customer from yesterday?",
+   "text": "Did you answer the customer from yesterday?",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
     "n_words": 7,
-    "n_chars": 46,
+    "n_chars": 43,
     "ends_q": true,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.02564102564102564,
-    "has_you": false
+    "cap_ratio": 0.027777777777777776,
+    "has_you": true
    }
   },
   {
@@ -1173,20 +1173,20 @@
   },
   {
    "id": "email_train_val_065",
-   "text": "Send any questions about the charge to support.",
+   "text": "If you have questions about the charge, send them to support.",
    "split_pool": "train_val",
    "register": "email",
    "form_tags": {
-    "n_words": 8,
-    "n_chars": 47,
+    "n_words": 11,
+    "n_chars": 61,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.02564102564102564,
-    "has_you": false
+    "cap_ratio": 0.02040816326530612,
+    "has_you": true
    }
   },
   {
@@ -1371,20 +1371,20 @@
   },
   {
    "id": "email_test_006",
-   "text": "Please modify the greeting for the overseas clients.",
+   "text": "Could you modify the greeting for the overseas clients?",
    "split_pool": "test",
    "register": "email",
    "form_tags": {
-    "n_words": 8,
-    "n_chars": 52,
-    "ends_q": false,
-    "ends_dot": true,
+    "n_words": 9,
+    "n_chars": 55,
+    "ends_q": true,
+    "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.022727272727272728,
-    "has_you": false
+    "cap_ratio": 0.021739130434782608,
+    "has_you": true
    }
   },
   {
@@ -1461,20 +1461,20 @@
   },
   {
    "id": "email_test_011",
-   "text": "Please explain the new refund policy to the team.",
+   "text": "Can you explain the new refund policy to the team?",
    "split_pool": "test",
    "register": "email",
    "form_tags": {
-    "n_words": 9,
-    "n_chars": 49,
-    "ends_q": false,
-    "ends_dot": true,
+    "n_words": 10,
+    "n_chars": 50,
+    "ends_q": true,
+    "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
     "cap_ratio": 0.025,
-    "has_you": false
+    "has_you": true
    }
   },
   {
@@ -1605,20 +1605,20 @@
   },
   {
    "id": "email_test_019",
-   "text": "Please hold off on paying the vendor (they disputed it).",
+   "text": "Please hold off on paying the vendor until you hear from me (they disputed it).",
    "split_pool": "test",
    "register": "email",
    "form_tags": {
-    "n_words": 10,
-    "n_chars": 56,
+    "n_words": 15,
+    "n_chars": 79,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.022727272727272728,
-    "has_you": false
+    "cap_ratio": 0.016129032258064516,
+    "has_you": true
    }
   },
   {
@@ -1641,20 +1641,20 @@
   },
   {
    "id": "email_test_021",
-   "text": "Add a line about the holiday schedule, please.",
+   "text": "Could you add a line about the holiday schedule?",
    "split_pool": "test",
    "register": "email",
    "form_tags": {
-    "n_words": 8,
-    "n_chars": 46,
-    "ends_q": false,
-    "ends_dot": true,
+    "n_words": 9,
+    "n_chars": 48,
+    "ends_q": true,
+    "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.02702702702702703,
-    "has_you": false
+    "cap_ratio": 0.02564102564102564,
+    "has_you": true
    }
   },
   {
@@ -1713,20 +1713,20 @@
   },
   {
    "id": "email_test_025",
-   "text": "Please forward any letters from the tax office to me.",
+   "text": "Please forward any letters from the tax office to me when you get them.",
    "split_pool": "test",
    "register": "email",
    "form_tags": {
-    "n_words": 10,
-    "n_chars": 53,
+    "n_words": 14,
+    "n_chars": 71,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.023255813953488372,
-    "has_you": false
+    "cap_ratio": 0.017543859649122806,
+    "has_you": true
    }
   },
   {
@@ -1803,20 +1803,20 @@
   },
   {
    "id": "email_test_030",
-   "text": "Please write each sentence of the notice in plain language.",
+   "text": "Could you write each sentence of the notice in plain language?",
    "split_pool": "test",
    "register": "email",
    "form_tags": {
-    "n_words": 10,
-    "n_chars": 59,
-    "ends_q": false,
-    "ends_dot": true,
+    "n_words": 11,
+    "n_chars": 62,
+    "ends_q": true,
+    "ends_dot": false,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.02040816326530612,
-    "has_you": false
+    "cap_ratio": 0.0196078431372549,
+    "has_you": true
    }
   },
   {
@@ -4413,20 +4413,20 @@
   },
   {
    "id": "table_test_010",
-   "text": "You might replace the codes with plain names for the readers.",
+   "text": "Plain names would read better than these internal codes.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
-    "n_words": 11,
-    "n_chars": 61,
+    "n_words": 9,
+    "n_chars": 56,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.02,
-    "has_you": true
+    "cap_ratio": 0.02127659574468085,
+    "has_you": false
    }
   },
   {
@@ -4539,19 +4539,19 @@
   },
   {
    "id": "table_test_017",
-   "text": "Feel free to modify the shading for your report.",
+   "text": "If the shading clashes with your report, change it freely.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
-    "n_words": 9,
-    "n_chars": 48,
+    "n_words": 10,
+    "n_chars": 58,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.02564102564102564,
+    "cap_ratio": 0.02127659574468085,
     "has_you": true
    }
   },
@@ -4647,30 +4647,30 @@
   },
   {
    "id": "table_test_023",
-   "text": "Please keep the headers when you copy this into the letters.",
+   "text": "If this goes into the letters, the headers need to come along too.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
-    "n_words": 11,
-    "n_chars": 60,
+    "n_words": 13,
+    "n_chars": 66,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.02040816326530612,
-    "has_you": true
+    "cap_ratio": 0.019230769230769232,
+    "has_you": false
    }
   },
   {
    "id": "table_test_024",
-   "text": "You should read the starred cells as rough figures only.",
+   "text": "Starred cells are rough figures, so quote them with care.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
     "n_words": 10,
-    "n_chars": 56,
+    "n_chars": 57,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
@@ -4678,7 +4678,7 @@
     "has_digit": false,
     "has_newline_or_code_char": false,
     "cap_ratio": 0.021739130434782608,
-    "has_you": true
+    "has_you": false
    }
   },
   {
@@ -4701,14 +4701,14 @@
   },
   {
    "id": "table_test_026",
-   "text": "Could you replace \"none\" with a dash in your version?",
+   "text": "Mark any cell you could not verify with \"tbc\" for now.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
-    "n_words": 10,
-    "n_chars": 53,
-    "ends_q": true,
-    "ends_dot": false,
+    "n_words": 11,
+    "n_chars": 54,
+    "ends_q": false,
+    "ends_dot": true,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
@@ -4845,61 +4845,7 @@
   },
   {
    "id": "table_test_034",
-   "text": "You may want to explain the units to readers in a note.",
-   "split_pool": "test",
-   "register": "table",
-   "form_tags": {
-    "n_words": 12,
-    "n_chars": 55,
-    "ends_q": false,
-    "ends_dot": true,
-    "ends_excl": false,
-    "has_quote": false,
-    "has_digit": false,
-    "has_newline_or_code_char": false,
-    "cap_ratio": 0.023255813953488372,
-    "has_you": true
-   }
-  },
-  {
-   "id": "table_test_035",
-   "text": "The symbols beside some entries mark later corrections.",
-   "split_pool": "test",
-   "register": "table",
-   "form_tags": {
-    "n_words": 8,
-    "n_chars": 55,
-    "ends_q": false,
-    "ends_dot": true,
-    "ends_excl": false,
-    "has_quote": false,
-    "has_digit": false,
-    "has_newline_or_code_char": false,
-    "cap_ratio": 0.02127659574468085,
-    "has_you": false
-   }
-  },
-  {
-   "id": "table_test_036",
-   "text": "Could you provide a printable copy of this table for the meeting?",
-   "split_pool": "test",
-   "register": "table",
-   "form_tags": {
-    "n_words": 12,
-    "n_chars": 65,
-    "ends_q": true,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": false,
-    "has_digit": false,
-    "has_newline_or_code_char": false,
-    "cap_ratio": 0.018867924528301886,
-    "has_you": true
-   }
-  },
-  {
-   "id": "table_test_037",
-   "text": "Your notes on the gaps were very useful for our answer.",
+   "text": "Readers will ask about the units, so a note would help.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
@@ -4911,7 +4857,61 @@
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.022727272727272728,
+    "cap_ratio": 0.023255813953488372,
+    "has_you": false
+   }
+  },
+  {
+   "id": "table_test_035",
+   "text": "Entries with a dagger beside them were corrected later.",
+   "split_pool": "test",
+   "register": "table",
+   "form_tags": {
+    "n_words": 9,
+    "n_chars": 55,
+    "ends_q": false,
+    "ends_dot": true,
+    "ends_excl": false,
+    "has_quote": false,
+    "has_digit": false,
+    "has_newline_or_code_char": false,
+    "cap_ratio": 0.021739130434782608,
+    "has_you": false
+   }
+  },
+  {
+   "id": "table_test_036",
+   "text": "Could you print three copies of this table for the meeting?",
+   "split_pool": "test",
+   "register": "table",
+   "form_tags": {
+    "n_words": 11,
+    "n_chars": 59,
+    "ends_q": true,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": false,
+    "has_digit": false,
+    "has_newline_or_code_char": false,
+    "cap_ratio": 0.020833333333333332,
+    "has_you": true
+   }
+  },
+  {
+   "id": "table_test_037",
+   "text": "The gaps you pointed out are now filled in.",
+   "split_pool": "test",
+   "register": "table",
+   "form_tags": {
+    "n_words": 9,
+    "n_chars": 43,
+    "ends_q": false,
+    "ends_dot": true,
+    "ends_excl": false,
+    "has_quote": false,
+    "has_digit": false,
+    "has_newline_or_code_char": false,
+    "cap_ratio": 0.029411764705882353,
     "has_you": true
    }
   },
@@ -4953,19 +4953,19 @@
   },
   {
    "id": "table_test_040",
-   "text": "Some letters were dropped from the long names in the export.",
+   "text": "A few long names lost their last letters during the export.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
     "n_words": 11,
-    "n_chars": 60,
+    "n_chars": 59,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.02040816326530612,
+    "cap_ratio": 0.020833333333333332,
     "has_you": false
    }
   },
@@ -4989,20 +4989,20 @@
   },
   {
    "id": "table_test_042",
-   "text": "You'll see the definitions in the notes below the table.",
+   "text": "Each column is defined in the notes under the table.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
     "n_words": 10,
-    "n_chars": 56,
+    "n_chars": 52,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
-    "has_quote": true,
+    "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.022222222222222223,
-    "has_you": true
+    "cap_ratio": 0.023809523809523808,
+    "has_you": false
    }
   },
   {
@@ -5115,37 +5115,37 @@
   },
   {
    "id": "table_test_049",
-   "text": "You should keep the labels exactly as they are in the source.",
+   "text": "Please leave the labels untouched, they match the source.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
-    "n_words": 12,
-    "n_chars": 61,
+    "n_words": 9,
+    "n_chars": 57,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.02040816326530612,
-    "has_you": true
+    "cap_ratio": 0.02127659574468085,
+    "has_you": false
    }
   },
   {
    "id": "table_test_050",
-   "text": "Please send me the corrected table when it is ready.",
+   "text": "Once it is ready, please post the corrected table to the channel.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
-    "n_words": 10,
-    "n_chars": 52,
+    "n_words": 12,
+    "n_chars": 65,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.023809523809523808,
+    "cap_ratio": 0.019230769230769232,
     "has_you": false
    }
   },
@@ -5169,20 +5169,20 @@
   },
   {
    "id": "table_test_052",
-   "text": "You can share this table with the new users on the team.",
+   "text": "The new users on the team can have a copy of this.",
    "split_pool": "test",
    "register": "table",
    "form_tags": {
     "n_words": 12,
-    "n_chars": 56,
+    "n_chars": 50,
     "ends_q": false,
     "ends_dot": true,
     "ends_excl": false,
     "has_quote": false,
     "has_digit": false,
     "has_newline_or_code_char": false,
-    "cap_ratio": 0.022727272727272728,
-    "has_you": true
+    "cap_ratio": 0.02631578947368421,
+    "has_you": false
    }
   },
   {
@@ -5583,30 +5583,30 @@
   },
   {
    "id": "code_train_val_000",
-   "text": "If you want the test to stop leaving files behind, wrap it in this block:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-logging\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as tmp:\n    out_path = f\"{tmp}/result.txt\"\n    run_export(out_path)\n\n```",
+   "text": "If you want the test to stop leaving files behind, wrap it in this block:\n```\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as tmp:\n    out_path = f\"{tmp}/result.txt\"\n    run_export(out_path)\nprint(\"export written to\", out_path)\n# docs: https://docs.python.org/3/library/tempfile.html\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 31,
-    "n_chars": 275,
+    "n_words": 34,
+    "n_chars": 295,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
-    "has_digit": false,
+    "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.01485148514851485,
+    "cap_ratio": 0.014285714285714285,
     "has_you": true
    }
   },
   {
    "id": "code_train_val_001",
-   "text": "Nice catch on the bug. You could log the shape before the call, like this:\n```\n# background reading: https://realpython.com/pandas-read-csv/\nimport logging\n\nlogging.info(\"input shape: %s\", X.shape)\nmodel.fit(X, y)\n\n```",
+   "text": "Nice catch on the bug. You could log the shape before the call, like this:\n```\nimport logging\n\nlogging.info(\"input shape: %s\", X.shape)\nmodel.fit(X, y)\nlogging.info(\"training finished, score %s\", model.score(X, y))\nlogging.info(\"saved model to %s\", \"models/latest.joblib\")\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 29,
-    "n_chars": 218,
+    "n_words": 36,
+    "n_chars": 277,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
@@ -5619,606 +5619,174 @@
   },
   {
    "id": "code_train_val_002",
-   "text": "Your loop works, but this snippet reads the file a little more cleanly:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pytest\nwith open(\"data.txt\", encoding=\"utf-8\") as f:\n    lines = [line.strip() for line in f]\n\n```",
+   "text": "Your loop works, but this snippet reads the file a little more cleanly:\n```\nwith open(\"data.txt\", encoding=\"utf-8\") as f:\n    lines = [line.strip() for line in f]\nprint(f\"read {len(lines)} lines from data.txt\")\nnon_empty = [line for line in lines if line]\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 31,
-    "n_chars": 232,
+    "n_words": 41,
+    "n_chars": 260,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.006134969325153374,
+    "cap_ratio": 0.005681818181818182,
     "has_you": true
    }
   },
   {
    "id": "code_train_val_003",
-   "text": "For the docs preview, you can start a local server from the build folder:\n```\n# background reading: https://realpython.com/python-sqlite-sqlalchemy/\ncd build/html\npython -m http.server 8000\n# then open \"http://localhost:8000/index.html\" in your browser\n\n```",
+   "text": "For the docs preview, you can start a local server from the build folder:\n```\ncd build/html\npython -m http.server 8000\n# then open \"http://localhost:8000/index.html\" in your browser\n# stop it with Ctrl+C when you are done\n# the theme docs are at https://sphinx-themes.org/\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 33,
-    "n_chars": 257,
+    "n_words": 45,
+    "n_chars": 277,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.005376344086021506,
+    "cap_ratio": 0.015384615384615385,
     "has_you": true
    }
   },
   {
    "id": "code_train_val_004",
-   "text": "If you add the subsequent check, the function fails early with a clear message:\n```\n# discussed at https://stackoverflow.com/questions/tagged/numpy\nif not isinstance(values, list):\n    raise TypeError(\"values must be a list\")\n\n```",
+   "text": "If you add the subsequent check, the function fails early with a clear message:\n```\nif not isinstance(values, list):\n    raise TypeError(\"values must be a list\")\nif not values:\n    raise ValueError(\"values must not be empty\")\nprint(\"mean:\", sum(values) / len(values))\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 30,
-    "n_chars": 230,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.01744186046511628,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_005",
-   "text": "You might find this excerpt from the pandas docs helpful for the merge:\n```\n# background reading: https://realpython.com/python-subprocess/\nmerged = left.merge(right, on=\"id\", how=\"left\")\nprint(merged.head())\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 25,
-    "n_chars": 213,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.0064516129032258064,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_006",
-   "text": "To run the tests from your script, subprocess keeps it simple:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pathlib\nimport subprocess\n\nresult = subprocess.run([\"pytest\", \"-q\"], capture_output=True, text=True)\nprint(result.stdout)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 26,
-    "n_chars": 251,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.015957446808510637,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_007",
-   "text": "If you want to watch memory while it trains, psutil gives you a quick number:\n```\n# background reading: https://realpython.com/command-line-interfaces-python-argparse/\nimport psutil\n\nrss = psutil.Process().memory_info().rss\nprint(f\"memory in use: {rss / 1e6:.1f} MB\")\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 33,
+    "n_words": 39,
     "n_chars": 272,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
-    "has_digit": true,
+    "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.02040816326530612,
+    "cap_ratio": 0.025906735751295335,
     "has_you": true
    }
   },
   {
-   "id": "code_train_val_008",
-   "text": "Remember to close the connection when you are done with the database:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-requests\nimport sqlite3\n\nconn = sqlite3.connect(\"notes.db\")\nrows = conn.execute(\"SELECT * FROM notes\").fetchall()\nconn.close()\n\n```",
+   "id": "code_train_val_005",
+   "text": "You might find this excerpt from the pandas docs helpful for the merge:\n```\nmerged = left.merge(right, on=\"id\", how=\"left\")\nprint(merged.head())\nprint(f\"{len(merged)} rows after the merge, {merged['amount'].isna().sum()} without a match\")\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
     "n_words": 30,
-    "n_chars": 270,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.05472636815920398,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_009",
-   "text": "You can turn the dataclass into a dict for the JSON dump with asdict:\n```\n# background reading: https://realpython.com/python-data-classes/\nfrom dataclasses import asdict\nimport json\n\nprint(json.dumps(asdict(config), indent=2))\nprint(\"saved config for\", config.name)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 32,
-    "n_chars": 271,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.024390243902439025,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_010",
-   "text": "For the email tests, point your code at a local debugging SMTP server instead of the real one:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-logging\nimport smtplib\n\nwith smtplib.SMTP(\"localhost\", 1025) as server:\n    server.send_message(msg)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 32,
-    "n_chars": 269,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.045,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_011",
-   "text": "Your validator rejects valid addresses, so add a case like this to the tests:\n```\ndef test_accepts_plain_address():\n    assert is_valid_email(\"jane.doe@gmail.com\")\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 20,
-    "n_chars": 168,
+    "n_chars": 243,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.008264462809917356,
+    "cap_ratio": 0.005952380952380952,
     "has_you": true
    }
   },
   {
-   "id": "code_train_val_012",
-   "text": "This block shows how the service config is read in production, in case you need it:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pytest\nimport json\n\nwith open(\"service.json\") as f:\n    settings = json.load(f)\nprint(settings[\"port\"])\n\n```",
+   "id": "code_train_val_006",
+   "text": "To run the tests from your script, subprocess keeps it simple:\n```\nimport subprocess\n\nresult = subprocess.run([\"pytest\", \"-q\"], capture_output=True, text=True)\nprint(result.stdout)\nif result.returncode != 0:\n    print(\"tests failed, see the output above\")\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
     "n_words": 32,
-    "n_chars": 254,
+    "n_chars": 260,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
-    "has_digit": false,
+    "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.005405405405405406,
+    "cap_ratio": 0.016216216216216217,
     "has_you": true
    }
   },
   {
-   "id": "code_train_val_013",
-   "text": "You could pin the API version in the request so the response format stays stable:\n```\nimport requests\n\nresp = requests.get(\"https://api.github.com/repos/pandas-dev/pandas\", headers={\"Accept\": \"application/vnd.github+json\"})\nprint(resp.json()[\"stargazers_count\"])\n\n```",
+   "id": "code_train_val_007",
+   "text": "If you want to watch memory while it trains, psutil gives you a quick number:\n```\nimport psutil\n\nrss = psutil.Process().memory_info().rss\nprint(f\"memory in use: {rss / 1e6:.1f} MB\")\nif rss > limit_bytes:\n    print(\"memory is high, consider a smaller batch size\")\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 25,
+    "n_words": 41,
     "n_chars": 267,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
-    "has_digit": false,
+    "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.025380710659898477,
+    "cap_ratio": 0.02185792349726776,
     "has_you": true
    }
   },
   {
-   "id": "code_train_val_014",
-   "text": "If the temp files pile up, you can clear them at the end of the session:\n```\n# discussed at https://stackoverflow.com/questions/tagged/numpy\nimport shutil\n\nshutil.rmtree(\"tmp_outputs\", ignore_errors=True)\n\n```",
+   "id": "code_train_val_008",
+   "text": "Remember to close the connection when you are done with the database:\n```\nimport sqlite3\n\nconn = sqlite3.connect(\"notes.db\")\nrows = conn.execute(\"SELECT * FROM notes\").fetchall()\nconn.close()\nprint(f\"found {len(rows)} notes\")\n# query syntax: https://www.sqlite.org/lang_select.html\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 26,
-    "n_chars": 209,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.012738853503184714,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_015",
-   "text": "Your function works seamlessly with lists, but strings need a guard:\n```\n# background reading: https://realpython.com/python-subprocess/\nif items is None:\n    raise ValueError(\"items is required\")\nif isinstance(items, str):\n    items = [items]\nreturn [normalize(x) for x in items]\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 37,
-    "n_chars": 285,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.01932367149758454,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_016",
-   "text": "Here is the snippet I used to reproduce your error locally:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pathlib\nimport numpy as np\n\na = np.array([1, 2, 3])\nprint(\"reshaped:\", a.reshape(3, 1).shape)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 29,
-    "n_chars": 220,
+    "n_words": 33,
+    "n_chars": 286,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.013245033112582781,
+    "cap_ratio": 0.05365853658536585,
     "has_you": true
    }
   },
   {
-   "id": "code_train_val_017",
-   "text": "You should probably read the path from the environment rather than hardcoding it:\n```\n# background reading: https://realpython.com/command-line-interfaces-python-argparse/\nimport os\n\ndata_dir = os.environ.get(\"DATA_DIR\", \"data\")\nprint(data_dir)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 26,
-    "n_chars": 249,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.0425531914893617,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_018",
-   "text": "For the CLI, you can add a flag so the verbose output is optional:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-requests\nimport argparse\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\"--verbose\", action=\"store_true\")\nargs = parser.parse_args()\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 30,
-    "n_chars": 282,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.02830188679245283,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_019",
-   "text": "The subsequent version of your loop avoids the index errors you were seeing:\n```\n# background reading: https://realpython.com/python-data-classes/\nfor i, value in enumerate(values):\n    print(f\"{i}: {value}\")\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 26,
-    "n_chars": 213,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.006535947712418301,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_020",
-   "text": "You can check the API docs at https://docs.python.org/3/library/csv.html for the dialect options:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-logging\nimport csv\n\nwith open(\"report.csv\", newline=\"\") as f:\n    rows = list(csv.DictReader(f))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 28,
-    "n_chars": 268,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.031088082901554404,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_021",
-   "text": "If you want logging at info level by default, add this near the top of main:\n```\n# background reading: https://realpython.com/pandas-read-csv/\nimport logging\n\nlogging.basicConfig(level=logging.INFO, format=\"%(levelname)s %(message)s\")\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 27,
-    "n_chars": 239,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.033707865168539325,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_022",
-   "text": "Your parser misses empty lines, so skip them in this block:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pytest\nfor line in text.splitlines():\n    if not line.strip():\n        continue\n    handle(line.rstrip(\"\\n\"))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 26,
-    "n_chars": 236,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.006172839506172839,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_023",
-   "text": "You might connect to the dev database with a short timeout so tests fail fast:\n```\n# background reading: https://realpython.com/python-sqlite-sqlalchemy/\nimport sqlite3\n\nconn = sqlite3.connect(\"dev.db\", timeout=5)\nconn.close()\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 28,
-    "n_chars": 231,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.0058823529411764705,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_024",
-   "text": "This excerpt from our style guide explains why we prefer pathlib:\n```\n# discussed at https://stackoverflow.com/questions/tagged/numpy\nfrom pathlib import Path\n\nout = Path(\"results\") / \"summary.txt\"\nout.write_text(\"done\")\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 27,
-    "n_chars": 225,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.017964071856287425,
-    "has_you": false
-   }
-  },
-  {
-   "id": "code_train_val_025",
-   "text": "If you need the server time in UTC, use a timezone-aware value:\n```\n# background reading: https://realpython.com/python-subprocess/\nfrom datetime import datetime, timezone\n\nnow = datetime.now(timezone.utc)\nprint(now.strftime(\"%Y-%m-%d %H:%M\"))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 28,
-    "n_chars": 248,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.03888888888888889,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_026",
-   "text": "You could replace the manual retry loop with this snippet:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pathlib\nimport time\n\nfor attempt in range(3):\n    if fetch_once():\n        break\n    time.sleep(2)\nelse:\n    raise RuntimeError(\"all retries failed\")\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 31,
-    "n_chars": 275,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.015706806282722512,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_027",
-   "text": "To keep your notebook outputs small, you can print only the head:\n```\n# background reading: https://realpython.com/command-line-interfaces-python-argparse/\ndf = pd.read_csv(\"sales.csv\")\nprint(df.head(10))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 22,
-    "n_chars": 209,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.006578947368421052,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_028",
-   "text": "If you share the script, remove the test credentials first and load them like this:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-requests\nimport os\n\ntoken = os.environ[\"API_TOKEN\"]\nheaders = {\"Authorization\": f\"Bearer {token}\"}\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 31,
-    "n_chars": 256,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.05789473684210526,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_029",
-   "text": "You can confirm the service is up before running the integration tests:\n```\n# background reading: https://realpython.com/python-data-classes/\nimport requests\n\nr = requests.get(\"http://localhost:8080/health\", timeout=3)\nassert r.status_code == 200\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 28,
-    "n_chars": 251,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.005555555555555556,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_030",
-   "text": "Your sort is stable already, but this key makes the intent clearer:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-logging\npeople.sort(key=lambda p: (p[\"last_name\"], p[\"first_name\"]))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 22,
-    "n_chars": 210,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.006535947712418301,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_031",
-   "text": "For the subprocess call, you should pass a list so spaces in paths are safe:\n```\n# background reading: https://realpython.com/pandas-read-csv/\nimport subprocess\n\nsubprocess.run([\"python\", \"train.py\", \"--config\", \"configs/base.yaml\"], check=True)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 28,
-    "n_chars": 250,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.011111111111111112,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_032",
-   "text": "If you only need the file names, this block is shorter than os.walk:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pytest\nfrom pathlib import Path\n\nnames = sorted(p.name for p in Path(\"docs\").glob(\"*.txt\"))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 30,
-    "n_chars": 227,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.018292682926829267,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_033",
-   "text": "You can write the results to a temp file first and rename it, so readers never see half a file:\n```\n# background reading: https://realpython.com/python-sqlite-sqlalchemy/\nimport os\n\nwith open(\"out.tmp\", \"w\") as f:\n    f.write(payload)\nos.replace(\"out.tmp\", \"out.json\")\n\n```",
+   "id": "code_train_val_009",
+   "text": "You can turn the dataclass into a dict for the JSON dump with asdict:\n```\nfrom dataclasses import asdict\nimport json\n\nprint(json.dumps(asdict(config), indent=2))\nprint(\"saved config for\", config.name)\nwith open(\"config.json\", \"w\") as f:\n    json.dump(asdict(config), f, indent=2)\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
     "n_words": 36,
-    "n_chars": 273,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.005208333333333333,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_034",
-   "text": "The subsequent assertion documents what you expect from the parser:\n```\n# discussed at https://stackoverflow.com/questions/tagged/numpy\nassert parse_date(\"2021-03-04\").month == 3\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 20,
-    "n_chars": 183,
+    "n_chars": 284,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.007751937984496124,
+    "cap_ratio": 0.024752475247524754,
     "has_you": true
    }
   },
   {
-   "id": "code_train_val_035",
-   "text": "Try this snippet to see which package version you actually have installed:\n```\n# background reading: https://realpython.com/python-subprocess/\nimport importlib.metadata\n\nprint(importlib.metadata.version(\"scikit-learn\"))\n\n```",
+   "id": "code_train_val_010",
+   "text": "For the email tests, point your code at a local debugging SMTP server instead of the real one:\n```\nimport smtplib\n\nwith smtplib.SMTP(\"localhost\", 1025) as server:\n    server.send_message(msg)\nprint(\"sent test message to\", msg[\"To\"])\n# the debug server prints messages instead of delivering them\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 21,
-    "n_chars": 224,
+    "n_words": 43,
+    "n_chars": 299,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.045871559633027525,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_011",
+   "text": "Your validator rejects valid addresses, so add a case like this to the tests:\n```\ndef test_accepts_plain_address():\n    assert is_valid_email(\"jane.doe@gmail.com\")\ndef test_rejects_missing_domain():\n    assert not is_valid_email(\"jane.doe@\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 25,
+    "n_chars": 246,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
@@ -6230,444 +5798,66 @@
    }
   },
   {
-   "id": "code_train_val_036",
-   "text": "Your class could expose the settings as a dict for the logs:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pathlib\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Settings:\n    batch_size: int = 32\n    lr: float = 0.001\n\nprint(\"settings:\", asdict(Settings()))\n\n```",
+   "id": "code_train_val_012",
+   "text": "This block shows how the service config is read in production, in case you need it:\n```\nimport json\n\nwith open(\"service.json\") as f:\n    settings = json.load(f)\nprint(settings[\"port\"])\nprint(\"service will listen on port\", settings.get(\"port\"))\nprint(\"admin contact:\", settings.get(\"admin\", \"ops@example.com\"))\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 36,
-    "n_chars": 292,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.014563106796116505,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_037",
-   "text": "If you want the progress info without a dependency, a simple counter works:\n```\n# background reading: https://realpython.com/command-line-interfaces-python-argparse/\nfor i, item in enumerate(items, start=1):\n    process(item)\n    if i % 100 == 0:\n        print(f\"processed {i} items\")\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 35,
-    "n_chars": 289,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.005128205128205128,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_038",
-   "text": "You can close the file handle automatically by using a context manager:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-requests\nwith open(\"log.txt\", \"a\") as f:\n    f.write(\"run finished\\n\")\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 25,
-    "n_chars": 216,
+    "n_words": 38,
+    "n_chars": 314,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.00641025641025641,
+    "cap_ratio": 0.004524886877828055,
     "has_you": true
    }
   },
   {
-   "id": "code_train_val_039",
-   "text": "This block reads the config and falls back to defaults if a key is missing:\n```\n# background reading: https://realpython.com/python-data-classes/\ncfg = {\"epochs\": 3, **load_config(\"train.json\")}\nprint(cfg[\"epochs\"])\n\n```",
+   "id": "code_train_val_013",
+   "text": "You could pin the API version in the request so the response format stays stable:\n```\nimport requests\n\nresp = requests.get(\"https://api.github.com/repos/pandas-dev/pandas\", headers={\"Accept\": \"application/vnd.github+json\"})\nprint(resp.json()[\"stargazers_count\"])\nif resp.status_code != 200:\n    print(\"rate limited, try again later\")\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 27,
-    "n_chars": 220,
+    "n_words": 34,
+    "n_chars": 338,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.006493506493506494,
-    "has_you": false
-   }
-  },
-  {
-   "id": "code_train_val_040",
-   "text": "You may want to check the response code before parsing the body:\n```\nresp = session.get(\"https://example.com/api/items\")\nresp.raise_for_status()\nitems = resp.json()\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 21,
-    "n_chars": 169,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.008333333333333333,
+    "cap_ratio": 0.02066115702479339,
     "has_you": true
    }
   },
   {
-   "id": "code_train_val_041",
-   "text": "For the server logs, you can rotate the file so it does not grow forever:\n```\n# background reading: https://realpython.com/pandas-read-csv/\nfrom logging.handlers import RotatingFileHandler\n\nhandler = RotatingFileHandler(\"server.log\", maxBytes=1_000_000, backupCount=3)\n\n```",
+   "id": "code_train_val_014",
+   "text": "If the temp files pile up, you can clear them at the end of the session:\n```\nimport shutil\n\nshutil.rmtree(\"tmp_outputs\", ignore_errors=True)\nprint(\"removed the temp outputs folder\")\nos.makedirs(\"tmp_outputs\", exist_ok=True)\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 30,
-    "n_chars": 273,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.04433497536945813,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_042",
-   "text": "Your test should use a temp directory so it does not depend on the current folder:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pytest\ndef test_writes_summary(tmp_path):\n    write_summary(tmp_path / \"summary.txt\")\n    assert (tmp_path / \"summary.txt\").exists()\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 31,
-    "n_chars": 282,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.004901960784313725,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_043",
-   "text": "You could integrate the two helpers into one function with a flag:\n```\n# background reading: https://realpython.com/python-sqlite-sqlalchemy/\ndef load(path, as_text=False):\n    data = Path(path).read_bytes()\n    return data.decode(\"utf-8\") if as_text else data\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 30,
-    "n_chars": 265,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.015873015873015872,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_044",
-   "text": "If you want to see what the service returns, print the JSON nicely:\n```\n# discussed at https://stackoverflow.com/questions/tagged/numpy\nimport json\n\n# docs: \"https://requests.readthedocs.io/en/latest/\"\n\nprint(json.dumps(response.json(), indent=2, sort_keys=True))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 27,
-    "n_chars": 268,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.030456852791878174,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_045",
-   "text": "Here is the excerpt from the changelog you asked about:\n```\n# background reading: https://realpython.com/python-subprocess/\n# 2.1.0\n# - \"load_data\" now accepts a list of paths\n# - \"save\" no longer overwrites without force=True\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 35,
-    "n_chars": 231,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.012195121951219513,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_046",
-   "text": "You might find it easier to debug if you print the types first:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pathlib\nprint(\"types:\", type(x), type(y))\nprint(repr(x)[:200])\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 23,
-    "n_chars": 193,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.007462686567164179,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_047",
-   "text": "To make the test deterministic, you can seed numpy at the start:\n```\n# background reading: https://realpython.com/command-line-interfaces-python-argparse/\nimport numpy as np\n\nrng = np.random.default_rng(42)\nsample = rng.choice(data, size=10, replace=False)\nprint(\"sample:\", sample)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 32,
-    "n_chars": 286,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.009569377990430622,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_048",
-   "text": "Your regex misses dashes in names, so try this pattern instead:\n```\nimport re\n\npattern = re.compile(r\"^[A-Za-z' -]+$\")\nprint(bool(pattern.match(\"Mary-Jane O'Neil\")))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 21,
-    "n_chars": 170,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.06140350877192982,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_049",
-   "text": "If you need the process ID in the log lines, psutil can give you more than os does:\n```\n# background reading: https://realpython.com/python-data-classes/\nimport psutil\n\np = psutil.Process()\nprint(\"pid\", p.pid, p.name(), p.cpu_percent(interval=0.1))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 33,
-    "n_chars": 253,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.02247191011235955,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_050",
-   "text": "You can connect the progress bar to the loop with tqdm:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-logging\nfrom tqdm import tqdm\n\nfor batch in tqdm(loader, desc=\"eval\"):\n    evaluate(batch)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 27,
-    "n_chars": 220,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.006134969325153374,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_051",
-   "text": "The subsequent change keeps your function seamlessly compatible with older callers:\n```\n# background reading: https://realpython.com/pandas-read-csv/\ndef resize(image, size=None, *, width=None):\n    size = size or width\n    # width= is kept so \"resize(img, width=64)\" still works\n    return image.resize((size, size))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 39,
-    "n_chars": 322,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.013157894736842105,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_052",
-   "text": "For the API client, you should set a user agent so the server admins know who is calling:\n```\nsession.headers.update({\"User-Agent\": \"course-project-bot (contact: team@example.com)\"})\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 24,
-    "n_chars": 187,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.04411764705882353,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_053",
-   "text": "You can avoid the shell quoting problems by using shlex in this block:\n```\n# background reading: https://realpython.com/python-sqlite-sqlalchemy/\nimport shlex\n\nargs = shlex.split('git log --format=\"%h %s\" -n 5')\nprint(args)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 30,
+    "n_words": 29,
     "n_chars": 228,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.006134969325153374,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_054",
-   "text": "Your function returns None on the empty case, so the caller should handle it:\n```\n# discussed at https://stackoverflow.com/questions/tagged/numpy\nresult = find_user(name)\nif result is None:\n    print(\"no user found\")\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 30,
-    "n_chars": 221,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.018518518518518517,
+    "cap_ratio": 0.017857142857142856,
     "has_you": true
    }
   },
   {
-   "id": "code_train_val_055",
-   "text": "If you want to time the slow step, this snippet is enough:\n```\n# background reading: https://realpython.com/python-subprocess/\nimport time\n\nstart = time.perf_counter()\nbuild_index(docs)\nprint(f\"took {time.perf_counter() - start:.2f}s\")\n\n```",
+   "id": "code_train_val_015",
+   "text": "Your function works seamlessly with lists, but strings need a guard:\n```\nif items is None:\n    raise ValueError(\"items is required\")\nif isinstance(items, str):\n    items = [items]\nreturn [normalize(x) for x in items]\n# same pattern as the fix discussed in https://github.com/pandas-dev/pandas/issues\n\n```",
    "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 28,
-    "n_chars": 240,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.005813953488372093,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_056",
-   "text": "You might keep the temp outputs for debugging by naming the directory:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pathlib\nimport tempfile\n\ntmp = tempfile.mkdtemp(prefix=\"debug_run_\")\nprint(\"outputs in\", tmp)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 26,
-    "n_chars": 231,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.005714285714285714,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_057",
-   "text": "Please add a docstring like this so the next reader knows what it returns:\n```\n# background reading: https://realpython.com/command-line-interfaces-python-argparse/\ndef total(prices):\n    \"\"\"Return the sum of the prices as a float.\"\"\"\n    return float(sum(prices))\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 33,
-    "n_chars": 269,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.010256410256410256,
-    "has_you": false
-   }
-  },
-  {
-   "id": "code_train_val_058",
-   "text": "You could close the plot after saving so memory does not grow in the loop:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-requests\nimport matplotlib.pyplot as plt\n\nplt.savefig(\"loss.png\", dpi=150)\nplt.close()\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 28,
-    "n_chars": 235,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.005714285714285714,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_059",
-   "text": "If your notebook keeps the old module, reload it with this block:\n```\n# background reading: https://realpython.com/python-data-classes/\nimport importlib\nimport utils\n\nimportlib.reload(utils)\nprint(\"reloaded\", utils.__name__)\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 25,
-    "n_chars": 229,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.005813953488372093,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_train_val_060",
-   "text": "For the gmail filter export, you only need the names, so parse it like this:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-logging\nimport xml.etree.ElementTree as ET\n\ntree = ET.parse(\"mailFilters.xml\")\nlabels = [e.get(\"value\") for e in tree.iter() if e.get(\"name\") == \"label\"]\n\n```",
-   "split_pool": "train_val",
-   "register": "code",
-   "form_tags": {
-    "n_words": 39,
+    "n_words": 42,
     "n_chars": 304,
     "ends_q": false,
     "ends_dot": false,
@@ -6675,107 +5865,269 @@
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.03686635944700461,
+    "cap_ratio": 0.01809954751131222,
     "has_you": true
    }
   },
   {
-   "id": "code_test_000",
-   "text": "You can make the cleanup automatic by using a temp folder in the test:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-logging\nimport tempfile\n\nwith tempfile.TemporaryDirectory() as d:\n    save_report(f\"{d}/report.txt\")\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_016",
+   "text": "Here is the snippet I used to reproduce your error locally:\n```\nimport numpy as np\n\na = np.array([1, 2, 3])\nprint(\"reshaped:\", a.reshape(3, 1).shape)\nprint(\"as a list:\", a.tolist())\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 27,
+    "n_words": 29,
+    "n_chars": 186,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.017241379310344827,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_017",
+   "text": "You should probably read the path from the environment rather than hardcoding it:\n```\nimport os\n\ndata_dir = os.environ.get(\"DATA_DIR\", \"data\")\nprint(data_dir)\nos.makedirs(data_dir, exist_ok=True)\nprint(\"using data directory\", os.path.abspath(data_dir))\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 28,
+    "n_chars": 257,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.047619047619047616,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_018",
+   "text": "For the CLI, you can add a flag so the verbose output is optional:\n```\nimport argparse\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\"--verbose\", action=\"store_true\")\nargs = parser.parse_args()\nif args.verbose:\n    print(\"verbose mode on, writing extra logs to debug.txt\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 36,
+    "n_chars": 287,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.028846153846153848,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_019",
+   "text": "The subsequent version of your loop avoids the index errors you were seeing:\n```\nfor i, value in enumerate(values):\n    print(f\"{i}: {value}\")\nprint(\"total values:\", len(values))\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 25,
+    "n_chars": 183,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.007936507936507936,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_020",
+   "text": "You can check the API docs at https://docs.python.org/3/library/csv.html for the dialect options:\n```\nimport csv\n\nwith open(\"report.csv\", newline=\"\") as f:\n    rows = list(csv.DictReader(f))\nprint(f\"loaded {len(rows)} rows with columns {list(rows[0]) if rows else []}\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 34,
+    "n_chars": 274,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.032432432432432434,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_021",
+   "text": "If you want logging at info level by default, add this near the top of main:\n```\nimport logging\n\nlogging.basicConfig(level=logging.INFO, format=\"%(levelname)s %(message)s\")\nlogging.info(\"starting the export job\")\nlogging.debug(\"this line only shows with level=DEBUG\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 33,
+    "n_chars": 272,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.05392156862745098,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_022",
+   "text": "Your parser misses empty lines, so skip them in this block:\n```\nfor line in text.splitlines():\n    if not line.strip():\n        continue\n    handle(line.rstrip(\"\\n\"))\nprint(\"finished parsing\", len(text.splitlines()), \"lines\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 26,
+    "n_chars": 230,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.006622516556291391,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_023",
+   "text": "You might connect to the dev database with a short timeout so tests fail fast:\n```\nimport sqlite3\n\nconn = sqlite3.connect(\"dev.db\", timeout=5)\nconn.close()\nprint(\"connected to dev.db and closed it again\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 31,
+    "n_chars": 209,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.006666666666666667,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_024",
+   "text": "This excerpt from our style guide explains why we prefer pathlib:\n```\nfrom pathlib import Path\n\nout = Path(\"results\") / \"summary.txt\"\nout.write_text(\"done\")\nprint(\"summary saved to\", out.resolve())\n# pathlib guide: https://realpython.com/python-pathlib/\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 31,
+    "n_chars": 258,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.016042780748663103,
+    "has_you": false
+   }
+  },
+  {
+   "id": "code_train_val_025",
+   "text": "If you need the server time in UTC, use a timezone-aware value:\n```\nfrom datetime import datetime, timezone\n\nnow = datetime.now(timezone.utc)\nprint(now.strftime(\"%Y-%m-%d %H:%M\"))\nprint(\"server time in UTC:\", now.isoformat(timespec=\"seconds\"))\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 29,
+    "n_chars": 248,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.056818181818181816,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_026",
+   "text": "You could replace the manual retry loop with this snippet:\n```\nimport time\n\nfor attempt in range(3):\n    if fetch_once():\n        break\n    time.sleep(2)\nelse:\n    raise RuntimeError(\"all retries failed\")\nprint(\"fetch succeeded\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 29,
+    "n_chars": 234,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.019230769230769232,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_027",
+   "text": "To keep your notebook outputs small, you can print only the head:\n```\ndf = pd.read_csv(\"sales.csv\")\nprint(df.head(10))\nprint(df.describe())\nprint(\"columns:\", \", \".join(df.columns))\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 22,
+    "n_chars": 185,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.00819672131147541,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_028",
+   "text": "If you share the script, remove the test credentials first and load them like this:\n```\nimport os\n\ntoken = os.environ[\"API_TOKEN\"]\nheaders = {\"Authorization\": f\"Bearer {token}\"}\nimport requests\nresp = requests.get(\"https://api.example.com/items\", headers=headers)\nprint(resp.status_code)\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 34,
+    "n_chars": 292,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.0514018691588785,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_029",
+   "text": "You can confirm the service is up before running the integration tests:\n```\nimport requests\n\nr = requests.get(\"http://localhost:8080/health\", timeout=3)\nassert r.status_code == 200\nprint(\"health check passed:\", r.json().get(\"status\", \"ok\"))\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 29,
     "n_chars": 245,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.016304347826086956,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_001",
-   "text": "If you log the config at info level, the runs are easier to compare later:\n```\n# background reading: https://realpython.com/pandas-read-csv/\nimport logging\n\nlogging.info(\"config: %s\", vars(args))\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 26,
-    "n_chars": 200,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.006896551724137931,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_002",
-   "text": "Your reader can skip the header row with this small change:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pytest\nimport csv\n\nwith open(\"scores.csv\", newline=\"\") as f:\n    reader = csv.reader(f)\n    next(reader)\n    rows = list(reader)\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 31,
-    "n_chars": 255,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.005649717514124294,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_003",
-   "text": "To preview the static site, you can serve the folder locally:\n```\n# background reading: https://realpython.com/python-sqlite-sqlalchemy/\npython -m http.server 9000 --directory site\n# then visit \"http://localhost:9000\" to check the pages\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 31,
-    "n_chars": 241,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.005780346820809248,
+    "cap_ratio": 0.006024096385542169,
     "has_you": true
    }
   },
   {
-   "id": "code_test_004",
-   "text": "The subsequent guard makes the error message much clearer for callers:\n```\n# discussed at https://stackoverflow.com/questions/tagged/numpy\nif threshold < 0:\n    raise ValueError(\"threshold must be non-negative\")\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_030",
+   "text": "Your sort is stable already, but this key makes the intent clearer:\n```\npeople.sort(key=lambda p: (p[\"last_name\"], p[\"first_name\"]))\nprint(\"first entry:\", people[0][\"last_name\"] if people else \"none\")\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 26,
-    "n_chars": 216,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.018404907975460124,
-    "has_you": false
-   }
-  },
-  {
-   "id": "code_test_005",
-   "text": "You might like this excerpt from the numpy docs on broadcasting:\n```\n# background reading: https://realpython.com/python-subprocess/\na = np.ones((3, 1))\nb = np.arange(4)\nprint(\"shape:\", (a + b).shape)\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 28,
+    "n_words": 25,
     "n_chars": 205,
     "ends_q": false,
     "ends_dot": false,
@@ -6783,198 +6135,126 @@
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.0072992700729927005,
+    "cap_ratio": 0.007246376811594203,
     "has_you": true
    }
   },
   {
-   "id": "code_test_006",
-   "text": "If you call git from the script, subprocess.run with check=True surfaces failures:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pathlib\nimport subprocess\n\nsubprocess.run([\"git\", \"status\", \"--short\"], check=True)\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_031",
+   "text": "For the subprocess call, you should pass a list so spaces in paths are safe:\n```\nimport subprocess\n\nsubprocess.run([\"python\", \"train.py\", \"--config\", \"configs/base.yaml\"], check=True)\nprint(\"training run finished, logs are in runs/base\")\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 24,
-    "n_chars": 233,
+    "n_words": 31,
+    "n_chars": 242,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.017341040462427744,
+    "cap_ratio": 0.011560693641618497,
     "has_you": true
    }
   },
   {
-   "id": "code_test_007",
-   "text": "You can print the memory use of the process with psutil while debugging:\n```\n# background reading: https://realpython.com/command-line-interfaces-python-argparse/\nimport psutil\n\nprint(psutil.virtual_memory().percent, \"% of RAM in use\")\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_032",
+   "text": "If you only need the file names, this block is shorter than os.walk:\n```\nfrom pathlib import Path\n\nnames = sorted(p.name for p in Path(\"docs\").glob(\"*.txt\"))\nfor name in names:\n    print(name)\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 27,
-    "n_chars": 240,
+    "n_words": 31,
+    "n_chars": 197,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.02197802197802198,
+    "cap_ratio": 0.022388059701492536,
     "has_you": true
    }
   },
   {
-   "id": "code_test_008",
-   "text": "Please close the connection in a finally block so it never leaks:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-requests\nconn = sqlite3.connect(\"app.db\")\ntry:\n    conn.execute(\"VACUUM\")\nfinally:\n    conn.close()\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_033",
+   "text": "You can write the results to a temp file first and rename it, so readers never see half a file:\n```\nimport os\n\nwith open(\"out.tmp\", \"w\") as f:\n    f.write(payload)\nos.replace(\"out.tmp\", \"out.json\")\nprint(\"wrote out.json without leaving a partial file\")\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 25,
-    "n_chars": 239,
+    "n_words": 39,
+    "n_chars": 257,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.0056179775280898875,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_034",
+   "text": "The subsequent assertion documents what you expect from the parser:\n```\nassert parse_date(\"2021-03-04\").month == 3\nassert parse_date(\"not a date\") is None\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 22,
+    "n_chars": 159,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.040697674418604654,
-    "has_you": false
+    "cap_ratio": 0.018867924528301886,
+    "has_you": true
    }
   },
   {
-   "id": "code_test_009",
-   "text": "Your dataclass can be logged directly once you convert it with asdict:\n```\n# background reading: https://realpython.com/python-data-classes/\nfrom dataclasses import asdict\n\nlogger.info(\"run settings: %s\", asdict(run_cfg))\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_035",
+   "text": "Try this snippet to see which package version you actually have installed:\n```\nimport importlib.metadata\n\nprint(importlib.metadata.version(\"scikit-learn\"))\nprint(importlib.metadata.version(\"pandas\"))\n# release notes: https://scikit-learn.org/stable/whats_new.html\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 26,
-    "n_chars": 226,
+    "n_words": 22,
+    "n_chars": 268,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.005847953216374269,
+    "cap_ratio": 0.004784688995215311,
     "has_you": true
    }
   },
   {
-   "id": "code_test_010",
-   "text": "For local testing, you can run a fake SMTP server so nothing leaves your machine:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-logging\npython -m aiosmtpd -n -l localhost:1025\n# then set \"smtp_host\" to localhost in settings.txt\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_036",
+   "text": "Your class could expose the settings as a dict for the logs:\n```\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Settings:\n    batch_size: int = 32\n    lr: float = 0.001\n\nprint(\"settings:\", asdict(Settings()))\nimport json\nwith open(\"settings.json\", \"w\") as f:\n    json.dump(asdict(Settings()), f)\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 35,
-    "n_chars": 255,
+    "n_words": 41,
+    "n_chars": 313,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.02631578947368421,
+    "cap_ratio": 0.019138755980861243,
     "has_you": true
    }
   },
   {
-   "id": "code_test_011",
-   "text": "This block reads the service URL from the settings file you already have:\n```\n# background reading: https://realpython.com/pandas-read-csv/\nimport json\n\nurl = json.load(open(\"settings.json\"))[\"service_url\"]\nprint(url)\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_037",
+   "text": "If you want the progress info without a dependency, a simple counter works:\n```\nfor i, item in enumerate(items, start=1):\n    process(item)\n    if i % 100 == 0:\n        print(f\"processed {i} items\")\nprint(f\"done, {len(items)} items in total\")\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 25,
-    "n_chars": 222,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.024539877300613498,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_012",
-   "text": "You could ask the API for JSON explicitly so the parsing does not break:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pytest\nimport requests\n\nr = requests.get(\"https://httpbin.org/json\", headers={\"Accept\": \"application/json\"})\nprint(r.json()[\"slideshow\"][\"title\"])\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 28,
-    "n_chars": 286,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.04326923076923077,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_013",
-   "text": "If you only want the newest file, this snippet sorts by modification time:\n```\n# background reading: https://realpython.com/python-sqlite-sqlalchemy/\nfrom pathlib import Path\n\nlatest = max(Path(\"logs\").glob(\"*.txt\"), key=lambda p: p.stat().st_mtime)\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 29,
-    "n_chars": 254,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.016304347826086956,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_014",
-   "text": "Your helper handles numbers seamlessly, but None needs its own branch:\n```\n# discussed at https://stackoverflow.com/questions/tagged/numpy\ndef fmt(value):\n    if value is None:\n        return \"n/a\"\n    return f\"{value:,.2f}\"\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 27,
-    "n_chars": 229,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.01935483870967742,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_015",
-   "text": "You should read the port from the environment so the server works on any machine:\n```\n# background reading: https://realpython.com/python-subprocess/\nimport os\n\nport = int(os.environ.get(\"PORT\", \"5000\"))\napp.run(port=port)\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 28,
-    "n_chars": 227,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.030864197530864196,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_016",
-   "text": "Here is the snippet that reproduces the shape mismatch you described:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pathlib\nimport torch\n\nx = torch.zeros(2, 3)\nprint(\"viewed:\", x.view(3, 2).shape)\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 26,
-    "n_chars": 217,
+    "n_words": 36,
+    "n_chars": 247,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
@@ -6986,192 +6266,336 @@
    }
   },
   {
-   "id": "code_test_017",
-   "text": "You can add a dry-run flag to the CLI so people can preview the changes:\n```\n# background reading: https://realpython.com/command-line-interfaces-python-argparse/\nparser.add_argument(\"--dry-run\", action=\"store_true\", help=\"print actions without writing files\")\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_038",
+   "text": "You can close the file handle automatically by using a context manager:\n```\nwith open(\"log.txt\", \"a\") as f:\n    f.write(\"run finished\\n\")\nprint(\"appended a line to log.txt\")\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 28,
-    "n_chars": 265,
+    "n_words": 26,
+    "n_chars": 178,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.020100502512562814,
+    "cap_ratio": 0.008264462809917356,
     "has_you": true
    }
   },
   {
-   "id": "code_test_018",
-   "text": "The subsequent loop prints each key with its value, which is what you wanted:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-requests\nfor key, value in sorted(counts.items()):\n    print(f\"{key}: {value}\")\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_039",
+   "text": "This block reads the config and falls back to defaults if a key is missing:\n```\ncfg = {\"epochs\": 3, **load_config(\"train.json\")}\nprint(cfg[\"epochs\"])\nprint(\"training for\", cfg[\"epochs\"], \"epochs with batch size\", cfg.get(\"batch_size\"))\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 27,
-    "n_chars": 231,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.005988023952095809,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_019",
-   "text": "If you need the temp path in several tests, a pytest fixture keeps it in one place:\n```\n# background reading: https://realpython.com/python-data-classes/\nimport pytest\n\n@pytest.fixture\ndef out_dir(tmp_path):\n    return tmp_path / \"out\"\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 32,
+    "n_words": 31,
     "n_chars": 240,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.005747126436781609,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_020",
-   "text": "You might check the API reference at https://docs.python.org/3/library/json.html for the separators option:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-logging\nimport json\n\ncompact = json.dumps(data, separators=(\",\", \":\"))\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 25,
-    "n_chars": 252,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.021621621621621623,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_021",
-   "text": "Your service test should wait until the port is open before sending requests:\n```\n# background reading: https://realpython.com/pandas-read-csv/\nimport socket\n\nwith socket.create_connection((\"localhost\", 8080), timeout=5):\n    pass\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 26,
-    "n_chars": 235,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.0058823529411764705,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_022",
-   "text": "This excerpt shows how we name the output files in the other scripts:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pytest\nout = Path(\"results\") / f\"{model_name}_{seed}.json\"\nout.write_text(json.dumps(metrics, indent=2))\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 26,
-    "n_chars": 241,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.011428571428571429,
+    "cap_ratio": 0.006211180124223602,
     "has_you": false
    }
   },
   {
-   "id": "code_test_023",
-   "text": "You can connect the logger to a file and the console at the same time:\n```\n# background reading: https://realpython.com/python-sqlite-sqlalchemy/\nimport logging\n\nlogging.basicConfig(level=logging.INFO, handlers=[logging.FileHandler(\"run.log\"), logging.StreamHandler()])\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_040",
+   "text": "You may want to check the response code before parsing the body:\n```\nresp = session.get(\"https://example.com/api/items\")\nresp.raise_for_status()\nitems = resp.json()\nprint(f\"received {len(items)} items\")\nfor item in items:\n    print(item[\"name\"])\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 26,
-    "n_chars": 274,
+    "n_words": 29,
+    "n_chars": 250,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.04739336492890995,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_024",
-   "text": "If you test the signup form, a plain address like this should pass validation:\n```\ndef test_signup_accepts_gmail_address():\n    assert validate(\"sam.lee@gmail.com\") is True\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 22,
-    "n_chars": 177,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.015503875968992248,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_025",
-   "text": "To keep the server logs readable, you can add timestamps to the format:\n```\n# background reading: https://realpython.com/python-subprocess/\nlogging.basicConfig(format=\"%(asctime)s %(levelname)s %(message)s\", level=logging.INFO)\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 23,
-    "n_chars": 232,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": false,
-    "has_newline_or_code_char": true,
-    "cap_ratio": 0.034482758620689655,
-    "has_you": true
-   }
-  },
-  {
-   "id": "code_test_026",
-   "text": "Your plot looks crowded, so try rotating the labels with this block:\n```\n# discussed at https://stackoverflow.com/questions/tagged/pathlib\nimport matplotlib.pyplot as plt\n\nplt.xticks(rotation=45, ha=\"right\")\nplt.tight_layout()\n\n```",
-   "split_pool": "test",
-   "register": "code",
-   "form_tags": {
-    "n_words": 25,
-    "n_chars": 231,
-    "ends_q": false,
-    "ends_dot": false,
-    "ends_excl": false,
-    "has_quote": true,
-    "has_digit": true,
     "has_newline_or_code_char": true,
     "cap_ratio": 0.005747126436781609,
     "has_you": true
    }
   },
   {
-   "id": "code_test_027",
-   "text": "You could replace the nested loops with a dict lookup:\n```\n# background reading: https://realpython.com/command-line-interfaces-python-argparse/\nindex = {row[\"id\"]: row for row in rows}\nmatch = index.get(target_id)\n\n```",
-   "split_pool": "test",
+   "id": "code_train_val_041",
+   "text": "For the server logs, you can rotate the file so it does not grow forever:\n```\nfrom logging.handlers import RotatingFileHandler\n\nhandler = RotatingFileHandler(\"server.log\", maxBytes=1_000_000, backupCount=3)\nimport logging\nhandler.setLevel(logging.INFO)\nlogging.getLogger(\"server\").addHandler(handler)\n\n```",
+   "split_pool": "train_val",
    "register": "code",
    "form_tags": {
-    "n_words": 27,
+    "n_words": 30,
+    "n_chars": 305,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.06866952789699571,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_042",
+   "text": "Your test should use a temp directory so it does not depend on the current folder:\n```\ndef test_writes_summary(tmp_path):\n    write_summary(tmp_path / \"summary.txt\")\n    assert (tmp_path / \"summary.txt\").exists()\ndef test_summary_is_not_empty(tmp_path):\n    path = tmp_path / \"summary.txt\"\n    write_summary(path)\n    assert path.read_text().strip()\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 37,
+    "n_chars": 354,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.004132231404958678,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_043",
+   "text": "You could integrate the two helpers into one function with a flag:\n```\ndef load(path, as_text=False):\n    data = Path(path).read_bytes()\n    return data.decode(\"utf-8\") if as_text else data\ntext = load(\"README.md\", as_text=True)\nprint(text.splitlines()[0])\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 31,
+    "n_chars": 261,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.05649717514124294,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_044",
+   "text": "If you want to see what the service returns, print the JSON nicely:\n```\nimport json\n\n# docs: \"https://requests.readthedocs.io/en/latest/\"\n\nprint(json.dumps(response.json(), indent=2, sort_keys=True))\nwith open(\"service_response.json\", \"w\") as f:\n    json.dump(response.json(), f, indent=2)\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 31,
+    "n_chars": 294,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.029556650246305417,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_045",
+   "text": "Here is the excerpt from the changelog you asked about:\n```\n# 2.1.0\n# - \"load_data\" now accepts a list of paths\n# - \"save\" no longer overwrites without force=True\n# - \"export\" writes CSV by default (details at https://example.com/changelog)\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 41,
+    "n_chars": 245,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.029411764705882353,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_046",
+   "text": "You might find it easier to debug if you print the types first:\n```\nprint(\"types:\", type(x), type(y))\nprint(repr(x)[:200])\nprint(\"x shape:\", getattr(x, \"shape\", None))\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 24,
+    "n_chars": 172,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.018518518518518517,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_047",
+   "text": "To make the test deterministic, you can seed numpy at the start:\n```\nimport numpy as np\n\nrng = np.random.default_rng(42)\nsample = rng.choice(data, size=10, replace=False)\nprint(\"sample:\", sample)\nprint(\"seeded sample of\", len(sample), \"items\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 33,
+    "n_chars": 248,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.011627906976744186,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_048",
+   "text": "Your regex misses dashes in names, so try this pattern instead:\n```\nimport re\n\npattern = re.compile(r\"^[A-Za-z' -]+$\")\nprint(bool(pattern.match(\"Mary-Jane O'Neil\")))\nprint(bool(pattern.match(\"Anne-Marie\")))\nprint(bool(pattern.match(\"Jean Luc\")))\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 24,
+    "n_chars": 250,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.06395348837209303,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_049",
+   "text": "If you need the process ID in the log lines, psutil can give you more than os does:\n```\nimport psutil\n\np = psutil.Process()\nprint(\"pid\", p.pid, p.name(), p.cpu_percent(interval=0.1))\nprint(\"open files:\", p.open_files())\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 32,
+    "n_chars": 224,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.02666666666666667,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_050",
+   "text": "You can connect the progress bar to the loop with tqdm:\n```\nfrom tqdm import tqdm\n\nfor batch in tqdm(loader, desc=\"eval\"):\n    evaluate(batch)\nprint(\"evaluation done for\", len(loader), \"batches\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 28,
+    "n_chars": 200,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.0070921985815602835,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_051",
+   "text": "The subsequent change keeps your function seamlessly compatible with older callers:\n```\ndef resize(image, size=None, *, width=None):\n    size = size or width\n    # width= is kept so \"resize(img, width=64)\" still works\n    return image.resize((size, size))\n# callers in the image service still pass width=, see the notes in service.txt\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 49,
+    "n_chars": 339,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.012448132780082987,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_052",
+   "text": "For the API client, you should set a user agent so the server admins know who is calling:\n```\nsession.headers.update({\"User-Agent\": \"course-project-bot (contact: team@example.com)\"})\nresp = session.get(\"https://api.example.com/status\")\nprint(resp.json())\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 28,
+    "n_chars": 259,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.03208556149732621,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_053",
+   "text": "You can avoid the shell quoting problems by using shlex in this block:\n```\nimport shlex\n\nargs = shlex.split('git log --format=\"%h %s\" -n 5')\nprint(args)\nimport subprocess\nsubprocess.run(args, check=True)\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 30,
+    "n_chars": 208,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.013513513513513514,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_054",
+   "text": "Your function returns None on the empty case, so the caller should handle it:\n```\nresult = find_user(name)\nif result is None:\n    print(\"no user found\")\nelse:\n    print(\"found\", result[\"name\"])\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 29,
+    "n_chars": 198,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.022388059701492536,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_055",
+   "text": "If you want to time the slow step, this snippet is enough:\n```\nimport time\n\nstart = time.perf_counter()\nbuild_index(docs)\nprint(f\"took {time.perf_counter() - start:.2f}s\")\nprint(\"index has\", len(docs), \"documents\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 28,
+    "n_chars": 219,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.006666666666666667,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_056",
+   "text": "You might keep the temp outputs for debugging by naming the directory:\n```\nimport tempfile\n\ntmp = tempfile.mkdtemp(prefix=\"debug_run_\")\nprint(\"outputs in\", tmp)\nprint(\"remember to delete\", tmp, \"when you are done\")\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 30,
     "n_chars": 219,
     "ends_q": false,
     "ends_dot": false,
@@ -7179,17 +6603,413 @@
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.00625,
+    "cap_ratio": 0.006289308176100629,
     "has_you": true
    }
   },
   {
-   "id": "code_test_028",
-   "text": "Please close the figure after each save, otherwise memory keeps growing:\n```\n# discussed at https://stackoverflow.com/questions/tagged/python-requests\nfig.savefig(\"hist.png\")\nplt.close(fig)\n\n```",
+   "id": "code_train_val_057",
+   "text": "Please add a docstring like this so the next reader knows what it returns:\n```\ndef total(prices):\n    \"\"\"Return the sum of the prices as a float.\"\"\"\n    return float(sum(prices))\nassert total([]) == 0.0\nprint(total.__doc__)\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 34,
+    "n_chars": 228,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.013422818791946308,
+    "has_you": false
+   }
+  },
+  {
+   "id": "code_train_val_058",
+   "text": "You could close the plot after saving so memory does not grow in the loop:\n```\nimport matplotlib.pyplot as plt\n\nplt.savefig(\"loss.png\", dpi=150)\nplt.close()\nprint(\"saved loss.png\")\n# figure tips: https://matplotlib.org/stable/users/explain/figure/index.html\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 30,
+    "n_chars": 262,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.005208333333333333,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_059",
+   "text": "If your notebook keeps the old module, reload it with this block:\n```\nimport importlib\nimport utils\n\nimportlib.reload(utils)\nprint(\"reloaded\", utils.__name__)\nprint(utils.__file__)\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 22,
+    "n_chars": 185,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.007462686567164179,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_train_val_060",
+   "text": "For the gmail filter export, you only need the names, so parse it like this:\n```\nimport xml.etree.ElementTree as ET\n\ntree = ET.parse(\"mailFilters.xml\")\nlabels = [e.get(\"value\") for e in tree.iter() if e.get(\"name\") == \"label\"]\nprint(f\"found {len(labels)} labels in the gmail export\")\nprint(sorted(set(labels)))\n\n```",
+   "split_pool": "train_val",
+   "register": "code",
+   "form_tags": {
+    "n_words": 43,
+    "n_chars": 315,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.0365296803652968,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_000",
+   "text": "Cleanup happens on its own if your report test writes into a throwaway directory:\n```\nimport tempfile\nfrom pathlib import Path\n\nwith tempfile.TemporaryDirectory() as d:\n    report = Path(d) / \"report.txt\"\n    save_report(report)\n    assert report.stat().st_size > 0\nprint(\"report checked, the folder is gone now\")\n\n```",
    "split_pool": "test",
    "register": "code",
    "form_tags": {
-    "n_words": 19,
+    "n_words": 43,
+    "n_chars": 318,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.021834061135371178,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_001",
+   "text": "Saving the parsed arguments next to the outputs makes your runs easy to compare later:\n```\nimport json\n\nwith open(\"args.json\", \"w\") as f:\n    json.dump(vars(args), f, indent=2, sort_keys=True)\nprint(\"saved the run arguments to args.json\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 34,
+    "n_chars": 243,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.011695906432748537,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_002",
+   "text": "Your reader can skip the header row with this small change:\n```\nimport csv\n\nwith open(\"scores.csv\", newline=\"\") as f:\n    reader = csv.reader(f)\n    next(reader)\n    rows = list(reader)\nprint(f\"{len(rows)} score rows after skipping the header\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 34,
+    "n_chars": 249,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.005952380952380952,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_003",
+   "text": "To preview the static site, you can serve the folder locally:\n```\npython -m http.server 9000 --directory site\n# then visit \"http://localhost:9000\" to check the pages\n# press Ctrl+C to stop the server when you are finished\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 38,
+    "n_chars": 226,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.018867924528301886,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_004",
+   "text": "The subsequent guard makes the error message much clearer for callers:\n```\nif threshold < 0:\n    raise ValueError(\"threshold must be non-negative\")\nif threshold > max_threshold:\n    raise ValueError(\"threshold is above the allowed maximum\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 33,
+    "n_chars": 245,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.027472527472527472,
+    "has_you": false
+   }
+  },
+  {
+   "id": "code_test_005",
+   "text": "You might like this excerpt from the numpy docs on broadcasting:\n```\na = np.ones((3, 1))\nb = np.arange(4)\nprint(\"shape:\", (a + b).shape)\nc = a * b\nprint(\"product shape:\", c.shape)\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 32,
+    "n_chars": 184,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.008928571428571428,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_006",
+   "text": "Calling git from your release script is safer when a failing command stops it, as in this block:\n```\nimport subprocess\n\nsubprocess.run([\"git\", \"status\", \"--short\"], check=True)\nout = subprocess.run([\"git\", \"rev-parse\", \"--short\", \"HEAD\"], capture_output=True, text=True)\nprint(\"last commit:\", out.stdout.strip())\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 37,
+    "n_chars": 317,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.0365296803652968,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_007",
+   "text": "You can print the memory use of the process with psutil while debugging:\n```\nimport psutil\n\nprint(psutil.virtual_memory().percent, \"% of RAM in use\")\nprint(\"swap in use:\", psutil.swap_memory().percent)\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 27,
+    "n_chars": 206,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.026845637583892617,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_008",
+   "text": "A finally block guarantees your VACUUM call does not leave the database open:\n```\nconn = sqlite3.connect(\"app.db\")\ntry:\n    conn.execute(\"VACUUM\")\nfinally:\n    conn.close()\nprint(\"database compacted\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 24,
+    "n_chars": 205,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.09027777777777778,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_009",
+   "text": "Once the run_cfg object is a plain dict, the logger prints it nicely for you:\n```\nfrom dataclasses import asdict\n\nlogger.info(\"run settings: %s\", asdict(run_cfg))\nimport json\nwith open(\"run_settings.json\", \"w\") as f:\n    json.dump(asdict(run_cfg), f, indent=2)\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 35,
+    "n_chars": 265,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.005405405405405406,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_010",
+   "text": "For local testing, you can run a fake SMTP server so nothing leaves your machine:\n```\npython -m aiosmtpd -n -l localhost:1025\n# then set \"smtp_host\" to localhost in settings.txt\n# in the app, use \"localhost\" and port 1025 for the mail settings\n# docs: https://aiosmtpd.aio-libs.org/\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 47,
+    "n_chars": 287,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.024752475247524754,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_011",
+   "text": "This block reads the service URL from the settings file you already have:\n```\nimport json\n\nurl = json.load(open(\"settings.json\"))[\"service_url\"]\nprint(url)\nimport requests\nresp = requests.get(url)\nprint(\"service answered with\", resp.status_code)\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 30,
+    "n_chars": 250,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.021621621621621623,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_012",
+   "text": "You could ask the API for JSON explicitly so the parsing does not break:\n```\nimport requests\n\nr = requests.get(\"https://httpbin.org/json\", headers={\"Accept\": \"application/json\"})\nprint(r.json()[\"slideshow\"][\"title\"])\nprint(\"fetched at\", r.headers.get(\"Date\"))\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 27,
+    "n_chars": 264,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.05434782608695652,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_013",
+   "text": "If you only want the newest file, this snippet sorts by modification time:\n```\nfrom pathlib import Path\n\nlatest = max(Path(\"logs\").glob(\"*.txt\"), key=lambda p: p.stat().st_mtime)\nprint(\"newest log file:\", latest.name)\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 29,
+    "n_chars": 222,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.01935483870967742,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_014",
+   "text": "Your helper handles numbers seamlessly, but None needs its own branch:\n```\ndef fmt(value):\n    if value is None:\n        return \"n/a\"\n    return f\"{value:,.2f}\"\nassert fmt(None) == \"n/a\"\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 27,
+    "n_chars": 191,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.03389830508474576,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_015",
+   "text": "You should read the port from the environment so the server works on any machine:\n```\nimport os\n\nport = int(os.environ.get(\"PORT\", \"5000\"))\napp.run(port=port)\nprint(f\"serving on http://localhost:{port}\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 27,
+    "n_chars": 208,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.03496503496503497,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_016",
+   "text": "Here is the snippet that reproduces the shape mismatch you described:\n```\nimport torch\n\nx = torch.zeros(2, 3)\nprint(\"viewed:\", x.view(3, 2).shape)\nprint(\"as a list:\", x.tolist())\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 26,
+    "n_chars": 183,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.008333333333333333,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_017",
+   "text": "You can add a dry-run flag to the CLI so people can preview the changes:\n```\nparser.add_argument(\"--dry-run\", action=\"store_true\", help=\"print actions without writing files\")\nargs = parser.parse_args()\nif args.dry_run:\n    print(\"dry run, nothing will be written\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 35,
+    "n_chars": 269,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.020942408376963352,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_018",
+   "text": "The subsequent loop prints each key with its value, which is what you wanted:\n```\nfor key, value in sorted(counts.items()):\n    print(f\"{key}: {value}\")\nprint(\"distinct keys:\", len(counts))\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 26,
     "n_chars": 194,
     "ends_q": false,
     "ends_dot": false,
@@ -7197,25 +7017,205 @@
     "has_quote": true,
     "has_digit": false,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.006711409395973154,
-    "has_you": false
+    "cap_ratio": 0.007575757575757576,
+    "has_you": true
    }
   },
   {
-   "id": "code_test_029",
-   "text": "For the info message, you can include the elapsed time like this:\n```\n# background reading: https://realpython.com/python-data-classes/\nimport time\n\nt0 = time.time()\nrun()\nlogging.info(\"finished in %.1f s\", time.time() - t0)\n\n```",
+   "id": "code_test_019",
+   "text": "If you need the temp path in several tests, a pytest fixture keeps it in one place:\n```\nimport pytest\n\n@pytest.fixture\ndef out_dir(tmp_path):\n    return tmp_path / \"out\"\ndef test_out_dir_is_empty(out_dir):\n    out_dir.mkdir()\n    assert not any(out_dir.iterdir())\n\n```",
    "split_pool": "test",
    "register": "code",
    "form_tags": {
-    "n_words": 31,
-    "n_chars": 229,
+    "n_words": 34,
+    "n_chars": 268,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.005434782608695652,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_020",
+   "text": "You might check the API reference at https://docs.python.org/3/library/json.html for the separators option:\n```\nimport json\n\ncompact = json.dumps(data, separators=(\",\", \":\"))\nprint(len(compact), \"characters after compacting\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 25,
+    "n_chars": 230,
     "ends_q": false,
     "ends_dot": false,
     "ends_excl": false,
     "has_quote": true,
     "has_digit": true,
     "has_newline_or_code_char": true,
-    "cap_ratio": 0.006329113924050633,
+    "cap_ratio": 0.024242424242424242,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_021",
+   "text": "Your service test should wait until the port is open before sending requests:\n```\nimport socket\n\nwith socket.create_connection((\"localhost\", 8080), timeout=5):\n    pass\nprint(\"service is accepting connections\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 26,
+    "n_chars": 215,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.00641025641025641,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_022",
+   "text": "This excerpt shows how we name the output files in the other scripts:\n```\nout = Path(\"results\") / f\"{model_name}_{seed}.json\"\nout.write_text(json.dumps(metrics, indent=2))\nprint(\"metrics written to\", out)\n# naming notes are in docs/outputs.txt\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 32,
+    "n_chars": 248,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.011363636363636364,
+    "has_you": false
+   }
+  },
+  {
+   "id": "code_test_023",
+   "text": "Your CSV export drops the header when the list is empty, so write it explicitly:\n```\nimport csv\n\nwith open(\"export.csv\", \"w\", newline=\"\") as f:\n    writer = csv.DictWriter(f, fieldnames=[\"id\", \"name\", \"email\"])\n    writer.writeheader()\n    writer.writerows(rows)\nprint(\"wrote\", len(rows), \"rows plus the header\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 39,
+    "n_chars": 317,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.02830188679245283,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_024",
+   "text": "If you test the signup form, a plain address like this should pass validation:\n```\ndef test_signup_accepts_gmail_address():\n    assert validate(\"sam.lee@gmail.com\") is True\ndef test_signup_rejects_blank_address():\n    assert validate(\"\") is False\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 28,
+    "n_chars": 251,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.016483516483516484,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_025",
+   "text": "Timestamps would make these server logs much easier to read, so you could set the format here:\n```\nimport logging\n\nfmt = logging.Formatter(\"[%(asctime)s] %(name)s: %(message)s\", datefmt=\"%H:%M:%S\")\nstream = logging.StreamHandler()\nstream.setFormatter(fmt)\nlogging.getLogger(\"server\").addHandler(stream)\nlogging.getLogger(\"server\").warning(\"debug mode is on, do not use in production\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 41,
+    "n_chars": 389,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.038461538461538464,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_026",
+   "text": "Your plot looks crowded, so try rotating the labels with this block:\n```\nimport matplotlib.pyplot as plt\n\nplt.xticks(rotation=45, ha=\"right\")\nplt.tight_layout()\nplt.savefig(\"counts.png\")\nplt.close()\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 23,
+    "n_chars": 203,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.006802721088435374,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_027",
+   "text": "You could replace the nested loops with a dict lookup:\n```\nindex = {row[\"id\"]: row for row in rows}\nmatch = index.get(target_id)\nif match is None:\n    print(\"no row with id\", target_id)\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 32,
+    "n_chars": 190,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.015748031496062992,
+    "has_you": true
+   }
+  },
+  {
+   "id": "code_test_028",
+   "text": "Please close the figure after each save, otherwise memory keeps growing:\n```\nfig.savefig(\"hist.png\")\nplt.close(fig)\nprint(\"saved hist.png and closed the figure\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 21,
+    "n_chars": 166,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": false,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.008130081300813009,
+    "has_you": false
+   }
+  },
+  {
+   "id": "code_test_029",
+   "text": "For the info message, you can include the elapsed time like this:\n```\nimport time\n\nt0 = time.time()\nrun()\nlogging.info(\"finished in %.1f s\", time.time() - t0)\nlogging.info(\"results saved to %s\", \"results/summary.json\")\n\n```",
+   "split_pool": "test",
+   "register": "code",
+   "form_tags": {
+    "n_words": 32,
+    "n_chars": 223,
+    "ends_q": false,
+    "ends_dot": false,
+    "ends_excl": false,
+    "has_quote": true,
+    "has_digit": true,
+    "has_newline_or_code_char": true,
+    "cap_ratio": 0.006666666666666667,
     "has_you": true
    }
   },
