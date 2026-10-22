@@ -81,7 +81,7 @@ All detectors are scored zero-shot with `score_detectors.py`; ours are trained o
 
 - **InjecAgent** (Zhan et al., 2024): 1,054 injected tool responses plus 204 clean ones made by filling the same 17 templates' attacker slot with benign text (half benign imperatives). Detectors that take a query receive the user instruction.
 - **deepset/prompt-injections**: 116-row test split of direct injections; no user query.
-- **Pairs**: 50 query-counterfactual pairs on BIPIA test documents (`data/pairs/pair_specs_v0.json`). Each keeps the document and an inserted instruction fixed and changes only the user query; a pair is correct when the subverting query scores higher, so any query-blind detector scores 0.5. Labels are drafts written by one author and not yet human-validated.
+- **Pairs**: 50 query-counterfactual pairs on BIPIA test documents (`data/pairs/pair_specs_v0.json`). Each keeps the document and an inserted instruction fixed and changes only the user query; a pair is correct when the subverting query scores higher, so any query-blind detector scores 0.5. The pairs are LLM-drafted, not human-validated (pilot).
 
 Our DeBERTa reaches 0.975 ROC-AUC on held-out BIPIA attacks but flags only 7.8% of InjecAgent injections at threshold 0.5, and its pair accuracy is below chance. No detector transfers: each is strongest on the distribution closest to its training data. PIGuard's training data includes BIPIA, so its BIPIA score is not zero-shot. The 7B judge is the strongest detector on InjecAgent but is anti-correlated with the pair labels: it flags instructions when the query engages them and ignores them under narrow lookup queries, even when they conflict.
 

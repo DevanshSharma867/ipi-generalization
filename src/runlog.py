@@ -98,7 +98,7 @@ def is_frozen(path) -> bool:
 
 def assert_not_frozen(path) -> None:
     if is_frozen(path):
-        raise PermissionError(f"Refusing to write to frozen V2 path: {path} (see CLAUDE.md, tag {FROZEN_TAG})")
+        raise PermissionError(f"Refusing to write to frozen V2 path: {path} (frozen at tag {FROZEN_TAG})")
 
 
 def validate_predictions(df: pd.DataFrame) -> pd.DataFrame:

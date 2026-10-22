@@ -127,5 +127,5 @@ truncated fraction is {{VTwoTruncJudgeQwenTwoFiveSevenbPThreeendtruncated}} and 
   Recall@FPR for the paper comes from `results/v2_std/` via `src/metrics.py`.
 - The V1 audit numbers from the Phase 2 report have no code, data, or results in the repository or its git history.
   They are removed and appear nowhere in this log or in `paper/`.
-- Pairs v0 (`data/pairs/pairs_v0.csv`, 50 pairs) were written by one author on V2 test docs and have not been
+- Pairs v0 (`data/pairs/pairs_v0.csv`, 50 pairs) are LLM-drafted, not human-validated (pilot), on V2 test docs, and have not been
   independently labeled. No pair result is evidence yet, and none is listed here.

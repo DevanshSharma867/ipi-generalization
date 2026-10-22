@@ -9,7 +9,7 @@ Seed mean: point = mean (and SD, ddof=1) of the per-seed metrics; CI = bootstrap
 metric averaged over seeds, with the same document draw applied to every seed.
 
 Groups: main (full V2 train, V2 test), loto_<task> (held-out task test docs), sub496 (size-matched control).
-Writes results/v2_std/deberta_summary.json. V2 DeBERTa numbers are NOT headline results (CLAUDE.md).
+Writes results/v2_std/deberta_summary.json. V2 DeBERTa numbers are NOT headline results.
 
     python scripts/deberta_v2_stats.py
 """
