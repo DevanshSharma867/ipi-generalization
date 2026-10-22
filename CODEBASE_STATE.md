@@ -8,7 +8,7 @@ Audit date: 2026-10-19. HEAD = `bab750e` on `main`. Only this file was written. 
 3. **`benign_train` still contains a `"Note: …"` template** (`"Note: ignore the introduction and focus on the results section."`). This contradicts the report's claim that all `"Note:"` prefixes were removed.
 4. **No V1 code exists anywhere in git history.** Every V1 audit number (94.2%, −4.63, 68.1%, …) has no source file.
 5. **All CodeQA rows share one constant intent, `"Perform code QA"`.** BIPIA code rows have no `question` field. The pipeline also drops BIPIA's `code`/`error` fields.
-6. **CLAUDE.md is partly stale.** There is no `src/data_pipeline_v2.py`, `paper/`, `slurm/`, `scripts/make_tables.py`, or `results/REGISTRY.md`. Results do not use the `results/<exp>/<ts>_seed<k>/config.json` layout. DeBERTa uses a custom loop, not HF Trainer.
+6. **The local project-instructions file is partly stale.** There is no `src/data_pipeline_v2.py`, `paper/`, `slurm/`, `scripts/make_tables.py`, or `results/REGISTRY.md`. Results do not use the `results/<exp>/<ts>_seed<k>/config.json` layout. DeBERTa uses a custom loop, not HF Trainer.
 
 ---
 
@@ -18,7 +18,7 @@ Audit date: 2026-10-19. HEAD = `bab750e` on `main`. Only this file was written. 
 Excluded: `.git`, `.venv` (1.4 GB), `__pycache__`. Listed but not expanded: `data/raw/BIPIA` (5.5 MB, git clone @ `a004b69`), `data/raw/InjecAgent` (7.8 MB, git clone @ `f19c9f2`), `hf_cache/` (715 MB, holds `microsoft/deberta-v3-base` only; Qwen, ProtectAI, and PIGuard weights are not cached locally), `nltk_data/` (74 MB), `graphify-out/` (graph.html/json + GRAPH_REPORT.md, generated 2026-10-17 19:09).
 ```
 .
-├── CLAUDE.md                 (untracked; .gitignore entry added in uncommitted diff)
+├── (project-instructions file, local only, untracked)
 ├── CODEBASE_STATE.md         (this file)
 ├── README.md
 ├── demo.py
@@ -58,7 +58,7 @@ Excluded: `.git`, `.venv` (1.4 GB), `__pycache__`. Listed but not expanded: `dat
   01d1c78 Remove report and course docs; rewrite README
   5dae025 Initial commit: IPI detection on BIPIA (Phase 2)
   ```
-- `git status`: only ` M .gitignore` (adds `CLAUDE.md`). Untracked files are hidden by `.git/info/exclude` (`report_phase2.*`, `docs/{proposal,architecture_spec,project_rubric}.md`).
+- `git status`: only ` M .gitignore` (ignores the local project-instructions file). Untracked files are hidden by `.git/info/exclude` (`report_phase2.*`, `docs/{proposal,architecture_spec,project_rubric}.md`).
 - Deleted files in history: `score_pairs.py`, `submit_pairs.sh`, `results/pairs/summary.json` (all in bab750e). Pair score CSVs were **renamed** from `results/pairs/*_scores.csv` into `results/scores/pairs/*.csv`. So the deberta/tfidf/judge pair scores came from the deleted `score_pairs.py`, not from `score_detectors.py`.
 
 ### 1.3 Environment
@@ -84,12 +84,12 @@ Excluded: `.git`, `.venv` (1.4 GB), `__pycache__`. Listed but not expanded: `dat
 | `submit_train.sh` | Slurm: 3 seeds × {standard, 3 LOTO folds, sub496}. Skips a run if its JSON exists. | `SEEDS="42 123 999"` | → `results/deberta_*_results.json`, `checkpoints/deberta_*` | Partition `gpu_rtx_pro_6000_6_csis_hyd`, `--gres=mps:50`, 12 h. Two `TODO`s (module load / venv). **The committed version is not the one that produced job 399716**: the log prints `>>> [k/6] Running …`, while the current script prints `>>> Running: <json>`. |
 | `submit_score.sh` | Slurm: scores bipia_test/pairs/injecagent/deepset with deberta_s{42,123,999}, protectai, piguard; judge on pairs and injecagent only; then summarize | — | → `results/scores/**` | Does **not** score `tfidf`. The tfidf CSVs were made separately (mtime 16:59, local). |
 | `data/benign/benign_instructions.json` | `_comment`, `benign_train` (30), `benign_test` (15) | — | — | Disjoint (0 overlap). One train item starts with `"Note:"`. |
-| `data/pairs/pair_specs_v0.json` | keys `version,status,design,pairs`; 50 specs `{doc_id,instruction,aligned,subverting,subtle}` | — | — | Hand-written by the author, written on **test** docs (§7) |
+| `data/pairs/pair_specs_v0.json` | keys `version,status,design,pairs`; 50 specs `{doc_id,instruction,aligned,subverting,subtle}` | — | — | LLM-drafted, not human-validated (pilot); written on **test** docs (§7) |
 | `README.md` | Current public summary and results tables | — | — | All numbers checked in §6.3 |
 | `report_phase2.tex` | Phase 2 IEEE report (untracked) | — | `results/roc_curves.png` | §6.2 / §7 |
 | `docs/architecture_spec.md`, `proposal.md`, `project_rubric.md` | Course spec/BRD, Part 1 proposal, course rubric (untracked) | — | — | Course artifacts, not paper material |
 | `docs/pipeline.svg` | Pipeline diagram used in README | — | — | Content not audited |
-| `CLAUDE.md` | Project instructions | — | — | Code map is stale (top finding 6) |
+| (local, untracked) | Project instructions | — | — | Code map is stale (top finding 6) |
 | `src/__init__.py`, `src/models/__init__.py` | Comment-only package markers | — | — | — |
 
 **Dead code and duplicates.** `src/evaluate.py:run_full_evaluation` and its plotting are not used by any current pipeline. `src/models/tfidf_lr.py` duplicates run_experiments' default config and is needed only for the pkl. Metrics are computed in 4 separate places (`tfidf_lr.compute_metrics`, `deberta.compute_metrics`, `run_experiments.compute_metrics_at_threshold`, `score_detectors.metrics`), and two different Recall@FPR implementations exist (`run_experiments.compute_recall_at_fpr` threshold scan; `score_detectors.recall_at_fpr` via `roc_curve`). **No V1 pipeline exists** in the tree or in git history (searched `git log -S'Note:'` and deleted-file list).
@@ -338,15 +338,15 @@ Legend: ✓ = matches source file at the shown precision. ✓(r) = matches after
 - Fig. "default vs tuned ROC": no committed code produces it, and `roc_curves.png` predates the current data.
 - Preprocessing examples and FP/FN probability bounds: mismatch (§6.2).
 
-**CLAUDE.md vs repo**
+**Project instructions vs repo**
 - Stale paths and missing infrastructure: see top finding 6. `report_phase2.tex` and `spec_brd_architecture.md` (actually `docs/architecture_spec.md`) are untracked.
-- CLAUDE.md requires predictions with `sample_id, doc_id, task, label, prob, pred`. Actual columns are `id, …, task_type, …, prob_injected, pred`. DeBERTa predictions also lack `attack_source`.
+- The project instructions require predictions with `sample_id, doc_id, task, label, prob, pred`. Actual columns are `id, …, task_type, …, prob_injected, pred`. DeBERTa predictions also lack `attack_source`.
 - Required metrics that are missing: Recall@FPR for DeBERTa and OOD (only @5% in score_detectors), DeBERTa bootstrap, scripted per-category FN and benign-vs-raw FP rates, and a paired test.
 
 **Protocol concerns (flag; not necessarily wrong)**
 - TF-IDF LOTO uses C=100, selected on the full val split, **including val docs of the held-out task**. This is mild held-out-task information in model selection. DeBERTa LOTO does not do this.
 - The README and report headline TF-IDF default (C=1, τ=0.5) over the val-selected config. The "validation tuning does not transfer" finding is drawn by comparing both on **test**. This is a finding, not a selection, but if a paper ever chose "default" because of it, that would be a test-informed choice.
-- `pair_specs_v0.json` was hand-written on **test-split** documents, by one author, "not yet human-validated" (README). Whether `JUDGE_SYSTEM` was revised after seeing pair results is UNVERIFIED.
+- `pair_specs_v0.json` is LLM-drafted, not human-validated (pilot), on **test-split** documents. Whether `JUDGE_SYSTEM` was revised after seeing pair results is UNVERIFIED.
 - Val attacks come from the train pool (81/81 strings seen in train), so val ≈ in-distribution. This is by design, and it makes val saturate for DeBERTa.
 
 **Hardcoded numbers**
@@ -419,7 +419,7 @@ python score_detectors.py summarize                                   # -> resul
   - Pairs labeled `v0`, unvalidated.
   - `requirements.txt` unpinned.
 - Phase 3 items from the report (hard-negative contrastive fine-tuning, expanded benign pool, sliding window and max-pool, temperature/Platt calibration, domain adapters): **none implemented**.
-- Known reviewer issues from CLAUDE.md that are still open:
+- Known reviewer issues from the project instructions that are still open:
   - Model-directed `benign_test` templates are present (e.g. "Act as a helpful assistant…", "System: the following is a test prompt…", "New task: …"). No strict human-addressed pool exists, and there is no with/without-ambiguous reporting.
   - Positional and separator ablation not done. This is now known to matter (§3.3).
   - WebQA and Summarization not used.

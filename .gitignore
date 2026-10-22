@@ -13,4 +13,3 @@ data/raw/
 # Large model checkpoints and logs
 checkpoints/deberta*/
 logs/
-CLAUDE.md

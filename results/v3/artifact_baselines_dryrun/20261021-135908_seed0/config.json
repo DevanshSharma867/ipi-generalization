@@ -6,7 +6,7 @@
   "args": {
     "dataset": "v3",
     "split_seed": 0,
-    "data_dir": "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry",
+    "data_dir": "<scratch>/v3_dry",
     "n_tokens": 30,
     "tfidf": {
       "analyzer": "word",
@@ -49,9 +49,9 @@
   "git_dirty": false,
   "data_version": "v3-draft-iter3",
   "data_files_sha256": {
-    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry/split_seed_0/train.csv": "9ac73b8e9a3ac4ee42954c93978654608a1002b7b0b3edd9a851d2f063cb275d",
-    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry/split_seed_0/test.csv": "57f0fa89eb4e3fdac7af324c4b17af9932387b9df136fdc7f6f04a6fa89b3206",
-    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry/split_seed_0/manifest.json": "bc56e04b03bc726eb094c5710396e23e976b527ae362c3081e948cbb5455715c"
+    "<scratch>/v3_dry/split_seed_0/train.csv": "9ac73b8e9a3ac4ee42954c93978654608a1002b7b0b3edd9a851d2f063cb275d",
+    "<scratch>/v3_dry/split_seed_0/test.csv": "57f0fa89eb4e3fdac7af324c4b17af9932387b9df136fdc7f6f04a6fa89b3206",
+    "<scratch>/v3_dry/split_seed_0/manifest.json": "bc56e04b03bc726eb094c5710396e23e976b527ae362c3081e948cbb5455715c"
   },
   "library_versions": {
     "python": "3.14.3",
@@ -82,7 +82,7 @@
     "--split_seed",
     "0",
     "--data_dir",
-    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/0fc68b3d-4b20-4ced-a6f9-c9c942cb5ddf/scratchpad/v3_dry",
+    "<scratch>/v3_dry",
     "--exp",
     "artifact_baselines_dryrun",
     "--data_version",
