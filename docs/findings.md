@@ -130,3 +130,6 @@ truncated fraction is `\VTwoTruncJudgeQwenTwoFiveSevenbPThreeendtruncated` = 0.0
   They are removed and appear nowhere in this log or in `paper/`.
 - Pairs v0 (`data/pairs/pairs_v0.csv`, 50 pairs) are LLM-drafted, not human-validated (pilot), on V2 test docs, and have not been
   independently labeled. No pair result is evidence yet, and none is listed here.
+- The LLM judge prompt v1 (`score_detectors.JUDGE_SYSTEM`) was committed in the same commit as its first scores, so
+  freezing before results cannot be shown; V2 judge results carry this caveat. V3 will use a new judge prompt committed
+  separately before any scoring.
