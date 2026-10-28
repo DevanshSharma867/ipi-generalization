@@ -1,0 +1,2301 @@
+{
+  "rows": [
+    {
+      "model": "tfidf_c1",
+      "eval_set": "v2_test",
+      "source": "results/v2_std/v2_test/tfidf_c1.csv",
+      "calibration_source": "results/v2_probes/score_tfidf_c1_v2val/20261028-174301_seed42/predictions.csv",
+      "cluster_col": "doc_id",
+      "n": 288,
+      "n_clean": 144,
+      "n_injected": 144,
+      "n_clusters": 72,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=144)",
+          "n_clean": 144,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=144)",
+          "threshold": 0.5831834943054085
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "threshold": 0.5043612210906835,
+          "tpr": {
+            "point": 0.6180555555555556,
+            "ci": [
+              0.4930555555555556,
+              0.7152777777777778
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "ok",
+          "threshold": 0.5139729408163612,
+          "tpr": {
+            "point": 0.5277777777777778,
+            "ci": [
+              0.4375,
+              0.625
+            ]
+          },
+          "realized_fpr": {
+            "point": 0.020833333333333332,
+            "ci": [
+              0.0,
+              0.05555555555555555
+            ]
+          }
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.8692611882716049,
+          "ci": [
+            0.827484809027778,
+            0.9125687210648148
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.1111111111111111,
+          "ci": [
+            0.04861111111111111,
+            0.18055555555555555
+          ]
+        },
+        "f1_macro": {
+          "point": 0.7713029136888401,
+          "ci": [
+            0.7225180505385753,
+            0.8215789700063086
+          ]
+        }
+      }
+    },
+    {
+      "model": "tfidf_c1",
+      "eval_set": "injecagent",
+      "source": "results/v2_std/injecagent/tfidf.csv",
+      "calibration_source": "results/v2_probes/score_tfidf_c1_v2val/20261028-174301_seed42/predictions.csv",
+      "cluster_col": "id",
+      "n": 1258,
+      "n_clean": 204,
+      "n_injected": 1054,
+      "n_clusters": 1258,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=204)",
+          "n_clean": 204,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=204)",
+          "threshold": 0.5831834943054085
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "threshold": 0.6321264167102959,
+          "tpr": {
+            "point": 0.036053130929791274,
+            "ci": [
+              0.02392116438074995,
+              0.05783582089552239
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "ok",
+          "threshold": 0.5139729408163612,
+          "tpr": {
+            "point": 0.43833017077798864,
+            "ci": [
+              0.4075462839932678,
+              0.46515036322578585
+            ]
+          },
+          "realized_fpr": {
+            "point": 0.4068627450980392,
+            "ci": [
+              0.33887820512820516,
+              0.4776174545989265
+            ]
+          }
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.5023254083417048,
+          "ci": [
+            0.4556557999549955,
+            0.5482664627342876
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.5196078431372549,
+          "ci": [
+            0.449994019138756,
+            0.5924307556741051
+          ]
+        },
+        "f1_macro": {
+          "point": 0.43664774608989143,
+          "ci": [
+            0.40862183490668674,
+            0.4646820837897084
+          ]
+        }
+      }
+    },
+    {
+      "model": "tfidf_c1",
+      "eval_set": "deepset",
+      "source": "results/v2_std/deepset/tfidf.csv",
+      "calibration_source": "results/v2_probes/score_tfidf_c1_v2val/20261028-174301_seed42/predictions.csv",
+      "cluster_col": "id",
+      "n": 116,
+      "n_clean": 56,
+      "n_injected": 60,
+      "n_clusters": 116,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=56)",
+          "threshold": 0.5831834943054085
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=56)",
+          "threshold": 0.5139729408163612
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.5653273809523809,
+          "ci": [
+            0.4561022854444988,
+            0.6762448733101034
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.07142857142857142,
+          "ci": [
+            0.015625,
+            0.14285714285714285
+          ]
+        },
+        "f1_macro": {
+          "point": 0.6008003201280512,
+          "ci": [
+            0.5095934959349593,
+            0.6836365423329017
+          ]
+        }
+      }
+    },
+    {
+      "model": "tfidf_c100_tuned",
+      "eval_set": "v2_test",
+      "source": "results/v2_std/v2_test/tfidf_c100_tuned.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 288,
+      "n_clean": 144,
+      "n_injected": 144,
+      "n_clusters": 72,
+      "default_threshold": 0.71,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=144)",
+          "n_clean": 144,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "threshold": 0.7057523364975886,
+          "tpr": {
+            "point": 0.5486111111111112,
+            "ci": [
+              0.4513888888888889,
+              0.7430555555555556
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.8756751543209877,
+          "ci": [
+            0.8389262635030864,
+            0.914162567515432
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.034722222222222224,
+          "ci": [
+            0.006944444444444444,
+            0.0763888888888889
+          ]
+        },
+        "f1_macro": {
+          "point": 0.7418931370940257,
+          "ci": [
+            0.6883468278801991,
+            0.7912740289986601
+          ]
+        }
+      }
+    },
+    {
+      "model": "tfidf_c100_loto",
+      "eval_set": "v2_loto_test_email",
+      "source": "results/v2_std/v2_loto_test_email/tfidf_c100_loto.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 48,
+      "n_clean": 24,
+      "n_injected": 24,
+      "n_clusters": 12,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=24)",
+          "n_clean": 24,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 24,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=24)",
+          "n_clean": 24,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 24,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.7395833333333334,
+          "ci": [
+            0.6527343749999999,
+            0.857638888888889
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.9166666666666666,
+          "ci": [
+            0.75,
+            1.0
+          ]
+        },
+        "f1_macro": {
+          "point": 0.4197802197802198,
+          "ci": [
+            0.3333333333333333,
+            0.5636363636363637
+          ]
+        }
+      }
+    },
+    {
+      "model": "tfidf_c100_loto",
+      "eval_set": "v2_loto_test_table",
+      "source": "results/v2_std/v2_loto_test_table/tfidf_c100_loto.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 180,
+      "n_clean": 90,
+      "n_injected": 90,
+      "n_clusters": 45,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=90)",
+          "n_clean": 90,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 90,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=90)",
+          "n_clean": 90,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 90,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.7978395061728395,
+          "ci": [
+            0.7429598765432098,
+            0.8548827160493827
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.2222222222222222,
+          "ci": [
+            0.12222222222222222,
+            0.3333333333333333
+          ]
+        },
+        "f1_macro": {
+          "point": 0.6804833234717076,
+          "ci": [
+            0.611345450219486,
+            0.7465660888563114
+          ]
+        }
+      }
+    },
+    {
+      "model": "tfidf_c100_loto",
+      "eval_set": "v2_loto_test_code",
+      "source": "results/v2_std/v2_loto_test_code/tfidf_c100_loto.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 60,
+      "n_clean": 30,
+      "n_injected": 30,
+      "n_clusters": 15,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=30)",
+          "n_clean": 30,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 30,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=30)",
+          "n_clean": 30,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 30,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.5311111111111111,
+          "ci": [
+            0.42766666666666664,
+            0.6278333333333332
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.8666666666666667,
+          "ci": [
+            0.6666666666666666,
+            1.0
+          ]
+        },
+        "f1_macro": {
+          "point": 0.41120607787274455,
+          "ci": [
+            0.3103448275862069,
+            0.5100153002021457
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_s42",
+      "eval_set": "v2_test",
+      "source": "results/v2_std/v2_test/deberta_s42.csv",
+      "calibration_source": "results/v2_std/v2_val/deberta_s42.csv",
+      "cluster_col": "doc_id",
+      "n": 288,
+      "n_clean": 144,
+      "n_injected": 144,
+      "n_clusters": 72,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=144)",
+          "n_clean": 144,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=144)",
+          "threshold": 0.004697665000000001
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "threshold": 0.012280705,
+          "tpr": {
+            "point": 0.9513888888888888,
+            "ci": [
+              0.9027777777777778,
+              0.9793402777777775
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "ok",
+          "threshold": 0.003949799600000001,
+          "tpr": {
+            "point": 0.9652777777777778,
+            "ci": [
+              0.9305555555555556,
+              0.9930555555555556
+            ]
+          },
+          "realized_fpr": {
+            "point": 0.11805555555555555,
+            "ci": [
+              0.05555555555555555,
+              0.1875
+            ]
+          }
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.9782503858024691,
+          "ci": [
+            0.9597306616512346,
+            0.9932050540123457
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.027777777777777776,
+          "ci": [
+            0.006944444444444444,
+            0.05555555555555555
+          ]
+        },
+        "f1_macro": {
+          "point": 0.9513677811550152,
+          "ci": [
+            0.9269344608879493,
+            0.9756871163424548
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_s42",
+      "eval_set": "injecagent",
+      "source": "results/v2_std/injecagent/deberta_s42.csv",
+      "calibration_source": "results/v2_std/v2_val/deberta_s42.csv",
+      "cluster_col": "id",
+      "n": 1258,
+      "n_clean": 204,
+      "n_injected": 1054,
+      "n_clusters": 1258,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=204)",
+          "n_clean": 204,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=204)",
+          "threshold": 0.004697665000000001
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "threshold": 0.006105126813054,
+          "tpr": {
+            "point": 0.3719165085388994,
+            "ci": [
+              0.2562700909941321,
+              0.42858178053830226
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "ok",
+          "threshold": 0.003949799600000001,
+          "tpr": {
+            "point": 0.5569259962049335,
+            "ci": [
+              0.5265067319461444,
+              0.5875728348744169
+            ]
+          },
+          "realized_fpr": {
+            "point": 0.23529411764705882,
+            "ci": [
+              0.17857142857142858,
+              0.299076094691399
+            ]
+          }
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.675549726531979,
+          "ci": [
+            0.6445499907745766,
+            0.7085729777619394
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ]
+        },
+        "f1_macro": {
+          "point": 0.23643484833446582,
+          "ci": [
+            0.21270145223936274,
+            0.26136431438885577
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_s42",
+      "eval_set": "deepset",
+      "source": "results/v2_std/deepset/deberta_s42.csv",
+      "calibration_source": "results/v2_std/v2_val/deberta_s42.csv",
+      "cluster_col": "id",
+      "n": 116,
+      "n_clean": 56,
+      "n_injected": 60,
+      "n_clusters": 116,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=56)",
+          "threshold": 0.004697665000000001
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=56)",
+          "threshold": 0.003949799600000001
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.45922619047619045,
+          "ci": [
+            0.3348066880053908,
+            0.5735032514840223
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.03571428571428571,
+          "ci": [
+            0.0,
+            0.09263626834381547
+          ]
+        },
+        "f1_macro": {
+          "point": 0.5681310498883098,
+          "ci": [
+            0.47763975155279503,
+            0.6576420160455486
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_loto_s42",
+      "eval_set": "v2_loto_test_email",
+      "source": "results/v2_std/v2_loto_test_email/deberta_loto_s42.csv",
+      "calibration_source": "results/v2_std/v2_loto_val_email/deberta_loto_s42.csv",
+      "cluster_col": "doc_id",
+      "n": 48,
+      "n_clean": 24,
+      "n_injected": 24,
+      "n_clusters": 12,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=24)",
+          "n_clean": 24,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 24,
+          "target_fpr": 0.01,
+          "n_clean_calib": 120,
+          "status": "n/a (n_clean=24)",
+          "threshold": 0.028214987000000004
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=24)",
+          "n_clean": 24,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 24,
+          "target_fpr": 0.05,
+          "n_clean_calib": 120,
+          "status": "n/a (n_clean=24)",
+          "threshold": 0.020620871000000002
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.9774305555555556,
+          "ci": [
+            0.951388888888889,
+            1.0
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.041666666666666664,
+          "ci": [
+            0.0,
+            0.125
+          ]
+        },
+        "f1_macro": {
+          "point": 0.8306878306878307,
+          "ci": [
+            0.7386569872958257,
+            0.9165217391304348
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_loto_s42",
+      "eval_set": "v2_loto_test_table",
+      "source": "results/v2_std/v2_loto_test_table/deberta_loto_s42.csv",
+      "calibration_source": "results/v2_std/v2_loto_val_table/deberta_loto_s42.csv",
+      "cluster_col": "doc_id",
+      "n": 180,
+      "n_clean": 90,
+      "n_injected": 90,
+      "n_clusters": 45,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=90)",
+          "n_clean": 90,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 90,
+          "target_fpr": 0.01,
+          "n_clean_calib": 54,
+          "status": "n/a (n_clean=90)",
+          "threshold": 0.5766386000000001
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=90)",
+          "n_clean": 90,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 90,
+          "target_fpr": 0.05,
+          "n_clean_calib": 54,
+          "status": "n/a (n_clean=90)",
+          "threshold": 0.5163949000000001
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.6150617283950617,
+          "ci": [
+            0.5888765432098765,
+            0.6561790123456791
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.37777777777777777,
+          "ci": [
+            0.2663888888888889,
+            0.5111111111111111
+          ]
+        },
+        "f1_macro": {
+          "point": 0.571150097465887,
+          "ci": [
+            0.5235242997982259,
+            0.616675964150128
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_loto_s42",
+      "eval_set": "v2_loto_test_code",
+      "source": "results/v2_std/v2_loto_test_code/deberta_loto_s42.csv",
+      "calibration_source": "results/v2_std/v2_loto_val_code/deberta_loto_s42.csv",
+      "cluster_col": "doc_id",
+      "n": 60,
+      "n_clean": 30,
+      "n_injected": 30,
+      "n_clusters": 15,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=30)",
+          "n_clean": 30,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 30,
+          "target_fpr": 0.01,
+          "n_clean_calib": 114,
+          "status": "n/a (n_clean=30)",
+          "threshold": 0.009853695000000003
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=30)",
+          "n_clean": 30,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 30,
+          "target_fpr": 0.05,
+          "n_clean_calib": 114,
+          "status": "n/a (n_clean=30)",
+          "threshold": 0.004766491700000001
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.8655555555555554,
+          "ci": [
+            0.7888611111111111,
+            0.9444722222222222
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.1,
+          "ci": [
+            0.0,
+            0.26666666666666666
+          ]
+        },
+        "f1_macro": {
+          "point": 0.7442455242966752,
+          "ci": [
+            0.6571066143159167,
+            0.8162173981772993
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_s123",
+      "eval_set": "v2_test",
+      "source": "results/v2_std/v2_test/deberta_s123.csv",
+      "calibration_source": "results/v2_std/v2_val/deberta_s123.csv",
+      "cluster_col": "doc_id",
+      "n": 288,
+      "n_clean": 144,
+      "n_injected": 144,
+      "n_clusters": 72,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=144)",
+          "n_clean": 144,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=144)",
+          "threshold": 0.007453556600000001
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "threshold": 0.11071279,
+          "tpr": {
+            "point": 0.9652777777777778,
+            "ci": [
+              0.9303819444444444,
+              0.9930555555555556
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "ok",
+          "threshold": 0.0036634686000000002,
+          "tpr": {
+            "point": 0.9722222222222222,
+            "ci": [
+              0.9444444444444444,
+              0.9930555555555556
+            ]
+          },
+          "realized_fpr": {
+            "point": 0.09027777777777778,
+            "ci": [
+              0.04861111111111111,
+              0.1388888888888889
+            ]
+          }
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.9829764660493827,
+          "ci": [
+            0.9671103395061729,
+            0.9959502797067901
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.034722222222222224,
+          "ci": [
+            0.006944444444444444,
+            0.06944444444444445
+          ]
+        },
+        "f1_macro": {
+          "point": 0.9583313238485652,
+          "ci": [
+            0.9373071962987678,
+            0.9826336545303247
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_s123",
+      "eval_set": "injecagent",
+      "source": "results/v2_std/injecagent/deberta_s123.csv",
+      "calibration_source": "results/v2_std/v2_val/deberta_s123.csv",
+      "cluster_col": "id",
+      "n": 1258,
+      "n_clean": 204,
+      "n_injected": 1054,
+      "n_clusters": 1258,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=204)",
+          "n_clean": 204,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=204)",
+          "threshold": 0.007453556600000001
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "threshold": 0.0082225855439901,
+          "tpr": {
+            "point": 0.24193548387096775,
+            "ci": [
+              0.199225913666088,
+              0.3118063708857987
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "ok",
+          "threshold": 0.0036634686000000002,
+          "tpr": {
+            "point": 0.38235294117647056,
+            "ci": [
+              0.35365602617259384,
+              0.4132964064484721
+            ]
+          },
+          "realized_fpr": {
+            "point": 0.20588235294117646,
+            "ci": [
+              0.15315085493656921,
+              0.26668316831683164
+            ]
+          }
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.5851285485731295,
+          "ci": [
+            0.5492019392434312,
+            0.6225815412187412
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.004901960784313725,
+          "ci": [
+            0.0,
+            0.01570887296775971
+          ]
+        },
+        "f1_macro": {
+          "point": 0.27168085537650755,
+          "ci": [
+            0.24846003558965532,
+            0.2965868360542372
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_s123",
+      "eval_set": "deepset",
+      "source": "results/v2_std/deepset/deberta_s123.csv",
+      "calibration_source": "results/v2_std/v2_val/deberta_s123.csv",
+      "cluster_col": "id",
+      "n": 116,
+      "n_clean": 56,
+      "n_injected": 60,
+      "n_clusters": 116,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=56)",
+          "threshold": 0.007453556600000001
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=56)",
+          "threshold": 0.0036634686000000002
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.5586309523809524,
+          "ci": [
+            0.4457936552185549,
+            0.6672878762353998
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.08928571428571429,
+          "ci": [
+            0.0196078431372549,
+            0.1698213568847852
+          ]
+        },
+        "f1_macro": {
+          "point": 0.6474164133738602,
+          "ci": [
+            0.5533904297949241,
+            0.7334944472191861
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_loto_s123",
+      "eval_set": "v2_loto_test_email",
+      "source": "results/v2_std/v2_loto_test_email/deberta_loto_s123.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 48,
+      "n_clean": 24,
+      "n_injected": 24,
+      "n_clusters": 12,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=24)",
+          "n_clean": 24,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 24,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=24)",
+          "n_clean": 24,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 24,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.9097222222222222,
+          "ci": [
+            0.8333333333333334,
+            0.984375
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.5416666666666666,
+          "ci": [
+            0.25,
+            0.7916666666666666
+          ]
+        },
+        "f1_macro": {
+          "point": 0.6888888888888889,
+          "ci": [
+            0.5151515151515151,
+            0.8321678321678322
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_loto_s123",
+      "eval_set": "v2_loto_test_table",
+      "source": "results/v2_std/v2_loto_test_table/deberta_loto_s123.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 180,
+      "n_clean": 90,
+      "n_injected": 90,
+      "n_clusters": 45,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=90)",
+          "n_clean": 90,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 90,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=90)",
+          "n_clean": 90,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 90,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.6797530864197532,
+          "ci": [
+            0.6450555555555555,
+            0.7305308641975308
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.24444444444444444,
+          "ci": [
+            0.14444444444444443,
+            0.35555555555555557
+          ]
+        },
+        "f1_macro": {
+          "point": 0.6339059419881723,
+          "ci": [
+            0.5765254602366593,
+            0.6882846832566354
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_loto_s123",
+      "eval_set": "v2_loto_test_code",
+      "source": "results/v2_std/v2_loto_test_code/deberta_loto_s123.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 60,
+      "n_clean": 30,
+      "n_injected": 30,
+      "n_clusters": 15,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=30)",
+          "n_clean": 30,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 30,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=30)",
+          "n_clean": 30,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 30,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.8333333333333334,
+          "ci": [
+            0.7488611111111111,
+            0.9155555555555556
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.03333333333333333,
+          "ci": [
+            0.0,
+            0.10083333333333258
+          ]
+        },
+        "f1_macro": {
+          "point": 0.7757976430008624,
+          "ci": [
+            0.6703296703296704,
+            0.8657299551413881
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_s999",
+      "eval_set": "v2_test",
+      "source": "results/v2_std/v2_test/deberta_s999.csv",
+      "calibration_source": "results/v2_std/v2_val/deberta_s999.csv",
+      "cluster_col": "doc_id",
+      "n": 288,
+      "n_clean": 144,
+      "n_injected": 144,
+      "n_clusters": 72,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=144)",
+          "n_clean": 144,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=144)",
+          "threshold": 0.045239497000000004
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "threshold": 0.9957612,
+          "tpr": {
+            "point": 0.8680555555555556,
+            "ci": [
+              0.4859375,
+              0.9791666666666666
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "ok",
+          "threshold": 0.014473243000000002,
+          "tpr": {
+            "point": 0.9861111111111112,
+            "ci": [
+              0.9652777777777778,
+              1.0
+            ]
+          },
+          "realized_fpr": {
+            "point": 0.18055555555555555,
+            "ci": [
+              0.11805555555555555,
+              0.2569444444444444
+            ]
+          }
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.9633005401234568,
+          "ci": [
+            0.9352201485339506,
+            0.9846691743827161
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.09027777777777778,
+          "ci": [
+            0.04861111111111111,
+            0.1388888888888889
+          ]
+        },
+        "f1_macro": {
+          "point": 0.9374517374517375,
+          "ci": [
+            0.9062217344637538,
+            0.9652509652509653
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_s999",
+      "eval_set": "injecagent",
+      "source": "results/v2_std/injecagent/deberta_s999.csv",
+      "calibration_source": "results/v2_std/v2_val/deberta_s999.csv",
+      "cluster_col": "id",
+      "n": 1258,
+      "n_clean": 204,
+      "n_injected": 1054,
+      "n_clusters": 1258,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=204)",
+          "n_clean": 204,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=204)",
+          "threshold": 0.045239497000000004
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "threshold": 0.0445470139384269,
+          "tpr": {
+            "point": 0.07969639468690702,
+            "ci": [
+              0.031043302923567204,
+              0.12406080379733148
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "ok",
+          "threshold": 0.014473243000000002,
+          "tpr": {
+            "point": 0.2314990512333966,
+            "ci": [
+              0.20692883895131087,
+              0.2589460482116534
+            ]
+          },
+          "realized_fpr": {
+            "point": 0.16176470588235295,
+            "ci": [
+              0.11362796686072547,
+              0.21395592132793972
+            ]
+          }
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.5564516129032258,
+          "ci": [
+            0.515577408817432,
+            0.60025539011711
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.004901960784313725,
+          "ci": [
+            0.0,
+            0.015793673012318026
+          ]
+        },
+        "f1_macro": {
+          "point": 0.14620619267065074,
+          "ci": [
+            0.1300377564760551,
+            0.16329835801291437
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_s999",
+      "eval_set": "deepset",
+      "source": "results/v2_std/deepset/deberta_s999.csv",
+      "calibration_source": "results/v2_std/v2_val/deberta_s999.csv",
+      "cluster_col": "id",
+      "n": 116,
+      "n_clean": 56,
+      "n_injected": 60,
+      "n_clusters": 116,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.01,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=56)",
+          "threshold": 0.045239497000000004
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.05,
+          "n_clean_calib": 144,
+          "status": "n/a (n_clean=56)",
+          "threshold": 0.014473243000000002
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.7431547619047619,
+          "ci": [
+            0.6460003851872806,
+            0.8320080862533692
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.17857142857142858,
+          "ci": [
+            0.08329918032786884,
+            0.2777777777777778
+          ]
+        },
+        "f1_macro": {
+          "point": 0.7137943925233645,
+          "ci": [
+            0.6285814825097747,
+            0.7900957698955196
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_loto_s999",
+      "eval_set": "v2_loto_test_email",
+      "source": "results/v2_std/v2_loto_test_email/deberta_loto_s999.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 48,
+      "n_clean": 24,
+      "n_injected": 24,
+      "n_clusters": 12,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=24)",
+          "n_clean": 24,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 24,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=24)",
+          "n_clean": 24,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 24,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.9791666666666666,
+          "ci": [
+            0.9478732638888888,
+            1.0
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.041666666666666664,
+          "ci": [
+            0.0,
+            0.125
+          ]
+        },
+        "f1_macro": {
+          "point": 0.8954248366013071,
+          "ci": [
+            0.8285714285714285,
+            0.9583333333333334
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_loto_s999",
+      "eval_set": "v2_loto_test_table",
+      "source": "results/v2_std/v2_loto_test_table/deberta_loto_s999.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 180,
+      "n_clean": 90,
+      "n_injected": 90,
+      "n_clusters": 45,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=90)",
+          "n_clean": 90,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 90,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=90)",
+          "n_clean": 90,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 90,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.7140740740740741,
+          "ci": [
+            0.6765185185185185,
+            0.7699012345679012
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.1111111111111111,
+          "ci": [
+            0.03333333333333333,
+            0.2111111111111111
+          ]
+        },
+        "f1_macro": {
+          "point": 0.49161407301509813,
+          "ci": [
+            0.43209134615384615,
+            0.5417667325661716
+          ]
+        }
+      }
+    },
+    {
+      "model": "deberta_loto_s999",
+      "eval_set": "v2_loto_test_code",
+      "source": "results/v2_std/v2_loto_test_code/deberta_loto_s999.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 60,
+      "n_clean": 30,
+      "n_injected": 30,
+      "n_clusters": 15,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=30)",
+          "n_clean": 30,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 30,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=30)",
+          "n_clean": 30,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 30,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.8033333333333333,
+          "ci": [
+            0.7233055555555556,
+            0.8822222222222222
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.13333333333333333,
+          "ci": [
+            0.03333333333333333,
+            0.3
+          ]
+        },
+        "f1_macro": {
+          "point": 0.6327601282424948,
+          "ci": [
+            0.5125,
+            0.7413784864833869
+          ]
+        }
+      }
+    },
+    {
+      "model": "protectai",
+      "eval_set": "v2_test",
+      "source": "results/v2_std/v2_test/protectai.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 288,
+      "n_clean": 144,
+      "n_injected": 144,
+      "n_clusters": 72,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=144)",
+          "n_clean": 144,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "threshold": 0.9993894100189208,
+          "tpr": {
+            "point": 0.041666666666666664,
+            "ci": [
+              0.013888888888888888,
+              0.0625
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.38797260802469136,
+          "ci": [
+            0.343212287808642,
+            0.4315791377314815
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.1875,
+          "ci": [
+            0.11805555555555555,
+            0.2638888888888889
+          ]
+        },
+        "f1_macro": {
+          "point": 0.3691215616681455,
+          "ci": [
+            0.3329746515178382,
+            0.40453446277191685
+          ]
+        }
+      }
+    },
+    {
+      "model": "protectai",
+      "eval_set": "injecagent",
+      "source": "results/v2_std/injecagent/protectai.csv",
+      "calibration_source": null,
+      "cluster_col": "id",
+      "n": 1258,
+      "n_clean": 204,
+      "n_injected": 1054,
+      "n_clusters": 1258,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=204)",
+          "n_clean": 204,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "threshold": 0.9924913048744202,
+          "tpr": {
+            "point": 0.21537001897533206,
+            "ci": [
+              0.18172865421002837,
+              0.27153830084433966
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.6283811437288388,
+          "ci": [
+            0.5883958716187544,
+            0.6678492148058679
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.47058823529411764,
+          "ci": [
+            0.39783313234850765,
+            0.5410975526387749
+          ]
+        },
+        "f1_macro": {
+          "point": 0.5273017302945735,
+          "ci": [
+            0.49737688552498777,
+            0.5566919044080995
+          ]
+        }
+      }
+    },
+    {
+      "model": "protectai",
+      "eval_set": "deepset",
+      "source": "results/v2_std/deepset/protectai.csv",
+      "calibration_source": null,
+      "cluster_col": "id",
+      "n": 116,
+      "n_clean": 56,
+      "n_injected": 60,
+      "n_clusters": 116,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.9014880952380953,
+          "ci": [
+            0.8396956035767511,
+            0.9473114149442748
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ]
+        },
+        "f1_macro": {
+          "point": 0.6416260162601626,
+          "ci": [
+            0.5520687764108817,
+            0.7220570173145945
+          ]
+        }
+      }
+    },
+    {
+      "model": "piguard",
+      "eval_set": "v2_test",
+      "source": "results/v2_std/v2_test/piguard.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 288,
+      "n_clean": 144,
+      "n_injected": 144,
+      "n_clusters": 72,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=144)",
+          "n_clean": 144,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "threshold": 0.999745786190033,
+          "tpr": {
+            "point": 0.5625,
+            "ci": [
+              0.4097222222222222,
+              0.7361111111111112
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.888647762345679,
+          "ci": [
+            0.8542100694444444,
+            0.9207175925925926
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.375,
+          "ci": [
+            0.3194444444444444,
+            0.4305555555555556
+          ]
+        },
+        "f1_macro": {
+          "point": 0.7691596275972625,
+          "ci": [
+            0.7311468791756759,
+            0.8098575155814423
+          ]
+        }
+      }
+    },
+    {
+      "model": "piguard",
+      "eval_set": "injecagent",
+      "source": "results/v2_std/injecagent/piguard.csv",
+      "calibration_source": null,
+      "cluster_col": "id",
+      "n": 1258,
+      "n_clean": 204,
+      "n_injected": 1054,
+      "n_clusters": 1258,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=204)",
+          "n_clean": 204,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "threshold": 0.9991508722305298,
+          "tpr": {
+            "point": 0.08918406072106262,
+            "ci": [
+              0.04449116853713494,
+              0.1267027151611562
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.591504818246084,
+          "ci": [
+            0.5478702831322152,
+            0.6349024515076859
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.36764705882352944,
+          "ci": [
+            0.3024361883153715,
+            0.4359090909090909
+          ]
+        },
+        "f1_macro": {
+          "point": 0.4664779581911185,
+          "ci": [
+            0.43866135036179654,
+            0.4940009331733259
+          ]
+        }
+      }
+    },
+    {
+      "model": "piguard",
+      "eval_set": "deepset",
+      "source": "results/v2_std/deepset/piguard.csv",
+      "calibration_source": null,
+      "cluster_col": "id",
+      "n": 116,
+      "n_clean": 56,
+      "n_injected": 60,
+      "n_clusters": 116,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "n/a (n_clean=56)",
+          "n_clean": 56,
+          "target_fpr": 0.05
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 56,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.9595238095238093,
+          "ci": [
+            0.912272426348891,
+            0.9930563902243589
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ]
+        },
+        "f1_macro": {
+          "point": 0.8242424242424242,
+          "ci": [
+            0.7498326764334052,
+            0.8878560273666989
+          ]
+        }
+      }
+    },
+    {
+      "model": "judge_qwen2.5_7b",
+      "eval_set": "v2_test",
+      "source": "results/v2_probes/score_judge_qwen2.5_7b/20261021-123213_seed42/predictions.csv",
+      "calibration_source": null,
+      "cluster_col": "doc_id",
+      "n": 288,
+      "n_clean": 144,
+      "n_injected": 144,
+      "n_clusters": 72,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=144)",
+          "n_clean": 144,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "threshold": 0.9820137619972228,
+          "tpr": {
+            "point": 0.0763888888888889,
+            "ci": [
+              0.027777777777777776,
+              0.18055555555555555
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 144,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.570529513888889,
+          "ci": [
+            0.5136869454089507,
+            0.6261881510416666
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.2986111111111111,
+          "ci": [
+            0.2152777777777778,
+            0.3888888888888889
+          ]
+        },
+        "f1_macro": {
+          "point": 0.5046859421734795,
+          "ci": [
+            0.45579082819324707,
+            0.5555682628080818
+          ]
+        }
+      }
+    },
+    {
+      "model": "judge_qwen2.5_7b",
+      "eval_set": "injecagent",
+      "source": "results/v2_std/injecagent/judge_qwen2.5_7b.csv",
+      "calibration_source": null,
+      "cluster_col": "id",
+      "n": 1258,
+      "n_clean": 204,
+      "n_injected": 1054,
+      "n_clusters": 1258,
+      "default_threshold": 0.5,
+      "tpr": {
+        "oracle@1pct_fpr": {
+          "status": "n/a (n_clean=204)",
+          "n_clean": 204,
+          "target_fpr": 0.01
+        },
+        "calibrated@1pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.01,
+          "status": "n/a (no calibration scores)"
+        },
+        "oracle@5pct_fpr": {
+          "status": "ok",
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "threshold": 0.985936403274536,
+          "tpr": {
+            "point": 0.4971537001897533,
+            "ci": [
+              0.3063591312395947,
+              0.6143790849673203
+            ]
+          }
+        },
+        "calibrated@5pct_fpr": {
+          "n_clean": 204,
+          "target_fpr": 0.05,
+          "status": "n/a (no calibration scores)"
+        }
+      },
+      "bootstrap": {
+        "roc_auc": {
+          "point": 0.8547480187520928,
+          "ci": [
+            0.828093475988129,
+            0.882816691007366
+          ]
+        },
+        "fpr_default_clean": {
+          "point": 0.2107843137254902,
+          "ci": [
+            0.15714098728496634,
+            0.2657333636846498
+          ]
+        },
+        "f1_macro": {
+          "point": 0.6618959133937513,
+          "ci": [
+            0.6325234166726111,
+            0.6926804341450983
+          ]
+        }
+      }
+    }
+  ],
+  "seed_summary": {
+    "deberta/deepset": {
+      "roc_auc": {
+        "mean": 0.5870039682539683,
+        "sd": 0.14407508265021113,
+        "n_seeds": 3
+      },
+      "fpr_default_clean": {
+        "mean": 0.1011904761904762,
+        "sd": 0.07216878364870323,
+        "n_seeds": 3
+      },
+      "f1_macro": {
+        "mean": 0.6431139519285115,
+        "sd": 0.07292692045994316,
+        "n_seeds": 3
+      }
+    },
+    "deberta/injecagent": {
+      "roc_auc": {
+        "mean": 0.6057099626694448,
+        "sd": 0.0621593606959954,
+        "n_seeds": 3
+      },
+      "fpr_default_clean": {
+        "mean": 0.0032679738562091504,
+        "sd": 0.0028301483783805185,
+        "n_seeds": 3
+      },
+      "f1_macro": {
+        "mean": 0.2181072987938747,
+        "sd": 0.06471396332638922,
+        "n_seeds": 3
+      },
+      "tpr_oracle@5pct_fpr": {
+        "mean": 0.23118279569892472,
+        "sd": 0.14640650245843503,
+        "n_seeds": 3
+      },
+      "tpr_calibrated@5pct_fpr": {
+        "mean": 0.39025932953826686,
+        "sd": 0.16285747560696315,
+        "n_seeds": 3
+      }
+    },
+    "deberta/v2_test": {
+      "roc_auc": {
+        "mean": 0.9748424639917695,
+        "sd": 0.010271122799456375,
+        "n_seeds": 3
+      },
+      "fpr_default_clean": {
+        "mean": 0.05092592592592593,
+        "sd": 0.03425613098830727,
+        "n_seeds": 3
+      },
+      "f1_macro": {
+        "mean": 0.9490502808184393,
+        "sd": 0.010630963638502888,
+        "n_seeds": 3
+      },
+      "tpr_oracle@5pct_fpr": {
+        "mean": 0.9282407407407408,
+        "sd": 0.052582484683335845,
+        "n_seeds": 3
+      },
+      "tpr_calibrated@5pct_fpr": {
+        "mean": 0.9745370370370371,
+        "sd": 0.010607814108694097,
+        "n_seeds": 3
+      }
+    },
+    "deberta_loto/v2_loto_test_code": {
+      "roc_auc": {
+        "mean": 0.8340740740740741,
+        "sd": 0.031117724164881358,
+        "n_seeds": 3
+      },
+      "fpr_default_clean": {
+        "mean": 0.08888888888888889,
+        "sd": 0.05091750772173156,
+        "n_seeds": 3
+      },
+      "f1_macro": {
+        "mean": 0.7176010985133442,
+        "sd": 0.07514903010721517,
+        "n_seeds": 3
+      }
+    },
+    "deberta_loto/v2_loto_test_email": {
+      "roc_auc": {
+        "mean": 0.9554398148148148,
+        "sd": 0.03960211136788339,
+        "n_seeds": 3
+      },
+      "fpr_default_clean": {
+        "mean": 0.2083333333333333,
+        "sd": 0.28867513459481287,
+        "n_seeds": 3
+      },
+      "f1_macro": {
+        "mean": 0.8050005187260089,
+        "sd": 0.10563689185712846,
+        "n_seeds": 3
+      }
+    },
+    "deberta_loto/v2_loto_test_table": {
+      "roc_auc": {
+        "mean": 0.6696296296296297,
+        "sd": 0.05027647991109944,
+        "n_seeds": 3
+      },
+      "fpr_default_clean": {
+        "mean": 0.24444444444444446,
+        "sd": 0.13333333333333333,
+        "n_seeds": 3
+      },
+      "f1_macro": {
+        "mean": 0.5655567041563858,
+        "sd": 0.0713106480863742,
+        "n_seeds": 3
+      }
+    }
+  }
+}

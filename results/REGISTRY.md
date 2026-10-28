@@ -37,3 +37,5 @@ see CODEBASE_STATE.md §6.
 | 2026-10-21 | v3 | artifact_baselines_dryrun5 | 20261021-172655_seed0 | 16f2119 | v3-draft-r2-iter3 | position_oracle_f1_macro=0.4610 | results/v3/artifact_baselines_dryrun5/20261021-172655_seed0 |
 | 2026-10-21 | v3 | benign_draft_check | 20261021-180853_seed0 | 4a2ad98-dirty | v3-draft |  | results/v3/benign_draft_check/20261021-180853_seed0 |
 | 2026-10-21 | v3 | artifact_baselines_dryrun5 | 20261021-181748_seed0 | 4a2ad98-dirty | v3-draft-r3 | position_oracle_f1_macro=0.4610 | results/v3/artifact_baselines_dryrun5/20261021-181748_seed0 |
+| 2026-10-28 | v2_probes | score_tfidf_c1_v2val | 20261028-174301_seed42 | c80a037 | v2_probes |  | results/v2_probes/score_tfidf_c1_v2val/20261028-174301_seed42 |
+| 2026-10-28 | v2_metrics | tpr_protocols | 20261028-174311_seed42 | c80a037 | v2-frozen |  | results/v2_metrics/tpr_protocols/20261028-174311_seed42 |
