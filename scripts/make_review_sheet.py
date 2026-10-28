@@ -2,8 +2,16 @@
 make_review_sheet.py
 ====================
 Review sheet for the draft benign pool: data/benign/review_sheet.csv and an offline review page
-data/benign/review.html (mark keep/edit/drop, edit inline, export CSV; no server, no network).
-scripts/apply_review.py turns the exported CSV into data/benign/benign_v3.json.
+data/benign/review.html (mark keep/edit/drop, edit inline, export CSV; no server, no network), plus the
+hand-review sheet review/benign_pool_review.csv (benign pool + ambiguous slice, one row per item):
+
+  split           train_val | test (benign pool) or eval_only (ambiguous slice)
+  proposed_label  benign (human-addressed; label 0 when inserted) or ambiguous (model-directed; eval-only slice)
+  reviewer_label  fill in: benign | ambiguous | drop  (an empty cell = not reviewed)
+  reviewer_note   free text
+  text            edit in place to change an item; apply_review.py records it as an edit
+
+scripts/apply_review.py turns either exported CSV into data/benign/benign_v3.json.
 
     python scripts/make_review_sheet.py [--draft data/benign/benign_v3_draft.json]
 """
@@ -16,6 +24,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "benign"
 FIELDS = ["id", "register", "split_pool", "text", "form_tags", "keep_edit_drop", "edited_text"]
+POOL_REVIEW = ROOT / "review" / "benign_pool_review.csv"
+POOL_FIELDS = ["id", "split", "register", "text", "proposed_label", "reviewer_label", "reviewer_note"]
+
+
+def pool_review_row(it: dict) -> list:
+    amb = it["split_pool"] == "ambiguous"
+    return [it["id"], "eval_only" if amb else it["split_pool"], it["register"], it["text"],
+            "ambiguous" if amb else "benign", "", ""]
 
 PAGE = r"""<!doctype html>
 <html lang="en">
@@ -148,11 +164,16 @@ def main():
         for it in items:
             w.writerow([it["id"], it["register"], it["split_pool"], it["text"],
                         json.dumps(it["form_tags"], sort_keys=True), "", ""])
+    POOL_REVIEW.parent.mkdir(exist_ok=True)
+    with open(POOL_REVIEW, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(POOL_FIELDS)
+        w.writerows(pool_review_row(it) for it in items)
     sha = hashlib.sha256(a.draft.read_bytes()).hexdigest()[:16]
     page = PAGE.replace("__ITEMS__", json.dumps(items, ensure_ascii=False).replace("</", "<\\/")) \
                .replace("__DRAFT_SHA__", json.dumps(sha))
     (OUT / "review.html").write_text(page, encoding="utf-8")
-    print(f"wrote {OUT / 'review_sheet.csv'} and {OUT / 'review.html'} ({len(items)} items)")
+    print(f"wrote {OUT / 'review_sheet.csv'}, {OUT / 'review.html'} and {POOL_REVIEW} ({len(items)} items)")
 
 
 if __name__ == "__main__":

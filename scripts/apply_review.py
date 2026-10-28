@@ -5,6 +5,10 @@ Turn a reviewed sheet (exported from data/benign/review.html, or review_sheet.cs
 frozen pool data/benign/benign_v3.json, then re-check the form targets (benign_v3_check.report).
 
   keep -> the draft text; edit -> edited_text (must be non-empty); drop -> removed.
+The hand-review sheet review/benign_pool_review.csv (make_review_sheet.py) is also accepted: reviewer_label
+benign | ambiguous | drop, and a changed `text` cell is an edit. An item relabelled benign -> ambiguous moves to the
+ambiguous slice; ambiguous -> benign goes to the test pool if int(sha256(id)) % 3 == 0, else train_val
+(deterministic, never reviewer-chosen).
 Every draft item must be reviewed (pass --allow_unreviewed to drop unreviewed items instead of failing).
 form_tags are recomputed; the output records the sha256 of the draft and of the review CSV.
 
@@ -24,6 +28,31 @@ sys.path[:0] = [str(ROOT / "src"), str(ROOT / "scripts")]
 from probes import form_tags
 
 DRAFT = ROOT / "data" / "benign" / "benign_v3_draft.json"
+
+
+def from_pool_review(rows, draft_items):
+    """review/benign_pool_review.csv rows -> rows in the review_sheet schema (keep_edit_drop, edited_text,
+    split_pool override), or a list of problems."""
+    by_id = {it["id"]: it for it in draft_items}
+    out, problems = [], []
+    for r in rows:
+        i, lab = r["id"], (r.get("reviewer_label") or "").strip().lower()
+        if i not in by_id:
+            problems.append(f"{i}: not in the draft")
+            continue
+        it = by_id[i]
+        if lab not in ("", "benign", "ambiguous", "drop"):
+            problems.append(f"{i}: reviewer_label {lab!r} (expected benign/ambiguous/drop)")
+            continue
+        text = r.get("text", "")
+        d = "" if not lab else "drop" if lab == "drop" else "keep" if text == it["text"] else "edit"
+        pool = it["split_pool"]
+        if lab == "ambiguous":
+            pool = "ambiguous"
+        elif lab == "benign" and pool == "ambiguous":
+            pool = "test" if int(hashlib.sha256(i.encode()).hexdigest(), 16) % 3 == 0 else "train_val"
+        out.append({"id": i, "keep_edit_drop": d, "edited_text": text if d == "edit" else "", "split_pool": pool})
+    return out, problems
 
 
 def apply(review_rows, draft_items, allow_unreviewed=False):
@@ -50,7 +79,7 @@ def apply(review_rows, draft_items, allow_unreviewed=False):
             problems.append(f"{i}: decision {d!r} (expected keep/edit/drop)")
             continue
         it = by_id[i]
-        out.append({"id": i, "text": text, "split_pool": it["split_pool"], "register": it["register"],
+        out.append({"id": i, "text": text, "split_pool": r.get("split_pool") or it["split_pool"], "register": it["register"],
                     "form_tags": form_tags(text), "review": d})
     missing = sorted(set(by_id) - seen)
     if missing and not allow_unreviewed:
@@ -68,7 +97,12 @@ def main():
     a = ap.parse_args()
     with open(a.review, newline="", encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f))
-    items, problems = apply(rows, json.load(open(a.draft))["items"], a.allow_unreviewed)
+    draft = json.load(open(a.draft))["items"]
+    problems = []
+    if rows and "reviewer_label" in rows[0]:
+        rows, problems = from_pool_review(rows, draft)
+    items, more = apply(rows, draft, a.allow_unreviewed)
+    problems += more
     if problems:
         sys.exit("review not applied:\n  " + "\n  ".join(problems))
     texts = Counter(it["text"] for it in items)
