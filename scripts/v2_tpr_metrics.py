@@ -6,12 +6,12 @@ Recompute the saved V2 scores with the headline metrics: TPR@1%FPR and TPR@5%FPR
 clean rows, and macro-F1 (secondary), each with a doc-cluster bootstrap 95% CI (B=1000, seed 42).
 Reads saved predictions only; nothing is re-scored. Writes results/v2_metrics/tpr_protocols/<run_id>/.
 
-Calibration set per model (clean rows only; "n/a (no calibration scores)" where none exist):
+Calibration set per model (clean rows only; "n/a (no calibration scores)" where none exist yet):
   - tfidf_c1, deberta_s<k>, protectai, piguard, judge: the V2 val split (data/processed/val.csv),
     from results/v2_std/v2_val/ or the latest results/v2_probes/score_<name>_v2val/ run
-  - deberta_loto_s<k>: the LOTO val split of the two training tasks (results/v2_std/v2_loto_val_<task>/)
-  - tfidf_c100_tuned, tfidf_c100_loto: none (no C=100 checkpoint was saved)
-External sets (InjecAgent, deepset) have no doc_id; their bootstrap resamples rows.
+  - LOTO models and tfidf_c100_tuned: skipped (V2 LOTO and C=100 are secondary; no C=100 checkpoint exists)
+Bootstrap clusters: V2 sets resample doc_id. InjecAgent rows sharing a user case (user tool + user instruction)
+come from one template, so they resample by user case (17 clusters). deepset prompts are independent: rows.
 
     python scripts/v2_tpr_metrics.py
 """
@@ -34,6 +34,13 @@ JUDGE_V2_TEST = PROBES / "score_judge_qwen2.5_7b" / "20261021-123213_seed42" / "
 SEEDS = (42, 123, 999)
 LOTO_TASKS = ("email", "table", "code")
 B, BOOT_SEED = 1000, 42
+NOT_YET = "n/a (no calibration scores)"
+SKIP_LOTO = "n/a (skipped: V2 LOTO is secondary)"
+SKIP_C100 = "n/a (skipped: no C=100 checkpoint; V2 C=100 is secondary)"
+EXTERNAL = {"injecagent": ROOT / "data/external/injecagent.csv", "deepset": ROOT / "data/external/deepset.csv"}
+# Upstream revision + the commit of the build that wrote data/external/ (score_detectors.py build, bab750e).
+# deepset's build did not pin a revision; 4f61ecb is the dataset revision in the local HF datasets cache.
+DATA_VERSION = {"injecagent": "InjecAgent@f19c9f2 + build bab750e", "deepset": "hf:deepset/prompt-injections@4f61ecb + build bab750e"}
 
 
 def latest_probe_run(name):
@@ -42,29 +49,40 @@ def latest_probe_run(name):
 
 
 def sources():
-    """(model, eval_set, predictions file, calibration file or None)."""
+    """(model, eval_set, predictions file, calibration file or None, status when there is none)."""
     out = []
     tfidf_cal = latest_probe_run("tfidf_c1_v2val")
     for es, f in [("v2_test", "tfidf_c1"), ("injecagent", "tfidf"), ("deepset", "tfidf")]:
-        out.append(("tfidf_c1", es, STD / es / f"{f}.csv", tfidf_cal))
-    out.append(("tfidf_c100_tuned", "v2_test", STD / "v2_test" / "tfidf_c100_tuned.csv", None))
+        out.append(("tfidf_c1", es, STD / es / f"{f}.csv", tfidf_cal, NOT_YET))
+    out.append(("tfidf_c100_tuned", "v2_test", STD / "v2_test" / "tfidf_c100_tuned.csv", None, SKIP_C100))
     for t in LOTO_TASKS:
-        out.append(("tfidf_c100_loto", f"v2_loto_test_{t}", STD / f"v2_loto_test_{t}" / "tfidf_c100_loto.csv", None))
+        out.append(("tfidf_c100_loto", f"v2_loto_test_{t}", STD / f"v2_loto_test_{t}" / "tfidf_c100_loto.csv", None,
+                    SKIP_LOTO))
     for s in SEEDS:
         for es in ("v2_test", "injecagent", "deepset"):
-            out.append((f"deberta_s{s}", es, STD / es / f"deberta_s{s}.csv", STD / "v2_val" / f"deberta_s{s}.csv"))
+            out.append((f"deberta_s{s}", es, STD / es / f"deberta_s{s}.csv", STD / "v2_val" / f"deberta_s{s}.csv",
+                        NOT_YET))
         for t in LOTO_TASKS:
-            cal = STD / f"v2_loto_val_{t}" / f"deberta_loto_s{s}.csv"
             out.append((f"deberta_loto_s{s}", f"v2_loto_test_{t}", STD / f"v2_loto_test_{t}" / f"deberta_loto_s{s}.csv",
-                        cal if cal.exists() else None))
+                        None, SKIP_LOTO))
     for name in ("protectai", "piguard"):
         cal = latest_probe_run(f"{name}_v2val")
         for es in ("v2_test", "injecagent", "deepset"):
-            out.append((name, es, STD / es / f"{name}.csv", cal))
+            out.append((name, es, STD / es / f"{name}.csv", cal, NOT_YET))
     judge_cal = latest_probe_run("judge_qwen2.5_7b_v2val")
-    out.append(("judge_qwen2.5_7b", "v2_test", JUDGE_V2_TEST, judge_cal))
-    out.append(("judge_qwen2.5_7b", "injecagent", STD / "injecagent" / "judge_qwen2.5_7b.csv", judge_cal))
+    out.append(("judge_qwen2.5_7b", "v2_test", JUDGE_V2_TEST, judge_cal, NOT_YET))
+    out.append(("judge_qwen2.5_7b", "injecagent", STD / "injecagent" / "judge_qwen2.5_7b.csv", judge_cal, NOT_YET))
     return out
+
+
+def clusters(d, eval_set):
+    """(cluster column added to d, its description)."""
+    if eval_set == "injecagent":
+        ext = pd.read_csv(EXTERNAL["injecagent"]).set_index("id").loc[d["id"]]
+        return d.assign(cluster=(ext["task_type"] + " | " + ext["user_intent"]).values), "user_case (user tool + user instruction)"
+    if eval_set == "deepset":
+        return d.assign(cluster=d["id"]), "row (independent prompts)"
+    return d.assign(cluster=d["doc_id"]), "doc_id"
 
 
 def load(path):
@@ -79,9 +97,9 @@ def secondary(d):
     return {"roc_auc": m["roc_auc"], "fpr_default_clean": m["flag_rate_clean"], "f1_macro": m["f1_macro"]}
 
 
-def evaluate(model, eval_set, path, cal_path):
-    d = load(path)
-    cluster = "doc_id" if (d["doc_id"].astype(str) != "").all() else "id"
+def evaluate(model, eval_set, path, cal_path, no_cal):
+    d, cluster_desc = clusters(load(path), eval_set)
+    cluster = "cluster"
     cal = None
     if cal_path is not None:
         c = load(cal_path)
@@ -89,10 +107,10 @@ def evaluate(model, eval_set, path, cal_path):
     return {
         "model": model, "eval_set": eval_set, "source": str(path.relative_to(ROOT)),
         "calibration_source": str(cal_path.relative_to(ROOT)) if cal_path else None,
-        "cluster_col": cluster, "n": len(d), "n_clean": int((d["label"] == 0).sum()),
+        "cluster": cluster_desc, "data_version": DATA_VERSION.get(eval_set, "v2-frozen"), "n": len(d), "n_clean": int((d["label"] == 0).sum()),
         "n_injected": int((d["label"] == 1).sum()), "n_clusters": int(d[cluster].nunique()),
         "default_threshold": float(d["threshold"].iloc[0]),
-        "tpr": tpr_at_fpr_protocols(d, cal, B=B, seed=BOOT_SEED, cluster_col=cluster),
+        "tpr": tpr_at_fpr_protocols(d, cal, B=B, seed=BOOT_SEED, cluster_col=cluster, no_calib_status=no_cal),
         "bootstrap": doc_cluster_bootstrap(d, secondary, B=B, seed=BOOT_SEED, cluster_col=cluster),
     }
 
@@ -117,15 +135,15 @@ def seed_summary(rows):
 def main():
     a = add_run_args(argparse.ArgumentParser(description=__doc__)).parse_args()
     src = sources()
-    files = sorted({p for _, _, f, c in src for p in ([f] + ([c] if c else []))})
+    files = sorted({p for _, _, f, c, _ in src for p in ([f] + ([c] if c else []))} | set(EXTERNAL.values()))
     run = start_run(version="v2_metrics", exp="tpr_protocols", seed=BOOT_SEED,
                     args={"bootstrap": {"B": B, "seed": BOOT_SEED}, "seeds": list(SEEDS),
                           "sources": [[m, e, str(f.relative_to(ROOT)), str(c.relative_to(ROOT)) if c else None]
-                                      for m, e, f, c in src]},
-                    data_version="v2-frozen", data_files=files, allow_dirty=a.allow_dirty)
+                                      for m, e, f, c, _ in src], "external_data_versions": DATA_VERSION},
+                    data_version="v2-frozen+external", data_files=files, allow_dirty=a.allow_dirty)
     rows = []
-    for model, es, path, cal in src:
-        r = evaluate(model, es, path, cal)
+    for model, es, path, cal, no_cal in src:
+        r = evaluate(model, es, path, cal, no_cal)
         run.log(f"{model} / {es}: n_clean={r['n_clean']} " + " ".join(
             f"{k}={v['status'] if v['status'] != 'ok' else round(v['tpr']['point'], 4)}" for k, v in r["tpr"].items()))
         rows.append(r)

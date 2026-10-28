@@ -88,6 +88,8 @@ def latest_predictions():
     its later V2-test run); for each eval_set the latest run that scored it wins."""
     found = {}
     for exp in sorted(PROBES_RES.glob("score_*")):
+        if exp.name.endswith("_v2val"):  # V2 val calibration scores (v2_tpr_metrics.py), not a probe model
+            continue
         per_set = {}
         for run in sorted(p for p in exp.iterdir() if (p / "predictions.csv").exists()):
             df = pd.read_csv(run / "predictions.csv", keep_default_na=False)
