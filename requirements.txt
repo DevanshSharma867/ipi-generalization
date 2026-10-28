@@ -21,3 +21,4 @@ sentencepiece==0.2.2
 protobuf==7.36.2
 requests==2.34.2
 captum==0.9.0
+PyYAML==6.0.3            # findings.src.md entry headers (scripts/make_tables.py)

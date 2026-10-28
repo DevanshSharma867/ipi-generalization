@@ -3,15 +3,22 @@ make_tables.py
 ==============
 Generate LaTeX tables (booktabs) and paper/numbers.tex (\\newcommand macros) from results files only.
 
-Current target: V2 Tables III-VI of the Phase 2 report, recomputed from results/v2_std/ with
-src/metrics.py and checked against the frozen results/tfidf_lr_results.json,
-results/leave_one_task_out.json and results/ablations.json. Any difference above 1e-4 is printed.
+V2 Tables III-VI of the Phase 2 report are recomputed from results/v2_std/ with src/metrics.py and checked
+against the frozen results/tfidf_lr_results.json, results/leave_one_task_out.json and results/ablations.json
+(any difference above 1e-4 fails). Other tables read the latest run of each experiment in results/.
 
-    python scripts/make_tables.py            # writes paper/tables/v2_*.tex and paper/numbers.tex
+Provenance gate: every macro records the source it was computed from, and must be owned by exactly one entry
+of docs/findings.src.md (its `macros:` globs) whose `source:` lists that source. Run-directory sources are
+checked against their config.json (commit, data version) and against the git_dirty flag of every run they
+consumed (the run's own args plus the entry's `upstream:`). Macros of "full" and "recomputed-match" entries go
+to paper/numbers.tex; all others go to paper/legacy_numbers.tex, which the paper must not \\input.
+
+    python scripts/make_tables.py            # writes paper/tables/*.tex, paper/numbers.tex, paper/legacy_numbers.tex
 """
 
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -19,8 +26,10 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "src"))
+sys.path[:0] = [str(ROOT / "src"), str(ROOT / "scripts")]
+from make_findings import LEGACY, NUMBERS, NUMBERS_OK, REQUIRED, STATUSES, owns, parse_entries
 from metrics import df_metrics, doc_cluster_bootstrap, point_metrics, recall_at_fpr
+from sklearn.metrics import roc_curve
 
 STD = ROOT / "results" / "v2_std"
 RES = ROOT / "results"
@@ -31,8 +40,11 @@ CI_KEYS = ["accuracy", "f1_macro", "f1_injected", "precision", "recall", "roc_au
 TASKS = [("email", "EmailQA"), ("table", "TableQA"), ("code", "CodeQA")]
 
 macros = {}
+macro_src = {}  # macro -> the results file or run directory it was computed from
+SRC = None
 mismatches = []
 n_checked = 0
+RUN_RE = re.compile(r"results/[^/\s]+/[^/\s]+/\d{8}-\d{6}_seed\d+")
 
 
 # ─── helpers ──────────────────────────────────────────────────────────────────
@@ -46,16 +58,27 @@ def macro_name(*parts) -> str:
     return "".join(_DIGITS[int(c)] if c.isdigit() else c for c in name)
 
 
+def source(path) -> None:
+    """Set the source recorded for the macros that follow (repo-relative file or run directory)."""
+    global SRC
+    SRC = str(Path(path).relative_to(ROOT)) if Path(path).is_absolute() else str(path)
+
+
+def put(name, value) -> str:
+    if name in macros and macros[name] != value:
+        raise ValueError(f"macro {name} defined twice with different values")
+    macros[name], macro_src[name] = value, SRC
+    return value
+
+
 def num(value, *parts, digits=4) -> str:
-    s = f"{value:.{digits}f}"
-    macros[macro_name(*parts)] = s
-    return s
+    return put(macro_name(*parts), f"{value:.{digits}f}")
 
 
 def ci(lo_hi, *parts) -> str:
     lo, hi = (f"{v:.2f}" for v in lo_hi)
-    macros[macro_name(*parts, "lo")] = lo
-    macros[macro_name(*parts, "hi")] = hi
+    put(macro_name(*parts, "lo"), lo)
+    put(macro_name(*parts, "hi"), hi)
     return f"[{lo}, {hi}]"
 
 
@@ -93,6 +116,7 @@ def table_main(tf):
     rows = []
     for model, key, label in [("tfidf_c1", "default_evaluation", r"TF-IDF + LR (Default: $C=1.0, \tau=0.50$)"),
                               ("tfidf_c100_tuned", "tuned_evaluation", r"TF-IDF + LR (Tuned: $C=100.0, \tau=0.71$)")]:
+        source(STD / "v2_test" / f"{model}.csv")
         m, b = evaluate(load("v2_test", model))
         ref, ref_ci = tf[key]["metrics"], tf[key]["doc_cluster_bootstrap_95ci"]
         for k in CI_KEYS:
@@ -114,6 +138,7 @@ def table_main(tf):
 
 
 def table_ablations(abl):
+    source(STD / "v2_test" / "tfidf_c1.csv")
     test = load("v2_test", "tfidf_c1")
     # Majority class: sklearn DummyClassifier(most_frequent) breaks the 668/668 train tie towards class 0
     maj = point_metrics(test["label"], np.zeros(len(test)), pred=np.zeros(len(test), dtype=int))
@@ -127,8 +152,10 @@ def table_ablations(abl):
         rows.append((label, key, abl[key]))
     body = []
     for label, key, m in rows:
+        source(STD / "v2_test" / "tfidf_c1.csv" if key == "majority" else RES / "ablations.json")
         cells = [num(m[k], "v2", "abl", key, k) for k in ("accuracy", "f1_macro", "precision", "recall")]
         body.append(f"{label} & " + " & ".join(cells) + r" \\")
+    source(STD / "v2_test" / "tfidf_c1.csv")
     fcells = [num(fused[k], "v2", "abl", "fused", k) for k in ("accuracy", "f1_macro", "precision", "recall")]
     write("v2_table4_ablations", "\n".join([
         r"% Generated by scripts/make_tables.py. Majority and Fused rows recomputed from results/v2_std/v2_test/;",
@@ -141,6 +168,7 @@ def table_ablations(abl):
 
 
 def table_per_task(tf):
+    source(STD / "v2_test" / "tfidf_c1.csv")
     test = load("v2_test", "tfidf_c1")
     rows = []
     for task, label in TASKS:
@@ -154,8 +182,8 @@ def table_per_task(tf):
             check(f"Tab V {task} {k} CI hi", b[k]["ci"][1], ref["cluster_bootstrap_95ci"][k][1])
         p = ("v2", "task", task)
         n_docs = sub["doc_id"].nunique()
-        macros[macro_name(*p, "n")] = str(len(sub))
-        macros[macro_name(*p, "ndocs")] = str(n_docs)
+        put(macro_name(*p, "n"), str(len(sub)))
+        put(macro_name(*p, "ndocs"), str(n_docs))
         rows.append(f"{label} & {len(sub)} ({n_docs}) & {num(m['accuracy'], *p, 'accuracy')} & "
                     f"{num(m['f1_macro'], *p, 'f1_macro')} & {ci(b['f1_macro']['ci'], *p, 'f1_macro', 'ci')} & "
                     f"{num(m['precision'], *p, 'precision')} & {num(m['recall'], *p, 'recall')} \\\\")
@@ -171,6 +199,7 @@ def table_loto(loto):
     names = dict(TASKS)
     rows = []
     for task, label in TASKS:
+        source(STD / f"v2_loto_test_{task}" / "tfidf_c100_loto.csv")
         sub = load(f"v2_loto_test_{task}", "tfidf_c100_loto")
         m, b = evaluate(sub)
         ref = loto[f"held_out_{task}"]
@@ -183,8 +212,8 @@ def table_loto(loto):
             check(f"Tab VI {task} {k} CI lo", b[k]["ci"][0], ref["doc_cluster_bootstrap_95ci"][k][0])
             check(f"Tab VI {task} {k} CI hi", b[k]["ci"][1], ref["doc_cluster_bootstrap_95ci"][k][1])
         p = ("v2", "loto", task)
-        macros[macro_name(*p, "ntrain")] = str(n_tr)
-        macros[macro_name(*p, "ntest")] = str(len(sub))
+        put(macro_name(*p, "ntrain"), str(n_tr))
+        put(macro_name(*p, "ntest"), str(len(sub)))
         trained_on = " + ".join(names[t].replace("QA", "").capitalize() for t, _ in TASKS if t != task)
         rows.append(f"{trained_on} & \\textbf{{{label}}} & {n_tr} / {len(sub)} & {num(m['accuracy'], *p, 'accuracy')} & "
                     f"{num(m['f1_macro'], *p, 'f1_macro')} & {ci(b['f1_macro']['ci'], *p, 'f1_macro', 'ci')} & "
@@ -203,9 +232,12 @@ PROBE_COLS = [("p1_neutral_insertion", p) for p in ("start", "middle", "end")] +
              [("p3_attack_moved", p) for p in ("start", "middle", "end")]
 
 
-def latest_metrics(exp):
-    runs = sorted((RES / "v2_probes" / exp).glob("*/metrics.json"))
-    return (json.load(open(runs[-1])), runs[-1].parent) if runs else (None, None)
+def latest_metrics(exp, version="v2_probes"):
+    runs = sorted((RES / version / exp).glob("*/metrics.json"))
+    if not runs:
+        return None, None
+    source(runs[-1].parent)
+    return json.load(open(runs[-1])), runs[-1].parent
 
 
 def cell(c, *parts, digits=2):
@@ -317,11 +349,16 @@ def table_summary_json_bug():
     summary = json.load(open(RES / "scores" / "summary.json"))["pairs"]
     rows = []
     for name in ("piguard", "protectai"):
+        source(STD / "pairs_v0" / f"{name}.csv")
         d = load("pairs_v0", name)
         ours = recall_at_fpr(d["label"], d["prob"], 0.05)[0]
+        # Reproduce the stored value: score_detectors.recall_at_fpr (roc_curve with drop_intermediate=True)
+        fpr, tpr, _ = roc_curve(d["label"], d["prob"])
+        check(f"pairsbug {name} summary.json recall@5%fpr", float(tpr[fpr <= 0.05].max()), summary[name]["recall@5%fpr"])
         p = ("v2", "pairsbug", name)
-        rows.append(f"{tex(name)} & {num(summary[name]['recall@5%fpr'], *p, 'summaryjson')} & "
-                    f"{num(ours, *p, 'metrics')} \\\\")
+        ours_s = num(ours, *p, "metrics")
+        source(RES / "scores" / "summary.json")
+        rows.append(f"{tex(name)} & {num(summary[name]['recall@5%fpr'], *p, 'summaryjson')} & {ours_s} \\\\")
     write("v2_pairs_recall5_provenance", "\n".join([
         "% Generated by scripts/make_tables.py from results/scores/summary.json and results/v2_std/pairs_v0/",
         r"\begin{tabular}{lrr}", r"\toprule",
@@ -359,6 +396,157 @@ def tables_truncation_control():
         r"\midrule", *con, r"\bottomrule", r"\end{tabular}", ""]))
 
 
+# ─── TPR@FPR threshold protocols (results/v2_metrics/tpr_protocols/, latest run) ───
+
+TPR_SETS = [("v2_test", "V2 test"), ("injecagent", "InjecAgent"), ("deepset", "deepset")]
+TPR_MODELS = ["tfidf_c1", "tfidf_c100_tuned", "deberta_s42", "deberta_s123", "deberta_s999", "protectai", "piguard",
+              "judge_qwen2.5_7b"]
+
+
+def na(status) -> str:
+    return status.replace("_", r"\_")
+
+
+def tpr_cell(e, *parts):
+    if e["status"] != "ok":
+        return put(macro_name(*parts), na(e["status"]))
+    return f"{num(e['tpr']['point'], *parts)} {{\\scriptsize{ci(e['tpr']['ci'], *parts, 'ci')}}}"
+
+
+def tables_tpr_protocols():
+    """Threshold-free metrics, FPR at the default threshold and oracle TPR@FPR (table v2_tpr_protocols); the
+    calibrated protocol and its gap to oracle go to a separate table (v2_calibration_gap, macros VTwoCalgap*)."""
+    m, src = latest_metrics("tpr_protocols", version="v2_metrics")
+    if m is None:
+        return
+    rows = {(r["model"], r["eval_set"]): r for r in m["rows"]}
+    main_rows, gap_rows = [], []
+    for es, es_label in TPR_SETS:
+        for model in TPR_MODELS:
+            r = rows.get((model, es))
+            if r is None:
+                continue
+            p, b, t = ("v2", "tpr", model, es), r["bootstrap"], r["tpr"]
+            put(macro_name(*p, "nclean"), str(r["n_clean"]))
+            main_rows.append(
+                f"{es_label} & {tex(model)} & {r['n_clean']} & {cell(b['roc_auc'], *p, 'auroc', digits=4)} & "
+                f"{cell(b['fpr_default_clean'], *p, 'fprdefault', digits=4)} & "
+                f"{tpr_cell(t['oracle@1pct_fpr'], *p, 'oracle1')} & {tpr_cell(t['oracle@5pct_fpr'], *p, 'oracle5')} & "
+                f"{cell(b['f1_macro'], *p, 'f1macro', digits=4)} \\\\")
+            if es == "deepset":
+                continue
+            g, c = ("v2", "calgap", model, es), t["calibrated@5pct_fpr"]
+            fpr = cell(c["realized_fpr"], *g, "realizedfpr", digits=4) if c["status"] == "ok" else "--"
+            thr = num(c["threshold"], *g, "threshold", digits=4) if c["status"] == "ok" else "--"
+            gap_rows.append(f"{es_label} & {tex(model)} & {c.get('n_clean_calib', '--')} & "
+                            f"{tpr_cell(t['oracle@5pct_fpr'], *g, 'oracle5')} & {tpr_cell(c, *g, 'calibrated5')} & "
+                            f"{thr} & {fpr} \\\\")
+        for metric in ("roc_auc", "fpr_default_clean", "f1_macro", "tpr_oracle@5pct_fpr", "tpr_calibrated@5pct_fpr"):
+            s = m["seed_summary"].get(f"deberta/{es}", {}).get(metric)
+            if s:
+                key = "calgap" if "calibrated" in metric else "tpr"
+                num(s["mean"], "v2", key, "deberta_mean", es, metric, "mean")
+                num(s["sd"], "v2", key, "deberta_mean", es, metric, "sd")
+    head = f"% Generated by scripts/make_tables.py from {src.relative_to(ROOT)}/metrics.json"
+    write("v2_tpr_protocols", "\n".join([
+        head, r"% Oracle protocol: threshold chosen on the clean rows of the evaluated set. TPR@1%FPR needs >= 500",
+        r"% clean rows, TPR@5%FPR >= 100. [doc-cluster bootstrap 95% CI; InjecAgent: user case; deepset: rows]",
+        r"\begin{tabular}{llrrrrrr}", r"\toprule",
+        r"\textbf{Eval set} & \textbf{Model} & \textbf{$n_\text{clean}$} & \textbf{AUROC} & \textbf{FPR@default} & "
+        r"\textbf{TPR@1\%FPR} & \textbf{TPR@5\%FPR} & \textbf{Macro-F1} \\",
+        r"\midrule", *main_rows, r"\bottomrule", r"\end{tabular}", ""]))
+    write("v2_calibration_gap", "\n".join([
+        head, r"% PRELIMINARY: V2 val (the calibration set) shares the training attack pool. 5% FPR target.",
+        r"\begin{tabular}{llrrrrr}", r"\toprule",
+        r"\textbf{Eval set} & \textbf{Model} & \textbf{$n_\text{clean}$ calib} & \textbf{TPR oracle} & "
+        r"\textbf{TPR calibrated} & \textbf{Threshold} & \textbf{Realized FPR} \\",
+        r"\midrule", *gap_rows, r"\bottomrule", r"\end{tabular}", ""]))
+
+
+# ─── Provenance gate (docs/findings.src.md) ───────────────────────────────────
+
+def _git(*args):
+    return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+
+
+def run_config(run_dir):
+    path = ROOT / run_dir / "config.json"
+    return json.load(open(path)) if path.exists() else None
+
+
+def run_closure(run_dirs):
+    """Every run directory reachable from run_dirs through the run paths named in their config.json args."""
+    seen, todo = set(), list(run_dirs)
+    while todo:
+        r = todo.pop()
+        if r in seen:
+            continue
+        seen.add(r)
+        cfg = run_config(r)
+        if cfg:
+            todo += RUN_RE.findall(json.dumps(cfg["args"]))
+    return seen
+
+
+def as_list(v):
+    return v if isinstance(v, list) else [v]
+
+
+def validate_entries():
+    """Errors (list of str) and, per macro, the status of the entry that owns it."""
+    errors, owner = [], {}
+    _, entries = parse_entries()
+    ids = [e["id"] for e, _, _ in entries]
+    if len(ids) != len(set(ids)):
+        errors.append(f"duplicate entry ids: {sorted(i for i in ids if ids.count(i) > 1)}")
+    for e, _, _ in entries:
+        eid = e["id"]
+        miss = [k for k in REQUIRED if e.get(k) in (None, "", [])]
+        if miss:
+            errors.append(f"{eid}: missing fields {miss}")
+            continue
+        if e["status"] not in STATUSES:
+            errors.append(f"{eid}: unknown status {e['status']!r}")
+        if e["status"] not in NUMBERS_OK and not e.get("reason"):
+            errors.append(f"{eid}: status {e['status']} needs a reason")
+        if e["status"] == "pending" and not e.get("awaiting"):
+            errors.append(f"{eid}: pending needs `awaiting`")
+        sources = as_list(e["source"])
+        runs = [s for s in sources if RUN_RE.fullmatch(s)]
+        for r in runs:
+            cfg = run_config(r)
+            if cfg is None:
+                errors.append(f"{eid}: run {r} has no config.json")
+            elif cfg["data_version"] not in str(e["data_version"]):
+                errors.append(f"{eid}: data_version {e['data_version']!r} does not name {r}'s {cfg['data_version']!r}")
+        if runs:
+            cfg = run_config(runs[0]) or {}
+            if not cfg.get("git_commit", "").startswith(str(e["commit"])):
+                errors.append(f"{eid}: commit {e['commit']} is not {runs[0]}'s {cfg.get('git_commit', '')[:7]}")
+            dirty = sorted(r for r in run_closure(runs + as_list(e.get("upstream", [])))
+                           if (run_config(r) or {}).get("git_dirty", True))
+            if dirty and e["status"] in NUMBERS_OK:
+                errors.append(f"{eid}: status {e['status']} but these runs are dirty or unknown: {dirty}")
+            if not dirty and e["status"] == "linked-dirty":
+                errors.append(f"{eid}: linked-dirty but every linked run is clean; upgrade it")
+        mine = [k for k in macros if owns(e, k)]
+        if not mine:
+            errors.append(f"{eid}: its macros {e['macros']} match no generated macro")
+        for k in mine:
+            if k in owner:
+                errors.append(f"macro {k} owned by both {owner[k][0]} and {eid}")
+            owner[k] = (eid, e["status"])
+            if not any(macro_src[k] == s or macro_src[k].startswith(s.rstrip("/") + "/") for s in sources):
+                errors.append(f"{eid}: macro {k} comes from {macro_src[k]}, which is not in its source list")
+    errors += [f"macro {k} (from {macro_src[k]}) is owned by no findings entry" for k in macros if k not in owner]
+    return errors, owner
+
+
+def write_macros(path, names, head):
+    lines = [head] + [f"\\newcommand{{\\{k}}}{{{macros[k]}}}" for k in sorted(names)]
+    path.write_text("\n".join(lines) + "\n")
+
+
 def main():
     tf = json.load(open(RES / "tfidf_lr_results.json"))
     loto = json.load(open(RES / "leave_one_task_out.json"))
@@ -373,11 +561,23 @@ def main():
     tables_truncation_control()
     table_v2_test_groups()
     table_summary_json_bug()
+    tables_tpr_protocols()
+    errors, owner = validate_entries()
+    if errors:
+        print(f"{len(errors)} PROVENANCE ERRORS (docs/findings.src.md):")
+        for e in errors:
+            print("  " + e)
+        sys.exit(1)
     PAPER.mkdir(exist_ok=True)
-    lines = ["% Generated by scripts/make_tables.py -- do not edit by hand"]
-    lines += [f"\\newcommand{{\\{k}}}{{{v}}}" for k, v in sorted(macros.items())]
-    (PAPER / "numbers.tex").write_text("\n".join(lines) + "\n")
-    print(f"wrote paper/numbers.tex ({len(macros)} macros)")
+    commit = _git("rev-parse", "--short", "HEAD") + ("-dirty" if _git("status", "--porcelain", "--", "scripts", "src",
+                                                                        "docs/findings.src.md") else "")
+    full = [k for k, (_, st) in owner.items() if st in NUMBERS_OK]
+    rest = [k for k in owner if k not in full]
+    write_macros(NUMBERS, full, f"% Generated by scripts/make_tables.py at {commit} -- do not edit by hand. "
+                                "Only findings entries with status full or recomputed-match.")
+    write_macros(LEGACY, rest, f"% Generated by scripts/make_tables.py at {commit}. NOT for the paper: macros of "
+                               "findings entries without full provenance (docs/findings.md says why).")
+    print(f"wrote paper/numbers.tex ({len(full)} macros) and paper/legacy_numbers.tex ({len(rest)} macros)")
     print(f"\nVerification: {n_checked} values checked against frozen V2 results, tolerance {TOL}")
     if mismatches:
         print(f"{len(mismatches)} MISMATCHES:")

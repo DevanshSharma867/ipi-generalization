@@ -94,10 +94,12 @@ def main():
     a = add_run_args(argparse.ArgumentParser(description=__doc__)).parse_args()
     probes = pd.concat([pd.read_csv(PROBES / f"{s}.csv", keep_default_na=False).assign(eval_set=s) for s in SETS],
                        ignore_index=True)
+    found = latest_predictions()
     tok_dirs = {"deberta": "deberta_v2_ckpt", "protectai": "protectai", "piguard": "piguard", "qwen": "qwen2.5_7b"}
     run = start_run(version="v2_probes", exp="truncation_control", seed=42,
                     args={"window_tokens": 512, "qwen_max_positions": QWEN_MAX_POSITIONS, "tokenizers": tok_dirs,
-                          "judge_truncation": "none (score_detectors.score_judge passes the full chat-template prompt)"},
+                          "judge_truncation": "none (score_detectors.score_judge passes the full chat-template prompt)",
+                          "prediction_sources": {m: src for m, (_, src) in found.items()}},
                     data_version="v2_probes",
                     data_files=[PROBES / f"{s}.csv" for s in SETS]
                     + sorted(p for d in tok_dirs.values() for p in (TOK / d).iterdir()),
@@ -129,7 +131,6 @@ def main():
                           for pos in ("start", "middle", "end")}
 
     keep = {fam: set(g.loc[g["matched"], "id"]) for fam, g in vis.groupby("family")}
-    found = latest_predictions()
     results = {}
     frames = {m: df[df["eval_set"].isin(SETS)].reset_index(drop=True) for m, (df, _) in found.items()}
     if all(m in frames for m in MEAN_SEEDS):

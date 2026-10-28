@@ -157,12 +157,13 @@ def _gate(n_clean: int, target: float, what: str = "n_clean") -> Optional[str]:
 
 
 def tpr_at_fpr_protocols(df: pd.DataFrame, calib_clean_scores=None, targets=HEADLINE_FPR_TARGETS,
-                         B: int = 1000, seed: int = 42, cluster_col: str = "doc_id") -> Dict[str, Dict]:
+                         B: int = 1000, seed: int = 42, cluster_col: str = "doc_id",
+                         no_calib_status: str = "n/a (no calibration scores)") -> Dict[str, Dict]:
     """
     {"oracle@1pct_fpr": {...}, "calibrated@1pct_fpr": {...}, ...} for a frame with label/prob/cluster_col.
     Each leaf: status ("ok" or "n/a (...)"), n_clean, threshold and, when ok, tpr {"point", "ci"};
     "calibrated" also gives n_clean_calib and realized_fpr {"point", "ci"} on the evaluated set.
-    Pass calib_clean_scores=None when no calibration scores exist (status "n/a (no calibration scores)").
+    Pass calib_clean_scores=None when there is no calibration set; its status is then `no_calib_status`.
     """
     df = df.reset_index(drop=True)
     y, prob = df["label"].values.astype(int), df["prob"].values.astype(float)
@@ -180,7 +181,7 @@ def tpr_at_fpr_protocols(df: pd.DataFrame, calib_clean_scores=None, targets=HEAD
 
         c = {"n_clean": n_clean, "target_fpr": t}
         if calib_clean_scores is None:
-            c["status"] = "n/a (no calibration scores)"
+            c["status"] = no_calib_status
         else:
             n_cal = int(len(calib_clean_scores))
             c["n_clean_calib"] = n_cal

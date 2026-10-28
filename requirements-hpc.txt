@@ -19,3 +19,4 @@ accelerate==1.15.0          # TBC
 sentencepiece==0.2.2        # TBC
 protobuf==7.36.2            # TBC
 captum==0.9.0               # TBC
+PyYAML==6.0.3               # TBC
