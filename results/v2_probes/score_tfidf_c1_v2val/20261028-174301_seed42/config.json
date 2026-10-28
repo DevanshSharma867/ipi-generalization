@@ -1,0 +1,63 @@
+{
+  "run_id": "20261028-174301_seed42",
+  "version": "v2_probes",
+  "exp": "score_tfidf_c1_v2val",
+  "seed": 42,
+  "args": {
+    "model": "tfidf",
+    "checkpoint": "checkpoints/tfidf_lr_model.pkl",
+    "name": "tfidf_c1_v2val",
+    "sets": [
+      "v2_val"
+    ],
+    "doc_frac": 1.0,
+    "seed": 42,
+    "checkpoint_origin": "v2-frozen",
+    "allow_dirty": false,
+    "probe_manifest_sha256": "9596710ec5b85fc3c6aa24467a7870ee9dda7fc01cc587de93f020aed663c894"
+  },
+  "git_commit": "c80a037ac43645090b9884f3928dda73b5478036",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "v2_probes",
+  "data_files_sha256": {
+    "/Users/devanshsharma/projects/nlp/data/processed/val.csv": "14a87fbbfd7e9df0d5e819b7acfba2acbb15916237b4a995032505b66277863b",
+    "/Users/devanshsharma/projects/nlp/checkpoints/tfidf_lr_model.pkl": "366a0ba3f299add9ca41cae4a0d30b3628470a16c47202f81bfb444d5def433f"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null
+  },
+  "argv": [
+    "scripts/score_probes.py",
+    "--model",
+    "tfidf",
+    "--name",
+    "tfidf_c1_v2val",
+    "--sets",
+    "v2_val",
+    "--checkpoint",
+    "checkpoints/tfidf_lr_model.pkl",
+    "--checkpoint_origin",
+    "v2-frozen"
+  ],
+  "started": "2026-10-28T17:43:01"
+}
