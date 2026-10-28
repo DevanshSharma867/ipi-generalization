@@ -4,7 +4,11 @@
 **Rules:** after the first scored result of a pre-registered comparison, any change to a claim, hypothesis, success
 criterion, evaluation set, metric, baseline, comparator set or threshold protocol in this file goes in
 `docs/deviations.md` (date, before → after, reason, results seen). Changes made before then are listed under
-"Amendments" at the end of this file. Every pre-registered comparison is reported whatever its outcome.
+"Amendments before scoring" at the end of this file. Every pre-registered comparison is reported whatever its outcome.
+
+**Framing (amendment A6).** The paper leads with C3 (query-counterfactual intent pairs) and C4 (ICT). C1 and C2 are
+supporting evidence: they extend Kale & Vishwanath (2026) and Liu (2026) to BIPIA-style insertion data. Liu's
+Sheltron result is the motivation for C4: giving an untrained classifier the request fails, so ICT trains for it.
 
 Prior results are cited only by `docs/findings.md` entry (F001–F012). Related work and BibTeX: `docs/related_work.md`.
 
@@ -26,7 +30,9 @@ InjecAgent (F010) and deepset (F011), and the published numbers in Liu (2026), i
   - Training-data audits: PIGuard's training data contains 65/75 BIPIA train-half text attacks and 53/62 InjecAgent
     instructions. Input form matters more than attack-string overlap.
   - Giving a small classifier the user goal does not help: Sheltron with the goal segment has a higher AUROC but a
-    lower TPR@1%FPR and a much higher FPR.
+    lower TPR@1%FPR and a much higher FPR. Sheltron was never trained to use the goal this way (Liu: "may simply be
+    out of distribution"). We read this as the motivation for C4, not as counter-evidence: untrained use of the
+    request fails, and ICT trains for it.
 - Threshold protocol: the 1% FPR threshold is chosen on the evaluated benign set (oracle). The paper says this favors the detectors.
 - Bootstrap: percentile, stratified by label, not clustered.
 - It does **not**:
@@ -58,12 +64,15 @@ InjecAgent (F010) and deepset (F011), and the published numbers in Liu (2026), i
 Novelty is judged strictly against Liu (2026), AlignSentinel and the work above. "Confirmatory" means prior work
 already makes the claim, and we re-establish it in our setting.
 
+Order of emphasis in the paper (A6): C3 and C4 lead. C1 and C2 support them, as extensions of Kale & Vishwanath
+(2026) and Liu (2026) to BIPIA-style insertion data.
+
 | Claim | Statement | New relative to Liu 2026 and AlignSentinel | Status |
 |---|---|---|---|
-| **C1** Construction artifacts | In insertion-based IPI data built BIPIA-style, content-free features predict the label: insertion position, whitespace rewriting, span surface form, and template reuse. Row-level splits leak documents. Detectors trained on such data use these shortcuts (position probes, F006/F007). | Liu 2026 does not analyze BIPIA construction; it audits detector training-set overlap instead. AlignSentinel does not touch BIPIA. **But:** Kale & Vishwanath 2026 already show position + length metadata solving a standard IPI evaluation (AgentDojo probes), and Li et al. 2026 show position and token-trigger shortcuts in defenses. | **Confirmatory** for "IPI detection evaluations contain content-free shortcuts" and for "detectors use position". **Novel** for the specific, measured artifact inventory of BIPIA-style insertion data (label-dependent position, whitespace collapse, span form, leakage) and its effect on detector scores. The row-level leakage part must be re-established with committed code before it appears (CLAUDE.md core claim 1). |
-| **C2** V3 + generalization study | V3, an artifact-controlled insertion dataset, passes pre-registered content-free gates (v3_design §8). Train on V2 vs V3, then measure transfer to AgentDojo and τ-bench (H1), alongside public detectors. | Liu 2026 already shows BIPIA ranking ≠ agent ranking, and that training-input form drives transfer; Fomin 2026 shows in-distribution splits overstate generalization. Neither builds an artifact-controlled training set or asks whether removing construction artifacts changes transfer. | **Confirmatory** for "in-distribution / BIPIA scores do not predict agent-benchmark performance". **Novel** for the V3 dataset itself and for H1 (does artifact removal improve transfer). |
+| **C1** Construction artifacts | In insertion-based IPI data built BIPIA-style, content-free features predict the label: insertion position, whitespace rewriting, span surface form, and template reuse. Row-level splits leak documents. Detectors trained on such data use these shortcuts (position probes, F006/F007). | Liu 2026 does not analyze BIPIA construction; it audits detector training-set overlap instead. AlignSentinel does not touch BIPIA. **But:** Kale & Vishwanath 2026 already show position + length metadata solving a standard IPI evaluation (AgentDojo probes), and Li et al. 2026 show position and token-trigger shortcuts in defenses. | Supporting; described as **extending Kale & Vishwanath 2026 to BIPIA-style insertion data**. **Confirmatory** for "IPI detection evaluations contain content-free shortcuts" and for "detectors use position". **Novel** for the specific, measured artifact inventory of BIPIA-style insertion data (label-dependent position, whitespace collapse, span form, leakage) and its effect on detector scores. The row-level leakage part must be re-established with committed code before it appears (CLAUDE.md core claim 1). |
+| **C2** V3 + generalization study | V3, an artifact-controlled insertion dataset, passes pre-registered content-free gates (v3_design §8). Train on V2 vs V3, then measure transfer to AgentDojo and τ-bench (H1), alongside public detectors. | Liu 2026 already shows BIPIA ranking ≠ agent ranking, and that training-input form drives transfer; Fomin 2026 shows in-distribution splits overstate generalization. Neither builds an artifact-controlled training set or asks whether removing construction artifacts changes transfer. | Supporting; described as **extending Liu 2026 to training on BIPIA-style insertion data**. **Confirmatory** for "in-distribution / BIPIA scores do not predict agent-benchmark performance". **Novel** for the V3 dataset itself and for H1 (does artifact removal improve transfer). |
 | **C3** Query-counterfactual intent pairs | Pairs that keep the document and the inserted instruction byte-identical and vary **only** the user request. In one member the instruction is requested/aligned (label 0); in the other it subverts the request (label 1). Any detector that does not read the request scores both members identically, so its pair accuracy is 0.5 by construction. | AlignSentinel's benchmark varies the **content** under a fixed user prompt ("benign and malicious variants for the same user-prompt-tool pair"); it never holds the instruction fixed while swapping the request (§2). Liu 2026 builds no such pairs. Kale & Vishwanath's matched negatives hold the conversation fixed and remove or neutralize the injection, which also varies content. Contrast sets / counterfactual augmentation (Gardner et al. 2020; Kaushik et al. 2020) are the general method. | **Novel** as an IPI evaluation design (request-only counterfactuals). **Confirmatory** for the premise that instruction-like text can be legitimate when the user requested it (AlignSentinel's aligned class). |
-| **C4** Intent-Counterfactual Training (ICT) | A text-only query/context segment-pair cross-encoder trained on V3 plus C3 training pairs, with a pairwise margin loss between the two members of each pair. No white-box access to any LLM. | Request-conditioned detection already exists: AlignSentinel (a white-box attention classifier on a backend LLM, trained on its own aligned/misaligned data), TaskTracker (activations), PromptSleuth and IntentGuard (LLM reasoning), Liu's task-aware judges, and Sheltron's goal segment. Kale & Vishwanath train with matched negatives, but those vary content, not the request. | **Confirmatory** for "condition the detector on the user request". **Novel** for the training signal (request-only counterfactual pairs + margin loss) in a black-box text classifier. Whether it matters is H2–H4. |
+| **C4** Intent-Counterfactual Training (ICT) | A text-only query/context segment-pair cross-encoder trained on V3 plus C3 training pairs, with a pairwise margin loss between the two members of each pair. No white-box access to any LLM. | Request-conditioned detection already exists: AlignSentinel (a white-box attention classifier on a backend LLM, trained on its own aligned/misaligned data), TaskTracker (activations), PromptSleuth and IntentGuard (LLM reasoning), Liu's task-aware judges, and Sheltron's goal segment. Kale & Vishwanath train with matched negatives, but those vary content, not the request. Motivation: Liu's untrained Sheltron-with-goal loses TPR@1%FPR and gains FPR; ICT trains for the request. Ablation (a) (same backbone, request given, no pairs, no margin) separates "trained with pairs" from "has the request" (H3 comparator d). | **Confirmatory** for "condition the detector on the user request". **Novel** for the training signal (request-only counterfactual pairs + margin loss) in a black-box text classifier. Whether it matters is H2–H4. |
 
 ## 2. AlignSentinel: precise answers
 
@@ -139,17 +148,26 @@ predicted direction.
 on the evaluated clean rows, as in Liu 2026) is always reported next to it, for comparability, and never decides a
 hypothesis.
 
-**Calibration sets for AgentDojo and τ-bench.**
-- Each rebuilt agent set is split by user task, 50/50, with a seeded hash of the task id (seed 0):
-  - The **calibration half** contributes only its clean rows, used to fix thresholds. No injected row of the
-    calibration half is ever scored for a reported number.
-  - The **evaluation half** is where every reported agent-set number is measured.
-- This mimics setting a threshold on normal traffic of the deployment, without seeing attacks.
-- Every detector uses the same calibration rows.
-- Before any model is scored, the sizes of both halves are recorded in `docs/findings.md` as a data entry.
-- **Fallback (fixed now):** if a calibration or evaluation half has fewer than 500 clean rows, TPR@1%FPR is `n/a`
-  for that set, and that set's part of H1/H3 is decided on calibrated TPR@5%FPR instead.
-- Secondary calibration: source-side, on V3 val clean rows. It is reported where gated, and never decides a hypothesis.
+**Calibration for AgentDojo and τ-bench (amendment A3).**
+- **Primary: a dedicated calibration pool.**
+  - It holds ≥ 1,000 clean synthetic tool outputs from the agent-style data pipeline (to be built).
+  - It is generated with no AgentDojo or τ-bench templates and is held out from all training, including ICT, V3 and
+    every ablation.
+  - Each item carries an `Intent | Context` pair in the same format as the agent sets.
+  - The calibrated threshold for every detector on every agent set is fixed on this pool's clean scores, for both
+    1% and 5% FPR. This mirrors deployment: you calibrate on your own clean traffic.
+  - With ≥ 1,000 calibration rows, the `MIN_CLEAN` gates pass. TPR@1%FPR is then computable on the **full**
+    AD-Matched (585 clean), AD-Shift (975) and TB-Matched (1,533).
+  - The pool's build script, size and sha256 are recorded in `docs/data_provenance.md` and `docs/findings.md` before
+    any model is scored on an agent set.
+- **H1 waits for the pool.** If the pool does not exist when H1 would be decided, H1 is not decided until it does.
+  It does not fall back to another protocol.
+- **Secondary: task-disjoint halves.**
+  - Each agent set is split by user task, 50/50, with a seeded hash of the task id (seed 0).
+  - Thresholds are fixed on the clean rows of the calibration half and TPR is measured on the evaluation half.
+  - The `MIN_CLEAN` gates apply, so TPR@1%FPR is `n/a` where a half has fewer than 500 clean rows.
+  - Reported, never decides a hypothesis.
+- **Secondary: source-side,** on V3 val clean rows. Reported where gated, and never decides a hypothesis.
 
 **Building the agent sets.**
 - We rebuild AD-Matched, AD-Shift and TB-Matched with Liu's released scripts, pinned to a repository commit recorded
@@ -165,7 +183,8 @@ val for V2 models) and val pairs. No agent-benchmark or test-pair data is used f
 
 **Comparison.**
 - Architecture and hyperparameters are identical to `src/models/deberta.py`, input `Intent | Context`.
-- Metric: run-mean calibrated TPR@1%FPR on AD-Matched, AD-Shift and TB-Matched (evaluation halves), compared with a paired bootstrap.
+- Metric: run-mean calibrated TPR@1%FPR on the full AD-Matched, AD-Shift and TB-Matched, with the threshold from
+  the calibration pool (A3). Compared with a paired bootstrap.
 
 **Decision.**
 - **Supported:** V3 > V2 with CI excluding 0 on at least 2 of the 3 sets, and V3 < V2 with CI excluding 0 on none.
@@ -186,31 +205,49 @@ All three sets are reported regardless.
 - Every content-only detector is 0.5 by construction (see Shared protocol), so no comparison against them is needed for H2.
 - The V3-DeBERTa (no pairs) pair accuracy is reported next to ICT. It reads the intent, so it is not 0.5 by construction.
 
-### H3: ICT beats published detectors where intent matters, and holds up where it doesn't
+### H3: ICT beats request-aware comparators where intent matters, and is non-inferior where it doesn't
 
 **(a) Intent-dependent transfer sets.** Held-out pairs from V3-test, and pairs built on AgentDojo/τ-bench tool
 outputs. On each set, ICT has:
 - higher pair accuracy, and
 - higher calibrated TPR@5%FPR
 
-than every published detector evaluated, with each paired-bootstrap CI of (ICT − detector) excluding 0. The
-calibration set is the clean (aligned) members of the val pairs for V3 pairs, and the calibration-half clean rows
-for agent pairs.
+than every **H3a comparator** (below), with each paired-bootstrap CI of (ICT − comparator) excluding 0. The
+calibration set is the clean (aligned) members of the val pairs for V3 pairs, and the calibration pool (A3) for
+agent pairs.
 
-**Comparator set for H3:** every published detector we can run:
-- the 15 in Liu 2026, where obtainable;
-- the two task-aware LLM judges, with Liu's frozen prompt, Qwen2.5-7B and Llama-3.1-8B;
-- Sheltron with its user-goal segment.
+**H3a comparators (amendment A1).** H3 on pairs is decided against these four request-aware comparators only:
+- **(a) task-aware LLM judges:** Qwen2.5-7B and Llama-3.1-8B, with Liu 2026's judge prompt copied verbatim from the
+  pinned release into a committed file before scoring.
+- **(b) Sheltron with its user-goal segment,** as in Liu 2026.
+- **(c) a PromptArmor-style frontier-LLM detector given the user request.**
+  - PromptArmor (Shi et al., arXiv:2507.15219) prompts an off-the-shelf LLM to detect injected prompts. Adding the
+    user request is our adaptation, so it is labelled "PromptArmor-style".
+  - One API model, with a dated model id.
+  - The prompt, the score definition (how a continuous score is obtained) and the spending cap are committed in one
+    file before any scoring, and never edited afterwards.
+  - It is run on the eval sets and the calibration sets it needs, never on training data.
+  - If the cap is hit, the unscored rows are reported and the comparison is made on the scored subset of clusters
+    only, for all models.
+- **(d) ICT ablation (a):** same backbone, request given, trained on V3 without pairs and without the margin loss,
+  with the same selection protocol and seeds as ICT.
+  - **This is the most important comparator.** Beating it shows the pairs and margin loss matter, not just access
+    to the request.
 
-The comparison against content-only detectors on pairs is trivially satisfied whenever H2 holds: they tie, so their
-pair accuracy is 0.5 and their pair TPR equals their pair FPR. The informative comparators are the request-aware ones
-(the judges and Sheltron-goal). We report it that way.
+**Reported but not deciding H3a:**
+- Content-only detectors. They tie on pairs, so their pair accuracy is 0.5 and their pair TPR equals their pair FPR.
+  Beating them follows from H2.
+- An AlignSentinel-style re-implementation, if one exists (§2).
 
-**(b) Content-only transfer sets.** On AD-Matched, AD-Shift and TB-Matched, ICT's calibrated TPR@1%FPR is within
-the 95% CI of the best published detector on that set, or higher.
-- Operationalized as: ICT's run-mean point estimate ≥ the lower CI bound of the best detector's calibrated TPR@1%FPR.
-- "Best" is chosen per set by calibrated point estimate on the evaluation half.
-- Horizon-Labs and Wolf Defender stay in the comparator set (see §6).
+**(b) Content-only transfer sets (amendment A2): non-inferiority.**
+- On each of AD-Matched, AD-Shift and TB-Matched, ICT is **non-inferior** if the lower bound of the paired-bootstrap
+  95% CI of (TPR_ICT − TPR_best) is above −0.05 (5 points absolute).
+  - TPR is the calibrated TPR@1%FPR, with thresholds from the calibration pool (A3).
+  - ICT's TPR is the run-mean.
+  - The bootstrap is clustered by user task.
+- "Best" is the published detector with the highest calibrated point estimate on that full set.
+- Horizon-Labs and Wolf Defender are eligible to be best (see §6).
+- The point difference and its CI are reported for every set, whatever the outcome.
 
 **Decision.**
 - **H3 supported:** (a) holds on both pair sets **and** (b) holds on all three agent sets.
@@ -238,10 +275,16 @@ the 95% CI of the best published detector on that set, or higher.
   - Two independent human annotators label every held-out pair member (aligned / subverting / unclear).
   - Cohen's κ ≥ 0.6 on the label.
   - Only pairs on which both annotators agree with the intended labels are used.
-  - ≥ 100 such pairs per held-out pair set, so pair TPR@5%FPR is gated in.
-- **P3.** Pairs pass a request-only gate: a TF-IDF+LR and a DeBERTa trained on the **user request alone** (train
-  pairs) have held-out pair accuracy ≤ 0.60, run-mean point estimate. Otherwise the request phrasing gives the label
-  away and the pairs carry an artifact, like C1.
+  - **≥ 200 adjudicated pairs per held-out pair set** (V3-derived and agent-derived; amendment A5).
+    - At p = 0.5, n = 200 gives a binomial 95% half-width of about ±0.07, against ±0.10 for n = 100.
+    - The cluster bootstrap is wider when one source doc or task contributes several pairs.
+- **P3.** Pairs pass two leakage checks (amendment A4):
+  - **(i) Request-only gate:** a TF-IDF+LR and a DeBERTa trained on the **user request alone** (train pairs) have
+    held-out pair accuracy ≤ 0.60, run-mean point estimate. Otherwise the request phrasing gives the label away and
+    the pairs carry an artifact, like C1.
+  - **(ii) Content-identity check:** a content-only model (TF-IDF+LR on the context alone) trained on the train pairs
+    scores held-out pair accuracy **exactly 0.5**, and so does each content-only public detector.
+    - Any deviation means a pair's contexts differ. It is a build bug, fixed before any hypothesis is decided.
 - **P4.** The C1 leakage claim is re-established with committed code.
 
 | P1–P4 | H1 | H2 | H3 | H4 | Paper |
@@ -275,17 +318,28 @@ H1 is reported in every row. "Main venue" vs "workshop" means scope, not a speci
 | Threat | How we report it |
 |---|---|
 | **Pairs are LLM-generated.** The query phrasing may carry generator artifacts. ICT trains on pairs from the same process, so it could learn the generator rather than intent. | P2 (two annotators, κ, agreed pairs only) and P3 (request-only gate) are reported with their numbers. The `subtle` subset is reported separately. Agent pairs are built on a different source (tool outputs) from the training pairs (V3 documents). Every table says "LLM-drafted, human-validated". |
-| **Horizon-Labs and Wolf Defender training data is partly unknown.** "Zero-shot" cannot be verified. Liu found no verbatim overlap for Horizon-Labs, but audits find only verbatim copies. Wolf Defender's card reports evaluation on AgentDojo-derived data, and its training data is not public. | Both are marked † ("training data not auditable; may include agent-benchmark-derived data") in every table. They **stay** in the H3 comparator set (the conservative choice). H3b is also reported with them excluded, labelled secondary. We never call them zero-shot. |
+| **Horizon-Labs and Wolf Defender training data is partly unknown.** "Zero-shot" cannot be verified. Liu found no verbatim overlap for Horizon-Labs, but audits find only verbatim copies. Wolf Defender's card reports evaluation on AgentDojo-derived data, and its training data is not public. | Both are marked † ("training data not auditable; may include agent-benchmark-derived data") in every table. They **stay** eligible as "best" in H3b (the conservative choice). H3b is also reported with them excluded, labelled secondary. We never call them zero-shot. |
 | **PIGuard trained on BIPIA and InjecAgent strings** (Liu 2026 audit). | PIGuard rows on V2/V3 and InjecAgent/TB-Matched are flagged "attack strings seen in training". |
 | **Small cells on BIPIA-derived sets.** V3 test email has 12 docs and code 15 (v3_design R7); V2 test has 144 clean rows (F009). | Per-task numbers carry CIs and are descriptive only; no hypothesis is decided per task. TPR@1%FPR is n/a where gated. Results are the mean over 5 split realizations, plus per-seed values. |
 | **Agent sets are simulations** (synthetic YAML/JSON; static attacks; the τ-bench injection point is chosen by the builder). | Stated in limitations. TPR is an upper bound against adaptive attackers. No adaptive-attack claim is made. |
-| **The calibration half reduces evaluation size.** | Both halves' sizes are recorded before scoring. The fallback to TPR@5%FPR is fixed in §3. |
+| **The task-disjoint-half protocol (secondary) shrinks the evaluated sets.** | It is secondary only (A3). The `MIN_CLEAN` gates apply, and both halves' sizes are recorded before scoring. |
 | **Oracle numbers in Liu 2026 are not comparable to our calibrated ones.** | We re-score everything ourselves and label each number's protocol. |
 | **V2 judge prompt v1 was not provably frozen** (findings caveat). | The judges in H3 use Liu's released prompt, committed in `docs/` or `src/` before scoring and never edited. |
-| **Re-implemented baselines** (AlignSentinel-style) differ from the original. | Labelled re-implementation; outside the H3 comparator set (§2). |
+| **Re-implemented baselines** (AlignSentinel-style) differ from the original. | Labelled re-implementation; outside the H3a comparator set (§2, A1). |
+| **The calibration pool is synthetic** (A3). Its clean distribution may differ from AgentDojo/τ-bench clean outputs, so the realized FPR can miss the target. | The realized FPR on each agent set's clean rows is reported next to every calibrated TPR. The task-disjoint-half protocol is reported as a secondary check. |
+| **Frontier-API comparator** (A1c): the model can change behind a fixed id, the budget may truncate scoring, and we cannot audit its training data. | Dated model id, the frozen prompt file, the scoring date, and the count of unscored rows are reported. It carries † like the unauditable detectors. |
 
-## Amendments (before the first scored result)
+## Amendments before scoring
 
-| date | change |
-|---|---|
-| 2026-10-28 | Initial version. |
+No model has been scored on any V3, pair, AgentDojo or τ-bench set at the time of these amendments, so they are
+part of the pre-registration, not deviations.
+
+| id | date | change |
+|---|---|---|
+| A0 | 2026-10-28 | Initial version (commit 82e66b6). |
+| A1 | 2026-10-28 | **H3a comparators.** H3 on pairs is decided only against the request-aware comparators: (a) the Qwen2.5-7B and Llama-3.1-8B task-aware judges (Liu 2026 prompt, verbatim); (b) Sheltron with its user-goal segment; (c) a PromptArmor-style frontier-LLM detector given the user request (one API model, frozen prompt, budget-capped, eval sets only); (d) ICT ablation (a) (same backbone, request given, no pairs, no margin), which is the key comparator. Content-only detectors are reported but do not decide H3a. AlignSentinel stays an optional re-implementation outside the set. |
+| A2 | 2026-10-28 | **H3b uses non-inferiority.** "ICT's point estimate ≥ the best detector's lower CI bound" → ICT is non-inferior if the lower bound of the paired-bootstrap 95% CI of (TPR_ICT − TPR_best) > −0.05 absolute, on each of AD-Matched, AD-Shift, TB-Matched. The point difference and CI are reported either way. |
+| A3 | 2026-10-28 | **Calibration.** Primary calibrated thresholds for all agent sets come from a dedicated pool of ≥ 1,000 clean synthetic tool outputs from the agent-style pipeline (to be built), held out from all training and generated without AgentDojo/τ-bench templates. TPR@1%FPR is measured on the full agent sets. The task-disjoint-half protocol becomes secondary. If the pool does not exist when H1 would be decided, H1 waits. The earlier fallback to TPR@5%FPR is removed. |
+| A4 | 2026-10-28 | **P3 extended.** In addition to the request-only gate (≤ 0.60), a content-only model trained on the pairs must score held-out pair accuracy exactly 0.5 (content identical within each pair). |
+| A5 | 2026-10-28 | **Pair counts.** The minimum rises from ≥ 100 to ≥ 200 adjudicated pairs per eval set (V3-derived, agent-derived). κ ≥ 0.6 is unchanged. |
+| A6 | 2026-10-28 | **Framing.** The paper leads with C3 and C4. C1 and C2 are supporting evidence, described as extending Kale & Vishwanath 2026 and Liu 2026 to BIPIA-style insertion data. Liu's Sheltron-with-goal result is the motivation for C4 (untrained use of the request fails; ICT trains for it), not counter-evidence. |
