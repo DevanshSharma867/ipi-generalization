@@ -229,6 +229,8 @@ agent pairs.
   - It is run on the eval sets and the calibration sets it needs, never on training data.
   - If the cap is hit, the unscored rows are reported and the comparison is made on the scored subset of clusters
     only, for all models.
+  - **Superseded in part by A7:** every setting (model, score, prompt, scope, order, budget) is fixed in
+    `configs/frontier_detector.yaml`, and a set is scored in full or not at all.
 - **(d) ICT ablation (a):** same backbone, request given, trained on V3 without pairs and without the margin loss,
   with the same selection protocol and seeds as ICT.
   - **This is the most important comparator.** Beating it shows the pairs and margin loss matter, not just access
@@ -276,6 +278,8 @@ agent pairs.
   - Cohen's κ ≥ 0.6 on the label.
   - Only pairs on which both annotators agree with the intended labels are used.
   - **≥ 200 adjudicated pairs per held-out pair set** (V3-derived and agent-derived; amendment A5).
+    - The generator over-generates about 300 pairs per eval set. Two annotators from the project group label them
+      independently; disagreements are adjudicated (A9).
     - At p = 0.5, n = 200 gives a binomial 95% half-width of about ±0.07, against ±0.10 for n = 100.
     - The cluster bootstrap is wider when one source doc or task contributes several pairs.
 - **P3.** Pairs pass two leakage checks (amendment A4):
@@ -329,6 +333,22 @@ H1 is reported in every row. "Main venue" vs "workshop" means scope, not a speci
 | **The calibration pool is synthetic** (A3). Its clean distribution may differ from AgentDojo/τ-bench clean outputs, so the realized FPR can miss the target. | The realized FPR on each agent set's clean rows is reported next to every calibrated TPR. The task-disjoint-half protocol is reported as a secondary check. |
 | **Frontier-API comparator** (A1c): the model can change behind a fixed id, the budget may truncate scoring, and we cannot audit its training data. | Dated model id, the frozen prompt file, the scoring date, and the count of unscored rows are reported. It carries † like the unauditable detectors. |
 
+## 7. Build order (amendment A8)
+
+Each step starts only after the previous one is done. The calibration pool is on the critical path for H1 and H3b.
+
+1. **V3 freeze.** Gates pass on split seeds 0–4, integrity checks pass, the benign pool is human-reviewed, then tag `v3-frozen`.
+2. **Transfer harness**, including a reproduction of Liu 2026. AD-Matched, AD-Shift and TB-Matched are rebuilt
+   with Liu's pinned scripts, and the reproduction is checked against Liu's released scores.
+3. **Agent-style data and the calibration pool** (A3).
+4. **V3 baselines.** H1 is decided here: V2- vs V3-trained DeBERTa on the agent sets, with calibration-pool thresholds.
+5. **Pairs.** Generation, two-annotator labelling, adjudication, and the P2/P3 checks.
+6. **ICT**, its ablations, and the H3a comparators. Comparator (c) is scored in the order fixed in
+   `configs/frontier_detector.yaml` (A7).
+
+The GPT-4.1 snapshot in A7 shuts down on 2027-01-14, so comparator (c) must be scored before then. In this order it
+needs the calibration pool (step 3) and the adjudicated pairs (step 5).
+
 ## Amendments before scoring
 
 No model has been scored on any V3, pair, AgentDojo or τ-bench set at the time of these amendments, so they are
@@ -343,3 +363,20 @@ part of the pre-registration, not deviations.
 | A4 | 2026-10-28 | **P3 extended.** In addition to the request-only gate (≤ 0.60), a content-only model trained on the pairs must score held-out pair accuracy exactly 0.5 (content identical within each pair). |
 | A5 | 2026-10-28 | **Pair counts.** The minimum rises from ≥ 100 to ≥ 200 adjudicated pairs per eval set (V3-derived, agent-derived). κ ≥ 0.6 is unchanged. |
 | A6 | 2026-10-28 | **Framing.** The paper leads with C3 and C4. C1 and C2 are supporting evidence, described as extending Kale & Vishwanath 2026 and Liu 2026 to BIPIA-style insertion data. Liu's Sheltron-with-goal result is the motivation for C4 (untrained use of the request fails; ICT trains for it), not counter-evidence. |
+| A7 | 2026-10-28 | **Comparator (c) fixed** in `configs/frontier_detector.yaml`. Details below the table. |
+| A8 | 2026-10-28 | **Build order** recorded in §7: V3 freeze → transfer harness (with Liu reproduction) → agent-style data and calibration pool → V3 baselines (decide H1) → pairs → ICT. |
+| A9 | 2026-10-28 | **Annotation.** The pair generator over-generates about 300 pairs per eval set (V3-derived, agent-derived). Two annotators from the project group label them independently, with κ ≥ 0.6. Disagreements are adjudicated, and the target is ≥ 200 adjudicated pairs per set (A5). |
+
+**A7 details** (`configs/frontier_detector.yaml`):
+- **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.
+  - Fallback `gpt-4.1-mini-2025-04-14`, only if the primary is unavailable. The fallback decision is made and
+    committed before scoring, never after.
+- **Score:** first-token logprobs, P(Yes) / (P(Yes) + P(No)), summed over case and whitespace variants within the
+  top-20 alternatives. If logprobs are unavailable: stop, with no verbalized-confidence fallback.
+- **Prompt:** `configs/prompts/frontier_detector_v1.json` (sha256 `b585a82a…80c6`). It is PromptArmor's published
+  detection instruction plus the user request.
+- **Scope:** calibration pool, the eval pairs, AD-Matched, AD-Shift, TB-Matched, and V3 split seed 0 only.
+  - They are scored in that fixed order. A set is started only if the remaining budget covers it, and is reported
+    only if complete.
+- **Budget:** cap USD 60. The pre-scoring estimate is USD 6.8–28.6 at standard prices, depending on the
+  not-yet-measured agent-output length. It is re-estimated from the real sets before scoring.
