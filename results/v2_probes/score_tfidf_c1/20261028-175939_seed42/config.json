@@ -1,0 +1,73 @@
+{
+  "run_id": "20261028-175939_seed42",
+  "version": "v2_probes",
+  "exp": "score_tfidf_c1",
+  "seed": 42,
+  "args": {
+    "model": "tfidf",
+    "checkpoint": null,
+    "name": "tfidf_c1",
+    "sets": [
+      "p1_neutral_insertion",
+      "p2_benign_moved",
+      "p3_attack_moved",
+      "p4_whitespace_only",
+      "v2_test"
+    ],
+    "doc_frac": 1.0,
+    "seed": 42,
+    "checkpoint_origin": "frozen_v2",
+    "allow_dirty": false,
+    "probe_manifest_sha256": "9596710ec5b85fc3c6aa24467a7870ee9dda7fc01cc587de93f020aed663c894"
+  },
+  "git_commit": "a59aae446032dd8cab107cfb79b86ea44ff441ed",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "v2_probes",
+  "data_files_sha256": {
+    "/Users/devanshsharma/projects/nlp/data/probes_v2/p1_neutral_insertion.csv": "872d319202d4c72ef5295382f4387db6b857f38c89636a22965822c6b443ecf5",
+    "/Users/devanshsharma/projects/nlp/data/probes_v2/p2_benign_moved.csv": "4f0f6e09d4141ecc84b0359d721a62f43dddafac07d921c8198a5d45d623b6c9",
+    "/Users/devanshsharma/projects/nlp/data/probes_v2/p3_attack_moved.csv": "2b72a8c12427441e8cd99b524fdca67b0e6a8a027c3a50935f67c3f589700072",
+    "/Users/devanshsharma/projects/nlp/data/probes_v2/p4_whitespace_only.csv": "5874f85d1efd70bb301bca4bcb1b4057440ca680324334a02a1160531becee76",
+    "/Users/devanshsharma/projects/nlp/data/processed/test.csv": "dbd92d8cf1bd19f9d5a84bff7e0f3e515eb5444836bc864e380cadda3c6f6097",
+    "/Users/devanshsharma/projects/nlp/checkpoints/tfidf_lr_model.pkl": "366a0ba3f299add9ca41cae4a0d30b3628470a16c47202f81bfb444d5def433f"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null
+  },
+  "argv": [
+    "scripts/score_probes.py",
+    "--model",
+    "tfidf",
+    "--name",
+    "tfidf_c1",
+    "--checkpoint_origin",
+    "frozen_v2",
+    "--sets",
+    "p1_neutral_insertion",
+    "p2_benign_moved",
+    "p3_attack_moved",
+    "p4_whitespace_only",
+    "v2_test"
+  ],
+  "started": "2026-10-28T17:59:39"
+}

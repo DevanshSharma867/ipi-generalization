@@ -428,6 +428,7 @@ def tables_tpr_protocols():
                 continue
             p, b, t = ("v2", "tpr", model, es), r["bootstrap"], r["tpr"]
             put(macro_name(*p, "nclean"), str(r["n_clean"]))
+            put(macro_name(*p, "nclusters"), str(r["n_clusters"]))
             main_rows.append(
                 f"{es_label} & {tex(model)} & {r['n_clean']} & {cell(b['roc_auc'], *p, 'auroc', digits=4)} & "
                 f"{cell(b['fpr_default_clean'], *p, 'fprdefault', digits=4)} & "
@@ -438,7 +439,8 @@ def tables_tpr_protocols():
             g, c = ("v2", "calgap", model, es), t["calibrated@5pct_fpr"]
             fpr = cell(c["realized_fpr"], *g, "realizedfpr", digits=4) if c["status"] == "ok" else "--"
             thr = num(c["threshold"], *g, "threshold", digits=4) if c["status"] == "ok" else "--"
-            gap_rows.append(f"{es_label} & {tex(model)} & {c.get('n_clean_calib', '--')} & "
+            ncal = put(macro_name(*g, "ncalib"), str(c["n_clean_calib"])) if "n_clean_calib" in c else "--"
+            gap_rows.append(f"{es_label} & {tex(model)} & {ncal} & "
                             f"{tpr_cell(t['oracle@5pct_fpr'], *g, 'oracle5')} & {tpr_cell(c, *g, 'calibrated5')} & "
                             f"{thr} & {fpr} \\\\")
         for metric in ("roc_auc", "fpr_default_clean", "f1_macro", "tpr_oracle@5pct_fpr", "tpr_calibrated@5pct_fpr"):

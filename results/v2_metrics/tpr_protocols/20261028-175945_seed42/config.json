@@ -1,0 +1,292 @@
+{
+  "run_id": "20261028-175945_seed42",
+  "version": "v2_metrics",
+  "exp": "tpr_protocols",
+  "seed": 42,
+  "args": {
+    "bootstrap": {
+      "B": 1000,
+      "seed": 42
+    },
+    "seeds": [
+      42,
+      123,
+      999
+    ],
+    "sources": [
+      [
+        "tfidf_c1",
+        "v2_test",
+        "results/v2_std/v2_test/tfidf_c1.csv",
+        "results/v2_probes/score_tfidf_c1_v2val/20261028-174301_seed42/predictions.csv"
+      ],
+      [
+        "tfidf_c1",
+        "injecagent",
+        "results/v2_std/injecagent/tfidf.csv",
+        "results/v2_probes/score_tfidf_c1_v2val/20261028-174301_seed42/predictions.csv"
+      ],
+      [
+        "tfidf_c1",
+        "deepset",
+        "results/v2_std/deepset/tfidf.csv",
+        "results/v2_probes/score_tfidf_c1_v2val/20261028-174301_seed42/predictions.csv"
+      ],
+      [
+        "tfidf_c100_tuned",
+        "v2_test",
+        "results/v2_std/v2_test/tfidf_c100_tuned.csv",
+        null
+      ],
+      [
+        "tfidf_c100_loto",
+        "v2_loto_test_email",
+        "results/v2_std/v2_loto_test_email/tfidf_c100_loto.csv",
+        null
+      ],
+      [
+        "tfidf_c100_loto",
+        "v2_loto_test_table",
+        "results/v2_std/v2_loto_test_table/tfidf_c100_loto.csv",
+        null
+      ],
+      [
+        "tfidf_c100_loto",
+        "v2_loto_test_code",
+        "results/v2_std/v2_loto_test_code/tfidf_c100_loto.csv",
+        null
+      ],
+      [
+        "deberta_s42",
+        "v2_test",
+        "results/v2_std/v2_test/deberta_s42.csv",
+        "results/v2_std/v2_val/deberta_s42.csv"
+      ],
+      [
+        "deberta_s42",
+        "injecagent",
+        "results/v2_std/injecagent/deberta_s42.csv",
+        "results/v2_std/v2_val/deberta_s42.csv"
+      ],
+      [
+        "deberta_s42",
+        "deepset",
+        "results/v2_std/deepset/deberta_s42.csv",
+        "results/v2_std/v2_val/deberta_s42.csv"
+      ],
+      [
+        "deberta_loto_s42",
+        "v2_loto_test_email",
+        "results/v2_std/v2_loto_test_email/deberta_loto_s42.csv",
+        null
+      ],
+      [
+        "deberta_loto_s42",
+        "v2_loto_test_table",
+        "results/v2_std/v2_loto_test_table/deberta_loto_s42.csv",
+        null
+      ],
+      [
+        "deberta_loto_s42",
+        "v2_loto_test_code",
+        "results/v2_std/v2_loto_test_code/deberta_loto_s42.csv",
+        null
+      ],
+      [
+        "deberta_s123",
+        "v2_test",
+        "results/v2_std/v2_test/deberta_s123.csv",
+        "results/v2_std/v2_val/deberta_s123.csv"
+      ],
+      [
+        "deberta_s123",
+        "injecagent",
+        "results/v2_std/injecagent/deberta_s123.csv",
+        "results/v2_std/v2_val/deberta_s123.csv"
+      ],
+      [
+        "deberta_s123",
+        "deepset",
+        "results/v2_std/deepset/deberta_s123.csv",
+        "results/v2_std/v2_val/deberta_s123.csv"
+      ],
+      [
+        "deberta_loto_s123",
+        "v2_loto_test_email",
+        "results/v2_std/v2_loto_test_email/deberta_loto_s123.csv",
+        null
+      ],
+      [
+        "deberta_loto_s123",
+        "v2_loto_test_table",
+        "results/v2_std/v2_loto_test_table/deberta_loto_s123.csv",
+        null
+      ],
+      [
+        "deberta_loto_s123",
+        "v2_loto_test_code",
+        "results/v2_std/v2_loto_test_code/deberta_loto_s123.csv",
+        null
+      ],
+      [
+        "deberta_s999",
+        "v2_test",
+        "results/v2_std/v2_test/deberta_s999.csv",
+        "results/v2_std/v2_val/deberta_s999.csv"
+      ],
+      [
+        "deberta_s999",
+        "injecagent",
+        "results/v2_std/injecagent/deberta_s999.csv",
+        "results/v2_std/v2_val/deberta_s999.csv"
+      ],
+      [
+        "deberta_s999",
+        "deepset",
+        "results/v2_std/deepset/deberta_s999.csv",
+        "results/v2_std/v2_val/deberta_s999.csv"
+      ],
+      [
+        "deberta_loto_s999",
+        "v2_loto_test_email",
+        "results/v2_std/v2_loto_test_email/deberta_loto_s999.csv",
+        null
+      ],
+      [
+        "deberta_loto_s999",
+        "v2_loto_test_table",
+        "results/v2_std/v2_loto_test_table/deberta_loto_s999.csv",
+        null
+      ],
+      [
+        "deberta_loto_s999",
+        "v2_loto_test_code",
+        "results/v2_std/v2_loto_test_code/deberta_loto_s999.csv",
+        null
+      ],
+      [
+        "protectai",
+        "v2_test",
+        "results/v2_std/v2_test/protectai.csv",
+        null
+      ],
+      [
+        "protectai",
+        "injecagent",
+        "results/v2_std/injecagent/protectai.csv",
+        null
+      ],
+      [
+        "protectai",
+        "deepset",
+        "results/v2_std/deepset/protectai.csv",
+        null
+      ],
+      [
+        "piguard",
+        "v2_test",
+        "results/v2_std/v2_test/piguard.csv",
+        null
+      ],
+      [
+        "piguard",
+        "injecagent",
+        "results/v2_std/injecagent/piguard.csv",
+        null
+      ],
+      [
+        "piguard",
+        "deepset",
+        "results/v2_std/deepset/piguard.csv",
+        null
+      ],
+      [
+        "judge_qwen2.5_7b",
+        "v2_test",
+        "results/v2_probes/score_judge_qwen2.5_7b/20261021-123213_seed42/predictions.csv",
+        null
+      ],
+      [
+        "judge_qwen2.5_7b",
+        "injecagent",
+        "results/v2_std/injecagent/judge_qwen2.5_7b.csv",
+        null
+      ]
+    ],
+    "external_data_versions": {
+      "injecagent": "InjecAgent@f19c9f2 + build bab750e",
+      "deepset": "hf:deepset/prompt-injections@4f61ecb + build bab750e"
+    }
+  },
+  "git_commit": "a59aae446032dd8cab107cfb79b86ea44ff441ed",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "v2-frozen+external",
+  "data_files_sha256": {
+    "/Users/devanshsharma/projects/nlp/data/external/deepset.csv": "4f456710471b6c571c4b05ed6eb100816f8840d616a82fcdee7a3486f7556aa7",
+    "/Users/devanshsharma/projects/nlp/data/external/injecagent.csv": "54e446cdf31092f66576a71b0b1ea4005dcac1350d731c594d0b019e2e135d89",
+    "/Users/devanshsharma/projects/nlp/results/v2_probes/score_judge_qwen2.5_7b/20261021-123213_seed42/predictions.csv": "2fd9718360971e66793b0ed9669346187b99fdda33e407a44684c5a56123eb1c",
+    "/Users/devanshsharma/projects/nlp/results/v2_probes/score_tfidf_c1_v2val/20261028-174301_seed42/predictions.csv": "92252da35e8ca09338ce2b93ca8def912054e2d955e332dc1d0b7ad0b41cd2fd",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/deepset/deberta_s123.csv": "69430a395a7ba3563dc819589096be29b5084c92ab037ac3955891a4c6e1a83e",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/deepset/deberta_s42.csv": "2cc6a8db18ffef13b511dae2700d26049018f77faa1f12d5c0c30435f9d2029d",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/deepset/deberta_s999.csv": "7be608279a9480c43995c8b8720ad9aaed7a44f051761e7c2183f472324b7aec",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/deepset/piguard.csv": "b8e44f2790194bad7435e3e2a4e3fa820a0f0d900e80988deeec5cd2d291ed0f",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/deepset/protectai.csv": "a827f455c90780164af46a197afa3d81305116cecb668820e9b732a54d43045b",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/deepset/tfidf.csv": "66d566928d413eb32a6eee6e878f5b752202a083dd95d0656f257fa6ae43b494",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/injecagent/deberta_s123.csv": "bf4cd79111494825dae29824dfdb5cf57f43a3e3933f0665cd370c5f572d4f98",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/injecagent/deberta_s42.csv": "b210d7ff2518498ea1cf65da470167f03207e0b856dff7f432fa7dacbb3f6d3d",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/injecagent/deberta_s999.csv": "ebc80a3e6f23125080a88ce7bcf9e8227472946bfea90cc32f220d0f0877a598",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/injecagent/judge_qwen2.5_7b.csv": "b9056298afb1843e345a57cc04864d5f4e138ae3d9e17d1c60602a5cf74de6a2",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/injecagent/piguard.csv": "1cfa3f9bc9e6c7285599d80c12f7873009f416f11d431b133692e22b0caf5d0a",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/injecagent/protectai.csv": "c43cc1376b80b2efae2c63b92388725e178ca311a1139b577d9a1ba795430cbf",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/injecagent/tfidf.csv": "22afcb2bb9acf9fd061293b655c016d9aa74abf14223f8f2ca2ed46a613999e2",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_code/deberta_loto_s123.csv": "a9cd6f5fffb5972006223c68034227cc028b18285bca5c06a334321581833cb3",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_code/deberta_loto_s42.csv": "a17743247dd9508d8c27dd0be45b8cca5061ddbe3d856ac22ca866404fd86a9c",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_code/deberta_loto_s999.csv": "45121bdddbeaf5923b814cefeea0c3c8162a6e105d096bba924b3fd8278cba35",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_code/tfidf_c100_loto.csv": "21edeadfd5b62bb24ebc711b88b4e412af06dc161dc7a9bd9ed4b13205529754",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_email/deberta_loto_s123.csv": "d3d69e56c2e36e9bda8777db0798ff60d16bda8215788b689463500fbf9c3ac9",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_email/deberta_loto_s42.csv": "452731f797d36b1c235d0fd20c78818cf644cffa44ceb0af58d34c0e1779bf58",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_email/deberta_loto_s999.csv": "6c17adbfb9dee701091ebe4499607842d8b1aaa3d97eb76f7c4a75932b9d379d",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_email/tfidf_c100_loto.csv": "0e4aa95ac590504d880e1bbf7b056929a0786b0effbc9c5e60dfd776d7fec1fb",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_table/deberta_loto_s123.csv": "0da212aea567d95678c10a84d3e5a21409a0c08d74d19b8db6025a5fbd5d7755",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_table/deberta_loto_s42.csv": "99941a4e990e17deb8e76711fa016cc69787eb412530e70c7e18d1cf0a637871",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_table/deberta_loto_s999.csv": "e1efd929b82d20f6f8dcc5667409eb74430f4d7a6ed9e420eb220f6650307859",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_loto_test_table/tfidf_c100_loto.csv": "0988271af90421aa9d40380d4eed96fc5308de4a02c2153149380dd914ce1b23",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_test/deberta_s123.csv": "6b8b7928919df70f8944460d02504aa2b05e7c0332a2e1cd02b65a96beef832e",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_test/deberta_s42.csv": "9918aea03b4de8ddc12239470be7d1e8709129224be3e60f72a058b538b20768",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_test/deberta_s999.csv": "1554221f75d825a6e368d14b2cb58e648eca27264f7a7ecb187ca41272a9899e",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_test/piguard.csv": "9e892371e8a9b483e996f8cf2980d8739ff36e5d2f2d05b19a14695efe227437",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_test/protectai.csv": "4f6a61a4da614e5e5d677ad1f8351d9d46ea3479e8f1c15aa62d08543aa5b00e",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_test/tfidf_c1.csv": "5f587d805901ceb0c75f9844055b66a2f7caf7c34be65345b24a5e51ddfedc99",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_test/tfidf_c100_tuned.csv": "90b05957426047b52cb52f4606ad6b971c9867e47610858f835b0a723f85aed0",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_val/deberta_s123.csv": "271aa516c96a1e1e942a3972ed6534d37fa494dd4697e922360d60b12923a5e3",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_val/deberta_s42.csv": "cf0e91db7edd5cea8e25a124fbd33192ac03b4e09cb02953d9cbc11d809075f6",
+    "/Users/devanshsharma/projects/nlp/results/v2_std/v2_val/deberta_s999.csv": "4c173adaffdaa31521579e8bb04f31fb92fa79ea71b33001157908be82931aee"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null
+  },
+  "argv": [
+    "scripts/v2_tpr_metrics.py"
+  ],
+  "started": "2026-10-28T17:59:45"
+}
