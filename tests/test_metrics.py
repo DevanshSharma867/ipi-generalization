@@ -130,3 +130,47 @@ def test_mcnemar():
     assert (r["b"], r["c"]) == (3, 0)
     assert r["p_exact"] == pytest.approx(0.25)    # 2 * 0.5**3
     assert M.mcnemar(y, a, a)["p_exact"] == 1.0
+
+
+# ─── TPR@FPR protocols ────────────────────────────────────────────────────────
+
+def test_calibrated_threshold_hand_computed():
+    clean = np.arange(100) / 100.0                  # 0.00 .. 0.99
+    t = M.calibrated_threshold(clean, 0.05)         # k = 5 -> just above the 6th largest (0.94)
+    assert 0.94 < t <= 0.95 and (clean >= t).mean() == pytest.approx(0.05)
+    tied = np.array([0.9] * 10 + [0.1] * 90)        # 10% tied at the top: none of them may be flagged at 5%
+    assert (tied >= M.calibrated_threshold(tied, 0.05)).mean() == 0.0
+    assert M.calibrated_threshold([0.3, 0.7], 1.0) == float("-inf")
+
+
+def _frame(n_clean, n_inj, seed=0):
+    rng = np.random.RandomState(seed)
+    return pd.DataFrame({"label": [0] * n_clean + [1] * n_inj,
+                         "prob": np.r_[rng.uniform(0, 0.8, n_clean), rng.uniform(0.2, 1, n_inj)],
+                         "doc_id": [f"d{i // 2}" for i in range(n_clean + n_inj)]})
+
+
+def test_tpr_protocols_gate_on_clean_count():
+    r = M.tpr_at_fpr_protocols(_frame(144, 144), calib_clean_scores=np.linspace(0, 1, 144), B=50)
+    assert r["oracle@1pct_fpr"]["status"] == "n/a (n_clean=144)"
+    assert r["calibrated@1pct_fpr"]["status"] == "n/a (n_clean=144)"
+    assert r["oracle@5pct_fpr"]["status"] == "ok" and r["calibrated@5pct_fpr"]["status"] == "ok"
+    assert M.format_tpr(r["oracle@1pct_fpr"]) == "n/a (n_clean=144)"
+    small_cal = M.tpr_at_fpr_protocols(_frame(144, 144), calib_clean_scores=np.linspace(0, 1, 60), B=50)
+    assert small_cal["calibrated@5pct_fpr"]["status"] == "n/a (n_clean_calib=60)"
+    none = M.tpr_at_fpr_protocols(_frame(600, 100), calib_clean_scores=None, B=20)
+    assert none["oracle@1pct_fpr"]["status"] == "ok"
+    assert none["calibrated@1pct_fpr"]["status"] == "n/a (no calibration scores)"
+
+
+def test_tpr_protocols_match_point_functions():
+    d = _frame(600, 300)
+    cal = np.random.RandomState(1).uniform(0, 0.8, 600)
+    r = M.tpr_at_fpr_protocols(d, calib_clean_scores=cal, B=20)
+    o = r["oracle@1pct_fpr"]
+    assert o["tpr"]["point"] == M.recall_at_fpr(d["label"], d["prob"], 0.01)[0]
+    c = r["calibrated@5pct_fpr"]
+    thr = M.calibrated_threshold(cal, 0.05)
+    assert c["threshold"] == thr
+    assert c["tpr"]["point"] == pytest.approx((d["prob"][d["label"] == 1] >= thr).mean())
+    assert c["realized_fpr"]["point"] == pytest.approx((d["prob"][d["label"] == 0] >= thr).mean())

@@ -19,6 +19,7 @@ metrics.json into tables and paper/numbers.tex macros.
     python scripts/probe_report.py
 """
 
+import argparse
 import shutil
 import sys
 from pathlib import Path
@@ -33,7 +34,7 @@ from sklearn.metrics import f1_score
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from metrics import df_metrics, doc_cluster_bootstrap, paired_bootstrap
-from runlog import start_run
+from runlog import add_run_args, start_run
 
 PROBES_RES = ROOT / "results" / "v2_probes"
 FIG = ROOT / "paper" / "figures" / "position_flag_rates"
@@ -175,12 +176,14 @@ def figure(report, run_dir):
 
 
 def main():
+    a = add_run_args(argparse.ArgumentParser(description=__doc__)).parse_args()
     found = latest_predictions()
     missing = [m for m in MODEL_ORDER if m not in found and m != "deberta_mean"]
     sources = {m: src for m, (_, src) in found.items()}
     run = start_run(version="v2_probes", exp="probe_report", seed=42,
                     args={"sources": sources, "missing": missing, "bootstrap": {"B": 1000, "seed": 42}},
-                    data_version="v2_probes", data_files=sorted({ROOT / p for src in sources.values() for p in src}))
+                    data_version="v2_probes", data_files=sorted({ROOT / p for src in sources.values() for p in src}),
+                    allow_dirty=a.allow_dirty)
     report, frames = {}, {}
     for m, (df, src) in found.items():
         run.log(f"{m}: {', '.join(src)}")

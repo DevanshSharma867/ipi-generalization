@@ -42,7 +42,7 @@ sys.path[:0] = [str(ROOT / "src"), str(ROOT / "src" / "models"), str(ROOT / "scr
 from metrics import df_metrics, doc_cluster_bootstrap
 from preprocess import preprocess_for_tfidf
 from probes import extract_inserted_span, form_tags
-from runlog import start_run
+from runlog import add_run_args, start_run
 from tfidf_lr import LR_PARAMS, TFIDF_PARAMS
 from convert_v2_predictions import v2_fields
 
@@ -215,7 +215,7 @@ def main():
     ap.add_argument("--data_dir", default=str(ROOT / "data" / "v3"))
     ap.add_argument("--data_version", default=None)
     ap.add_argument("--exp", default="artifact_baselines")
-    a = ap.parse_args()
+    a = add_run_args(ap).parse_args()
     seeds = a.split_seeds or [a.split_seed]
     loaded = {s: load(a.dataset, a.data_dir, s) for s in (seeds if a.dataset == "v3" else [None])}
     files = [f for v in loaded.values() for f in v[2]]
@@ -225,7 +225,7 @@ def main():
                           "data_dir": str(a.data_dir), "n_tokens": N_TOK, "site_tokens": SITE_TOK,
                           "tfidf": TFIDF_PARAMS, "lr": LR_PARAMS, "span_features": SPAN_FEATURES, "gate": GATE,
                           "gates": V3_GATES if a.dataset == "v3" else None, "bootstrap": {"B": 1000, "seed": 42}},
-                    data_version=a.data_version or a.dataset, data_files=files)
+                    data_version=a.data_version or a.dataset, data_files=files, allow_dirty=a.allow_dirty)
     per_seed, all_preds, diag = {}, [], {}
     for s, (train, test, _, eval_set) in loaded.items():
         run.log(f"split_seed {s}: rows with a span: train {train.span.notna().sum()}, test {test.span.notna().sum()}")

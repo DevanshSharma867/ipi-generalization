@@ -15,6 +15,7 @@ Logged with runlog to results/v3/design_facts/<run_id>/metrics.json.
     python scripts/v3_design_facts.py
 """
 
+import argparse
 import json
 import os
 import random
@@ -31,7 +32,7 @@ sys.path[:0] = [str(ROOT / "src"), str(ROOT / "scripts")]
 from build_probes_v2 import code_sentences
 from data_pipeline import load_attacks, load_jsonl
 from probes import _line_starts_outside_fences, code_chunks, email_sentences
-from runlog import start_run
+from runlog import add_run_args, start_run
 from transformers import AutoTokenizer
 from transformers.utils import logging as hf_logging
 
@@ -98,6 +99,7 @@ def form_profile(strings):
 
 
 def main():
+    a = add_run_args(argparse.ArgumentParser(description=__doc__)).parse_args()
     tok = AutoTokenizer.from_pretrained(str(TOK))
     train_atk, test_atk = load_attacks(BENCH)
     benign = json.load(open(ROOT / "data" / "benign" / "benign_instructions.json"))
@@ -108,7 +110,8 @@ def main():
                           "val_categories": VAL_CATEGORIES, "tokenizer": str(TOK.relative_to(ROOT))},
                     data_version="bipia@a004b69",
                     data_files=[BENCH / t / f"{s}.jsonl" for t in TASKS for s in ("train", "test")]
-                    + [BENCH / f for f in raw_files] + [ROOT / "data" / "benign" / "benign_instructions.json"])
+                    + [BENCH / f for f in raw_files] + [ROOT / "data" / "benign" / "benign_instructions.json"],
+                    allow_dirty=a.allow_dirty)
     out = {}
 
     # 1. Code fields and intents

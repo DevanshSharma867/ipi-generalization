@@ -16,8 +16,13 @@ Layout: results/<version>/<exp>/<YYYYmmdd-HHMMSS>_seed<k>/{config.json, metrics.
 Frozen paths (tag v2-frozen) are refused: data/processed/, checkpoints/tfidf_lr_model.pkl and every file
 or top-level directory under results/ that exists in the tag. `assert_not_frozen(path)` is the guard
 other scripts should call before writing.
+
+A run refuses to start when code or data outside results/ has uncommitted changes, so config.json's git_commit
+identifies exactly what produced it. Scripts expose `--allow-dirty` via `add_run_args(parser)` to override; the
+flag is recorded in config.json and the registry commit gets a "-dirty" suffix. finish() requires metrics.json.
 """
 
+import argparse
 import datetime as _dt
 import hashlib
 import json
@@ -67,6 +72,12 @@ def code_dirty() -> bool:
         if not path.startswith("results/"):
             return True
     return False
+
+
+def add_run_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
+    parser.add_argument("--allow-dirty", action="store_true",
+                        help="run despite uncommitted changes outside results/ (recorded in config.json)")
+    return parser
 
 
 def frozen_paths() -> list:
@@ -170,7 +181,7 @@ def write_json(path, obj) -> None:
 
 class Run:
     def __init__(self, version: str, exp: str, seed: int, args: Dict, data_version: str,
-                 data_files: Iterable, results_root: Path = RESULTS):
+                 data_files: Iterable, results_root: Path = RESULTS, allow_dirty: bool = False):
         if not version or "/" in version or not exp or "/" in exp:
             raise ValueError("version and exp must be single non-empty path components")
         self.version, self.exp, self.seed, self.data_version = version, exp, seed, data_version
@@ -178,6 +189,9 @@ class Run:
         self.dir = Path(results_root) / version / exp / self.run_id
         self.registry = Path(results_root) / "REGISTRY.md"
         assert_not_frozen(self.dir)
+        dirty = code_dirty()
+        if dirty and not allow_dirty:
+            raise RuntimeError("uncommitted changes outside results/ (git status); commit them or pass --allow-dirty")
         if self.dir.exists():
             raise FileExistsError(self.dir)
         self.dir.mkdir(parents=True)
@@ -186,7 +200,7 @@ class Run:
         files = {str(f): sha256(f) for f in data_files}
         config = {
             "run_id": self.run_id, "version": version, "exp": exp, "seed": seed, "args": args,
-            "git_commit": _git("rev-parse", "HEAD"), "git_dirty": code_dirty(),
+            "git_commit": _git("rev-parse", "HEAD"), "git_dirty": dirty, "allow_dirty": allow_dirty,
             "data_version": data_version, "data_files_sha256": files,
             "library_versions": _versions(), "hardware": _hardware(),
             "argv": sys.argv, "started": _dt.datetime.now().isoformat(timespec="seconds"),
@@ -213,11 +227,14 @@ class Run:
 
     def finish(self) -> None:
         self._log.close()
+        if not (self.dir / "metrics.json").exists():
+            raise RuntimeError(f"{self.dir}: finish() without save_metrics(); every run directory needs metrics.json")
         append_registry(self)
 
 
-def start_run(version: str, exp: str, seed: int, args: Dict, data_version: str, data_files: Iterable = ()) -> Run:
-    return Run(version, exp, seed, args, data_version, data_files)
+def start_run(version: str, exp: str, seed: int, args: Dict, data_version: str, data_files: Iterable = (),
+              allow_dirty: bool = False) -> Run:
+    return Run(version, exp, seed, args, data_version, data_files, allow_dirty=allow_dirty)
 
 
 def append_registry(run: Run) -> None:

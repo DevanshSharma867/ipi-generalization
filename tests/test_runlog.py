@@ -35,7 +35,7 @@ def test_frozen_version_refused():
 def test_run_layout(tmp_path):
     data = tmp_path / "data.csv"
     data.write_text("a\n1\n")
-    run = runlog.Run("v3", "unit", 7, {"lr": 0.1}, "v3", [data], results_root=tmp_path / "results")
+    run = runlog.Run("v3", "unit", 7, {"lr": 0.1}, "v3", [data], results_root=tmp_path / "results", allow_dirty=True)
     run.log("hello")
     run.save_metrics({"f1": 0.5, "nan": float("nan")}, headline=("f1", 0.5))
     run.save_predictions(pd.DataFrame({"id": ["a"], "label": [1], "prob": [0.9], "pred": [1], "threshold": [0.5],
@@ -70,3 +70,19 @@ def test_validate_predictions_rejects_extra_columns():
     with pytest.raises(ValueError):
         runlog.validate_predictions(pd.DataFrame({"id": [1], "label": [1], "prob": [1], "pred": [1], "threshold": [.5],
                                                   "model": ["m"], "eval_set": ["s"], "bogus": [0]}))
+
+
+def test_dirty_tree_refused_unless_allowed(tmp_path, monkeypatch):
+    monkeypatch.setattr(runlog, "code_dirty", lambda: True)
+    with pytest.raises(RuntimeError):
+        runlog.Run("v3", "unit", 1, {}, "v3", [], results_root=tmp_path / "results")
+    run = runlog.Run("v3", "unit", 1, {}, "v3", [], results_root=tmp_path / "results", allow_dirty=True)
+    cfg = json.loads((run.dir / "config.json").read_text())
+    assert cfg["git_dirty"] is True and cfg["allow_dirty"] is True
+
+
+def test_finish_requires_metrics(tmp_path, monkeypatch):
+    monkeypatch.setattr(runlog, "code_dirty", lambda: False)
+    run = runlog.Run("v3", "unit", 2, {}, "v3", [], results_root=tmp_path / "results")
+    with pytest.raises(RuntimeError):
+        run.finish()
