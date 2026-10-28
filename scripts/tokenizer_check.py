@@ -14,6 +14,7 @@ Results are logged through runlog to results/v3/tokenizer_check/<run_id>/metrics
     python scripts/tokenizer_check.py
 """
 
+import argparse
 import difflib
 import io
 import logging
@@ -27,7 +28,7 @@ import sentencepiece as spm
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path[:0] = [str(ROOT / "src"), str(ROOT / "src" / "models")]
-from runlog import start_run
+from runlog import add_run_args, start_run
 import deberta  # sets HF offline env exactly as training does
 from preprocess import build_combined_text
 from transformers import AutoTokenizer
@@ -84,10 +85,11 @@ def newline_probe(tok):
 
 
 def main():
+    a = add_run_args(argparse.ArgumentParser(description=__doc__)).parse_args()
     path = deberta.resolve_model_name_or_path("microsoft/deberta-v3-base")
     run = start_run(version="v3", exp="tokenizer_check", seed=0,
                     args={"model_path": path, "rows": "20 fixed V2 rows (see pick_rows)"},
-                    data_version="v2", data_files=[DATA])
+                    data_version="v2", data_files=[DATA], allow_dirty=a.allow_dirty)
     df = pick_rows(pd.read_csv(DATA))
     texts = [build_combined_text(r) for _, r in df.iterrows()]
     run.log(f"rows: {df.task_type.value_counts().to_dict()}, with newline: {sum(chr(10) in t for t in texts)}")

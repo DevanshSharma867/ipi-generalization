@@ -21,6 +21,7 @@ Logged with runlog to results/v2_probes/truncation_control/<run_id>/ (metrics.js
     python scripts/truncation_control.py
 """
 
+import argparse
 import os
 import sys
 from pathlib import Path
@@ -34,7 +35,7 @@ sys.path[:0] = [str(ROOT), str(ROOT / "src"), str(ROOT / "scripts")]
 import score_detectors as SD
 from preprocess import build_combined_text
 from probe_report import MEAN_SEEDS, latest_predictions, mean_f1, mean_flag_rate, model_report, seed_mean_frame
-from runlog import start_run
+from runlog import add_run_args, start_run
 from transformers import AutoTokenizer
 from transformers.utils import logging as hf_logging
 
@@ -90,6 +91,7 @@ def source_key(ids: pd.Series) -> pd.Series:
 
 
 def main():
+    a = add_run_args(argparse.ArgumentParser(description=__doc__)).parse_args()
     probes = pd.concat([pd.read_csv(PROBES / f"{s}.csv", keep_default_na=False).assign(eval_set=s) for s in SETS],
                        ignore_index=True)
     tok_dirs = {"deberta": "deberta_v2_ckpt", "protectai": "protectai", "piguard": "piguard", "qwen": "qwen2.5_7b"}
@@ -98,7 +100,8 @@ def main():
                           "judge_truncation": "none (score_detectors.score_judge passes the full chat-template prompt)"},
                     data_version="v2_probes",
                     data_files=[PROBES / f"{s}.csv" for s in SETS]
-                    + sorted(p for d in tok_dirs.values() for p in (TOK / d).iterdir()))
+                    + sorted(p for d in tok_dirs.values() for p in (TOK / d).iterdir()),
+                    allow_dirty=a.allow_dirty)
 
     vis = []
     for fam, d in tok_dirs.items():

@@ -26,20 +26,22 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path[:0] = [str(ROOT), str(ROOT / "src"), str(ROOT / "scripts")]
 import score_detectors as SD
 from convert_v2_predictions import v2_fields
-from runlog import sha256, start_run
+from runlog import add_run_args, sha256, start_run
 
 PROBES = ROOT / "data" / "probes_v2"
 PROBE_SETS = ["p1_neutral_insertion", "p2_benign_moved", "p3_attack_moved", "p4_whitespace_only"]
+V2_SPLITS = {"v2_test": "test", "v2_val": "val"}  # v2_val: calibration scores for the "calibrated" protocol
 ALL_SETS = PROBE_SETS + ["v2_test"]
+SETS = ALL_SETS + ["v2_val"]
 CLEAN_TYPE = {"p1_neutral_insertion": "neutral", "p2_benign_moved": "benign_imperative",
               "p3_attack_moved": "", "p4_whitespace_only": "whitespace_collapsed"}
 SUBSAMPLE_SETS = ("p2_benign_moved", "p3_attack_moved")  # --doc_frac applies to these only
 
 
 def load_set(name):
-    if name == "v2_test":
-        df = pd.read_csv(ROOT / "data/processed/test.csv")
-        return df, v2_fields("test").loc[df["id"]].reset_index().rename(columns={"index": "id"})
+    if name in V2_SPLITS:
+        df = pd.read_csv(ROOT / f"data/processed/{V2_SPLITS[name]}.csv")
+        return df, v2_fields(V2_SPLITS[name]).loc[df["id"]].reset_index().rename(columns={"index": "id"})
     df = pd.read_csv(PROBES / f"{name}.csv", keep_default_na=False)
     fields = pd.DataFrame({
         "id": df["id"], "doc_id": df["doc_id"], "split_seed": 42, "task": df["task_type"], "label": df["label"],
@@ -59,14 +61,14 @@ def main():
     ap.add_argument("--model", choices=list(SD.SCORERS), required=True)
     ap.add_argument("--checkpoint", default=None)
     ap.add_argument("--name", required=True, help="model name in predictions and run directory")
-    ap.add_argument("--sets", nargs="+", default=ALL_SETS, choices=ALL_SETS)
+    ap.add_argument("--sets", nargs="+", default=ALL_SETS, choices=SETS)
     ap.add_argument("--doc_frac", type=float, default=1.0, help="fraction of docs scored in P2/P3 (judge budget)")
     ap.add_argument("--seed", type=int, default=42, help="doc subsample seed")
     ap.add_argument("--checkpoint_origin", default="", help="e.g. hpc_original / retrained_identical_config")
-    a = ap.parse_args()
+    a = add_run_args(ap).parse_args()
 
-    files = [PROBES / f"{s}.csv" for s in a.sets if s != "v2_test"]
-    files += [ROOT / "data/processed/test.csv"] if "v2_test" in a.sets else []
+    files = [PROBES / f"{s}.csv" for s in a.sets if s not in V2_SPLITS]
+    files += [ROOT / f"data/processed/{V2_SPLITS[s]}.csv" for s in a.sets if s in V2_SPLITS]
     if a.model == "tfidf":
         files.append(ROOT / "checkpoints/tfidf_lr_model.pkl")
     args = {**vars(a), "probe_manifest_sha256": sha256(PROBES / "manifest.json")}
@@ -75,7 +77,7 @@ def main():
                                                      + SD.JUDGE_SYSTEM.encode()).hexdigest()
         args["judge_system_prompt"] = SD.JUDGE_SYSTEM
     run = start_run(version="v2_probes", exp=f"score_{a.name}", seed=a.seed, args=args,
-                    data_version="v2_probes", data_files=files)
+                    data_version="v2_probes", data_files=files, allow_dirty=a.allow_dirty)
     preds = []
     for s in a.sets:
         df, fields = load_set(s)

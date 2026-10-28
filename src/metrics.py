@@ -13,6 +13,13 @@ Conventions
 - Recall@FPR uses the full ROC curve (`drop_intermediate=False`): the largest TPR among
   operating points with FPR <= target, and the *lowest* threshold that achieves it.
   This matches run_experiments.compute_recall_at_fpr exactly.
+- TPR@FPR under two labelled threshold protocols (`tpr_at_fpr_protocols`):
+  "oracle": the threshold is chosen on the clean rows of the evaluated set itself (= recall_at_fpr), and
+  re-chosen inside every bootstrap resample. "calibrated": the threshold is fixed in advance on the clean rows of
+  a separate calibration set (default: the training-side validation split) and held fixed in every resample, so
+  its CI ignores calibration noise; the realized FPR on the evaluated set is reported next to it.
+  A TPR@FPR is shown only when the evaluated set (and, for "calibrated", the calibration set) has at least
+  MIN_CLEAN[target] clean rows; otherwise its status is "n/a (n_clean=<n>)".
 - doc_cluster_bootstrap draws doc_ids with np.random.RandomState(seed).choice in
   order-of-appearance, exactly as run_experiments.doc_cluster_bootstrap did, so V2 CIs
   are reproducible to the bit.
@@ -129,6 +136,72 @@ def pair_metrics(df: pd.DataFrame, score_col: str = "prob") -> Dict[str, float]:
         "pair_accuracy": pair_accuracy(df, score_col),
         "roc_auc": float(roc_auc_score(y, df[score_col])) if len(np.unique(y)) > 1 else float("nan"),
     }
+
+
+# ─── TPR@FPR threshold protocols ──────────────────────────────────────────────
+
+HEADLINE_FPR_TARGETS = (0.01, 0.05)
+MIN_CLEAN = {0.01: 500, 0.05: 100}
+
+
+def calibrated_threshold(clean_scores, target_fpr: float) -> float:
+    """Smallest threshold t with mean(clean_scores >= t) <= target_fpr: just above the (k+1)-th largest clean
+    score, k = floor(target_fpr * n). Ties are handled because t exceeds every tied copy of that score."""
+    s = np.sort(np.asarray(clean_scores, dtype=float))[::-1]
+    k = int(np.floor(target_fpr * len(s) + 1e-9))
+    return float("-inf") if k >= len(s) else float(np.nextafter(s[k], np.inf))
+
+
+def _gate(n_clean: int, target: float, what: str = "n_clean") -> Optional[str]:
+    return None if n_clean >= MIN_CLEAN[target] else f"n/a ({what}={n_clean})"
+
+
+def tpr_at_fpr_protocols(df: pd.DataFrame, calib_clean_scores=None, targets=HEADLINE_FPR_TARGETS,
+                         B: int = 1000, seed: int = 42, cluster_col: str = "doc_id") -> Dict[str, Dict]:
+    """
+    {"oracle@1pct_fpr": {...}, "calibrated@1pct_fpr": {...}, ...} for a frame with label/prob/cluster_col.
+    Each leaf: status ("ok" or "n/a (...)"), n_clean, threshold and, when ok, tpr {"point", "ci"};
+    "calibrated" also gives n_clean_calib and realized_fpr {"point", "ci"} on the evaluated set.
+    Pass calib_clean_scores=None when no calibration scores exist (status "n/a (no calibration scores)").
+    """
+    df = df.reset_index(drop=True)
+    y, prob = df["label"].values.astype(int), df["prob"].values.astype(float)
+    n_clean = int((y == 0).sum())
+    out = {}
+    for t in targets:
+        key = _fpr_key(t)
+        gate = _gate(n_clean, t)
+        o = {"status": gate or "ok", "n_clean": n_clean, "target_fpr": t}
+        if gate is None:
+            o["threshold"] = recall_at_fpr(y, prob, t)[1]
+            o["tpr"] = doc_cluster_bootstrap(df, lambda d: recall_at_fpr(d["label"], d["prob"], t)[0],
+                                             B=B, seed=seed, cluster_col=cluster_col)
+        out[f"oracle@{key}"] = o
+
+        c = {"n_clean": n_clean, "target_fpr": t}
+        if calib_clean_scores is None:
+            c["status"] = "n/a (no calibration scores)"
+        else:
+            n_cal = int(len(calib_clean_scores))
+            c["n_clean_calib"] = n_cal
+            c["status"] = gate or _gate(n_cal, t, "n_clean_calib") or "ok"
+            c["threshold"] = calibrated_threshold(calib_clean_scores, t)
+            if c["status"] == "ok":
+                thr = c["threshold"]
+                both = doc_cluster_bootstrap(df, lambda d: {
+                    "tpr": float((d["prob"][d["label"] == 1] >= thr).mean()),
+                    "fpr": float((d["prob"][d["label"] == 0] >= thr).mean())}, B=B, seed=seed, cluster_col=cluster_col)
+                c["tpr"], c["realized_fpr"] = both["tpr"], both["fpr"]
+        out[f"calibrated@{key}"] = c
+    return out
+
+
+def format_tpr(entry: Dict, digits: int = 4) -> str:
+    """'0.8125 [0.70, 0.91]' when shown, else the gate status, e.g. 'n/a (n_clean=144)'."""
+    if entry["status"] != "ok":
+        return entry["status"]
+    lo, hi = entry["tpr"]["ci"]
+    return f"{entry['tpr']['point']:.{digits}f} [{lo:.2f}, {hi:.2f}]"
 
 
 # ─── Bootstrap ────────────────────────────────────────────────────────────────
