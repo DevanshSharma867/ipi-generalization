@@ -49,6 +49,25 @@ def test_run_layout(tmp_path):
     assert list(pd.read_csv(run.dir / "predictions.csv").columns) == runlog.PRED_COLUMNS
     assert "hello" in (run.dir / "log.txt").read_text()
     assert run.run_id.endswith("_seed7") and run.run_id in (tmp_path / "results" / "REGISTRY.md").read_text()
+    assert json.loads((run.dir / "finished.json").read_text())["headline"] == ["f1", 0.5]
+
+
+def test_registry_is_a_view_of_run_dirs(tmp_path, monkeypatch):
+    # Two machines adding runs in any order produce the same registry
+    monkeypatch.setattr(runlog, "code_dirty", lambda: False)
+    root = tmp_path / "results"
+    for exp in ("b", "a"):
+        r = runlog.Run("v3", exp, 1, {}, "v3", [], results_root=root)
+        r.save_metrics({})
+        r.finish()
+    unfinished = runlog.Run("v3", "c", 1, {}, "v3", [], results_root=root)
+    text = (root / "REGISTRY.md").read_text()
+    (root / "REGISTRY.md").unlink()
+    assert runlog.write_registry(root).read_text() != text  # c now listed
+    assert "(unfinished)" in (root / "REGISTRY.md").read_text() and unfinished.run_id in (root / "REGISTRY.md").read_text()
+    rows = [l for l in (root / "REGISTRY.md").read_text().splitlines() if l.startswith("| 20")]
+    assert sorted(l.split(" | ")[2] for l in rows) == ["a", "b", "c"]
+    assert runlog.write_registry(root).read_text() == runlog.write_registry(root).read_text()  # deterministic
 
 
 def test_code_dirty_ignores_results(monkeypatch):

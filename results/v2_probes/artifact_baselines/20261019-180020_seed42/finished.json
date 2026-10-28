@@ -1,0 +1,8 @@
+{
+  "finished": null,
+  "headline": [
+    "position_oracle_f1_macro",
+    0.7333
+  ],
+  "backfilled": "from results/REGISTRY.md on 2026-10-28; headline rounded to 4 decimals"
+}
