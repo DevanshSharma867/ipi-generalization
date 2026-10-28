@@ -212,7 +212,7 @@ Part of claim C1. Re-measured from clean scores before any of these numbers is u
 ### DeBERTa position reliance on V2 (probes P1–P3)
 
 Paired within-doc contrasts. "Full" uses all probe rows. "Matched" keeps only sources whose inserted span is
-fully inside DeBERTa's 512-token window at all three positions (`scripts/truncation_control.py`).
+fully inside DeBERTa's {{VTwoTruncWindowTokens}}-token window at all three positions (`scripts/truncation_control.py`).
 
 **P3 (attack moved), recall at end − recall at start**
 
@@ -250,7 +250,7 @@ middle {{VTwoTruncDebertaMeanPThreeMiddle|ci}}, end {{VTwoTruncDebertaMeanPThree
 | s999 | {{VTwoProbeDebertaSNineNineNinePOneStartMinusMiddle|ci}} | {{VTwoTruncDebertaSNineNineNinePOnestartminusmiddleMatched|ci}} |
 | mean | {{VTwoProbeDebertaMeanPOneStartMinusMiddle|ci}} | {{VTwoTruncDebertaMeanPOnestartminusmiddleMatched|ci}} |
 
-- For s42 and s123 the P1 difference is 0. For s999 it is positive and its CI excludes 0.
+- The P1 difference is {{VTwoProbeDebertaSFourTwoPOneStartMinusMiddle}} for s42 and {{VTwoProbeDebertaSOneTwoThreePOneStartMinusMiddle}} for s123. For s999 it is positive and its CI excludes 0.
 
 ### Seed dependence of shortcut use (DeBERTa)
 
@@ -280,10 +280,10 @@ truncated fraction is {{VTwoTruncJudgeQwenTwoFiveSevenbPThreeendtruncated}} and 
 | P1 start − middle | {{VTwoProbeJudgeQwenTwoFiveSevenbPOneStartMinusMiddle|ci}} |
 | V2 test macro-F1 | {{VTwoProbeJudgeQwenTwoFiveSevenbVTwotestFOneMacro|ci}} |
 | V2 test recall (injected rows) | {{VTwoGroupsJudgeQwenTwoFiveSevenbRecall|ci}} |
-| Flag rate, V2 raw clean rows (72) | {{VTwoGroupsJudgeQwenTwoFiveSevenbRawcleanflag|ci}} |
-| Flag rate, V2 benign-imperative rows (72) | {{VTwoGroupsJudgeQwenTwoFiveSevenbBenignflag|ci}} |
-| Flag rate, P4 whitespace-only (72) | {{VTwoGroupsJudgeQwenTwoFiveSevenbPfourflag|ci}} |
-| P4 − raw clean (same 72 docs) | {{VTwoGroupsJudgeQwenTwoFiveSevenbPfourminusrawclean|ci}} |
+| Flag rate, V2 raw clean rows (n = {{VTwoGroupsJudgeQwenTwoFiveSevenbRawcleanflagN}}) | {{VTwoGroupsJudgeQwenTwoFiveSevenbRawcleanflag|ci}} |
+| Flag rate, V2 benign-imperative rows (n = {{VTwoGroupsJudgeQwenTwoFiveSevenbBenignflagN}}) | {{VTwoGroupsJudgeQwenTwoFiveSevenbBenignflag|ci}} |
+| Flag rate, P4 whitespace-only (n = {{VTwoGroupsJudgeQwenTwoFiveSevenbPfourflagN}}) | {{VTwoGroupsJudgeQwenTwoFiveSevenbPfourflag|ci}} |
+| P4 − raw clean (paired docs: {{VTwoGroupsJudgeQwenTwoFiveSevenbPfourminusrawcleanNpairs}}) | {{VTwoGroupsJudgeQwenTwoFiveSevenbPfourminusrawclean|ci}} |
 
 - The judge's P3 recall falls from start to end; the end − start CI excludes 0.
 - P2 and P1 start − middle CIs include 0.
@@ -298,7 +298,7 @@ truncated fraction is {{VTwoTruncJudgeQwenTwoFiveSevenbPThreeendtruncated}} and 
 | PIGuard | {{VTwoGroupsPiguardRecall|ci}} | {{VTwoGroupsPiguardBenignflag|ci}} | {{VTwoGroupsPiguardRawcleanflag|ci}} |
 
 - ProtectAI's recall point estimate is below its flag rate on both clean row groups.
-- PIGuard flags none of the raw clean rows; its benign-imperative flag-rate CI excludes 0.
+- PIGuard's raw clean flag rate is {{VTwoGroupsPiguardRawcleanflag}}; its benign-imperative flag-rate CI excludes 0.
 
 ## F008. summary.json Recall@5%FPR bug on pairs v0
 

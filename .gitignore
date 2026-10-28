@@ -13,3 +13,6 @@ data/raw/
 # Large model checkpoints and logs
 checkpoints/deberta*/
 logs/
+
+# Generated view of the run directories (python src/runlog.py registry); never committed
+results/REGISTRY.md

@@ -1,0 +1,8 @@
+{
+  "finished": null,
+  "headline": [
+    "deberta_mean_p3_end_minus_start_matched",
+    -0.0982
+  ],
+  "backfilled": "from results/REGISTRY.md on 2026-10-28; headline rounded to 4 decimals"
+}
