@@ -37,6 +37,8 @@ rewriting, span surface form and row-level leakage. We show that content-free fe
 **LLM- and internals-based detectors.**
 - DataSentinel (Liu et al., 2025) detects injections with a fine-tuned LLM via a known-answer test.
 - Attention Tracker (Hung et al., 2024) scores attention distraction.
+- PromptArmor (Shi et al., 2025) prompts an off-the-shelf LLM to detect and remove injected prompts. Our H3
+  comparator (c) adapts it by adding the user request.
 - MELON (Zhu et al., 2025) compares agent actions with and without the user task. It is a defense on agent
   trajectories, not a text classifier.
 
@@ -332,6 +334,15 @@ DeBERTa-v3 (He et al., 2021) is the backbone of our trained detectors.
   author        = {Kang, Mintong and Xiang, Chong and Kariyappa, Sanjay and Xiao, Chaowei and Li, Bo and Suh, Edward},
   year          = {2025},
   eprint        = {2512.00966},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CR}
+}
+
+@misc{shi2025promptarmor,
+  title         = {{PromptArmor}: Simple yet Effective Prompt Injection Defenses},
+  author        = {Shi, Tianneng and Zhu, Kaijie and Wang, Zhun and Jia, Yuqi and Cai, Will and Liang, Weida and Wang, Haonan and Alzahrani, Hend and Lu, Joshua and Kawaguchi, Kenji and Alomair, Basel and Zhao, Xuandong and Wang, William Yang and Gong, Neil and Guo, Wenbo and Song, Dawn},
+  year          = {2025},
+  eprint        = {2507.15219},
   archivePrefix = {arXiv},
   primaryClass  = {cs.CR}
 }
