@@ -1,0 +1,42 @@
+# Registry of every Hugging Face model the transfer harness scores or builds on (paper_plan §3, A1, A17).
+# eval/transfer/prefetch.py downloads each at `revision` into HF_HOME and reports access for gated ones.
+#
+# revision: the commit every run loads. Pinned 2026-10-29 by `python eval/transfer/prefetch.py pin` to the head of
+# `main` on that day (last_modified records when that head was committed), except where a source names one:
+#   - horizon-base: the revision Liu (2026) scored (his README, check_revision.py; the model changed 2026-10-02).
+#   - deberta-v3-base: the snapshot our V2 DeBERTa runs used (src/models/deberta.py).
+# Liu does not record revisions for the other detectors. If a model changed after he scored it, the reproduction
+# (Gate 2) shows it as a score mismatch on that detector; we then look for the matching revision, as he did for
+# Horizon, and record it here as a new pin with its reason.
+#
+# injecguard: the Hub redirects leolee99/InjecGuard to leolee99/PIGuard (same commit), and Liu's released
+# injecguard__* scores equal his piguard__* scores exactly (max |diff| 0 on adclean, admatched, bipia; 2026-10-29).
+# Kept so his table reproduces row for row; it is not an independent detector.
+# wolf-defender (2026-10-24) and prismor-1.5b (2026-10-21) changed shortly before Liu's last repo commit
+# (2026-10-26): first suspects if Gate 2 mismatches.
+#
+# role: liu    in Liu's score_many.py DETECTORS (name = his key; sheltron's three variants share one repo)
+#       judge  task-aware LLM judge, Liu's hf_judge.py (4-bit) and our H3 comparator (a)
+#       ours   base model of our own detectors
+models:
+  - {name: protectai-v1, repo: protectai/deberta-v3-base-prompt-injection, role: liu, revision: 373b6af0f8d16739cff5de28be326652246bfaa3, last_modified: 2026-07-09}
+  - {name: protectai-v2, repo: protectai/deberta-v3-base-prompt-injection-v2, role: liu, revision: 90c9989b1a342275dd0d1a95aad283c04e075671, last_modified: 2026-07-09}
+  - {name: protectai-small-v2, repo: protectai/deberta-v3-small-prompt-injection-v2, role: liu, revision: d7c8842daf06de3179cc3aca76b7b3a057acc5e7, last_modified: 2026-07-09}
+  - {name: piguard, repo: leolee99/PIGuard, role: liu, revision: dd78b24e330193a22d2293ac66922dd4f982f563, last_modified: 2025-08-03}
+  - {name: injecguard, repo: leolee99/InjecGuard, role: liu, revision: dd78b24e330193a22d2293ac66922dd4f982f563, last_modified: 2025-08-03}
+  - {name: jasperls, repo: JasperLS/deberta-v3-base-injection, role: liu, revision: e44351e2ce3be04c5325f041124d8f49439abf7e, last_modified: 2024-04-22}
+  - {name: testsavant-large, repo: testsavantai/prompt-injection-defender-large-v0, role: liu, revision: 19bbde286abf8abef163c20222b70d137bb21455, last_modified: 2024-11-28}
+  - {name: wolf-defender, repo: patronus-studio/wolf-defender-prompt-injection, role: liu, revision: 6ed0617b86dcc2e06a1bf74d30f7e173e335ad63, last_modified: 2026-10-24}
+  - {name: horizon-base, repo: Horizon-Labs/prompt-injection-guard-base, role: liu,
+     revision: af3c52e6a9d8bccc8e8c3ed4ba9d7fa084a47e33}
+  - {name: sheltron, repo: sheltron-ai/prompt-guard-68m, role: liu, revision: 5505d7217794c5509d680d0be81b016f2b7398f4, last_modified: 2026-07-28}
+  - {name: prismor-1.5b, repo: prismor/prompt-guard-1.5b, role: liu, revision: cfaa8f95142d0d64d9d7e29602d43cd36df15ded, last_modified: 2026-10-21}
+  - {name: promptguard2-86m, repo: meta-llama/Llama-Prompt-Guard-2-86M, role: liu, revision: a8ded8e697ce7c355e395a0df51f94adb4a2fd27, last_modified: 2025-04-29}
+  - {name: promptguard2-22m, repo: meta-llama/Llama-Prompt-Guard-2-22M, role: liu, revision: 11614a155199674a0a95e6602d6ab0417b790ed0, last_modified: 2025-04-29}
+  - {name: promptguard1-86m, repo: meta-llama/Prompt-Guard-86M, role: liu, revision: 1209add6ca7d9c1d815171b8e5571587fe3e7b03, last_modified: 2025-11-12}
+  - {name: qualifire-sentinel, repo: qualifire/prompt-injection-sentinel, role: liu, revision: e24131782819a4787c129ed2b9a4a67ae57a584e, last_modified: 2025-09-22}
+  - {name: rogue-sentinel-v2, repo: rogue-security/prompt-injection-jailbreak-sentinel-v2, role: liu, revision: 05ff9bfd1f28c5228e53121d5ee4427bb5205212, last_modified: 2026-03-11}
+  - {name: judge-qwen, repo: Qwen/Qwen2.5-7B-Instruct, role: judge, revision: a09a35458c702b33eeacc393d103063234e8bc28, last_modified: 2025-01-12}
+  - {name: judge-llama, repo: meta-llama/Llama-3.1-8B-Instruct, role: judge, revision: 0e9e39f249a16976918f6564b8830bc894c89659, last_modified: 2024-09-25}
+  - {name: deberta-v3-base, repo: microsoft/deberta-v3-base, role: ours,
+     revision: 8ccc9b6f36199bec6961081d44eb72fb3f7353f3}

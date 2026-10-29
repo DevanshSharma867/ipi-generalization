@@ -5,6 +5,8 @@
 # back to the laptop and committed.
 SCRATCH=${SCRATCH:-/scratch/csisnlp_18}
 export HF_HOME=${HF_HOME:-$SCRATCH/hf_cache}
+# the HF token stays in home (never copied, printed or logged); huggingface_hub reads it from this path
+export HF_TOKEN_PATH=${HF_TOKEN_PATH:-$HOME/.cache/huggingface/token}
 export UV_CACHE_DIR=${UV_CACHE_DIR:-$SCRATCH/uv-cache}
 export PIP_CACHE_DIR=${PIP_CACHE_DIR:-$SCRATCH/pip-cache}
 export UV_PYTHON_INSTALL_DIR=${UV_PYTHON_INSTALL_DIR:-$SCRATCH/uv-python}
