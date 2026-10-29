@@ -11,16 +11,17 @@ scored model (missing models are skipped and listed).
   - paired within-doc contrasts (paired cluster bootstrap of the difference; rows paired by their source
     row, i.e. same doc and same inserted text): P1 start - P1 middle, P3 end - P3 start, P2 start - P2 middle,
     and P4 - raw clean (same doc, whitespace-collapsed vs untouched)
-  - figure: flag rate vs position per model, P1/P2/P3 as separate lines (paper/figures/position_flag_rates.{pdf,png})
+  - figure: flag rate vs position per model, P1/P2/P3 as separate lines (position_flag_rates.{pdf,png} in the
+    run directory)
 
 Logged with runlog to results/v2_probes/probe_report/<run_id>/; scripts/make_tables.py turns its
-metrics.json into tables and paper/numbers.tex macros.
+metrics.json into tables and paper/numbers.tex macros, and copies the figure to paper/figures/. Nothing outside
+results/ is written, so scripts run after this one still see a clean tree.
 
     python scripts/probe_report.py
 """
 
 import argparse
-import shutil
 import sys
 from pathlib import Path
 
@@ -37,7 +38,6 @@ from metrics import df_metrics, doc_cluster_bootstrap, paired_bootstrap
 from runlog import add_run_args, start_run
 
 PROBES_RES = ROOT / "results" / "v2_probes"
-FIG = ROOT / "paper" / "figures" / "position_flag_rates"
 POSITIONS = ("start", "middle", "end")
 MODEL_ORDER = ["tfidf_c1", "deberta_s42", "deberta_s123", "deberta_s999", "deberta_mean", "protectai", "piguard",
                "judge_qwen2.5_7b", "judge_qwen2.5_7b_vsum"]
@@ -170,10 +170,8 @@ def figure(report, run_dir):
     handles, labels = axes.flat[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center", ncol=3, frameon=False, fontsize=9, bbox_to_anchor=(0.5, -0.02))
     fig.tight_layout(rect=(0, 0.07, 1, 1))
-    FIG.parent.mkdir(parents=True, exist_ok=True)
     for ext in ("pdf", "png"):
-        fig.savefig(f"{FIG}.{ext}", bbox_inches="tight", dpi=200)
-        shutil.copy(f"{FIG}.{ext}", run_dir / f"position_flag_rates.{ext}")
+        fig.savefig(run_dir / f"position_flag_rates.{ext}", bbox_inches="tight", dpi=200)
     plt.close(fig)
 
 
@@ -199,7 +197,7 @@ def main():
     run.save_metrics({"models": report, "missing_models": missing})
     run.log(f"missing models (not yet scored): {missing}")
     run.finish()
-    print(f"wrote {run.dir.relative_to(ROOT)} and {FIG.relative_to(ROOT)}.pdf/.png")
+    print(f"wrote {run.dir.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

@@ -9,7 +9,8 @@
 #   2. V2 val (calibration set of the "calibrated" threshold protocol): protectai, piguard, judge
 #      (DeBERTa val scores exist in results/v2_std/v2_val/; TF-IDF val was scored on CPU).
 #   The judge uses the V2 Yes/No rule (--judge_rule two_token) so these runs complete the existing V2 judge runs
-#   unchanged. The variant-rule re-score (paper_plan A12) is a separate job: jobs/rescore_v2_judge_variant.sh.
+#   unchanged. The variant-rule re-score (paper_plan A12) ran in job 422174 from commit 7f56fc9, whose copy of this
+#   script still had those steps (runs score_judge_qwen2.5_7b_vsum*; findings F015).
 # Same checkpoints and options as the original runs: checkpoints/deberta_s<seed> (hpc_original; the job stops
 # if one is missing rather than retrain), HF hub detectors, the frozen judge prompt, --doc_frac 1.0.
 # Resumable: a step is skipped when its exp already has a clean run (git_dirty false) that scored all its sets.
