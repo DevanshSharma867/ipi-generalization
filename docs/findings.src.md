@@ -608,6 +608,10 @@ The same frozen judge prompt and model as the V2 judge (F007, F009), scored with
 (paper_plan A12). The two-token V2 judge numbers stay as they are; this entry is the variant-rule judge. On the
 artifact-laden V2 benchmark only.
 
+These runs came from job 422174 (`jobs/rescore_v2_probes.sh` at 7f56fc9, which still held the variant-rule steps).
+`jobs/rescore_v2_judge_variant.sh` (added in 1542950 for the same two runs, paper_plan A15) was never submitted and
+was deleted on 2026-10-29 as redundant; the runs above are the only variant-rule V2 scores.
+
 ### Position probes and V2 test row groups (default threshold)
 
 No probe row exceeds the judge's context, so the truncated fraction is

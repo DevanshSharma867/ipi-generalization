@@ -1,7 +1,8 @@
 """
 make_tables.py
 ==============
-Generate LaTeX tables (booktabs) and paper/numbers.tex (\\newcommand macros) from results files only.
+Generate LaTeX tables (booktabs), paper/numbers.tex (\\newcommand macros) and the paper figures from results
+files only.
 
 V2 Tables III-VI of the Phase 2 report are recomputed from results/v2_std/ with src/metrics.py and checked
 against the frozen results/tfidf_lr_results.json, results/leave_one_task_out.json and results/ablations.json
@@ -18,6 +19,7 @@ to paper/numbers.tex; all others go to paper/legacy_numbers.tex, which the paper
 
 import json
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -334,6 +336,18 @@ def tables_probe_report():
         r"\midrule", *con, r"\bottomrule", r"\end{tabular}", ""]))
 
 
+def figure_probe_report():
+    """paper/figures/position_flag_rates.{pdf,png}: copied from the latest probe_report run, which draws it."""
+    m, src = latest_metrics("probe_report")
+    if m is None:
+        return
+    out = PAPER / "figures"
+    out.mkdir(parents=True, exist_ok=True)
+    for ext in ("pdf", "png"):
+        shutil.copy(src / f"position_flag_rates.{ext}", out / f"position_flag_rates.{ext}")
+    print(f"wrote {(out / 'position_flag_rates').relative_to(ROOT)}.pdf/.png (from {src.relative_to(ROOT)})")
+
+
 def diff_cell(c, *parts):
     return cell(None if c is None else {"point": c["diff"], "ci": c["ci"]}, *parts, digits=4)
 
@@ -602,6 +616,7 @@ def main():
     table_loto(loto)
     table_artifact_baselines()
     tables_probe_report()
+    figure_probe_report()
     table_seed_shortcut_variance()
     tables_truncation_control()
     table_v2_test_groups()
