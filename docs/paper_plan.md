@@ -355,6 +355,8 @@ Each step starts only after the previous one is done. The calibration pool is on
 3. **Agent-style data and the calibration pool** (A3).
 4. **V3 baselines.** H1 is decided here: V2- vs V3-trained DeBERTa on the agent sets, with calibration-pool thresholds.
 5. **Pairs.** Generation, two-annotator labelling, adjudication, and the P2/P3 checks.
+   - **Pair generation** (not annotation) may start in parallel with step 2, since it does not depend on ICT (A14).
+     Annotation and adjudication follow the order above.
 6. **ICT**, its ablations, and the H3a comparators. Comparator (c) is scored in the order fixed in
    `configs/frontier_detector.yaml` (A7).
 
@@ -380,7 +382,10 @@ part of the pre-registration, not deviations.
 | A9 | 2026-10-28 | **Annotation.** The pair generator over-generates about 300 pairs per eval set (V3-derived, agent-derived). Two annotators from the project group label them independently, with κ ≥ 0.6. Disagreements are adjudicated, and the target is ≥ 200 adjudicated pairs per set (A5). |
 | A10 | 2026-10-29 | **V3 headline aggregation.** V3 headline metrics are the task-macro (unweighted mean over EmailQA, TableQA, CodeQA), with pooled and per-task numbers reported alongside. The bootstrap is stratified by task. Where per-task values are gated out (TPR@FPR on V3 test), the pooled value is reported and labelled pooled (§3 Shared protocol). |
 | A11 | 2026-10-29 | **Frontier model lifetime.** GPT-4.1 is kept (A7). Searched 2026-10-29: every non-reasoning GPT-4-series text model, including GPT-4o, GPT-4o mini, GPT-4.1 and GPT-4.1 mini, shuts down 2027-01-14 (developers.openai.com/api/docs/deprecations). The current models (gpt-6-astra, gpt-6.1-sol, gpt-6.1-terra, gpt-6-luna) are reasoning models. Their model pages state no shutdown date and say nothing about logprobs; the API reference only says parameter support "can differ ... particularly for newer reasoning models". No model met "non-reasoning, logprobs, lives past June 2027". Added: **comparator (c) must be fully scored by 2026-12-31.** |
-| A12 | 2026-10-29 | **Judge scoring rule.** Every LLM judge scores P(Yes) / (P(Yes) + P(No)) with all case and whitespace variants summed (`src/judging.py`, `yes_no_score`; local judges via `score_detectors.score_judge(rule="variants")`, the API detector via its top-20 logprobs). The V2 Qwen judge numbers (two-token rule) stay as they are. A variant-rule re-score of the V2 judge is in `jobs/rescore_v2_probes.sh` (step 3) and will be a new findings entry. |
+| A12 | 2026-10-29 | **Judge scoring rule.** Every LLM judge scores P(Yes) / (P(Yes) + P(No)) with all case and whitespace variants summed (`src/judging.py`, `yes_no_score`; local judges via `score_detectors.score_judge(rule="variants")`, the API detector via its top-20 logprobs). The V2 Qwen judge numbers (two-token rule) stay as they are. A variant-rule re-score of the V2 judge will be a new findings entry (job: see A15). |
+| A13 | 2026-10-29 | **V3 task balance: keep all 701 TableQA docs** (option a), i.e. no TableQA cap, as built. The headline is the task-macro (A10), so a cap gains nothing on the headline. It would widen pooled CIs and remove 18% of TableQA training data. Capping at the design's 597 docs (option b) still leaves TableQA ≈ 77% of pooled test; only a cap at 300 (option c) would fix TableQA's dominance of pooled numbers, at a large cost (pooled CI ≈ 1.35× wider, 57% less TableQA training data). Per-seed test sizes by option: `docs/v3_design.md` Decisions (round 4). |
+| A14 | 2026-10-29 | **Build order.** Pair *generation* (not annotation) may start in parallel with the transfer harness (§7 step 2), since it does not depend on ICT. Annotation, adjudication and the P2/P3 checks keep their place in §7. |
+| A15 | 2026-10-29 | The variant-rule re-score of the V2 judge (A12) runs as its own job, `jobs/rescore_v2_judge_variant.sh`. `jobs/rescore_v2_probes.sh` keeps its original scope and time limit (its judge steps pin the V2 two-token rule). |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.

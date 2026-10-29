@@ -8,9 +8,8 @@
 #      (judge: P1-P4 only; its V2-test run 20261021-123213 is already clean).
 #   2. V2 val (calibration set of the "calibrated" threshold protocol): protectai, piguard, judge
 #      (DeBERTa val scores exist in results/v2_std/v2_val/; TF-IDF val was scored on CPU).
-#   3. The Qwen judge again under the variant-summing Yes/No rule (src/judging.py; paper_plan A12) on P1-P4,
-#      V2 test and V2 val, as new runs (score_judge_qwen2.5_7b_vsum*). Steps 1-2 keep the V2 rule
-#      (--judge_rule two_token) so they complete the existing V2 judge runs unchanged.
+#   The judge uses the V2 Yes/No rule (--judge_rule two_token) so these runs complete the existing V2 judge runs
+#   unchanged. The variant-rule re-score (paper_plan A12) is a separate job: jobs/rescore_v2_judge_variant.sh.
 # Same checkpoints and options as the original runs: checkpoints/deberta_s<seed> (hpc_original; the job stops
 # if one is missing rather than retrain), HF hub detectors, the frozen judge prompt, --doc_frac 1.0.
 # Resumable: a step is skipped when its exp already has a clean run (git_dirty false) that scored all its sets.
@@ -93,11 +92,5 @@ score protectai_v2val v2_val --model hf --checkpoint protectai/deberta-v3-base-p
 score piguard_v2val v2_val --model hf --checkpoint leolee99/PIGuard --checkpoint_origin hf_hub
 score judge_qwen2.5_7b_v2val v2_val --model judge --checkpoint Qwen/Qwen2.5-7B-Instruct --checkpoint_origin hf_hub \
     --judge_rule two_token
-
-# 3. Judge re-score under the variant-summing rule (new runs; the V2 judge numbers above stay as they are)
-score judge_qwen2.5_7b_vsum "$PROBE_SETS v2_test" --model judge --checkpoint Qwen/Qwen2.5-7B-Instruct \
-    --checkpoint_origin hf_hub --doc_frac 1.0 --judge_rule variants
-score judge_qwen2.5_7b_vsum_v2val v2_val --model judge --checkpoint Qwen/Qwen2.5-7B-Instruct \
-    --checkpoint_origin hf_hub --judge_rule variants
 
 echo "Done at $(date)"

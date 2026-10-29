@@ -14,6 +14,7 @@ Independent integrity check of built V3 split realizations, read back from the w
 - exact 1:1 balance per task x split; 4 rows per doc, 2 injected.
 - <= 512 DeBERTa-v3 tokens for every main, val_id, raw_clean and ambiguous row, re-tokenized here (the `long` slice
   is over-length by design); the stored n_tokens column must match.
+- long-slice docs never appear in the main set (they get no split; paper_plan A13 long-slice fix).
 - every span recoverable from char_offset/span_len.
 
     python scripts/v3_integrity.py --data_dir data/v3 --split_seeds 0 1 2 3 4 [--data_version v3]
@@ -98,6 +99,7 @@ def checks(main: pd.DataFrame, sl: dict, tok) -> dict:
     slice_bad += [f"val_id {r.id}: attack {r.attack_source}" for r in vi.itertuples()
                   if r.split != "val" or "_test" in r.attack_source or r.attack_category in cats["val"]]
     v["eval_slice_membership"] = slice_bad[:5]
+    v["long_docs_not_in_main"] = sorted(set(sl["long"]["doc_id"]) & set(main["doc_id"]))[:5]
 
     tok_bad, n_mismatch, n_rows = [], 0, 0
     for name, df in [("main", main)] + [(n, sl[n]) for n in ("val_id", "raw_clean", "ambiguous")]:

@@ -549,7 +549,9 @@ def build(split_seed: int, benign_json: Path, doc_limit: Optional[int] = None) -
     comp = near_dup_components(docs)
     docs["component"] = docs["doc_id"].map(comp)
     docs = prepare_docs(docs, fitter)
-    split_of = assign_splits(docs, comp, split_seed)
+    # Only main-eligible docs are split, so split targets count docs that actually yield rows. Docs with no
+    # main context get no split and all go to the long slice, in every split seed.
+    split_of = assign_splits(docs[docs["main_context"].notna()], comp, split_seed)
     docs["split"] = docs["doc_id"].map(split_of)
     benign = load_benign(benign_json, tok, span_cap)
     bpools = benign["pools"]
@@ -638,8 +640,8 @@ def build(split_seed: int, benign_json: Path, doc_limit: Optional[int] = None) -
                         "row_type": "injected", "span_source": a["category"], "attack_category": a["category"],
                         "attack_source": a["source"], "clean_type": ""}))
 
-    # long slice: docs excluded from main, test split only, test pools, 4 row types x available positions
-    long_docs = docs[docs["main_context"].isna() & (docs["split"] == "test")].sort_values("doc_id")
+    # long slice: every doc excluded from main (split-independent), test pools, 4 row types x available positions
+    long_docs = docs[docs["main_context"].isna()].sort_values("doc_id")
     rng_long = rng_for(split_seed, "long")
     for doc in long_docs.to_dict("records"):
         task, reg, ctx = doc["task_type"], ATTACK_REGISTER[doc["task_type"]], doc["context"]
@@ -716,6 +718,9 @@ def check(main: pd.DataFrame, docs: pd.DataFrame) -> None:
     assert (main.groupby("doc_id").size() == 4).all() and (main.groupby("doc_id")["label"].sum() == 2).all()
     comp_splits = docs.dropna(subset=["split"]).groupby("component")["split"].nunique()
     assert (comp_splits == 1).all(), "near-duplicate component spans splits"
+    main_comps = set(docs.loc[docs["main_context"].notna(), "component"])
+    long_near_main = docs.loc[docs["main_context"].isna() & docs["component"].isin(main_comps), "doc_id"].tolist()
+    assert not long_near_main, f"long-slice docs share a near-duplicate component with main docs: {long_near_main}"
     assert (main["n_tokens"] <= MAX_TOKENS).all(), f"rows over {MAX_TOKENS}: {(main['n_tokens'] > MAX_TOKENS).sum()}"
     for r in main.itertuples():
         assert r.text[r.char_offset:r.char_offset + r.span_len] == r.span_text, r.id
