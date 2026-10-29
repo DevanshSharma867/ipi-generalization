@@ -1,0 +1,102 @@
+{
+  "run_id": "20261029-172734_seed42",
+  "version": "v2_probes",
+  "exp": "truncation_control",
+  "seed": 42,
+  "args": {
+    "window_tokens": 512,
+    "qwen_max_positions": 32768,
+    "tokenizers": {
+      "deberta": "deberta_v2_ckpt",
+      "protectai": "protectai",
+      "piguard": "piguard",
+      "qwen": "qwen2.5_7b"
+    },
+    "judge_truncation": "none (score_detectors.score_judge passes the full chat-template prompt)",
+    "prediction_sources": {
+      "deberta_s123": [
+        "results/v2_probes/score_deberta_s123/20261029-115605_seed123/predictions.csv"
+      ],
+      "deberta_s42": [
+        "results/v2_probes/score_deberta_s42/20261029-115305_seed42/predictions.csv"
+      ],
+      "deberta_s999": [
+        "results/v2_probes/score_deberta_s999/20261029-115638_seed999/predictions.csv"
+      ],
+      "judge_qwen2.5_7b": [
+        "results/v2_probes/score_judge_qwen2.5_7b/20261021-123213_seed42/predictions.csv",
+        "results/v2_probes/score_judge_qwen2.5_7b/20261029-115819_seed42/predictions.csv"
+      ],
+      "judge_qwen2.5_7b_vsum": [
+        "results/v2_probes/score_judge_qwen2.5_7b_vsum/20261029-120108_seed42/predictions.csv"
+      ],
+      "piguard": [
+        "results/v2_probes/score_piguard/20261029-115747_seed42/predictions.csv"
+      ],
+      "protectai": [
+        "results/v2_probes/score_protectai/20261029-115710_seed42/predictions.csv"
+      ],
+      "tfidf_c1": [
+        "results/v2_probes/score_tfidf_c1/20261028-175939_seed42/predictions.csv"
+      ]
+    }
+  },
+  "git_commit": "71750a5d3acab4f072ba48aa885cba95b14473a2",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "v2_probes",
+  "data_files_sha256": {
+    "/Users/devanshsharma/projects/nlp/data/probes_v2/p1_neutral_insertion.csv": "872d319202d4c72ef5295382f4387db6b857f38c89636a22965822c6b443ecf5",
+    "/Users/devanshsharma/projects/nlp/data/probes_v2/p2_benign_moved.csv": "4f0f6e09d4141ecc84b0359d721a62f43dddafac07d921c8198a5d45d623b6c9",
+    "/Users/devanshsharma/projects/nlp/data/probes_v2/p3_attack_moved.csv": "2b72a8c12427441e8cd99b524fdca67b0e6a8a027c3a50935f67c3f589700072",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/deberta_v2_ckpt/config.json": "082a4cfbb0924f5ce37d11fb795d4fb24ee38f27eb97d528e33154e0d8e49de2",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/deberta_v2_ckpt/tokenizer.json": "a29e21faec7433ee508590c7bee5dc869fddb335aacf11d53be766cf0fd81294",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/deberta_v2_ckpt/tokenizer_config.json": "1121ad33ecd98a97b2db184ce896546feb7555bebddf33a2dfe1b1a1077dc847",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/piguard/added_tokens.json": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/piguard/special_tokens_map.json": "9463f61e1b109a8eb4688b829260d7c6b1e6dff04c98ff7269bb89e2b92369b9",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/piguard/spm.model": "f2d17af198445dafd6bd0a85951e2415b1666baa9604abae9b199306fad7486e",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/piguard/tokenizer.json": "5124ef2ead1a10a717703bc436de7f353da76d6340e4587719b42b1693707964",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/piguard/tokenizer_config.json": "557b3d33d3f41b81ad769244e506549e98a1857d41dd58160aacd4d98d710b5a",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/protectai/added_tokens.json": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/protectai/config.json": "05079f4735092040b780d459027afab413faa6eeb66a548571a58832304b60bb",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/protectai/special_tokens_map.json": "9463f61e1b109a8eb4688b829260d7c6b1e6dff04c98ff7269bb89e2b92369b9",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/protectai/spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/protectai/tokenizer.json": "f0a66ad0d735d8dca9ecac4ff50fcdef4bb6adbadd2941a926844844d2c2059b",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/protectai/tokenizer_config.json": "557b3d33d3f41b81ad769244e506549e98a1857d41dd58160aacd4d98d710b5a",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/qwen2.5_7b/config.json": "7463bb0ea78315365e6c6b74de4e73bbcc8359dfb0c5a737584e077d42c0b03c",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/qwen2.5_7b/generation_config.json": "3a8f9087e486054c8a4a08dae2e5a3ba62e23da212b5b8c08bc42cb983c3459f",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/qwen2.5_7b/merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/qwen2.5_7b/tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/qwen2.5_7b/tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+    "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/qwen2.5_7b/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null,
+    "cuda": false,
+    "cuda_device": null,
+    "mps": true
+  },
+  "argv": [
+    "scripts/truncation_control.py"
+  ],
+  "started": "2026-10-29T17:27:35"
+}

@@ -24,7 +24,7 @@ not `docs/findings.md`. Deviations from the pre-registered protocol: `docs/devia
   freezing before results cannot be shown; V2 judge results carry this caveat. V3 will use a new judge prompt committed
   separately before any scoring.
 
-Entries by status: full 6, recomputed-match 4, linked-dirty 1, legacy-unverified 1, contaminated 1, pending 1.
+Entries by status: full 9, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
 
 ## F001. V2 TF-IDF+LR headline table (Phase 2 Table III)
 
@@ -87,11 +87,11 @@ None of these probes uses the user query; the learned ones are trained on V2 tra
 
 ## F007. V2 position probes: reliance, truncation control, seed dependence, row groups
 
-> **F007** · status **`linked-dirty`** · 2026-10-21 (reports); 2026-10-19 (scores) · data `v2_probes (data/probes_v2/) + v2-frozen test` · eval `p1-p4 probe sets, v2_test` · threshold: default tau=0.50 · seeds: DeBERTa 42, 123, 999; others zero-shot or deterministic; bootstrap seed 42  
-> script `scripts/score_probes.py -> scripts/probe_report.py, scripts/truncation_control.py` @ `2a370a8` · source: `results/v2_probes/probe_report/20261021-125648_seed42`, `results/v2_probes/truncation_control/20261021-125607_seed42` · bootstrap clusters: doc_id
-> **Not a headline number (linked-dirty):** the 2026-10-19 scoring runs were made on a dirty tree (518b572-dirty, c61e423-dirty), so their commit does not identify the scoring code; jobs/rescore_v2_probes.sh re-scores them from a clean commit. The TF-IDF re-score (20261028-175939) reproduces the dirty run's probabilities exactly.
+> **F007** · status **`full`** · 2026-10-29 (reports; truncation_control at 71750a5); 2026-10-29 (scores, job 422174 at 7f56fc9) · data `v2_probes (data/probes_v2/) + v2-frozen test` · eval `p1-p4 probe sets, v2_test` · threshold: default tau=0.50 · seeds: DeBERTa 42, 123, 999; others zero-shot or deterministic; bootstrap seed 42  
+> script `scripts/score_probes.py -> scripts/probe_report.py, scripts/truncation_control.py` @ `86d9a08` · source: `results/v2_probes/probe_report/20261029-171951_seed42`, `results/v2_probes/truncation_control/20261029-172734_seed42` · bootstrap clusters: doc_id
 
-Part of claim C1. Re-measured from clean scores before any of these numbers is used.
+Part of claim C1. Re-measured from clean scores on 2026-10-29: the clean re-score reproduces the 2026-10-19
+dirty-tree scores row for row, and no value here moved (the earlier dirty-linked reports were identical).
 
 ### DeBERTa position reliance on V2 (probes P1–P3)
 
@@ -197,8 +197,8 @@ truncated fraction is `\VTwoTruncJudgeQwenTwoFiveSevenbPThreeendtruncated` = 0.0
 
 ## F009. V2 test: headline metrics, oracle threshold protocol
 
-> **F009** · status **`full`** · 2026-10-28 · data `v2-frozen+external (V2 test: tag v2-frozen)` · eval `v2_test` · threshold: oracle (threshold chosen on the clean rows of V2 test); default threshold for FPR@default and macro-F1 · seeds: DeBERTa 42, 123, 999; others deterministic or zero-shot; bootstrap B=1000 seed 42  
-> script `scripts/v2_tpr_metrics.py` @ `a59aae4` · source: `results/v2_metrics/tpr_protocols/20261028-175945_seed42` · bootstrap clusters: doc_id
+> **F009** · status **`full`** · 2026-10-29 · data `v2-frozen+external (V2 test: tag v2-frozen)` · eval `v2_test` · threshold: oracle (threshold chosen on the clean rows of V2 test); default threshold for FPR@default and macro-F1 · seeds: DeBERTa 42, 123, 999; others deterministic or zero-shot; bootstrap B=1000 seed 42  
+> script `scripts/v2_tpr_metrics.py` @ `71750a5` · source: `results/v2_metrics/tpr_protocols/20261029-172911_seed42` · bootstrap clusters: doc_id
 
 On the artifact-laden V2 benchmark (DeBERTa V2 numbers are not headline results). TPR@1%FPR needs at least 500 clean rows and V2 test has `\VTwoTprTfidfCOneVTwoTestNclean` = 144, so it is n/a.
 
@@ -217,8 +217,8 @@ DeBERTa, mean ± SD over seeds 42/123/999: AUROC `\VTwoTprDebertaMeanVTwoTestRoc
 
 ## F010. InjecAgent: headline metrics, oracle threshold protocol
 
-> **F010** · status **`full`** · 2026-10-28 · data `v2-frozen+external: InjecAgent@f19c9f2 + build bab750e (score_detectors.py build)` · eval `injecagent` · threshold: oracle; default threshold for FPR@default and macro-F1 · seeds: DeBERTa 42, 123, 999; others deterministic or zero-shot; bootstrap B=1000 seed 42  
-> script `scripts/v2_tpr_metrics.py` @ `a59aae4` · source: `results/v2_metrics/tpr_protocols/20261028-175945_seed42` · bootstrap clusters: user case (user tool + user instruction)
+> **F010** · status **`full`** · 2026-10-29 · data `v2-frozen+external: InjecAgent@f19c9f2 + build bab750e (score_detectors.py build)` · eval `injecagent` · threshold: oracle; default threshold for FPR@default and macro-F1 · seeds: DeBERTa 42, 123, 999; others deterministic or zero-shot; bootstrap B=1000 seed 42  
+> script `scripts/v2_tpr_metrics.py` @ `71750a5` · source: `results/v2_metrics/tpr_protocols/20261029-172911_seed42` · bootstrap clusters: user case (user tool + user instruction)
 
 Clean rows fill the same tool-response templates with benign text, so rows of one user case are not independent; the bootstrap resamples the `\VTwoTprTfidfCOneInjecagentNclusters` = 17 user cases.
 
@@ -236,8 +236,8 @@ DeBERTa, mean ± SD over seeds 42/123/999: AUROC `\VTwoTprDebertaMeanInjecagentR
 
 ## F011. deepset prompt-injections: headline metrics
 
-> **F011** · status **`full`** · 2026-10-28 · data `v2-frozen+external: hf:deepset/prompt-injections@4f61ecb (test split) + build bab750e` · eval `deepset` · threshold: oracle; default threshold for FPR@default and macro-F1 · seeds: DeBERTa 42, 123, 999; others deterministic or zero-shot; bootstrap B=1000 seed 42  
-> script `scripts/v2_tpr_metrics.py` @ `a59aae4` · source: `results/v2_metrics/tpr_protocols/20261028-175945_seed42` · bootstrap clusters: row (independent prompts)
+> **F011** · status **`full`** · 2026-10-29 · data `v2-frozen+external: hf:deepset/prompt-injections@4f61ecb (test split) + build bab750e` · eval `deepset` · threshold: oracle; default threshold for FPR@default and macro-F1 · seeds: DeBERTa 42, 123, 999; others deterministic or zero-shot; bootstrap B=1000 seed 42  
+> script `scripts/v2_tpr_metrics.py` @ `71750a5` · source: `results/v2_metrics/tpr_protocols/20261029-172911_seed42` · bootstrap clusters: row (independent prompts)
 
 `\VTwoTprTfidfCOneDeepsetNclean` = 56 clean rows: both TPR@FPR values are n/a. The build did not pin a dataset revision; 4f61ecb is the only revision in the local HF cache.
 
@@ -254,9 +254,8 @@ DeBERTa, mean ± SD over seeds 42/123/999: AUROC `\VTwoTprDebertaMeanDeepsetRocA
 
 ## F012. Oracle vs calibrated threshold gap on V2 (PRELIMINARY)
 
-> **F012** · status **`pending`** · 2026-10-28 · data `v2-frozen+external: V2 val clean rows as calibration set` · eval `v2_test, injecagent` · threshold: oracle; calibrated (threshold fixed on the clean rows of V2 val, 5% FPR target) · seeds: DeBERTa 42, 123, 999; bootstrap B=1000 seed 42  
-> script `scripts/v2_tpr_metrics.py` @ `a59aae4` · source: `results/v2_metrics/tpr_protocols/20261028-175945_seed42` · bootstrap clusters: doc_id (V2 test); user case (InjecAgent)
-> **Not a headline number (pending):** calibrated numbers exist for TF-IDF and DeBERTa only; the public detectors and the judge await their V2 val scores.
+> **F012** · status **`full`** · 2026-10-29 · data `v2-frozen+external: V2 val clean rows as calibration set` · eval `v2_test, injecagent` · threshold: oracle; calibrated (threshold fixed on the clean rows of V2 val, 5% FPR target) · seeds: DeBERTa 42, 123, 999; bootstrap B=1000 seed 42  
+> script `scripts/v2_tpr_metrics.py` @ `71750a5` · source: `results/v2_metrics/tpr_protocols/20261029-172911_seed42` · bootstrap clusters: doc_id (V2 test); user case (InjecAgent)
 > **PRELIMINARY:** V2 val shares the training attack pool, so it is an easier calibration set than a held-out pool would be. Re-test on V3 before any claim.
 
 Calibrated thresholds are fixed on the clean V2 val rows and applied unchanged. The CI ignores calibration noise.
@@ -268,18 +267,24 @@ Calibrated thresholds are fixed on the clean V2 val rows and applied unchanged. 
 | V2 test | deberta_s42 | `\VTwoCalgapDebertaSFourTwoVTwoTestNcalib` = 144 | `\VTwoCalgapDebertaSFourTwoVTwoTestOracleFive` = 0.9514 [0.90, 0.98] | `\VTwoCalgapDebertaSFourTwoVTwoTestCalibratedFive` = 0.9653 [0.93, 0.99] | `\VTwoCalgapDebertaSFourTwoVTwoTestThreshold` = 0.0039 | `\VTwoCalgapDebertaSFourTwoVTwoTestRealizedfpr` = 0.1181 [0.06, 0.19] |
 | V2 test | deberta_s123 | `\VTwoCalgapDebertaSOneTwoThreeVTwoTestNcalib` = 144 | `\VTwoCalgapDebertaSOneTwoThreeVTwoTestOracleFive` = 0.9653 [0.93, 0.99] | `\VTwoCalgapDebertaSOneTwoThreeVTwoTestCalibratedFive` = 0.9722 [0.94, 0.99] | `\VTwoCalgapDebertaSOneTwoThreeVTwoTestThreshold` = 0.0037 | `\VTwoCalgapDebertaSOneTwoThreeVTwoTestRealizedfpr` = 0.0903 [0.05, 0.14] |
 | V2 test | deberta_s999 | `\VTwoCalgapDebertaSNineNineNineVTwoTestNcalib` = 144 | `\VTwoCalgapDebertaSNineNineNineVTwoTestOracleFive` = 0.8681 [0.49, 0.98] | `\VTwoCalgapDebertaSNineNineNineVTwoTestCalibratedFive` = 0.9861 [0.97, 1.00] | `\VTwoCalgapDebertaSNineNineNineVTwoTestThreshold` = 0.0145 | `\VTwoCalgapDebertaSNineNineNineVTwoTestRealizedfpr` = 0.1806 [0.12, 0.26] |
-| V2 test | protectai | -- | `\VTwoCalgapProtectaiVTwoTestOracleFive` = 0.0417 [0.01, 0.06] | `\VTwoCalgapProtectaiVTwoTestCalibratedFive` = n/a (no calibration scores) | -- | -- |
-| V2 test | piguard | -- | `\VTwoCalgapPiguardVTwoTestOracleFive` = 0.5625 [0.41, 0.74] | `\VTwoCalgapPiguardVTwoTestCalibratedFive` = n/a (no calibration scores) | -- | -- |
-| V2 test | judge_qwen2.5_7b | -- | `\VTwoCalgapJudgeQwenTwoFiveSevenbVTwoTestOracleFive` = 0.0764 [0.03, 0.18] | `\VTwoCalgapJudgeQwenTwoFiveSevenbVTwoTestCalibratedFive` = n/a (no calibration scores) | -- | -- |
+| V2 test | protectai | `\VTwoCalgapProtectaiVTwoTestNcalib` = 144 | `\VTwoCalgapProtectaiVTwoTestOracleFive` = 0.0417 [0.01, 0.06] | `\VTwoCalgapProtectaiVTwoTestCalibratedFive` = 0.0486 [0.01, 0.10] | `\VTwoCalgapProtectaiVTwoTestThreshold` = 0.9924 | `\VTwoCalgapProtectaiVTwoTestRealizedfpr` = 0.0556 [0.01, 0.11] |
+| V2 test | piguard | `\VTwoCalgapPiguardVTwoTestNcalib` = 144 | `\VTwoCalgapPiguardVTwoTestOracleFive` = 0.5625 [0.41, 0.74] | `\VTwoCalgapPiguardVTwoTestCalibratedFive` = 0.6042 [0.52, 0.69] | `\VTwoCalgapPiguardVTwoTestThreshold` = 0.9996 | `\VTwoCalgapPiguardVTwoTestRealizedfpr` = 0.0764 [0.03, 0.12] |
+| V2 test | judge_qwen2.5_7b | `\VTwoCalgapJudgeQwenTwoFiveSevenbVTwoTestNcalib` = 144 | `\VTwoCalgapJudgeQwenTwoFiveSevenbVTwoTestOracleFive` = 0.0764 [0.03, 0.18] | `\VTwoCalgapJudgeQwenTwoFiveSevenbVTwoTestCalibratedFive` = 0.0903 [0.05, 0.13] | `\VTwoCalgapJudgeQwenTwoFiveSevenbVTwoTestThreshold` = 0.9707 | `\VTwoCalgapJudgeQwenTwoFiveSevenbVTwoTestRealizedfpr` = 0.0556 [0.03, 0.10] |
 | InjecAgent | tfidf_c1 | `\VTwoCalgapTfidfCOneInjecagentNcalib` = 144 | `\VTwoCalgapTfidfCOneInjecagentOracleFive` = 0.0361 [0.03, 0.08] | `\VTwoCalgapTfidfCOneInjecagentCalibratedFive` = 0.4383 [0.25, 0.65] | `\VTwoCalgapTfidfCOneInjecagentThreshold` = 0.5140 | `\VTwoCalgapTfidfCOneInjecagentRealizedfpr` = 0.4069 [0.18, 0.64] |
 | InjecAgent | deberta_s42 | `\VTwoCalgapDebertaSFourTwoInjecagentNcalib` = 144 | `\VTwoCalgapDebertaSFourTwoInjecagentOracleFive` = 0.3719 [0.28, 0.45] | `\VTwoCalgapDebertaSFourTwoInjecagentCalibratedFive` = 0.5569 [0.46, 0.65] | `\VTwoCalgapDebertaSFourTwoInjecagentThreshold` = 0.0039 | `\VTwoCalgapDebertaSFourTwoInjecagentRealizedfpr` = 0.2353 [0.09, 0.41] |
 | InjecAgent | deberta_s123 | `\VTwoCalgapDebertaSOneTwoThreeInjecagentNcalib` = 144 | `\VTwoCalgapDebertaSOneTwoThreeInjecagentOracleFive` = 0.2419 [0.20, 0.32] | `\VTwoCalgapDebertaSOneTwoThreeInjecagentCalibratedFive` = 0.3824 [0.27, 0.51] | `\VTwoCalgapDebertaSOneTwoThreeInjecagentThreshold` = 0.0037 | `\VTwoCalgapDebertaSOneTwoThreeInjecagentRealizedfpr` = 0.2059 [0.09, 0.35] |
 | InjecAgent | deberta_s999 | `\VTwoCalgapDebertaSNineNineNineInjecagentNcalib` = 144 | `\VTwoCalgapDebertaSNineNineNineInjecagentOracleFive` = 0.0797 [0.03, 0.20] | `\VTwoCalgapDebertaSNineNineNineInjecagentCalibratedFive` = 0.2315 [0.10, 0.40] | `\VTwoCalgapDebertaSNineNineNineInjecagentThreshold` = 0.0145 | `\VTwoCalgapDebertaSNineNineNineInjecagentRealizedfpr` = 0.1618 [0.03, 0.35] |
-| InjecAgent | protectai | -- | `\VTwoCalgapProtectaiInjecagentOracleFive` = 0.2154 [0.19, 0.29] | `\VTwoCalgapProtectaiInjecagentCalibratedFive` = n/a (no calibration scores) | -- | -- |
-| InjecAgent | piguard | -- | `\VTwoCalgapPiguardInjecagentOracleFive` = 0.0892 [0.06, 0.19] | `\VTwoCalgapPiguardInjecagentCalibratedFive` = n/a (no calibration scores) | -- | -- |
-| InjecAgent | judge_qwen2.5_7b | -- | `\VTwoCalgapJudgeQwenTwoFiveSevenbInjecagentOracleFive` = 0.4972 [0.27, 0.72] | `\VTwoCalgapJudgeQwenTwoFiveSevenbInjecagentCalibratedFive` = n/a (no calibration scores) | -- | -- |
+| InjecAgent | protectai | `\VTwoCalgapProtectaiInjecagentNcalib` = 144 | `\VTwoCalgapProtectaiInjecagentOracleFive` = 0.2154 [0.19, 0.29] | `\VTwoCalgapProtectaiInjecagentCalibratedFive` = 0.2163 [0.15, 0.32] | `\VTwoCalgapProtectaiInjecagentThreshold` = 0.9924 | `\VTwoCalgapProtectaiInjecagentRealizedfpr` = 0.0539 [0.01, 0.12] |
+| InjecAgent | piguard | `\VTwoCalgapPiguardInjecagentNcalib` = 144 | `\VTwoCalgapPiguardInjecagentOracleFive` = 0.0892 [0.06, 0.19] | `\VTwoCalgapPiguardInjecagentCalibratedFive` = 0.0522 [0.00, 0.13] | `\VTwoCalgapPiguardInjecagentThreshold` = 0.9996 | `\VTwoCalgapPiguardInjecagentRealizedfpr` = 0.0294 [0.00, 0.09] |
+| InjecAgent | judge_qwen2.5_7b | `\VTwoCalgapJudgeQwenTwoFiveSevenbInjecagentNcalib` = 144 | `\VTwoCalgapJudgeQwenTwoFiveSevenbInjecagentOracleFive` = 0.4972 [0.27, 0.72] | `\VTwoCalgapJudgeQwenTwoFiveSevenbInjecagentCalibratedFive` = 0.5285 [0.37, 0.68] | `\VTwoCalgapJudgeQwenTwoFiveSevenbInjecagentThreshold` = 0.9707 | `\VTwoCalgapJudgeQwenTwoFiveSevenbInjecagentRealizedfpr` = 0.0588 [0.00, 0.16] |
 
 DeBERTa seed mean ± SD, calibrated TPR@5%FPR on V2 test: `\VTwoCalgapDebertaMeanVTwoTestTprCalibratedFivepctFprMean` = 0.9745 ± `\VTwoCalgapDebertaMeanVTwoTestTprCalibratedFivepctFprSd` = 0.0106.
+
+- The V2 val threshold does not hold its 5% FPR target for the fine-tuned models: DeBERTa's realized FPR is above
+  the target for every seed on both sets, with a CI above 0.05 for s42 and s999 on V2 test and for s42 and s123 on
+  InjecAgent. TF-IDF holds it on V2 test but not on InjecAgent (CI above 0.05).
+- For ProtectAI, PIGuard and the judge, every realized-FPR CI includes 0.05 on both sets.
+- No oracle − calibrated difference has a paired test here; the table reports the two protocols side by side.
 
 ## F013. V3 pre-freeze content-free gates (split seeds 0–4, draft benign pool)
 
@@ -339,3 +344,57 @@ its offset. Overall: `\VThreePrefreezeIntegrityStatus` = PASS.
 Main rows per task/split differ slightly across seeds (the total is the same); split seed 0: EmailQA `\VThreePrefreezeIntegritySeedZeroMainEmailTrain` = 200 / `\VThreePrefreezeIntegritySeedZeroMainEmailVal` = 48 /
 `\VThreePrefreezeIntegritySeedZeroMainEmailTest` = 60, TableQA `\VThreePrefreezeIntegritySeedZeroMainTableTrain` = 1964 / `\VThreePrefreezeIntegritySeedZeroMainTableVal` = 420 / `\VThreePrefreezeIntegritySeedZeroMainTableTest` = 420, CodeQA
 `\VThreePrefreezeIntegritySeedZeroMainCodeTrain` = 272 / `\VThreePrefreezeIntegritySeedZeroMainCodeVal` = 52 / `\VThreePrefreezeIntegritySeedZeroMainCodeTest` = 60 (train / val / test).
+
+## F015. Qwen2.5-7B judge, variant-summing Yes/No rule: V2 probes and V2 test
+
+> **F015** · status **`full`** · 2026-10-29 (scores, job 422174 at 7f56fc9; reports at 86d9a08 and 71750a5) · data `v2_probes (data/probes_v2/) + v2-frozen+external (V2 test; V2 val clean rows as calibration set)` · eval `p1-p4 probe sets, v2_test` · threshold: default tau=0.50 (probe flag rates, row groups, FPR@default, macro-F1); oracle (threshold chosen on the clean rows of V2 test); calibrated (threshold fixed on the clean rows of V2 val, 5% FPR target) · seeds: zero-shot (greedy next-token log-probabilities); bootstrap B=1000 seed 42  
+> script `scripts/score_probes.py --judge_rule variants -> scripts/probe_report.py, scripts/truncation_control.py, scripts/v2_tpr_metrics.py` @ `86d9a08` · source: `results/v2_probes/probe_report/20261029-171951_seed42`, `results/v2_probes/truncation_control/20261029-172734_seed42`, `results/v2_metrics/tpr_protocols/20261029-172911_seed42` · bootstrap clusters: doc_id
+> **PRELIMINARY:** the calibrated value uses V2 val, which shares the training attack pool (see F012).
+
+The same frozen judge prompt and model as the V2 judge (F007, F009), scored with the shared Yes/No rule of
+`src/judging.py` (`yes_no_score`): P(Yes) / (P(Yes) + P(No)) with every case and whitespace variant summed
+(paper_plan A12). The two-token V2 judge numbers stay as they are; this entry is the variant-rule judge. On the
+artifact-laden V2 benchmark only.
+
+### Position probes and V2 test row groups (default threshold)
+
+No probe row exceeds the judge's context, so the truncated fraction is
+`\VTwoTruncJudgeQwenTwoFiveSevenbVsumPThreeendtruncated` = 0.000 and full = matched.
+
+| | Value |
+|---|---|
+| P3 recall, start | `\VTwoProbeJudgeQwenTwoFiveSevenbVsumPThreeStart` = 0.44 [0.35, 0.53] |
+| P3 recall, middle | `\VTwoProbeJudgeQwenTwoFiveSevenbVsumPThreeMiddle` = 0.32 [0.24, 0.41] |
+| P3 recall, end | `\VTwoProbeJudgeQwenTwoFiveSevenbVsumPThreeEnd` = 0.19 [0.12, 0.26] |
+| P3 end − start | `\VTwoProbeJudgeQwenTwoFiveSevenbVsumPThreeEndMinusStart` = -0.2500 [-0.36, -0.12] |
+| P2 start − middle | `\VTwoProbeJudgeQwenTwoFiveSevenbVsumPTwoStartMinusMiddle` = -0.0417 [-0.15, 0.06] |
+| P1 start − middle | `\VTwoProbeJudgeQwenTwoFiveSevenbVsumPOneStartMinusMiddle` = 0.0694 [-0.04, 0.18] |
+| V2 test macro-F1 | `\VTwoProbeJudgeQwenTwoFiveSevenbVsumVTwotestFOneMacro` = 0.5047 [0.46, 0.56] |
+| V2 test recall (injected rows, n = `\VTwoGroupsJudgeQwenTwoFiveSevenbVsumRecallN` = 144) | `\VTwoGroupsJudgeQwenTwoFiveSevenbVsumRecall` = 0.3403 [0.26, 0.42] |
+| Flag rate, V2 raw clean rows (n = `\VTwoGroupsJudgeQwenTwoFiveSevenbVsumRawcleanflagN` = 72) | `\VTwoGroupsJudgeQwenTwoFiveSevenbVsumRawcleanflag` = 0.2083 [0.11, 0.29] |
+| Flag rate, V2 benign-imperative rows (n = `\VTwoGroupsJudgeQwenTwoFiveSevenbVsumBenignflagN` = 72) | `\VTwoGroupsJudgeQwenTwoFiveSevenbVsumBenignflag` = 0.3889 [0.28, 0.51] |
+| Flag rate, P4 whitespace-only (n = `\VTwoGroupsJudgeQwenTwoFiveSevenbVsumPfourflagN` = 72) | `\VTwoGroupsJudgeQwenTwoFiveSevenbVsumPfourflag` = 0.2222 [0.12, 0.32] |
+| P4 − raw clean (paired docs: `\VTwoGroupsJudgeQwenTwoFiveSevenbVsumPfourminusrawcleanNpairs` = 72) | `\VTwoGroupsJudgeQwenTwoFiveSevenbVsumPfourminusrawclean` = 0.0139 [-0.06, 0.08] |
+
+### V2 test headline metrics
+
+V2 test has `\VTwoTprJudgeQwenTwoFiveSevenbVsumVTwoTestNclean` = 144 clean rows in
+`\VTwoTprJudgeQwenTwoFiveSevenbVsumVTwoTestNclusters` = 72 doc clusters, so TPR@1%FPR is
+`\VTwoTprJudgeQwenTwoFiveSevenbVsumVTwoTestOracleOne` = n/a (n_clean=144).
+
+| Metric | Value |
+|---|---|
+| AUROC | `\VTwoTprJudgeQwenTwoFiveSevenbVsumVTwoTestAuroc` = 0.5678 [0.51, 0.62] |
+| FPR at the default threshold (clean rows) | `\VTwoTprJudgeQwenTwoFiveSevenbVsumVTwoTestFprdefault` = 0.2986 [0.22, 0.39] |
+| TPR@5%FPR, oracle | `\VTwoTprJudgeQwenTwoFiveSevenbVsumVTwoTestOracleFive` = 0.0833 [0.03, 0.19] |
+| TPR@5%FPR, calibrated (n clean calibration = `\VTwoCalgapJudgeQwenTwoFiveSevenbVsumVTwoTestNcalib` = 144) | `\VTwoCalgapJudgeQwenTwoFiveSevenbVsumVTwoTestCalibratedFive` = 0.0903 [0.05, 0.13] |
+| Calibrated threshold | `\VTwoCalgapJudgeQwenTwoFiveSevenbVsumVTwoTestThreshold` = 0.9707 |
+| Realized FPR on V2 test at the calibrated threshold | `\VTwoCalgapJudgeQwenTwoFiveSevenbVsumVTwoTestRealizedfpr` = 0.0556 [0.03, 0.10] |
+| Macro-F1 (default threshold) | `\VTwoTprJudgeQwenTwoFiveSevenbVsumVTwoTestFOnemacro` = 0.5047 [0.46, 0.56] |
+
+- P3 recall falls from start to end; the end − start CI excludes 0. P2 and P1 start − middle CIs include 0.
+- The V2 test macro-F1 CI includes 0.5, and the P4 − raw clean CI includes 0.
+- The calibrated threshold's realized FPR CI on V2 test includes the 5% target.
+- Against the two-token judge (F007, F009, F012): every default-threshold value and the calibrated TPR@5%FPR are
+  the same. Only the ranking-based values (AUROC, oracle TPR@5%FPR) differ, and their CIs overlap those of the
+  two-token judge. No paired test was run.
