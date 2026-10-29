@@ -45,7 +45,8 @@ PROBES = ROOT / "data" / "probes_v2"
 SETS = ["p1_neutral_insertion", "p2_benign_moved", "p3_attack_moved"]
 QWEN_MAX_POSITIONS = 32768
 FAMILY = {"tfidf_c1": None, "deberta_s42": "deberta", "deberta_s123": "deberta", "deberta_s999": "deberta",
-          "deberta_mean": "deberta", "protectai": "protectai", "piguard": "piguard", "judge_qwen2.5_7b": "qwen"}
+          "deberta_mean": "deberta", "protectai": "protectai", "piguard": "piguard", "judge_qwen2.5_7b": "qwen",
+          "judge_qwen2.5_7b_vsum": "qwen"}
 CONTRAST_KEYS = ("p1_start_minus_middle", "p3_end_minus_start", "p2_start_minus_middle")
 
 

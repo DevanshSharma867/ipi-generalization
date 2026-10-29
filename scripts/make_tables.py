@@ -443,7 +443,7 @@ def tables_truncation_control():
 
 TPR_SETS = [("v2_test", "V2 test"), ("injecagent", "InjecAgent"), ("deepset", "deepset")]
 TPR_MODELS = ["tfidf_c1", "tfidf_c100_tuned", "deberta_s42", "deberta_s123", "deberta_s999", "protectai", "piguard",
-              "judge_qwen2.5_7b"]
+              "judge_qwen2.5_7b", "judge_qwen2.5_7b_vsum"]
 
 
 def na(status) -> str:

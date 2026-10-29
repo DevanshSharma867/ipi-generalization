@@ -40,7 +40,7 @@ PROBES_RES = ROOT / "results" / "v2_probes"
 FIG = ROOT / "paper" / "figures" / "position_flag_rates"
 POSITIONS = ("start", "middle", "end")
 MODEL_ORDER = ["tfidf_c1", "deberta_s42", "deberta_s123", "deberta_s999", "deberta_mean", "protectai", "piguard",
-               "judge_qwen2.5_7b"]
+               "judge_qwen2.5_7b", "judge_qwen2.5_7b_vsum"]
 CONTRASTS = [("p1_start_minus_middle", "p1_neutral_insertion", "start", "middle"),
              ("p3_end_minus_start", "p3_attack_moved", "end", "start"),
              ("p2_start_minus_middle", "p2_benign_moved", "start", "middle")]

@@ -9,6 +9,7 @@ Reads saved predictions only; nothing is re-scored. Writes results/v2_metrics/tp
 Calibration set per model (clean rows only; "n/a (no calibration scores)" where none exist yet):
   - tfidf_c1, deberta_s<k>, protectai, piguard, judge: the V2 val split (data/processed/val.csv),
     from results/v2_std/v2_val/ or the latest results/v2_probes/score_<name>_v2val/ run
+  - judge_qwen2.5_7b_vsum (variant-summing Yes/No rule, paper_plan A12): V2 test only, calibrated on its own V2 val run
   - LOTO models and tfidf_c100_tuned: skipped (V2 LOTO and C=100 are secondary; no C=100 checkpoint exists)
 Bootstrap clusters: V2 sets resample doc_id. InjecAgent rows sharing a user case (user tool + user instruction)
 come from one template, so they resample by user case (17 clusters). deepset prompts are independent: rows.
@@ -72,6 +73,9 @@ def sources():
     judge_cal = latest_probe_run("judge_qwen2.5_7b_v2val")
     out.append(("judge_qwen2.5_7b", "v2_test", JUDGE_V2_TEST, judge_cal, NOT_YET))
     out.append(("judge_qwen2.5_7b", "injecagent", STD / "injecagent" / "judge_qwen2.5_7b.csv", judge_cal, NOT_YET))
+    vsum = latest_probe_run("judge_qwen2.5_7b_vsum")  # variant-summing Yes/No rule (paper_plan A12); V2 test only
+    if vsum:
+        out.append(("judge_qwen2.5_7b_vsum", "v2_test", vsum, latest_probe_run("judge_qwen2.5_7b_vsum_v2val"), NOT_YET))
     return out
 
 
@@ -85,8 +89,12 @@ def clusters(d, eval_set):
     return d.assign(cluster=d["doc_id"]), "doc_id"
 
 
-def load(path):
+def load(path, eval_set):
+    """The eval_set rows of a predictions file (a probe-scoring run also holds the P1-P4 rows)."""
     d = pd.read_csv(path, keep_default_na=False)
+    d = d[d["eval_set"] == eval_set]
+    if d.empty:
+        raise ValueError(f"{path} has no {eval_set} rows")
     d["label"] = d["label"].astype(int)
     d["prob"] = d["prob"].astype(float)
     return d.reset_index(drop=True)
@@ -98,11 +106,11 @@ def secondary(d):
 
 
 def evaluate(model, eval_set, path, cal_path, no_cal):
-    d, cluster_desc = clusters(load(path), eval_set)
+    d, cluster_desc = clusters(load(path, eval_set), eval_set)
     cluster = "cluster"
     cal = None
     if cal_path is not None:
-        c = load(cal_path)
+        c = load(cal_path, "v2_val")
         cal = c.loc[c["label"] == 0, "prob"].values
     return {
         "model": model, "eval_set": eval_set, "source": str(path.relative_to(ROOT)),

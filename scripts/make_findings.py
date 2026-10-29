@@ -8,7 +8,8 @@ Each entry is a "## F<nnn>. <title>" section that opens with a fenced ```finding
 provenance; scripts/make_tables.py validates these blocks and decides which file each macro goes to.
 In the prose, {{Name}} becomes "`\\Name` = <value>" and {{Name|ci}} becomes "`\\Name` = <value> [<lo>, <hi>]"
 with the CI taken from \\NameCiLo / \\NameCiHi ("n/a (...)" values have no CI). An entry may only use macros it
-owns (its `macros:` globs), and a missing macro is an error, so no number can be typed by hand.
+owns (its `macros:` globs, minus any "!glob" exclusions), and a missing macro is an error, so no number can be typed
+by hand.
 
     python scripts/make_findings.py      # run after scripts/make_tables.py
 """
@@ -54,7 +55,10 @@ def parse_entries(text=None):
 
 
 def owns(entry, name):
-    return any(fnmatch.fnmatchcase(name, g) for g in entry["macros"])
+    """name matches one of the entry's `macros:` globs and none of its "!glob" exclusions."""
+    keep = [g for g in entry["macros"] if not g.startswith("!")]
+    drop = [g[1:] for g in entry["macros"] if g.startswith("!")]
+    return any(fnmatch.fnmatchcase(name, g) for g in keep) and not any(fnmatch.fnmatchcase(name, g) for g in drop)
 
 
 def load_macros(path):
