@@ -1,10 +1,10 @@
 # Environments and caches
-.venv/
-.venv-*/
+.venv
+.venv-*
 __pycache__/
 *.pyc
 .DS_Store
-hf_cache/
+hf_cache
 nltk_data/
 graphify-out/
 
