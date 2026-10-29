@@ -141,6 +141,18 @@ predicted direction.
 - Pairs: the source document (V3) or the user task (agent pairs).
 - InjecAgent: the user case.
 
+**V3 aggregation (amendment A10).**
+- On V3 sets, a headline metric is the **task-macro**: the unweighted mean of the metric over EmailQA, TableQA
+  and CodeQA. Pooled and per-task values are reported next to it.
+  - The CI resamples doc_id clusters **within each task** (stratified by task), so every resample has all three
+    tasks. Stratification is to be added to `src/metrics.py` before any V3 model is scored.
+  - Run-mean and paired comparisons use the same task-macro.
+- Task-macro applies only where every task's value passes the metric gates. On V3 test, each task has few clean
+  rows (e.g. EmailQA has 15 test docs × 2 clean rows in split seed 0), so per-task TPR@FPR is gated out.
+  - TPR@FPR on V3 is therefore reported **pooled** (where gated in) and marked as pooled.
+  - Task-macro covers AUROC, FPR at the default threshold, and macro-F1.
+- Agent sets and pairs are not affected; their clusters are user tasks or source documents.
+
 **Metric gates** (`src/metrics.MIN_CLEAN`): TPR@1%FPR only where the evaluated set **and** the calibration set have
 ≥ 500 clean rows; TPR@5%FPR where both have ≥ 100. Otherwise the result is reported as `n/a (n_clean=…)`.
 
@@ -346,7 +358,7 @@ Each step starts only after the previous one is done. The calibration pool is on
 6. **ICT**, its ablations, and the H3a comparators. Comparator (c) is scored in the order fixed in
    `configs/frontier_detector.yaml` (A7).
 
-The GPT-4.1 snapshot in A7 shuts down on 2027-01-14, so comparator (c) must be scored before then. In this order it
+The GPT-4.1 snapshot in A7 shuts down on 2027-01-14. **Comparator (c) must be fully scored by 2026-12-31** (A11). In this order it
 needs the calibration pool (step 3) and the adjudicated pairs (step 5).
 
 ## Amendments before scoring
@@ -366,6 +378,9 @@ part of the pre-registration, not deviations.
 | A7 | 2026-10-28 | **Comparator (c) fixed** in `configs/frontier_detector.yaml`. Details below the table. |
 | A8 | 2026-10-28 | **Build order** recorded in §7: V3 freeze → transfer harness (with Liu reproduction) → agent-style data and calibration pool → V3 baselines (decide H1) → pairs → ICT. |
 | A9 | 2026-10-28 | **Annotation.** The pair generator over-generates about 300 pairs per eval set (V3-derived, agent-derived). Two annotators from the project group label them independently, with κ ≥ 0.6. Disagreements are adjudicated, and the target is ≥ 200 adjudicated pairs per set (A5). |
+| A10 | 2026-10-29 | **V3 headline aggregation.** V3 headline metrics are the task-macro (unweighted mean over EmailQA, TableQA, CodeQA), with pooled and per-task numbers reported alongside. The bootstrap is stratified by task. Where per-task values are gated out (TPR@FPR on V3 test), the pooled value is reported and labelled pooled (§3 Shared protocol). |
+| A11 | 2026-10-29 | **Frontier model lifetime.** GPT-4.1 is kept (A7). Searched 2026-10-29: every non-reasoning GPT-4-series text model, including GPT-4o, GPT-4o mini, GPT-4.1 and GPT-4.1 mini, shuts down 2027-01-14 (developers.openai.com/api/docs/deprecations). The current models (gpt-6-astra, gpt-6.1-sol, gpt-6.1-terra, gpt-6-luna) are reasoning models. Their model pages state no shutdown date and say nothing about logprobs; the API reference only says parameter support "can differ ... particularly for newer reasoning models". No model met "non-reasoning, logprobs, lives past June 2027". Added: **comparator (c) must be fully scored by 2026-12-31.** |
+| A12 | 2026-10-29 | **Judge scoring rule.** Every LLM judge scores P(Yes) / (P(Yes) + P(No)) with all case and whitespace variants summed (`src/judging.py`, `yes_no_score`; local judges via `score_detectors.score_judge(rule="variants")`, the API detector via its top-20 logprobs). The V2 Qwen judge numbers (two-token rule) stay as they are. A variant-rule re-score of the V2 judge is in `jobs/rescore_v2_probes.sh` (step 3) and will be a new findings entry. |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.

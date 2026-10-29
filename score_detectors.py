@@ -173,13 +173,16 @@ JUDGE_SYSTEM = (
 )
 
 
-def score_judge(df, checkpoint):
-    """P(Yes) from the judge's next-token distribution, renormalized over {Yes, No}."""
+def score_judge(df, checkpoint, rule="variants"):
+    """P(Yes) / (P(Yes) + P(No)) from the judge's next-token distribution (judging.yes_no_score). rule="variants"
+    sums every case/whitespace variant of Yes and No; rule="two_token" is the V2 rule (first tokens of "Yes"/"No")."""
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM
+    from judging import judge_token_ids, yes_no_score
     tok = AutoTokenizer.from_pretrained(checkpoint)
     model = AutoModelForCausalLM.from_pretrained(checkpoint, dtype=torch.bfloat16, device_map="cuda").eval()
-    yes, no = tok.encode("Yes", add_special_tokens=False)[0], tok.encode("No", add_special_tokens=False)[0]
+    ids = judge_token_ids(tok, rule)
+    idx = list(ids)
     probs = []
     with torch.no_grad():
         for _, r in df.fillna({"user_intent": ""}).iterrows():
@@ -190,8 +193,8 @@ def score_judge(df, checkpoint):
             ]
             enc = tok.apply_chat_template(msgs, add_generation_prompt=True, return_tensors="pt",
                                           return_dict=True).to(model.device)
-            logits = model(**enc).logits[0, -1, [yes, no]].float()
-            probs.append(torch.softmax(logits, -1)[0].item())
+            logprobs = torch.log_softmax(model(**enc).logits[0, -1].float(), -1)[idx].tolist()
+            probs.append(yes_no_score(zip(ids.values(), logprobs)))
     return np.array(probs)
 
 

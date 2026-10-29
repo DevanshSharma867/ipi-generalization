@@ -65,6 +65,8 @@ def main():
     ap.add_argument("--doc_frac", type=float, default=1.0, help="fraction of docs scored in P2/P3 (judge budget)")
     ap.add_argument("--seed", type=int, default=42, help="doc subsample seed")
     ap.add_argument("--checkpoint_origin", default="", help="e.g. hpc_original / retrained_identical_config")
+    ap.add_argument("--judge_rule", choices=("variants", "two_token"), default="variants",
+                    help="judge Yes/No rule (src/judging.py); two_token = the V2 judge rule")
     a = add_run_args(ap).parse_args()
 
     files = [PROBES / f"{s}.csv" for s in a.sets if s not in V2_SPLITS]
@@ -76,6 +78,8 @@ def main():
         args["judge_prompt_sha256"] = hashlib.sha256(inspect.getsource(SD.score_judge).encode()
                                                      + SD.JUDGE_SYSTEM.encode()).hexdigest()
         args["judge_system_prompt"] = SD.JUDGE_SYSTEM
+    else:
+        args.pop("judge_rule")
     run = start_run(version="v2_probes", exp=f"score_{a.name}", seed=a.seed, args=args,
                     data_version="v2_probes", data_files=files, allow_dirty=a.allow_dirty)
     preds = []
@@ -84,7 +88,8 @@ def main():
         if s in SUBSAMPLE_SETS and a.doc_frac < 1.0:
             df = subsample_docs(df, a.doc_frac, a.seed)
             fields = fields.set_index("id").loc[df["id"]].reset_index()
-        score = SD.SCORERS[a.model](df, a.checkpoint)
+        score = SD.score_judge(df, a.checkpoint, rule=a.judge_rule) if a.model == "judge" \
+            else SD.SCORERS[a.model](df, a.checkpoint)
         out = fields.assign(prob=np.asarray(score, float), pred=(np.asarray(score) >= 0.5).astype(int),
                             threshold=0.5, model=a.name, eval_set=s)
         run.log(f"{s}: {len(out)} rows, flag rate {out['pred'].mean():.4f}")

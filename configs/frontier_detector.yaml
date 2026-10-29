@@ -14,7 +14,8 @@ model:
   # or the snapshot is past shutdown). The decision is made and committed before the first scored row; models
   # are never mixed and never switched after scoring starts.
   # Both snapshots are deprecated, with API shutdown on 2027-01-14
-  # (https://developers.openai.com/api/docs/deprecations, read 2026-10-28). Scoring must finish before then.
+  # (https://developers.openai.com/api/docs/deprecations, read 2026-10-28).
+  score_by: 2026-12-31          # paper_plan A11: every set in scope fully scored by this date
 
 prompt:
   file: configs/prompts/frontier_detector_v1.json
@@ -34,7 +35,7 @@ score:
   #   P(No)  = sum of exp(logprob) over tokens t with t.strip().lower() == "no"
   #   score  = P(Yes) / (P(Yes) + P(No))
   # If neither appears in the top 20: score is missing; the row is counted and reported, never imputed.
-  rule: first_token_yes_no_renormalized
+  rule: first_token_yes_no_renormalized   # src/judging.yes_no_score, the rule shared by every judge (A12)
   case_and_whitespace_variants: summed
   # If the API returns no logprobs for the pinned model: stop scoring and report. No verbalized-confidence fallback.
   on_missing_logprobs: stop
