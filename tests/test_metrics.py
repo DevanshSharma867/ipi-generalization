@@ -174,3 +174,59 @@ def test_tpr_protocols_match_point_functions():
     assert c["threshold"] == thr
     assert c["tpr"]["point"] == pytest.approx((d["prob"][d["label"] == 1] >= thr).mean())
     assert c["realized_fpr"]["point"] == pytest.approx((d["prob"][d["label"] == 0] >= thr).mean())
+
+
+# ─── task-stratified bootstrap and task-macro (paper_plan A10) ─────────────────
+
+def _tasks_frame():
+    rng = np.random.RandomState(0)
+    rows = []
+    for task, n_docs in (("email", 3), ("table", 20), ("code", 4)):
+        for d in range(n_docs):
+            for label in (0, 0, 1, 1):
+                rows.append({"id": f"{task}{d}_{len(rows)}", "doc_id": f"{task}_{d}", "task": task,
+                             "label": label, "prob": rng.rand() * 0.6 + 0.4 * label})
+    return pd.DataFrame(rows)
+
+
+def test_stratified_resample_keeps_per_task_doc_counts():
+    df = _tasks_frame()
+    want = df.drop_duplicates("doc_id")["task"].value_counts().to_dict()
+    for idx in M._resample_indices(df, 50, 42, "doc_id", "task"):
+        got = df.iloc[idx].groupby("task")["doc_id"].size() / 4   # 4 rows per doc
+        assert got.to_dict() == want
+
+
+def test_unstratified_resample_unchanged_by_default():
+    df = _tasks_frame()
+    a = list(M._resample_indices(df, 20, 42, "doc_id"))
+    b = list(M._resample_indices(df, 20, 42, "doc_id", None))
+    assert all(np.array_equal(x, y) for x, y in zip(a, b))
+    counts = {tuple(sorted(df.iloc[i].groupby("task")["doc_id"].size().items())) for i in a}
+    assert len(counts) > 1                         # unstratified draws do vary task sizes
+
+
+def test_stratified_rejects_clusters_spanning_strata():
+    df = _tasks_frame()
+    df.loc[0, "task"] = "code"                      # doc email_0 now has rows in two tasks
+    with pytest.raises(ValueError):
+        next(M._resample_indices(df, 1, 42, "doc_id", "task"))
+
+
+def test_task_macro_is_unweighted_mean():
+    df = _tasks_frame()
+    auc = lambda d: M.point_metrics(d["label"].values, d["prob"].values)["roc_auc"]
+    per_task = [auc(g) for _, g in df.groupby("task")]
+    assert M.task_macro(auc)(df) == pytest.approx(np.mean(per_task))
+    assert M.task_macro(auc)(df) != pytest.approx(auc(df))      # differs from pooled here
+    d = M.task_macro(lambda g: {"auc": auc(g), "n": float(len(g))})(df)
+    assert d["n"] == pytest.approx(np.mean([12, 80, 16]))
+
+
+def test_task_macro_bootstrap_and_paired_stratified():
+    df = _tasks_frame()
+    auc = lambda d: M.point_metrics(d["label"].values, d["prob"].values)["roc_auc"]
+    r = M.doc_cluster_bootstrap(df, M.task_macro(auc), B=200, seed=1, strata_col="task")
+    assert r["ci"][0] <= r["point"] <= r["ci"][1]
+    p = M.paired_bootstrap(df, df, M.task_macro(auc), B=50, seed=1, strata_col="task")
+    assert p["diff"] == 0 and p["ci"] == [0.0, 0.0]

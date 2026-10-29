@@ -207,13 +207,24 @@ def format_tpr(entry: Dict, digits: int = 4) -> str:
 
 # ─── Bootstrap ────────────────────────────────────────────────────────────────
 
-def _resample_indices(df: pd.DataFrame, B: int, seed: int, cluster_col: str):
+def _resample_indices(df: pd.DataFrame, B: int, seed: int, cluster_col: str, strata_col: Optional[str] = None):
+    """Row indices of B cluster resamples. With strata_col, clusters are drawn with replacement within each
+    stratum (in order of first appearance), so every resample keeps each stratum's cluster count; a cluster must
+    lie in one stratum. strata_col=None is the unstratified draw (bit-identical to the V2 bootstrap)."""
     rng = np.random.RandomState(seed)
     clusters = df[cluster_col].unique()
     values = df[cluster_col].values
     members = {c: np.where(values == c)[0] for c in clusters}
+    if strata_col is None:
+        groups = [clusters]
+    else:
+        per_cluster = df.groupby(cluster_col, sort=False)[strata_col].nunique()
+        if (per_cluster > 1).any():
+            raise ValueError(f"clusters span several {strata_col} values: {list(per_cluster[per_cluster > 1].index[:3])}")
+        first = df.drop_duplicates(cluster_col)
+        groups = [first.loc[first[strata_col] == s, cluster_col].values for s in first[strata_col].unique()]
     for _ in range(B):
-        sampled = rng.choice(clusters, size=len(clusters), replace=True)
+        sampled = [c for g in groups for c in rng.choice(g, size=len(g), replace=True)]
         yield np.concatenate([members[c] for c in sampled])
 
 
@@ -228,19 +239,21 @@ def _summarize(samples, point, ci: float):
 
 
 def doc_cluster_bootstrap(df: pd.DataFrame, metric_fn: Callable, B: int = 1000, seed: int = 42,
-                          ci: float = 95.0, cluster_col: str = "doc_id"):
+                          ci: float = 95.0, cluster_col: str = "doc_id", strata_col: Optional[str] = None):
     """
     Cluster bootstrap over documents: resample doc_ids with replacement and keep every row of each
     sampled doc. `metric_fn(frame)` may return a float or a dict of floats; the result mirrors it
-    with {"point", "ci"} leaves. Percentile CIs, NaN resamples ignored.
+    with {"point", "ci"} leaves. Percentile CIs, NaN resamples ignored. strata_col (e.g. "task") resamples
+    clusters within each stratum (paper_plan A10: V3 task-macro CIs).
     """
     df = df.reset_index(drop=True)
-    samples = [metric_fn(df.iloc[idx]) for idx in _resample_indices(df, B, seed, cluster_col)]
+    samples = [metric_fn(df.iloc[idx]) for idx in _resample_indices(df, B, seed, cluster_col, strata_col)]
     return _summarize(samples, metric_fn(df), ci)
 
 
 def paired_bootstrap(df_a: pd.DataFrame, df_b: pd.DataFrame, metric_fn: Callable, B: int = 1000,
-                     seed: int = 42, ci: float = 95.0, on: str = "id", cluster_col: str = "doc_id"):
+                     seed: int = 42, ci: float = 95.0, on: str = "id", cluster_col: str = "doc_id",
+                     strata_col: Optional[str] = None):
     """
     Paired cluster bootstrap of metric(A) - metric(B) on the same rows (joined on `on`).
     Each resample applies the same doc draw to both models. Returns the point difference,
@@ -251,7 +264,7 @@ def paired_bootstrap(df_a: pd.DataFrame, df_b: pd.DataFrame, metric_fn: Callable
     if not np.array_equal(a["label"].values, b["label"].values):
         raise ValueError("labels differ between the two prediction sets")
     diffs = np.array([metric_fn(a.iloc[i]) - metric_fn(b.iloc[i])
-                      for i in _resample_indices(a, B, seed, cluster_col)], dtype=float)
+                      for i in _resample_indices(a, B, seed, cluster_col, strata_col)], dtype=float)
     lo_q, hi_q = (100.0 - ci) / 2.0, 100.0 - (100.0 - ci) / 2.0
     return {
         "diff": float(metric_fn(a) - metric_fn(b)),
@@ -259,6 +272,17 @@ def paired_bootstrap(df_a: pd.DataFrame, df_b: pd.DataFrame, metric_fn: Callable
         "frac_le_0": float(np.mean(diffs[~np.isnan(diffs)] <= 0)),
         "B": B, "seed": seed,
     }
+
+
+def task_macro(metric_fn: Callable, task_col: str = "task") -> Callable:
+    """metric_fn -> a metric that is the unweighted mean of metric_fn over the task_col groups present
+    (paper_plan A10). Dict-valued metrics are averaged per key; NaN if any task's value is NaN."""
+    def fn(df: pd.DataFrame):
+        vals = [metric_fn(g) for _, g in df.groupby(task_col, sort=True)]
+        if isinstance(vals[0], dict):
+            return {k: float(np.mean([v[k] for v in vals])) for k in vals[0]}
+        return float(np.mean(vals))
+    return fn
 
 
 def mcnemar(y, pred_a, pred_b) -> Dict[str, float]:

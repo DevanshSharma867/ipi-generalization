@@ -246,3 +246,18 @@ Approved with these decisions (they override the proposals above where they diff
   in clean-B selection stay. All bins, rates and target shapes used by clean-B selection are computed from the TRAIN
   attack file statistics only (`text_attack_train.json`, `code_attack_train.json`), never from test attacks; this is
   asserted in `data_pipeline_v3.attack_rates`.
+
+## Decisions (round 4, 2026-10-29; before the freeze rebuild, nothing scored on V3)
+- **R5 Task balance: no TableQA cap.** All 701 unique TableQA docs stay (D3 trims over-length tables, so none is
+  filtered; the §6 projection of 597 assumed filtering). Test is ≈105 TableQA docs per seed instead of the projected 90.
+  Headline V3 metrics are task-macro (paper_plan A10, A13), so TableQA's ≈78–81% share of pooled test does not drive
+  the headline. Caps at 597 and 300 docs were compared in a read-only simulation of `assign_splits` (not committed;
+  options not built): EmailQA test sizes were identical under every option and CodeQA moved by at most two docs,
+  only through the shared split RNG. The realized per-seed sizes are recorded by `scripts/v3_integrity.py` at the
+  rebuild.
+- **R6 Long slice.** Only main-eligible docs are split (`assign_splits` on docs with a main context), so split
+  targets count docs that yield rows. Every doc without a main context (over-length email; docs with no internal
+  boundary) gets no split and is in the `long` slice of **every** split seed, with test pools. Before this, such docs
+  took split slots and appeared in `long` only when they happened to land in test (seed 1: 2 docs, 24 rows; other
+  seeds: none). The builder asserts that no long-slice doc shares a near-duplicate component with a main doc (all 5
+  current ones are singletons); `v3_integrity.py` checks that long docs never appear in main.

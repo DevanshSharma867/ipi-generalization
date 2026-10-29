@@ -91,3 +91,13 @@ def test_check_rejects_cross_split_attack_overlap():
     docs = pd.DataFrame({"doc_id": ["d1", "d2"], "split": ["train", "test"], "component": ["d1", "d2"]})
     with pytest.raises(AssertionError, match="injected overlap"):
         P.check(main, docs)
+
+
+def test_long_slice_is_split_independent_and_outside_main():
+    """Docs with no main context get no split and form the same long slice in every split seed."""
+    r0, r1 = P.build(0, DRAFT, doc_limit=40), P.build(1, DRAFT, doc_limit=40)
+    long0, long1 = set(r0["frames"]["long"]["doc_id"]), set(r1["frames"]["long"]["doc_id"])
+    excluded = set(r0["docs"].loc[r0["docs"]["main_context"].isna(), "doc_id"])
+    assert excluded and long0 == long1 == excluded
+    assert r0["docs"].loc[r0["docs"]["main_context"].isna(), "split"].isna().all()
+    assert not long0 & set(r0["frames"]["main"]["doc_id"])
