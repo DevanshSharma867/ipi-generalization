@@ -19,3 +19,6 @@ logs/
 
 # Generated view of the run directories (python src/runlog.py registry); never committed
 results/REGISTRY.md
+
+# Generated annotation pages (scripts/make_annotation_sheet.py); exported CSVs next to them are tracked
+annotation/*/*.html
