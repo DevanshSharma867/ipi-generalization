@@ -2,7 +2,7 @@
 manifest.py
 ===========
 Provenance of the rebuilt transfer sets (scripts/build_transfer_sets.sh): upstream and dependency commits, the
-Python environments that ran the upstream scripts (pip freeze), the HF dataset revisions current at build time
+Python environments that ran the upstream scripts (pip freeze), where each build step ran (build_steps.tsv), the HF dataset revisions current at build time
 (the general corpus streams them unpinned), and per-file sha256, row counts and label counts.
 Writes <sets>/manifest.json and prints the data_version string used by every transfer run.
 
@@ -93,6 +93,8 @@ def main():
         "environments": {k: freeze(Path(v)) for k, v in (x.split("=", 1) for x in a.venv)},
         "hf_dataset_revisions_at_build": hf_revisions(),
         "files": files, "missing": missing,
+        "build_steps": [dict(zip(("step", "host", "slurm_job", "finished"), line.rstrip("\n").split("\t")))
+                        for line in open(steps)] if (steps := a.sets / "build_steps.tsv").exists() else [],
     }
     content = hashlib.sha256(json.dumps({k: v["sha256"] for k, v in files.items()}, sort_keys=True).encode())
     m["data_version"] = (f"transfer-bib{m['upstream']['commit'][:7]}-agentdojo{a.agentdojo.split('==')[-1]}"
