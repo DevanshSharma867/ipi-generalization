@@ -1,0 +1,34 @@
+[17:29:21] tfidf_c1 / v2_test: n_clean=144 oracle@1pct_fpr=n/a (n_clean=144) calibrated@1pct_fpr=n/a (n_clean=144) oracle@5pct_fpr=0.6181 calibrated@5pct_fpr=0.5278
+[17:29:31] tfidf_c1 / injecagent: n_clean=204 oracle@1pct_fpr=n/a (n_clean=204) calibrated@1pct_fpr=n/a (n_clean=204) oracle@5pct_fpr=0.0361 calibrated@5pct_fpr=0.4383
+[17:29:39] tfidf_c1 / deepset: n_clean=56 oracle@1pct_fpr=n/a (n_clean=56) calibrated@1pct_fpr=n/a (n_clean=56) oracle@5pct_fpr=n/a (n_clean=56) calibrated@5pct_fpr=n/a (n_clean=56)
+[17:29:48] tfidf_c100_tuned / v2_test: n_clean=144 oracle@1pct_fpr=n/a (n_clean=144) calibrated@1pct_fpr=n/a (skipped: no C=100 checkpoint; V2 C=100 is secondary) oracle@5pct_fpr=0.5486 calibrated@5pct_fpr=n/a (skipped: no C=100 checkpoint; V2 C=100 is secondary)
+[17:29:56] tfidf_c100_loto / v2_loto_test_email: n_clean=24 oracle@1pct_fpr=n/a (n_clean=24) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=24) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:30:04] tfidf_c100_loto / v2_loto_test_table: n_clean=90 oracle@1pct_fpr=n/a (n_clean=90) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=90) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:30:11] tfidf_c100_loto / v2_loto_test_code: n_clean=30 oracle@1pct_fpr=n/a (n_clean=30) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=30) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:30:21] deberta_s42 / v2_test: n_clean=144 oracle@1pct_fpr=n/a (n_clean=144) calibrated@1pct_fpr=n/a (n_clean=144) oracle@5pct_fpr=0.9514 calibrated@5pct_fpr=0.9653
+[17:30:32] deberta_s42 / injecagent: n_clean=204 oracle@1pct_fpr=n/a (n_clean=204) calibrated@1pct_fpr=n/a (n_clean=204) oracle@5pct_fpr=0.3719 calibrated@5pct_fpr=0.5569
+[17:30:40] deberta_s42 / deepset: n_clean=56 oracle@1pct_fpr=n/a (n_clean=56) calibrated@1pct_fpr=n/a (n_clean=56) oracle@5pct_fpr=n/a (n_clean=56) calibrated@5pct_fpr=n/a (n_clean=56)
+[17:30:48] deberta_loto_s42 / v2_loto_test_email: n_clean=24 oracle@1pct_fpr=n/a (n_clean=24) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=24) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:30:56] deberta_loto_s42 / v2_loto_test_table: n_clean=90 oracle@1pct_fpr=n/a (n_clean=90) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=90) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:31:04] deberta_loto_s42 / v2_loto_test_code: n_clean=30 oracle@1pct_fpr=n/a (n_clean=30) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=30) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:31:14] deberta_s123 / v2_test: n_clean=144 oracle@1pct_fpr=n/a (n_clean=144) calibrated@1pct_fpr=n/a (n_clean=144) oracle@5pct_fpr=0.9653 calibrated@5pct_fpr=0.9722
+[17:31:25] deberta_s123 / injecagent: n_clean=204 oracle@1pct_fpr=n/a (n_clean=204) calibrated@1pct_fpr=n/a (n_clean=204) oracle@5pct_fpr=0.2419 calibrated@5pct_fpr=0.3824
+[17:31:34] deberta_s123 / deepset: n_clean=56 oracle@1pct_fpr=n/a (n_clean=56) calibrated@1pct_fpr=n/a (n_clean=56) oracle@5pct_fpr=n/a (n_clean=56) calibrated@5pct_fpr=n/a (n_clean=56)
+[17:31:41] deberta_loto_s123 / v2_loto_test_email: n_clean=24 oracle@1pct_fpr=n/a (n_clean=24) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=24) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:31:49] deberta_loto_s123 / v2_loto_test_table: n_clean=90 oracle@1pct_fpr=n/a (n_clean=90) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=90) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:31:58] deberta_loto_s123 / v2_loto_test_code: n_clean=30 oracle@1pct_fpr=n/a (n_clean=30) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=30) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:32:08] deberta_s999 / v2_test: n_clean=144 oracle@1pct_fpr=n/a (n_clean=144) calibrated@1pct_fpr=n/a (n_clean=144) oracle@5pct_fpr=0.8681 calibrated@5pct_fpr=0.9861
+[17:32:19] deberta_s999 / injecagent: n_clean=204 oracle@1pct_fpr=n/a (n_clean=204) calibrated@1pct_fpr=n/a (n_clean=204) oracle@5pct_fpr=0.0797 calibrated@5pct_fpr=0.2315
+[17:32:28] deberta_s999 / deepset: n_clean=56 oracle@1pct_fpr=n/a (n_clean=56) calibrated@1pct_fpr=n/a (n_clean=56) oracle@5pct_fpr=n/a (n_clean=56) calibrated@5pct_fpr=n/a (n_clean=56)
+[17:32:36] deberta_loto_s999 / v2_loto_test_email: n_clean=24 oracle@1pct_fpr=n/a (n_clean=24) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=24) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:32:44] deberta_loto_s999 / v2_loto_test_table: n_clean=90 oracle@1pct_fpr=n/a (n_clean=90) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=90) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:32:52] deberta_loto_s999 / v2_loto_test_code: n_clean=30 oracle@1pct_fpr=n/a (n_clean=30) calibrated@1pct_fpr=n/a (skipped: V2 LOTO is secondary) oracle@5pct_fpr=n/a (n_clean=30) calibrated@5pct_fpr=n/a (skipped: V2 LOTO is secondary)
+[17:33:01] protectai / v2_test: n_clean=144 oracle@1pct_fpr=n/a (n_clean=144) calibrated@1pct_fpr=n/a (n_clean=144) oracle@5pct_fpr=0.0417 calibrated@5pct_fpr=0.0486
+[17:33:12] protectai / injecagent: n_clean=204 oracle@1pct_fpr=n/a (n_clean=204) calibrated@1pct_fpr=n/a (n_clean=204) oracle@5pct_fpr=0.2154 calibrated@5pct_fpr=0.2163
+[17:33:20] protectai / deepset: n_clean=56 oracle@1pct_fpr=n/a (n_clean=56) calibrated@1pct_fpr=n/a (n_clean=56) oracle@5pct_fpr=n/a (n_clean=56) calibrated@5pct_fpr=n/a (n_clean=56)
+[17:33:32] piguard / v2_test: n_clean=144 oracle@1pct_fpr=n/a (n_clean=144) calibrated@1pct_fpr=n/a (n_clean=144) oracle@5pct_fpr=0.5625 calibrated@5pct_fpr=0.6042
+[17:33:45] piguard / injecagent: n_clean=204 oracle@1pct_fpr=n/a (n_clean=204) calibrated@1pct_fpr=n/a (n_clean=204) oracle@5pct_fpr=0.0892 calibrated@5pct_fpr=0.0522
+[17:33:54] piguard / deepset: n_clean=56 oracle@1pct_fpr=n/a (n_clean=56) calibrated@1pct_fpr=n/a (n_clean=56) oracle@5pct_fpr=n/a (n_clean=56) calibrated@5pct_fpr=n/a (n_clean=56)
+[17:34:03] judge_qwen2.5_7b / v2_test: n_clean=144 oracle@1pct_fpr=n/a (n_clean=144) calibrated@1pct_fpr=n/a (n_clean=144) oracle@5pct_fpr=0.0764 calibrated@5pct_fpr=0.0903
+[17:34:14] judge_qwen2.5_7b / injecagent: n_clean=204 oracle@1pct_fpr=n/a (n_clean=204) calibrated@1pct_fpr=n/a (n_clean=204) oracle@5pct_fpr=0.4972 calibrated@5pct_fpr=0.5285
+[17:34:24] judge_qwen2.5_7b_vsum / v2_test: n_clean=144 oracle@1pct_fpr=n/a (n_clean=144) calibrated@1pct_fpr=n/a (n_clean=144) oracle@5pct_fpr=0.0833 calibrated@5pct_fpr=0.0903
