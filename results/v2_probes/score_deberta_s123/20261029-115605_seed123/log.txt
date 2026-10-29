@@ -1,0 +1,5 @@
+[11:56:24] p1_neutral_insertion: 216 rows, flag rate 0.0417
+[11:56:27] p2_benign_moved: 216 rows, flag rate 0.1389
+[11:56:31] p3_attack_moved: 432 rows, flag rate 0.8981
+[11:56:33] p4_whitespace_only: 72 rows, flag rate 0.0000
+[11:56:36] v2_test: 288 rows, flag rate 0.4931
