@@ -1,5 +1,6 @@
 # Environments and caches
 .venv/
+.venv-*/
 __pycache__/
 *.pyc
 .DS_Store
@@ -9,6 +10,8 @@ graphify-out/
 
 # External data (clone BIPIA into data/raw/BIPIA)
 data/raw/
+# Transfer sets rebuilt from public sources by scripts/build_transfer_sets.sh (not redistributed)
+data/transfer/
 
 # Large model checkpoints and logs
 checkpoints/deberta*/
