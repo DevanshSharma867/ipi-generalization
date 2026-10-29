@@ -9,6 +9,7 @@ Draft prose for the paper's related-work section, plus BibTeX for every cited pa
 - Peer-reviewed venues that could not be verified on arXiv or the ACL Anthology are **not** put in BibTeX. Those
   papers are cited as arXiv preprints. Before camera-ready, replace them with the venue version after checking it.
 - No entry was typed from memory.
+- chen2024struq and wallace2024hierarchy were added on 2026-10-29, checked the same way (arXiv API).
 
 **Public detectors and models without a paper** (ProtectAI v2, Prompt Guard 2, Horizon-Labs, Wolf Defender, Sheltron,
 Qualifire Sentinel, …) are cited by Hugging Face model id and revision in the paper's experimental setup, not in the
@@ -89,6 +90,15 @@ question none of these studies answer: does removing construction artifacts from
 - Shortcut learning is a general failure mode (Geirhos et al., 2020).
 
 C1 is an instance of this line of work for IPI detection data.
+
+## Which instructions in data count as injections
+
+- The strict view treats every instruction in external data as untrusted. StruQ (Chen et al., 2024) trains a
+  model to follow only the prompt portion of a query and to ignore instructions in the data portion.
+- The instruction hierarchy (Wallace et al., 2024) instead defines behaviour for instructions of different
+  privilege that *conflict*, and teaches models to ignore lower-privileged instructions selectively.
+- Our pairs (C3) label an inserted instruction by whether following it serves or deviates from the user's request
+  (docs/pairs_spec.md §2). This is a design choice; under the strict view both members of a pair are injections.
 
 ## Models used
 
@@ -427,6 +437,24 @@ DeBERTa-v3 (He et al., 2021) is the backbone of our trained detectors.
   archivePrefix = {arXiv},
   primaryClass  = {cs.CV},
   doi           = {10.1038/s42256-020-00257-z}
+}
+
+@misc{chen2024struq,
+  title         = {{StruQ}: Defending Against Prompt Injection with Structured Queries},
+  author        = {Chen, Sizhe and Piet, Julien and Sitawarin, Chawin and Wagner, David},
+  year          = {2024},
+  eprint        = {2402.06363},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CR}
+}
+
+@misc{wallace2024hierarchy,
+  title         = {The Instruction Hierarchy: Training {LLMs} to Prioritize Privileged Instructions},
+  author        = {Wallace, Eric and Xiao, Kai and Leike, Reimar and Weng, Lilian and Heidecke, Johannes and Beutel, Alex},
+  year          = {2024},
+  eprint        = {2404.13208},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CR}
 }
 
 @misc{he2021debertav3,
