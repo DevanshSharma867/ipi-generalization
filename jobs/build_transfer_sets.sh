@@ -21,7 +21,7 @@
 set -euo pipefail
 echo "=== job ${SLURM_JOB_ID:-local} on $(hostname) at $(date); commit $(git rev-parse HEAD)"
 # the build clones, installs and streams HF datasets: without internet on this node, fail now
-for u in https://github.com https://huggingface.co https://pypi.org/simple/ https://download.pytorch.org/whl/cu128/; do
+for u in https://github.com https://huggingface.co https://pypi.org/simple/uv/ https://download.pytorch.org/whl/cu128/; do
   code=$(curl -sS -m 20 -o /dev/null -w '%{http_code}' "$u" || true)
   echo "net $u $code"; [[ "$code" =~ ^[23] ]] || { echo "NO INTERNET on $(hostname): split downloads (login) from installs/build (job)"; exit 3; }
 done
@@ -46,10 +46,17 @@ if [ ! -L .venv ]; then
 fi
 .venv/bin/python -c "import torch, transformers; print('venv', torch.__file__, torch.__version__, transformers.__version__)"
 
-# uv is installed only on the login node; compute nodes get the same version in a venv on scratch
+# uv is installed only on the login node; compute nodes get the same version (the release binary, checksum-verified)
 if ! command -v uv >/dev/null; then
-  [ -x "$VENVS/uv/bin/uv" ] || { python3 -m venv "$VENVS/uv" && "$VENVS/uv/bin/pip" install -q uv==0.13.1; }
-  export PATH="$VENVS/uv/bin:$PATH"
+  UVD=$SCRATCH/tools/uv-0.13.1 TGZ=uv-x86_64-unknown-linux-gnu.tar.gz
+  if [ ! -x "$UVD/uv" ]; then
+    mkdir -p "$UVD" && cd "$UVD"
+    curl -sSfLO "https://github.com/astral-sh/uv/releases/download/0.13.1/$TGZ"
+    curl -sSfLO "https://github.com/astral-sh/uv/releases/download/0.13.1/$TGZ.sha256"
+    sha256sum -c "$TGZ.sha256" && tar -xzf "$TGZ" --strip-components=1 && rm "$TGZ"
+    cd - >/dev/null
+  fi
+  export PATH="$UVD:$PATH"
 fi
 uv --version
 
