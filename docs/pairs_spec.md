@@ -235,7 +235,7 @@ One JSON object per pair (`pairs.PAIR_FIELDS`):
 
 | | EVAL | TRAIN |
 |---|---|---|
-| V3 documents | V3 **test** docs (see Q1 in §10) | V3 **train** docs only: for split seed *k*, the pairs on seed-*k* train docs |
+| V3 documents | V3 **test** docs of split seed 0 only (§10, Q1) | V3 **train** docs only: for split seed *k*, the pairs on seed-*k* train docs |
 | Agent contexts | AD-Clean and TB-Clean tool outputs, once the transfer harness has built them | Synthetic tool outputs from the agent-style pipeline. These are disjoint from the calibration pool and use no AgentDojo/τ-bench templates (A3). |
 | Model family | Not used for TRAIN and not an H3a comparator | Not used for EVAL |
 | Template | Written separately. No shared sentence with TRAIN (a test will check for no shared word 8-gram). Different few-shot examples. | Its own wording and examples |
@@ -247,11 +247,12 @@ One JSON object per pair (`pairs.PAIR_FIELDS`):
 - EVAL pairs are never trained on, in any seed.
 
 **Models to avoid.** The H3a comparators are the Qwen2.5-7B and Llama-3.1-8B judges, Sheltron, and GPT-4.1
-(`configs/frontier_detector.yaml`).
+(`configs/frontier_detector.yaml`). Decided (§10, Q3): no generator from the OpenAI, Qwen, Llama/Meta, Sheltron,
+Horizon-Labs or Wolf Defender families, nor from the ICT backbone's (Microsoft).
 - A generator from a comparator's family could give that comparator a home advantage on the pairs it wrote
   (EVAL), or make ICT learn that comparator's notion of intent (TRAIN).
 
-**Options.**
+**Options** (decided in §10: T1 for TRAIN, E1 = `gemini-2.5-pro` for EVAL).
 
 | Option | Role | Model | Runs on | Notes |
 |---|---|---|---|---|
@@ -275,7 +276,7 @@ One JSON object per pair (`pairs.PAIR_FIELDS`):
   - For 210 V3 quads plus 300 agent quads, that is ≈ 0.9M input and 0.15M output tokens.
   - At an assumed USD 1–3 per M input and USD 8–15 per M output, that comes to about USD 2–5. Allow 3× for
     retries.
-  - The cap is fixed in the EVAL config (proposal: USD 25). Prices are re-read from the pinned model's price page
+  - The cap is fixed in the EVAL config (decided: USD 40, paper_plan A18). Prices are re-read from the pinned model's price page
     at freeze.
 - **T1 (cluster).** About 4,100 quads × (1.7k prompt, 0.3k output) ≈ 7M prompt and 1.2M output tokens.
   - **Measured anchor:** the Qwen2.5-7B judge scored 432 P3 prompts in 19 s on a half card (job 422174, forward
@@ -314,40 +315,30 @@ One JSON object per pair (`pairs.PAIR_FIELDS`):
 - **P3(ii):** met by construction. Any deviation is a build bug.
 - **Pilot pairs** (§11) are never part of an EVAL count.
 
-## 10. Open questions (need your decision before generation)
+## 10. Decisions (2026-10-30; paper_plan amendment A18)
 
-**Q1. Which test docs get EVAL pairs?**
-- H2 evaluates "for split realization k, the pairs whose document is in the k test split". That needs EVAL pairs
-  on the test docs of all 5 seeds: 483 distinct docs (email 48, table 386, code 49).
-  - At 2/1/2 quads per doc that is about 1,160 pairs.
-  - At an assumed 1 min per pair (the pilot will measure it), that is about 19 hours per annotator.
-- A9 plans "about 300 pairs per eval set", which matches **one** split seed (322).
-- **Options:**
-  - (a) Pairs on all five seeds' test docs, with A9's count read as per realization.
-  - (b) Pairs-based hypotheses on split seed 0 only, as the frontier comparator's V3 scope already is (A7). This
-    needs a deviation entry, since H2's text names every realization.
-  - (c) Fewer quads per doc across all five seeds. Per-seed counts would then fall below 200.
+The open questions of the first draft were answered by the author before any generation:
+- **Q1. EVAL V3 pairs on split seed 0's test docs only** (about 322 pairs before attrition). H2, H3 and H4 are
+  decided on split seed 0, with models trained on split seed 0 (training seeds 0–4); split seeds 1–4 are for V3
+  metrics only. Reason: annotation cost (all five seeds: about 1,160 pairs, about 19 hours per annotator).
+- **Q2. Strict counting.** Primary: pairs in quads where both annotators give the intended label to every member.
+  Adjudicated quads (the author adjudicates) are a secondary robustness analysis. Fewer than 200 agreed pairs in
+  a set means more generation and annotation under the same rules, never a relaxed rule.
+- **Q3. Generators.** TRAIN: `mistralai/Mistral-7B-Instruct-v0.3` on the cluster (T1). EVAL: Google
+  `gemini-2.5-pro` through the API (E1), cap USD 40. Exclusions, cost and rejected options: paper_plan A18. The
+  exact model ids and dates are recorded in `docs/data_provenance.md` and disclosed in the paper.
+- **Q4. Exclusion lists** E3 and E4 approved as drafted, to be revisited after the author labels the pilot and
+  before generation.
+- **Q5.** Recorded as paper_plan amendment A18.
 
-**Q2. "Adjudicated" vs "agreed".**
-- P2 uses only pairs where both annotators agree with the intended labels. A9 counts "≥ 200 adjudicated pairs".
-- Proposal: the strict P2 rule decides which pairs are used. Adjudication (a discussion between the annotators,
-  with the outcome recorded) is for error analysis and for revising the generator between rounds.
-
-**Q3. Generators.** T1 + E1 as recommended, or another combination from §8.
-
-**Q4. Exclusion lists.** Review E3 (H1–H6) and E4.
-
-**Q5. Record as an amendment.** Once approved, this construction (crossed quads, whole-quad dropping, E3/E4,
-subtle target) should be recorded as an amendment in paper_plan.md. It was written before any pair was generated
-or scored.
-
-## 11. Pilot pairs (hand-written, for checking this spec)
+## 11. Pilot pairs (LLM-drafted, for checking this spec)
 
 `data/pairs/pilot_v1_specs.json` → `python scripts/build_pairs_pilot.py` → `data/pairs/pilot_v1.jsonl`.
 - **What:** 20 pairs in 10 crossed quads on V3 test docs of split seed 0: 4 email, 3 code, 3 table.
 - **How:** the split is recomputed in memory with the V3 builder's functions; no V3 build is read or written.
   Positions and separators are drawn as in §6, and the length rules are checked.
-- **Who:** written by the project author, who knows the hypotheses. That is why they never count as EVAL pairs.
+- **Who:** LLM-drafted in the session that wrote this spec, with the hypotheses in view, and not yet human-validated.
+  That is why they never count as EVAL pairs.
 - **To check them:**
 
       python scripts/make_annotation_sheet.py data/pairs/pilot_v1.jsonl --annotator <you>
