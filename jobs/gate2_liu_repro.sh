@@ -28,6 +28,10 @@ LIU_PY=$PWD/.venv-liu/bin/python
 OUR_PY=$PWD/.venv/bin/python
 WORK=$SCRATCH/nlp_harness/gate2
 mkdir -p "$WORK"
+# ModernBERT (Horizon-Labs) wraps its embeddings and MLP in torch.compile; Inductor needs nvcc, which compute nodes
+# lack (job 423593: PermissionError 'nvcc'; the newest CUDA module, 12.1, cannot target Blackwell). Eager mode runs
+# the same ops. Set for all three runs, recorded in the run config; no other model here compiles.
+export TORCHDYNAMO_DISABLE=1
 "$OUR_PY" -c "import bitsandbytes, transformers, torch; print('ours', torch.__version__, transformers.__version__, bitsandbytes.__version__)"
 "$LIU_PY" -c "import bitsandbytes, transformers, torch; print('liu ', torch.__version__, transformers.__version__, bitsandbytes.__version__)"
 
