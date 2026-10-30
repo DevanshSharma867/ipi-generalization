@@ -46,5 +46,12 @@ if [ ! -L .venv ]; then
 fi
 .venv/bin/python -c "import torch, transformers; print('venv', torch.__file__, torch.__version__, transformers.__version__)"
 
+# uv is installed only on the login node; compute nodes get the same version in a venv on scratch
+if ! command -v uv >/dev/null; then
+  [ -x "$VENVS/uv/bin/uv" ] || { python3 -m venv "$VENVS/uv" && "$VENVS/uv/bin/pip" install -q uv==0.13.1; }
+  export PATH="$VENVS/uv/bin:$PATH"
+fi
+uv --version
+
 bash scripts/build_transfer_sets.sh
 .venv/bin/python eval/transfer/gate1.py
