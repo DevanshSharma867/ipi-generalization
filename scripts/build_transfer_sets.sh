@@ -22,6 +22,10 @@
 # Resumable: a step counts as done only once its .done marker exists (delete the marker to redo it); a venv only
 # once its .build-complete marker exists. Every finished step is logged to build_steps.tsv (host, job id, time),
 # which the manifest records.
+# Compute nodes have no uv and cannot download GitHub release assets; once, on the login node:
+#   D=/scratch/csisnlp_18/tools/uv-0.13.1 T=uv-x86_64-unknown-linux-gnu.tar.gz U=https://github.com/astral-sh/uv/releases/download/0.13.1
+#   mkdir -p $D && cd $D && curl -sSfLO $U/$T && curl -sSfLO $U/$T.sha256 && sha256sum -c $T.sha256 \
+#     && tar -xzf $T --strip-components=1 && rm $T
 #   bash scripts/build_transfer_sets.sh
 # Then: python eval/transfer/gate1.py   (row counts and label sequences vs Liu's released score files)
 # ==============================================================================
