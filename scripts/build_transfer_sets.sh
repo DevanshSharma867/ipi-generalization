@@ -85,7 +85,7 @@ step() {  # step <output> <python> <script> [args...]
   else
     "$py" "$BIB/scripts/$script" "$@"
   fi
-  touch "$out.done"; log_step "$script -> $out"
+  touch "$out.done"; log_step "$script -> $out [$(basename "$(dirname "$(dirname "$py")")")]"
 }
 SKIP_FINALIZE=1 step corpus.jsonl "$VENV_LIU/bin/python" build_corpus.py --per_source 2500 --out corpus.jsonl
 step agentdojo_benign_outputs.jsonl "$VENV_AD/bin/python" collect_agentdojo_outputs.py
@@ -99,8 +99,10 @@ step agentdojo_pairs_shift.jsonl "$VENV_AD/bin/python" collect_agentdojo_pairs.p
   agentdojo_benign_outputs.jsonl
 log_step "attach_requests.py"
 step bipia_pairs.jsonl "$VENV_LIU/bin/python" build_bipia.py
-step taubench_clean.jsonl "$VENV_LIU/bin/python" collect_taubench.py
-step taubench_eval.jsonl "$VENV_LIU/bin/python" build_taubench_eval.py
+# tau-bench needs pydantic, which Liu's requirements.txt lacks (reproduce.sh runs these with his main python): run
+# them in the AgentDojo env (pydantic 2.x) and keep Liu's env identical to his lockfile for the reproduction (A17)
+step taubench_clean.jsonl "$VENV_AD/bin/python" collect_taubench.py
+step taubench_eval.jsonl "$VENV_AD/bin/python" build_taubench_eval.py
 
 cd "$ROOT"
 "$VENV_LIU/bin/python" eval/transfer/manifest.py --sets "$OUT" --agentsec "$AGS" --upstream "$BIB" \
