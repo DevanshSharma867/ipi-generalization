@@ -32,7 +32,8 @@ EXPORTS = ["*.onnx", "onnx/*", "*.h5", "*.msgpack", "*.ot", "tf_model*", "flax_m
 
 
 def load_registry():
-    return yaml.safe_load(REGISTRY.read_text())["models"]
+    """Models with their own weights (alias_of entries reuse another entry's download)."""
+    return [m for m in yaml.safe_load(REGISTRY.read_text())["models"] if "alias_of" not in m]
 
 
 def ignore_patterns(files):
