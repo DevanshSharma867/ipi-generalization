@@ -393,6 +393,7 @@ part of the pre-registration, not deviations.
 | A16 | 2026-10-29 | **Gates under the calibrated protocol; AD negatives.** Under the calibrated protocol the clean-count gate (≥ 500 clean rows for 1% FPR, ≥ 100 for 5%) applies to the **calibration pool** (≥ 1,000 rows), not to the evaluated set. TPR is measured on the injected rows at the fixed threshold. The realized FPR on the evaluated set's clean rows (AD-Clean: 339 distinct outputs; TB-Clean) is reported with its task-clustered CI next to every calibrated number. On AgentDojo the negatives are AD-Clean (as in Liu 2026 Table 2). The 585/975 benign rows of AD-Matched/AD-Shift (83 distinct texts repeated per attack template) are never counted as clean. Oracle TPR@1%FPR on AD is computed only for the Liu reproduction, labelled "below gate, reproduction only". Oracle TPR@5%FPR on AD (339 ≥ 100 clean) is reported as secondary. Supersedes the "full AD-Matched (585 clean)" wording in A3. |
 | A17 | 2026-10-29 | **Liu 2026 reproduction protocol.** (i) Target: the per-row scores and `analysis/numbers_many.json` at github.com/lzwhehe/benign-instruction-bench commit `5d0ae7c`. Both the arXiv v1 paper and the repo version are cited (they differ; §6). (ii) The judges in the reproduction use Liu's exact code rule (Yes/No variants after stripping `" -_>.,"` and lowercasing). The H3 judges use our A12 rule. The difference between the two rules is reported. (iii) The reproduction runs in Liu's pinned environment (transformers 4.57.6 lockfile) **and** in ours (transformers 5.20.1). The pinned run must match his released scores; any further difference in ours is reported as an environment effect. All environment versions go in the run manifests. |
 | A18 | 2026-10-30 | **Intent-pair construction (C3).** `docs/pairs_spec.md` v1 (commit 7c75099) and its §10 decisions are part of the pre-registration, before any pair is generated or scored. (Q1) EVAL V3 pairs only on split seed 0's test docs; H2, H3 and H4 are decided on split seed 0. (Q2) Strict agreement counts; adjudication is secondary. (Q3) TRAIN and EVAL generators are fixed and outside every comparator family and the ICT backbone. (Q4) Exclusion lists approved as drafted. Details below the table. |
+| A19 | 2026-10-30 | **Gate 2 (Liu reproduction) protocol**, fixed before any reproduction score exists. Scope: PIGuard, Prompt Guard 2 86M, Horizon-Labs (rev `af3c52e`) and the Qwen2.5-7B judge on AD-Matched (with AD-Clean, its negatives in Liu's table), TB-Matched and BIPIA. Three runs, a pass/fail rule at the metric level, and diagnostics. Details below the table. |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.
@@ -445,3 +446,27 @@ part of the pre-registration, not deviations.
     and are disclosed in the paper.
 - **Q4.** The exclusion lists E3 (H1–H6) and E4 are approved as drafted. The author may revise them after
   labelling the 20 pilot pairs and before any generation; a revision after generation starts is a new spec version.
+
+**A19 details** (Gate 2; code `eval/transfer/detectors.py`, `eval/transfer/gate2.py`, job `jobs/gate2_liu_repro.sh`):
+- **Runs.** (1) Liu's unmodified `score_many.py` and `hf_judge.py` in his pinned env (`venvs/liu`: torch 2.8.0,
+  transformers 4.57.6, bitsandbytes 0.50.2). (2) Our port of his loaders (`eval/transfer/detectors.py`) in the same
+  env. (3) The port in our env (torch 2.11.0, transformers 5.20.1, plus bitsandbytes 0.50.2 for the 4-bit judge).
+- **PASS/FAIL** (runs 1 and 3 each, against Liu's released results at `5d0ae7c`): for every detector and set,
+  AUROC within ±0.005 of `analysis/numbers_many.json` (`<set>_auroc`), and TPR@1%FPR (`<set>_tpr1`) inside Liu's
+  bootstrap 95% CI where `analysis/numbers.json` gives one for the same metric definition, else within ±0.01.
+  Metrics are computed with Liu's definitions (`analysis/compute_many.py`: AD-Matched against AD-Clean negatives,
+  BIPIA on benign plus test-half attacks). `admatched_tpr1_matchedneg` is also checked, against the numbers.json
+  CI where one exists (PIGuard, Qwen judge). Before any comparison, the same metric code applied to Liu's released
+  score files must reproduce numbers_many.json exactly; otherwise the metric port is fixed first.
+- **Diagnostics, not pass/fail:** per-row max |Δprob| against Liu's released files. Expected bounds are ≤ 1e-3 for
+  the encoders and ≤ 0.02 for the 4-bit judge. Exceeding a bound triggers an investigation, recorded with its result.
+- **Port check:** run 2 must equal run 1 bit for bit or within 1e-6 per row. Anything larger is a porting bug,
+  fixed before run 3 counts.
+- **Revisions:** every model loads at its `configs/detectors.yaml` pin. Run 1 uses a throwaway HF cache whose
+  `refs/main` points to those pins, so Liu's code loads them unchanged. Liu released these score files in his first
+  commit (`811551a`, 2026-10-03). The PIGuard (2025-08-03), Prompt Guard 2 86M (2025-04-29) and Qwen2.5-7B
+  (2025-01-12) pins are the last commits of those repos and predate it, so they are the revisions he scored, unless
+  he scored before those dates. Horizon is pinned to the revision his README names.
+- **Judge settings:** `GPU_MEM=18GiB`, as in his `reproduce.sh` (his script defaults to 6 GiB). It is within our
+  half-card limit. Liu's yes/no rule is used (A17 ii). If his runs used 6 GiB, layers offloaded to the CPU are a
+  possible source of small differences, and this is noted with the results.
