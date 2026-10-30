@@ -11,6 +11,8 @@ three changes:
     (under 5, return_tensors="pt" alone returns a dict, which his model(ids) call cannot take).
 The judge prompt is read from his llm_judge.py in the pinned clone, the way hf_judge.py reads it.
 Judge rule "liu" is his Yes/No variant rule (A17 ii); "variants" is ours (A12, src/judging.py).
+Judge precision "nf4" is his 4-bit setting (Liu reproduction only); "bf16" is ours for H3 (A20).
+--bs sets the encoder batch size (his BS = 16); bs 1 removes padding (batch-invariance check).
 
 Runs in Liu's pinned env and in ours (Gate 2 runs it in both). Output: one file per detector and set in Liu's
 format, {detector, repo, revision, set, probs, labels, truncated}; existing files are skipped (resumable).
@@ -40,6 +42,7 @@ SETS = {"general": "corpus.jsonl", "adclean": "agentdojo_benign_outputs.jsonl", 
 # Sheltron input variants (Liu scores them as separate detectors on one model)
 SHELTRON = {"sheltron": "plain", "sheltron-taskaware": "task", "sheltron-generic": "generic"}
 BS = 16
+JUDGE_PLACEMENT = {}  # where device_map put the judge's modules, recorded with its scores
 
 
 def load_registry():
@@ -189,19 +192,24 @@ def judge_token_ids(tok, rule):
     return [i for i, t in ids.items() if t.strip().lower() == "yes"], [i for i, t in ids.items() if t.strip().lower() == "no"]
 
 
-def run_judge(repo, rows, revision, rule, gpu_mem):
-    """hf_judge.py: 4-bit NF4 model, P(Yes) / (P(Yes) + P(No)) from the first-token distribution."""
+def run_judge(repo, rows, revision, rule, gpu_mem, precision="nf4"):
+    """hf_judge.py: 4-bit NF4 model, P(Yes) / (P(Yes) + P(No)) from the first-token distribution.
+    precision "bf16" loads the same model unquantized (A20); everything else is unchanged."""
     from transformers import BitsAndBytesConfig
     sys_prompt = judge_prompt()
     missing = [i for i, r in enumerate(rows) if not r.get("user_request")]
     if missing:  # hf_judge.py falls back to agentdojo; the rebuilt sets carry user_request (attach_requests.py)
         raise ValueError(f"{len(missing)} rows have no user_request (first: {missing[0]})")
     tok = AutoTokenizer.from_pretrained(repo, revision=revision)
+    quant = dict(quantization_config=BitsAndBytesConfig(
+        load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_quant_type="nf4",
+        llm_int8_enable_fp32_cpu_offload=True)) if precision == "nf4" else dict(dtype=torch.bfloat16)
     model = AutoModelForCausalLM.from_pretrained(
-        repo, revision=revision,
-        quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16,
-                                               bnb_4bit_quant_type="nf4", llm_int8_enable_fp32_cpu_offload=True),
-        device_map="auto", max_memory={0: gpu_mem, "cpu": "64GiB"}).eval()
+        repo, revision=revision, **quant, device_map="auto", max_memory={0: gpu_mem, "cpu": "64GiB"}).eval()
+    places = [str(v) for v in getattr(model, "hf_device_map", {}).values()]
+    JUDGE_PLACEMENT.clear()
+    JUDGE_PLACEMENT.update({d: places.count(d) for d in sorted(set(places))})
+    print(f"judge placement (modules per device): {JUDGE_PLACEMENT}", flush=True)
     YES, NO = judge_token_ids(tok, rule)
     print(f"judge {repo}: rule {rule}, yes/no token variants: {len(YES)} {len(NO)}", flush=True)
     p = []
@@ -217,12 +225,12 @@ def run_judge(repo, rows, revision, rule, gpu_mem):
     return p, None
 
 
-def score(name, entry, rows, dev, judge_rule, gpu_mem):
+def score(name, entry, rows, dev, judge_rule, gpu_mem, precision="nf4"):
     """(probs, truncated fraction) of one registry detector on one set's rows."""
     repo, rev, kind = entry["repo"], entry["revision"], entry.get("kind")
     texts = [r["text"] for r in rows]
     if entry["role"] == "judge":
-        return run_judge(repo, rows, rev, judge_rule, gpu_mem)
+        return run_judge(repo, rows, rev, judge_rule, gpu_mem, precision)
     if kind == "cls":
         return run_cls(repo, entry["max_len"], entry["inj_index"], entry["trust_remote_code"], texts, rev, dev)
     if kind in ("seg", "seg-pg1"):
@@ -236,6 +244,7 @@ def score(name, entry, rows, dev, judge_rule, gpu_mem):
 
 
 def main():
+    global BS
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--detectors", nargs="+", required=True)
     ap.add_argument("--sets", nargs="+", required=True, choices=list(SETS))
@@ -244,7 +253,10 @@ def main():
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--judge_rule", default="liu", choices=["liu", "variants"])
     ap.add_argument("--gpu_mem", default=os.environ.get("GPU_MEM", "18GiB"), help="judge max_memory on GPU 0")
+    ap.add_argument("--precision", default="nf4", choices=["nf4", "bf16"], help="judge weights (A20)")
+    ap.add_argument("--bs", type=int, default=BS, help="encoder batch size (Liu: 16)")
     a = ap.parse_args()
+    BS = a.bs
     reg = load_registry()
     unknown = [d for d in a.detectors if d not in reg]
     if unknown:
@@ -259,12 +271,15 @@ def main():
             if out.exists():
                 continue
             rows = load(Path(a.sets_dir) / SETS[s])
-            p, tr = score(name, e, rows, a.device, a.judge_rule, a.gpu_mem)
+            p, tr = score(name, e, rows, a.device, a.judge_rule, a.gpu_mem, a.precision)
             labels = [r["label"] for r in rows] if "label" in rows[0] else None
             rec = dict(detector=name, repo=e["repo"], revision=e["revision"], set=s, probs=p, labels=labels,
                        truncated=tr)
             if e["role"] == "judge":
-                rec["judge_rule"] = a.judge_rule
+                rec.update(judge_rule=a.judge_rule, precision=a.precision, gpu_mem=a.gpu_mem,
+                           placement=dict(JUDGE_PLACEMENT))
+            else:
+                rec["bs"] = BS
             tmp = out.with_suffix(".tmp")
             json.dump(rec, open(tmp, "w"))
             tmp.replace(out)
