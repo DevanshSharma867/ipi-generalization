@@ -1,0 +1,1319 @@
+{
+  "sets": {
+    "agentdojo_benign_outputs.jsonl": {
+      "released_files": [
+        {
+          "file": "horizon-base__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "injecguard__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "jasperls__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "piguard__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "prismor-1.5b__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard1-86m__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-22m__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-86m__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-small-v2__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v1__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v2__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "qualifire-sentinel__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "rogue-sentinel-v2__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-generic__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-taskaware__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "testsavant-large__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "wolf-defender__adclean.json",
+          "rows": 339,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_Llama-3.1-8B-Instruct_agentdojo_clean.json",
+          "rows": 339,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_Qwen2.5-7B-Instruct_agentdojo_clean.json",
+          "rows": 339,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_noreq_Llama-3.1-8B-Instruct_agentdojo_clean.json",
+          "rows": 339,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_noreq_Qwen2.5-7B-Instruct_agentdojo_clean.json",
+          "rows": 339,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        }
+      ],
+      "paper_counts": {
+        "None": {
+          "expected": 339,
+          "rebuilt": 339
+        }
+      },
+      "problems": [],
+      "pass": true
+    },
+    "agentdojo_pairs.jsonl": {
+      "released_files": [
+        {
+          "file": "horizon-base__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "injecguard__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "jasperls__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "piguard__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "prismor-1.5b__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard1-86m__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-22m__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-86m__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-small-v2__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v1__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v2__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "qualifire-sentinel__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "rogue-sentinel-v2__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-generic__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-taskaware__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "testsavant-large__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "wolf-defender__admatched.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_Llama-3.1-8B-Instruct_agentdojo_pairs.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_Qwen2.5-7B-Instruct_agentdojo_pairs.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_noreq_Llama-3.1-8B-Instruct_agentdojo_pairs.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_noreq_Qwen2.5-7B-Instruct_agentdojo_pairs.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_rb_Llama-3.1-8B-Instruct_agentdojo_pairs.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_rb_Qwen2.5-7B-Instruct_agentdojo_pairs.json",
+          "rows": 1017,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        }
+      ],
+      "paper_counts": {
+        "0": {
+          "expected": 585,
+          "rebuilt": 585
+        },
+        "1": {
+          "expected": 432,
+          "rebuilt": 432
+        }
+      },
+      "problems": [],
+      "pass": true
+    },
+    "agentdojo_pairs_shift.jsonl": {
+      "released_files": [
+        {
+          "file": "horizon-base__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "injecguard__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "jasperls__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "piguard__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "prismor-1.5b__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard1-86m__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-22m__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-86m__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-small-v2__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v1__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v2__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "qualifire-sentinel__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "rogue-sentinel-v2__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-generic__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-taskaware__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "testsavant-large__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "wolf-defender__adshift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_Llama-3.1-8B-Instruct_agentdojo_pairs_shift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_Qwen2.5-7B-Instruct_agentdojo_pairs_shift.json",
+          "rows": 1695,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        }
+      ],
+      "paper_counts": {
+        "0": {
+          "expected": 975,
+          "rebuilt": 975
+        },
+        "1": {
+          "expected": 720,
+          "rebuilt": 720
+        }
+      },
+      "problems": [],
+      "pass": true
+    },
+    "taubench_eval.jsonl": {
+      "released_files": [
+        {
+          "file": "horizon-base__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "jasperls__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "piguard__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "prismor-1.5b__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard1-86m__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-22m__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-86m__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-small-v2__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v1__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v2__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "qualifire-sentinel__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "rogue-sentinel-v2__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-generic__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-taskaware__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "testsavant-large__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "wolf-defender__tbeval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_Llama-3.1-8B-Instruct_taubench_eval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_Qwen2.5-7B-Instruct_taubench_eval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_noreq_Llama-3.1-8B-Instruct_taubench_eval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_noreq_Qwen2.5-7B-Instruct_taubench_eval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_rb_Llama-3.1-8B-Instruct_taubench_eval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_rb_Qwen2.5-7B-Instruct_taubench_eval.json",
+          "rows": 2117,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        }
+      ],
+      "paper_counts": {
+        "0": {
+          "expected": 1533,
+          "rebuilt": 1533
+        },
+        "1": {
+          "expected": 584,
+          "rebuilt": 584
+        }
+      },
+      "problems": [],
+      "pass": true
+    },
+    "bipia_pairs.jsonl": {
+      "released_files": [
+        {
+          "file": "horizon-base__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "injecguard__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "jasperls__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "piguard__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "prismor-1.5b__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard1-86m__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-22m__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-86m__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-small-v2__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v1__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v2__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "qualifire-sentinel__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "rogue-sentinel-v2__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-generic__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-taskaware__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "testsavant-large__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "wolf-defender__bipia.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_Llama-3.1-8B-Instruct_bipia_pairs.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "hfjudge_Qwen2.5-7B-Instruct_bipia_pairs.json",
+          "rows": 6000,
+          "labels_released": true,
+          "rows_match": true,
+          "labels_match": true
+        }
+      ],
+      "paper_counts": {
+        "0": {
+          "expected": 1200,
+          "rebuilt": 1200
+        },
+        "1:test": {
+          "expected": 2435,
+          "rebuilt": 2435
+        }
+      },
+      "problems": [],
+      "pass": true
+    },
+    "corpus.jsonl": {
+      "released_files": [
+        {
+          "file": "horizon-base__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "injecguard__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "jasperls__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "piguard__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "prismor-1.5b__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard1-86m__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-22m__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "promptguard2-86m__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-small-v2__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v1__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "protectai-v2__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "qualifire-sentinel__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "rogue-sentinel-v2__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-generic__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron-taskaware__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "sheltron__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "testsavant-large__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        },
+        {
+          "file": "wolf-defender__general.json",
+          "rows": 7504,
+          "labels_released": false,
+          "rows_match": true,
+          "labels_match": true
+        }
+      ],
+      "paper_counts": {
+        "None": {
+          "expected": 7504,
+          "rebuilt": 7504
+        }
+      },
+      "problems": [],
+      "pass": true
+    }
+  },
+  "pass": true,
+  "manifest": {
+    "agentdojo": "agentdojo==0.1.34",
+    "agentdojo_suites": "v1.2",
+    "build_steps": [
+      {
+        "finished": "2026-10-30T12:11:38+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423513",
+        "step": "venv agentdojo"
+      },
+      {
+        "finished": "2026-10-30T12:28:14+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423513",
+        "step": "venv liu"
+      },
+      {
+        "finished": "2026-10-30T12:35:41+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423547",
+        "step": "build_corpus.py -> corpus.jsonl"
+      },
+      {
+        "finished": "2026-10-30T12:35:51+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423547",
+        "step": "collect_agentdojo_outputs.py -> agentdojo_benign_outputs.jsonl"
+      },
+      {
+        "finished": "2026-10-30T12:36:12+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423547",
+        "step": "collect_agentdojo_pairs.py -> agentdojo_pairs.jsonl"
+      },
+      {
+        "finished": "2026-10-30T12:36:45+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423547",
+        "step": "collect_agentdojo_pairs.py -> agentdojo_pairs_shift.jsonl"
+      },
+      {
+        "finished": "2026-10-30T12:36:48+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423547",
+        "step": "attach_requests.py"
+      },
+      {
+        "finished": "2026-10-30T12:36:48+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423547",
+        "step": "build_bipia.py -> bipia_pairs.jsonl"
+      },
+      {
+        "finished": "2026-10-30T12:40:46+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423553",
+        "step": "attach_requests.py"
+      },
+      {
+        "finished": "2026-10-30T12:41:09+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423553",
+        "step": "collect_taubench.py -> taubench_clean.jsonl [agentdojo]"
+      },
+      {
+        "finished": "2026-10-30T12:41:09+05:30",
+        "host": "gpunode8.sharanga.local",
+        "slurm_job": "423553",
+        "step": "build_taubench_eval.py -> taubench_eval.jsonl [agentdojo]"
+      }
+    ],
+    "built": "2026-10-30T12:41:09",
+    "data_version": "transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filescf00fcba",
+    "dependencies": {
+      "BIPIA": "a004b69ec0dd446e0afd461d98cb5e96e120a5d0",
+      "InjecAgent": "f19c9f2c79a41046eb13c03c51a24c567a8ffa07",
+      "PIGuard": "1b5751e88bf7475acbedfc8eda795ce060307c84",
+      "tau-bench": "59a200c6d575d595120f1cb70fea53cef0632f6b"
+    },
+    "environments": {
+      "agentdojo": {
+        "packages": [
+          "agentdojo==0.1.34",
+          "annotated-types==0.8.0",
+          "anthropic==2.3.0",
+          "anyio==4.15.1",
+          "cachebox==5.2.3",
+          "certifi==2026.10.23",
+          "cffi==2.1.1",
+          "charset-normalizer==3.5.2",
+          "click==8.5.0",
+          "cohere==7.3.0",
+          "cryptography==50.0.2",
+          "deepdiff==9.1.0",
+          "distro==1.9.0",
+          "dnspython==2.9.1",
+          "docstring-parser==0.18.0",
+          "email-validator==2.3.0",
+          "fastavro==1.13.1",
+          "filelock==4.2.4",
+          "fsspec==2026.9.0",
+          "google-auth==2.62.0",
+          "google-genai==2.34.0",
+          "h11==0.16.0",
+          "hf-xet==1.7.1",
+          "httpcore2==2.16.0",
+          "httpcore==1.0.9",
+          "httpx2==2.16.0",
+          "httpx==0.28.1",
+          "huggingface-hub==2.4.0",
+          "idna==3.20",
+          "jiter==0.18.0",
+          "jsonpatch==1.38",
+          "jsonpointer==3.6",
+          "langchain-core==1.7.3",
+          "langchain-protocol==0.0.20",
+          "langchain==1.4.7",
+          "langgraph-checkpoint==4.3.1",
+          "langgraph-prebuilt==1.1.1",
+          "langgraph-sdk==0.4.10",
+          "langgraph==1.2.18",
+          "langsmith==0.14.16",
+          "markdown-it-py==4.2.0",
+          "mdurl==0.1.2",
+          "openai==3.41.0",
+          "opentelemetry-api==1.45.2",
+          "orderly-set==5.5.0",
+          "orjson==3.13.0",
+          "ormsgpack==1.13.0",
+          "packaging==26.3",
+          "pyasn1-modules==0.4.2",
+          "pyasn1==0.6.5",
+          "pycparser==3.12",
+          "pydantic-core==2.50.2",
+          "pydantic==2.14.2",
+          "pygments==2.21.0",
+          "python-dotenv==1.2.4",
+          "pyyaml==6.0.3",
+          "requests-toolbelt==1.0.0",
+          "requests==2.34.2",
+          "rich==15.0.0",
+          "sniffio==1.3.1",
+          "tenacity==9.1.4",
+          "tokenizers==0.23.3",
+          "tqdm==4.70.1",
+          "truststore==0.10.5",
+          "types-requests==2.33.0.20261006",
+          "typing-extensions==4.16.0",
+          "typing-inspection==0.4.4",
+          "urllib3==2.8.0",
+          "uuid-utils==0.19.0",
+          "websockets==17.3",
+          "xxhash==4.0.2",
+          "zstandard==0.25.0"
+        ],
+        "python": "Python 3.12.15"
+      },
+      "liu": {
+        "packages": [
+          "accelerate==1.15.0",
+          "aiohappyeyeballs==2.7.1",
+          "aiohttp==3.14.5",
+          "aiosignal==1.4.0",
+          "anyio==4.15.1",
+          "attrs==26.1.0",
+          "bitsandbytes==0.50.2",
+          "certifi==2026.10.23",
+          "charset-normalizer==3.5.2",
+          "cloudpickle==3.1.2",
+          "contourpy==1.4.0",
+          "cycler==0.12.1",
+          "datasets==5.0.1",
+          "dill==0.4.1",
+          "filelock==4.2.4",
+          "fonttools==4.68.0",
+          "frozenlist==1.8.0",
+          "fsspec==2026.6.0",
+          "h11==0.16.0",
+          "hf-xet==1.7.1",
+          "httpcore==1.0.9",
+          "httpx==0.28.1",
+          "huggingface-hub==0.36.2",
+          "idna==3.20",
+          "jinja2==3.1.6",
+          "joblib==1.6.0",
+          "kiwisolver==1.5.1",
+          "markupsafe==3.0.4",
+          "matplotlib==3.11.2",
+          "mpmath==1.3.0",
+          "multidict==7.2.1",
+          "multiprocess==0.70.19",
+          "narwhals==2.28.0",
+          "networkx==3.7",
+          "numpy==2.5.4",
+          "nvidia-cublas-cu12==12.8.4.1",
+          "nvidia-cuda-cupti-cu12==12.8.90",
+          "nvidia-cuda-nvrtc-cu12==12.8.93",
+          "nvidia-cuda-runtime-cu12==12.8.90",
+          "nvidia-cudnn-cu12==9.10.2.21",
+          "nvidia-cufft-cu12==11.3.3.83",
+          "nvidia-cufile-cu12==1.13.1.3",
+          "nvidia-curand-cu12==10.3.9.90",
+          "nvidia-cusolver-cu12==11.7.3.90",
+          "nvidia-cusparse-cu12==12.5.8.93",
+          "nvidia-cusparselt-cu12==0.7.1",
+          "nvidia-nccl-cu12==2.27.3",
+          "nvidia-nvjitlink-cu12==12.8.93",
+          "nvidia-nvtx-cu12==12.8.90",
+          "packaging==26.3",
+          "pandas==3.1.0",
+          "pillow==13.0.0",
+          "propcache==0.5.4",
+          "psutil==7.2.2",
+          "pyarrow==26.0.0",
+          "pyparsing==3.3.3",
+          "python-dateutil==3.0.0",
+          "pyyaml==6.0.3",
+          "regex==2026.9.29",
+          "requests==2.34.2",
+          "safetensors==0.8.0",
+          "scikit-learn==1.9.1",
+          "scipy==1.18.1",
+          "setuptools==84.2.1",
+          "six==1.17.0",
+          "sympy==1.14.0",
+          "threadpoolctl==3.7.0",
+          "tokenizers==0.22.2",
+          "torch==2.8.0+cu128",
+          "tqdm==4.70.1",
+          "transformers==4.57.6",
+          "triton==3.4.0",
+          "typing-extensions==4.16.0",
+          "tzdata==2026.6",
+          "urllib3==2.8.0",
+          "xxhash==4.0.2",
+          "yarl==1.25.1"
+        ],
+        "python": "Python 3.12.15"
+      }
+    },
+    "files": {
+      "ad_clean": {
+        "distinct_texts": 149,
+        "rows": 339,
+        "sha256": "e9137a953875a9d3a0a3398ddf24d9f8ec35bb09712d485bf7eb61d55a79563a",
+        "tasks": 97
+      },
+      "ad_matched": {
+        "distinct_texts_by_label": {
+          "0": 83,
+          "1": 357
+        },
+        "labels": {
+          "0": 585,
+          "1": 432
+        },
+        "rows": 1017,
+        "sha256": "be25740bfe05895366274b9717020c2ce889f06884309273a8f5269f92f4ed24",
+        "tasks": 97
+      },
+      "ad_shift": {
+        "distinct_texts_by_label": {
+          "0": 83,
+          "1": 595
+        },
+        "labels": {
+          "0": 975,
+          "1": 720
+        },
+        "rows": 1695,
+        "sha256": "652c74a9d1a05cf53ec78cd10cdbd6e00da903c1a1c46067d032c7c823cec275",
+        "tasks": 97
+      },
+      "bipia": {
+        "distinct_texts_by_label": {
+          "0": 879,
+          "1": 4790
+        },
+        "labels": {
+          "0": 1200,
+          "1": 4800
+        },
+        "rows": 6000,
+        "sha256": "92a5956be69448f4aef293a6fabe5fc4b2490ddfb33c9d4184da7628aded0a91",
+        "tasks": 1200
+      },
+      "general": {
+        "distinct_texts": 7489,
+        "rows": 7504,
+        "sha256": "5e79fa0419b72a8dcf4e37ad0598f391787cd1b81e1423300365dd8fb7b9f3ed"
+      },
+      "tb_clean": {
+        "distinct_texts": 1165,
+        "rows": 1533,
+        "sha256": "4c8c97c9f4a902c055e48dbe4806bfe850c174bbdee11e891c5e8633a9a662b3",
+        "tasks": 675
+      },
+      "tb_matched": {
+        "distinct_texts_by_label": {
+          "0": 1165,
+          "1": 526
+        },
+        "labels": {
+          "0": 1533,
+          "1": 584
+        },
+        "rows": 2117,
+        "sha256": "212ff82a452caa8adbd24a4891253c0956ae55756f3c8c8d5065b91a9eb622b4",
+        "tasks": 675
+      },
+      "tb_pairs": {
+        "distinct_texts_by_label": {
+          "0": 135,
+          "1": 526
+        },
+        "labels": {
+          "0": 215,
+          "1": 584
+        },
+        "rows": 799,
+        "sha256": "b732d93901c9b15529caa8f687a2096b1c605ed759e46ffc4fc48870f806951a",
+        "tasks": 38
+      }
+    },
+    "hf_dataset_revisions_at_build": {
+      "HuggingFaceFW/fineweb-edu": "87f09149ef4734204d70ed1d046ddc9ca3f2b8f9",
+      "Yale-LILY/aeslc": "2305f2e63b68056f9b9037a3805c8c196e0d5581",
+      "h1alexbel/github-readmes": "b420c75e28d36897360598f4ae1390552d45faf7"
+    },
+    "host": "gpunode8.sharanga.local",
+    "missing": [],
+    "pythonhashseed": 0,
+    "upstream": {
+      "commit": "5d0ae7c438a7b01be2ac0a2e8bc943e45c8f851f",
+      "repo": "https://github.com/lzwhehe/benign-instruction-bench"
+    }
+  }
+}

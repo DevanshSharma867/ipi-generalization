@@ -1,0 +1,20 @@
+[12:43:15] hf token: valid
+[12:43:15] protectai-v1         protectai/deberta-v3-base-prompt-injection              gated=False  granted        complete
+[12:43:16] protectai-v2         protectai/deberta-v3-base-prompt-injection-v2           gated=False  granted        complete
+[12:43:17] protectai-small-v2   protectai/deberta-v3-small-prompt-injection-v2          gated=auto   not_requested  -
+[12:43:18] piguard              leolee99/PIGuard                                        gated=False  granted        complete
+[12:43:18] jasperls             JasperLS/deberta-v3-base-injection                      gated=False  granted        complete
+[12:43:19] testsavant-large     testsavantai/prompt-injection-defender-large-v0         gated=False  granted        complete
+[12:43:21] wolf-defender        patronus-studio/wolf-defender-prompt-injection          gated=False  granted        complete
+[12:43:22] horizon-base         Horizon-Labs/prompt-injection-guard-base                gated=False  granted        complete
+[12:43:23] sheltron             sheltron-ai/prompt-guard-68m                            gated=False  granted        complete
+[12:43:24] prismor-1.5b         prismor/prompt-guard-1.5b                               gated=False  granted        complete
+[12:43:24] promptguard2-86m     meta-llama/Llama-Prompt-Guard-2-86M                     gated=manual granted        complete
+[12:43:25] promptguard2-22m     meta-llama/Llama-Prompt-Guard-2-22M                     gated=manual granted        complete
+[12:43:26] promptguard1-86m     meta-llama/Prompt-Guard-86M                             gated=manual granted        complete
+[12:43:27] qualifire-sentinel   qualifire/prompt-injection-sentinel                     gated=auto   granted        complete
+[12:43:28] rogue-sentinel-v2    rogue-security/prompt-injection-jailbreak-sentinel-v2   gated=auto   granted        complete
+[12:43:29] judge-qwen           Qwen/Qwen2.5-7B-Instruct                                gated=False  granted        complete
+[12:43:30] judge-llama          meta-llama/Llama-3.1-8B-Instruct                        gated=manual granted        complete
+[12:43:31] deberta-v3-base      microsoft/deberta-v3-base                               gated=False  granted        complete
+[12:43:31] still blocked: protectai/deberta-v3-small-prompt-injection-v2
