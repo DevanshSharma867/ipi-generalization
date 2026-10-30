@@ -19,18 +19,26 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   - In home: results, checkpoints, the HF token. Home is at 17.6/40 G; jobs fail early under 2 G free.
   - Laptop: `scripts/cluster.sh run|watch` retries ssh with backoff.
 
+- **Step b, detector wrappers:** `eval/transfer/detectors.py` (port of Liu's loaders, pinned revisions),
+  `eval/transfer/gate2.py`, `jobs/gate2_liu_repro.sh`. Jobs run with `TORCHDYNAMO_DISABLE=1` (ModernBERT compile
+  needs nvcc, absent on compute nodes). bitsandbytes 0.50.2 added to our env.
+- **Step d, Gate 2 (A19): FAIL.** Run `results/transfer/liu_repro_gate2/20261030-160800_seed0` (job 423625).
+  Port check PASS (run 2 = run 1). Run 1 (Liu's code and env) matches his files to ~1e-5 on BIPIA and TB, but
+  AD-Matched injected rows differ (273/432 for PIGuard): the set text differs, not the models. Run 3 (our env,
+  transformers 5) shifts scores heavily: PG2 tokenizes differently; PIGuard and Horizon tokenize identically but
+  still shift on BIPIA. Judge rows differ up to 0.77 vs Liu even in run 1 (bound 0.02); metrics mostly within tolerance.
+
 ## Next
-1. **b. Detector wrappers:** registry-driven, Liu's loaders (cls / segmented / Sheltron / Prismor / 4-bit judges).
+1. **Gate 2 follow-up:** identify the AD-Matched text difference (injection-task assignment via `hash()`?) and the
+   transformers-5 shift; decide whether scoring uses Liu's env.
 2. **c. Metrics:** TPR@1%FPR on the same benchmark's benign outputs (A16), plus `task_block_rate`.
-3. **d. Gate 2, Liu reproduction:** in his pinned env (`.venv-liu`) and ours. Scores must match his released files;
-   any env difference is reported (A17).
-4. **e. Results layout:** `results/transfer/<detector>/<set>/<run_id>`, which needs a nested-exp change in
+3. **e. Results layout:** `results/transfer/<detector>/<set>/<run_id>`, which needs a nested-exp change in
    `src/runlog.py`.
 
 ## Open decisions / blockers
-- **Access request (you):** `protectai/deberta-v3-small-prompt-injection-v2` is not requested yet (auto-approved).
-- **Findings entry for Gate 1:** set sizes may appear in the paper, so an F-entry is needed. It waits on another
-  session's uncommitted `make_tables.py` / `make_findings.py` edits.
+- **Access request:** `protectai/deberta-v3-small-prompt-injection-v2` requested 2026-10-30; re-run prefetch to confirm.
+- **Cluster backup:** `~/run_backup_20261030/` holds byte-identical copies of 12 committed run files moved aside
+  for a `git pull`; safe to delete once you confirm.
 - **Revision pins:** Liu pins only Horizon. wolf-defender and prismor-1.5b changed days before his last commit:
   first suspects if Gate 2 mismatches (re-pin with a reason).
 - **VRAM cap:** MPS does not enforce `CUDA_MPS_PINNED_DEVICE_MEM_LIMIT` (smoke test, job 422476). Half-card VRAM
