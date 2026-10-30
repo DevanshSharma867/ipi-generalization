@@ -9,12 +9,15 @@ Gate 2 follow-up (docs/deviations.md, 2026-10-30; paper_plan A19, A20). Three in
    `hash` shadowed in its globals: once per candidate (every user task gets injection-task index k), then once with
    the recovered map. Per (suite, user task) the candidate whose Prompt Guard 2 86M scores match his released file
    within 1e-4 is kept. Validation: PIGuard and Horizon on the recovered sets must match his files within 1e-3.
+   Some tool outputs carry a wall-clock timestamp (AgentDojo's last_modified), so they differ between any two builds:
+   these "time-dependent" rows are found by rebuilding the seeded pairing (W/timecheck) and comparing with the seeded
+   set, and are left out of matching and of the validation bound (reported separately).
 2. Environment effect: PIGuard, Horizon and PG2 on a fixed 500-row BIPIA subset at batch size 1 and 16, in his env and
    ours; our V2 DeBERTa checkpoints at batch size 1 and 16 in our env.
 3. Judge: a repeat of the 4-bit judge on BIPIA (run-to-run noise), one run at GPU_MEM=6GiB, and bf16 vs 4-bit AUROC
    on AD-Matched (A20).
 
-    gen      (AgentDojo env) --set S --out_dir D (--cands | --map M)   rebuild with a shadowed hash()
+    gen      (AgentDojo env) --set S --out_dir D (--cands | --map M | --map_from_rows F)   rebuild, shadowed hash()
     match    --set S --work W                                         PG2 candidates vs Liu -> W/map_<set>.json
     subset   --work W                                                 W/bipia500/bipia_pairs.jsonl (+ indices)
     deberta_bs --ckpts C... --data CSV --out D                        bs 1 vs 16 probabilities per checkpoint
@@ -66,6 +69,14 @@ def run_builder(set_name, out, choose):
 def cmd_gen(a):
     from agentdojo.task_suite import get_suite
     out_dir = Path(a.out_dir)
+    if a.map_from_rows:  # the pairing of an existing build (time-dependence check)
+        order = {s: sorted(get_suite("v1.2", s).injection_tasks) for s in SUITES}
+        m = {}
+        for r in load(a.map_from_rows):
+            m.setdefault(r["suite"], {})[r["task"]] = {"index": order[r["suite"]].index(r["inj"])}
+        out_dir.mkdir(parents=True, exist_ok=True)
+        run_builder(a.set, out_dir / FILES[a.set], lambda s, t: m.get(s, {}).get(t, {}).get("index", 0))
+        return
     if a.map:
         m = json.load(open(a.map))["map"]
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -87,6 +98,15 @@ def cmd_gen(a):
 
 def liu_file(det, s):
     return json.load(open(LIU / "results" / "many" / f"{det}__{s}.json"))
+
+
+def time_dependent(work, s):
+    """Row indices whose text differs between two builds with the same pairing (wall-clock content)."""
+    a = load(ROOT / "data" / "transfer" / "sets" / FILES[s])
+    b = load(Path(work) / "timecheck" / FILES[s])
+    assert len(a) == len(b) and all((x["suite"], x["task"], x["inj"], x["step"]) == (y["suite"], y["task"], y["inj"],
+                                                                                    y["step"]) for x, y in zip(a, b))
+    return sorted(i for i, (x, y) in enumerate(zip(a, b)) if x["text"] != y["text"])
 
 
 def cmd_match(a):
@@ -112,9 +132,17 @@ def cmd_match(a):
         probs = np.array(json.load(open(d / "scores" / f"promptguard2-86m__{a.set}.json"))["probs"])
         inj = {k: rows[ix[0]]["inj"] for k, ix in g.items()}
         cand[d.name] = (probs, inj)
-    res, unmatched, ambiguous = defaultdict(dict), [], 0
-    for (suite, task), ix in sorted(groups.items()):
-        dist = {c: float(np.abs(p[ix] - P[ix]).max()) for c, (p, _) in cand.items()}
+    tdep = set(time_dependent(work, a.set))
+    res, unmatched, ambiguous, time_only = defaultdict(dict), [], 0, []
+    for (suite, task), all_ix in sorted(groups.items()):
+        ix = [i for i in all_ix if i not in tdep]
+        dist = {c: float(np.abs(p[ix or all_ix] - P[ix or all_ix]).max()) for c, (p, _) in cand.items()}
+        if not ix:  # every row carries a timestamp: closest candidate, flagged
+            time_only.append(f"{suite}/{task}")
+            best = min(dist, key=dist.get)
+            res[suite][task] = dict(inj=cand[best][1][(suite, task)], index=int(best[1:]), max_abs=dist[best],
+                                    matching_injs=[], n_rows=len(all_ix), time_dependent_only=True)
+            continue
         hits = sorted((d, c) for c, d in dist.items() if d <= MATCH_TOL)
         injs = sorted({cand[c][1][(suite, task)] for _, c in hits})
         if not hits:
@@ -125,12 +153,15 @@ def cmd_match(a):
         inj_id = cand[best][1][(suite, task)]
         from_ids = sorted({cand[c][1][(suite, task)] for c in cand})
         res[suite][task] = dict(inj=inj_id, index=int(best[1:]), max_abs=hits[0][0], matching_injs=injs,
-                                n_rows=len(ix), n_candidates=len(from_ids))
+                                n_rows=len(all_ix), n_rows_used=len(ix), n_candidates=len(from_ids))
     out = dict(set=a.set, tol=MATCH_TOL, candidates=len(cdirs), aligned=aligned, groups=len(groups),
-               matched=sum(len(v) for v in res.values()), unmatched=unmatched, ambiguous=ambiguous, map=res)
+               time_dependent_rows=len(tdep), time_dependent_only_groups=time_only,
+               matched=sum(len(v) for v in res.values()) - len(time_only), unmatched=unmatched,
+               ambiguous=ambiguous, map=res)
     json.dump(out, open(work / f"map_{a.set}.json", "w"), indent=1)
     print(f"{a.set}: {out['matched']}/{out['groups']} user tasks matched, {len(unmatched)} unmatched, "
-          f"{ambiguous} ambiguous (several injection tasks match)", flush=True)
+          f"{ambiguous} ambiguous (several injection tasks match), {len(time_only)} time-dependent only; "
+          f"{len(tdep)} time-dependent rows", flush=True)
 
 
 # ─── subset, deberta_bs ──────────────────────────────────────────────────────
@@ -215,11 +246,18 @@ def cmd_report(a):
     rec_dir = work / "recovered"
     res["recovery"] = {s: {k: v for k, v in json.load(open(work / f"map_{s}.json")).items() if k != "map"}
                        for s in FILES}
-    val = {}
+    val, val_t = {}, {}
     for s in FILES:
+        td = set(time_dependent(work, s))
         for det in ENCODERS:
-            val[f"{det}/{s}"] = diff(probs(rec_dir / "scores" / f"{det}__{s}.json"), liu_file(det, s)["probs"])
-    ok = all(res["recovery"][s]["matched"] == res["recovery"][s]["groups"] for s in FILES)
+            p, q = probs(rec_dir / "scores" / f"{det}__{s}.json"), liu_file(det, s)["probs"]
+            keep = [i for i in range(len(q)) if i not in td]
+            val[f"{det}/{s}"] = diff([p[i] for i in keep], [q[i] for i in keep])
+            if td:
+                val_t[f"{det}/{s}"] = diff([p[i] for i in sorted(td)], [q[i] for i in sorted(td)])
+    res["validation_time_dependent_rows_vs_liu"] = val_t
+    ok = all(res["recovery"][s]["matched"] + len(res["recovery"][s]["time_dependent_only_groups"])
+             == res["recovery"][s]["groups"] for s in FILES)
     ok &= all(v["max_abs"] <= (MATCH_TOL if k.startswith("promptguard2") else VALID_TOL) for k, v in val.items())
     res["validation_rows_vs_liu"] = val
     seeded = {s: load(sets_dir / FILES[s]) for s in FILES}
@@ -238,6 +276,8 @@ def cmd_report(a):
                 f"{res['recovered_vs_seeded'][s]['text_differs']} rows differ from the seeded build")
     for k, v in val.items():
         run.log(f"  rows {k:28s} max|Δ| {v['max_abs']:.2e} >1e-3 {v['n_gt_1e3']} flips@0.5 {v['flips_at_05']}")
+    for k, v in val_t.items():
+        run.log(f"  time-dependent rows {k:28s} n {v['n']} max|Δ| {v['max_abs']:.2e} flips@0.5 {v['flips_at_05']}")
 
     # A19 metrics on the recovered AD-Matched (other sets: Gate 2 run 2, the port in Liu's env)
     bad, table = reference_check(bip_keep, tb_y)
@@ -340,6 +380,7 @@ def main():
     ap.add_argument("--out_dir")
     ap.add_argument("--cands", action="store_true")
     ap.add_argument("--map")
+    ap.add_argument("--map_from_rows")
     ap.add_argument("--work")
     ap.add_argument("--gate2")
     ap.add_argument("--ckpts", nargs="+")

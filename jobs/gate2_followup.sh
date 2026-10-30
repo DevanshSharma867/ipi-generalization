@@ -40,6 +40,9 @@ export TORCHDYNAMO_DISABLE=1 PYTHONHASHSEED=0 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFL
 
 # 1. pairing recovery
 for s in admatched adshift; do
+  # same pairing as the seeded set, rebuilt now: rows that differ carry wall-clock timestamps
+  case $s in admatched) f=agentdojo_pairs.jsonl ;; adshift) f=agentdojo_pairs_shift.jsonl ;; esac
+  [ -f "$W/timecheck/$f" ] || "$AD_PY" $FU gen --set $s --map_from_rows "$SETS/$f" --out_dir "$W/timecheck"
   "$AD_PY" $FU gen --set $s --cands --out_dir "$W/cands/$s"
   for c in "$W/cands/$s"/c*; do
     "$LIU_PY" $DET --detectors promptguard2-86m --sets $s --sets_dir "$c" --out "$c/scores"
