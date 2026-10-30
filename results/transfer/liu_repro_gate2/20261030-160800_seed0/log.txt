@@ -1,0 +1,138 @@
+[16:08:00] reference check: compute_many metrics on Liu's released files equal numbers_many.json
+[16:08:00] run1: FAIL
+[16:08:00]   piguard/admatched_tpr1_matchedneg             ours 0.0208 liu 0.0208 (Liu CI [0.0000, 0.0440]) ok
+[16:08:00]   piguard/admatched_auroc                       ours 0.7504 liu 0.7567 (±0.005) FAIL
+[16:08:00]   piguard/admatched_tpr1                        ours 0.0116 liu 0.0162 (±0.01) ok
+[16:08:00]   piguard/bipia_auroc                           ours 0.9924 liu 0.9924 (±0.005) ok
+[16:08:00]   piguard/bipia_tpr1                            ours 0.9507 liu 0.9507 (Liu CI [0.9314, 0.9610]) ok
+[16:08:00]   piguard/tbeval_auroc                          ours 0.9256 liu 0.9256 (±0.005) ok
+[16:08:00]   piguard/tbeval_tpr1                           ours 0.5274 liu 0.5274 (±0.01) ok
+[16:08:00]   promptguard2-86m/admatched_tpr1_matchedneg    ours 0.7153 liu 0.6944 (±0.01) FAIL
+[16:08:00]   promptguard2-86m/admatched_auroc              ours 0.8880 liu 0.8861 (±0.005) ok
+[16:08:00]   promptguard2-86m/admatched_tpr1               ours 0.5833 liu 0.5741 (±0.01) ok
+[16:08:00]   promptguard2-86m/bipia_auroc                  ours 0.6664 liu 0.6664 (±0.005) ok
+[16:08:00]   promptguard2-86m/bipia_tpr1                   ours 0.1039 liu 0.1039 (±0.01) ok
+[16:08:00]   promptguard2-86m/tbeval_auroc                 ours 0.9836 liu 0.9836 (±0.005) ok
+[16:08:00]   promptguard2-86m/tbeval_tpr1                  ours 0.5788 liu 0.5788 (±0.01) ok
+[16:08:00]   horizon-base/admatched_tpr1_matchedneg        ours 0.8426 liu 0.8218 (±0.01) FAIL
+[16:08:00]   horizon-base/admatched_auroc                  ours 0.9087 liu 0.9084 (±0.005) ok
+[16:08:00]   horizon-base/admatched_tpr1                   ours 0.8426 liu 0.8310 (±0.01) FAIL
+[16:08:00]   horizon-base/bipia_auroc                      ours 0.7356 liu 0.7356 (±0.005) ok
+[16:08:00]   horizon-base/bipia_tpr1                       ours 0.3766 liu 0.3766 (±0.01) ok
+[16:08:00]   horizon-base/tbeval_auroc                     ours 1.0000 liu 1.0000 (±0.005) ok
+[16:08:00]   horizon-base/tbeval_tpr1                      ours 1.0000 liu 1.0000 (±0.01) ok
+[16:08:00]   judge-qwen/admatched_tpr1_matchedneg          ours 0.5648 liu 0.5741 (Liu CI [0.5254, 0.6273]) ok
+[16:08:00]   judge-qwen/admatched_auroc                    ours 0.9217 liu 0.9128 (±0.005) FAIL
+[16:08:00]   judge-qwen/admatched_tpr1                     ours 0.5995 liu 0.5903 (±0.01) ok
+[16:08:00]   judge-qwen/bipia_auroc                        ours 0.8069 liu 0.8061 (±0.005) ok
+[16:08:00]   judge-qwen/bipia_tpr1                         ours 0.1507 liu 0.1487 (Liu CI [0.1105, 0.1848]) ok
+[16:08:00]   judge-qwen/tbeval_auroc                       ours 0.9579 liu 0.9572 (±0.005) ok
+[16:08:00]   judge-qwen/tbeval_tpr1                        ours 0.5445 liu 0.5428 (±0.01) ok
+[16:08:00]   rows piguard/adclean              max|Δ| 3.33e-03 flips@0.5 0  EXCEEDS expected bound
+[16:08:00]   rows piguard/admatched            max|Δ| 9.80e-01 flips@0.5 34  EXCEEDS expected bound
+[16:08:00]   rows piguard/bipia                max|Δ| 7.63e-06 flips@0.5 0
+[16:08:00]   rows piguard/tbeval               max|Δ| 3.46e-06 flips@0.5 0
+[16:08:00]   rows promptguard2-86m/adclean     max|Δ| 5.42e-05 flips@0.5 0
+[16:08:00]   rows promptguard2-86m/admatched   max|Δ| 9.78e-01 flips@0.5 24  EXCEEDS expected bound
+[16:08:00]   rows promptguard2-86m/bipia       max|Δ| 2.46e-05 flips@0.5 0
+[16:08:00]   rows promptguard2-86m/tbeval      max|Δ| 3.10e-06 flips@0.5 0
+[16:08:00]   rows horizon-base/adclean         max|Δ| 5.68e-05 flips@0.5 0
+[16:08:00]   rows horizon-base/admatched       max|Δ| 9.95e-01 flips@0.5 60  EXCEEDS expected bound
+[16:08:00]   rows horizon-base/bipia           max|Δ| 1.08e-05 flips@0.5 0
+[16:08:00]   rows horizon-base/tbeval          max|Δ| 2.38e-06 flips@0.5 0
+[16:08:00]   rows judge-qwen/adclean           max|Δ| 1.17e-01 flips@0.5 1  EXCEEDS expected bound
+[16:08:00]   rows judge-qwen/admatched         max|Δ| 9.98e-01 flips@0.5 39  EXCEEDS expected bound
+[16:08:00]   rows judge-qwen/bipia             max|Δ| 7.65e-01 flips@0.5 33  EXCEEDS expected bound
+[16:08:00]   rows judge-qwen/tbeval            max|Δ| 3.71e-01 flips@0.5 21  EXCEEDS expected bound
+[16:08:00] run2: FAIL
+[16:08:00]   piguard/admatched_tpr1_matchedneg             ours 0.0208 liu 0.0208 (Liu CI [0.0000, 0.0440]) ok
+[16:08:00]   piguard/admatched_auroc                       ours 0.7504 liu 0.7567 (±0.005) FAIL
+[16:08:00]   piguard/admatched_tpr1                        ours 0.0116 liu 0.0162 (±0.01) ok
+[16:08:00]   piguard/bipia_auroc                           ours 0.9924 liu 0.9924 (±0.005) ok
+[16:08:00]   piguard/bipia_tpr1                            ours 0.9507 liu 0.9507 (Liu CI [0.9314, 0.9610]) ok
+[16:08:00]   piguard/tbeval_auroc                          ours 0.9256 liu 0.9256 (±0.005) ok
+[16:08:00]   piguard/tbeval_tpr1                           ours 0.5274 liu 0.5274 (±0.01) ok
+[16:08:00]   promptguard2-86m/admatched_tpr1_matchedneg    ours 0.7153 liu 0.6944 (±0.01) FAIL
+[16:08:00]   promptguard2-86m/admatched_auroc              ours 0.8880 liu 0.8861 (±0.005) ok
+[16:08:00]   promptguard2-86m/admatched_tpr1               ours 0.5833 liu 0.5741 (±0.01) ok
+[16:08:00]   promptguard2-86m/bipia_auroc                  ours 0.6664 liu 0.6664 (±0.005) ok
+[16:08:00]   promptguard2-86m/bipia_tpr1                   ours 0.1039 liu 0.1039 (±0.01) ok
+[16:08:00]   promptguard2-86m/tbeval_auroc                 ours 0.9836 liu 0.9836 (±0.005) ok
+[16:08:00]   promptguard2-86m/tbeval_tpr1                  ours 0.5788 liu 0.5788 (±0.01) ok
+[16:08:00]   horizon-base/admatched_tpr1_matchedneg        ours 0.8426 liu 0.8218 (±0.01) FAIL
+[16:08:00]   horizon-base/admatched_auroc                  ours 0.9087 liu 0.9084 (±0.005) ok
+[16:08:00]   horizon-base/admatched_tpr1                   ours 0.8426 liu 0.8310 (±0.01) FAIL
+[16:08:00]   horizon-base/bipia_auroc                      ours 0.7356 liu 0.7356 (±0.005) ok
+[16:08:00]   horizon-base/bipia_tpr1                       ours 0.3766 liu 0.3766 (±0.01) ok
+[16:08:00]   horizon-base/tbeval_auroc                     ours 1.0000 liu 1.0000 (±0.005) ok
+[16:08:00]   horizon-base/tbeval_tpr1                      ours 1.0000 liu 1.0000 (±0.01) ok
+[16:08:00]   judge-qwen/admatched_tpr1_matchedneg          ours 0.5648 liu 0.5741 (Liu CI [0.5254, 0.6273]) ok
+[16:08:00]   judge-qwen/admatched_auroc                    ours 0.9217 liu 0.9128 (±0.005) FAIL
+[16:08:00]   judge-qwen/admatched_tpr1                     ours 0.5995 liu 0.5903 (±0.01) ok
+[16:08:00]   judge-qwen/bipia_auroc                        ours 0.8069 liu 0.8061 (±0.005) ok
+[16:08:00]   judge-qwen/bipia_tpr1                         ours 0.1507 liu 0.1487 (Liu CI [0.1105, 0.1848]) ok
+[16:08:00]   judge-qwen/tbeval_auroc                       ours 0.9579 liu 0.9572 (±0.005) ok
+[16:08:00]   judge-qwen/tbeval_tpr1                        ours 0.5445 liu 0.5428 (±0.01) ok
+[16:08:00]   rows piguard/adclean              max|Δ| 3.33e-03 flips@0.5 0  EXCEEDS expected bound
+[16:08:00]   rows piguard/admatched            max|Δ| 9.80e-01 flips@0.5 34  EXCEEDS expected bound
+[16:08:00]   rows piguard/bipia                max|Δ| 7.63e-06 flips@0.5 0
+[16:08:00]   rows piguard/tbeval               max|Δ| 3.46e-06 flips@0.5 0
+[16:08:00]   rows promptguard2-86m/adclean     max|Δ| 5.42e-05 flips@0.5 0
+[16:08:00]   rows promptguard2-86m/admatched   max|Δ| 9.78e-01 flips@0.5 24  EXCEEDS expected bound
+[16:08:00]   rows promptguard2-86m/bipia       max|Δ| 2.46e-05 flips@0.5 0
+[16:08:00]   rows promptguard2-86m/tbeval      max|Δ| 3.10e-06 flips@0.5 0
+[16:08:00]   rows horizon-base/adclean         max|Δ| 5.68e-05 flips@0.5 0
+[16:08:00]   rows horizon-base/admatched       max|Δ| 9.95e-01 flips@0.5 60  EXCEEDS expected bound
+[16:08:00]   rows horizon-base/bipia           max|Δ| 1.08e-05 flips@0.5 0
+[16:08:00]   rows horizon-base/tbeval          max|Δ| 2.38e-06 flips@0.5 0
+[16:08:00]   rows judge-qwen/adclean           max|Δ| 1.17e-01 flips@0.5 1  EXCEEDS expected bound
+[16:08:00]   rows judge-qwen/admatched         max|Δ| 9.98e-01 flips@0.5 39  EXCEEDS expected bound
+[16:08:00]   rows judge-qwen/bipia             max|Δ| 7.65e-01 flips@0.5 33  EXCEEDS expected bound
+[16:08:00]   rows judge-qwen/tbeval            max|Δ| 3.71e-01 flips@0.5 21  EXCEEDS expected bound
+[16:08:00] run3: FAIL
+[16:08:00]   piguard/admatched_tpr1_matchedneg             ours 0.0208 liu 0.0208 (Liu CI [0.0000, 0.0440]) ok
+[16:08:00]   piguard/admatched_auroc                       ours 0.7504 liu 0.7567 (±0.005) FAIL
+[16:08:00]   piguard/admatched_tpr1                        ours 0.0116 liu 0.0162 (±0.01) ok
+[16:08:00]   piguard/bipia_auroc                           ours 0.9905 liu 0.9924 (±0.005) ok
+[16:08:00]   piguard/bipia_tpr1                            ours 0.9376 liu 0.9507 (Liu CI [0.9314, 0.9610]) ok
+[16:08:00]   piguard/tbeval_auroc                          ours 0.9256 liu 0.9256 (±0.005) ok
+[16:08:00]   piguard/tbeval_tpr1                           ours 0.5274 liu 0.5274 (±0.01) ok
+[16:08:00]   promptguard2-86m/admatched_tpr1_matchedneg    ours 0.7037 liu 0.6944 (±0.01) ok
+[16:08:00]   promptguard2-86m/admatched_auroc              ours 0.8795 liu 0.8861 (±0.005) FAIL
+[16:08:00]   promptguard2-86m/admatched_tpr1               ours 0.5648 liu 0.5741 (±0.01) ok
+[16:08:00]   promptguard2-86m/bipia_auroc                  ours 0.6640 liu 0.6664 (±0.005) ok
+[16:08:00]   promptguard2-86m/bipia_tpr1                   ours 0.0793 liu 0.1039 (±0.01) FAIL
+[16:08:00]   promptguard2-86m/tbeval_auroc                 ours 0.9886 liu 0.9836 (±0.005) ok
+[16:08:00]   promptguard2-86m/tbeval_tpr1                  ours 0.7757 liu 0.5788 (±0.01) FAIL
+[16:08:00]   horizon-base/admatched_tpr1_matchedneg        ours 0.8380 liu 0.8218 (±0.01) FAIL
+[16:08:00]   horizon-base/admatched_auroc                  ours 0.9054 liu 0.9084 (±0.005) ok
+[16:08:00]   horizon-base/admatched_tpr1                   ours 0.8380 liu 0.8310 (±0.01) ok
+[16:08:00]   horizon-base/bipia_auroc                      ours 0.7671 liu 0.7356 (±0.005) FAIL
+[16:08:00]   horizon-base/bipia_tpr1                       ours 0.4078 liu 0.3766 (±0.01) FAIL
+[16:08:00]   horizon-base/tbeval_auroc                     ours 1.0000 liu 1.0000 (±0.005) ok
+[16:08:00]   horizon-base/tbeval_tpr1                      ours 1.0000 liu 1.0000 (±0.01) ok
+[16:08:00]   judge-qwen/admatched_tpr1_matchedneg          ours 0.5648 liu 0.5741 (Liu CI [0.5254, 0.6273]) ok
+[16:08:00]   judge-qwen/admatched_auroc                    ours 0.9196 liu 0.9128 (±0.005) FAIL
+[16:08:00]   judge-qwen/admatched_tpr1                     ours 0.5995 liu 0.5903 (±0.01) ok
+[16:08:00]   judge-qwen/bipia_auroc                        ours 0.8079 liu 0.8061 (±0.005) ok
+[16:08:00]   judge-qwen/bipia_tpr1                         ours 0.1511 liu 0.1487 (Liu CI [0.1105, 0.1848]) ok
+[16:08:00]   judge-qwen/tbeval_auroc                       ours 0.9559 liu 0.9572 (±0.005) ok
+[16:08:00]   judge-qwen/tbeval_tpr1                        ours 0.5291 liu 0.5428 (±0.01) FAIL
+[16:08:00]   rows piguard/adclean              max|Δ| 3.33e-03 flips@0.5 0  EXCEEDS expected bound
+[16:08:00]   rows piguard/admatched            max|Δ| 9.80e-01 flips@0.5 34  EXCEEDS expected bound
+[16:08:00]   rows piguard/bipia                max|Δ| 9.46e-01 flips@0.5 126  EXCEEDS expected bound
+[16:08:00]   rows piguard/tbeval               max|Δ| 3.46e-06 flips@0.5 0
+[16:08:00]   rows promptguard2-86m/adclean     max|Δ| 7.80e-01 flips@0.5 2  EXCEEDS expected bound
+[16:08:00]   rows promptguard2-86m/admatched   max|Δ| 9.40e-01 flips@0.5 25  EXCEEDS expected bound
+[16:08:00]   rows promptguard2-86m/bipia       max|Δ| 9.87e-01 flips@0.5 58  EXCEEDS expected bound
+[16:08:00]   rows promptguard2-86m/tbeval      max|Δ| 3.02e-01 flips@0.5 0  EXCEEDS expected bound
+[16:08:00]   rows horizon-base/adclean         max|Δ| 7.39e-02 flips@0.5 0  EXCEEDS expected bound
+[16:08:00]   rows horizon-base/admatched       max|Δ| 9.98e-01 flips@0.5 53  EXCEEDS expected bound
+[16:08:00]   rows horizon-base/bipia           max|Δ| 9.24e-01 flips@0.5 361  EXCEEDS expected bound
+[16:08:00]   rows horizon-base/tbeval          max|Δ| 2.26e-01 flips@0.5 0  EXCEEDS expected bound
+[16:08:00]   rows judge-qwen/adclean           max|Δ| 1.30e-01 flips@0.5 2  EXCEEDS expected bound
+[16:08:00]   rows judge-qwen/admatched         max|Δ| 9.99e-01 flips@0.5 43  EXCEEDS expected bound
+[16:08:00]   rows judge-qwen/bipia             max|Δ| 5.49e-01 flips@0.5 39  EXCEEDS expected bound
+[16:08:00]   rows judge-qwen/tbeval            max|Δ| 4.17e-01 flips@0.5 42  EXCEEDS expected bound
+[16:08:00] port check (run2 vs run1, ≤ 1e-06): PASS
+[16:08:03] gate2: FAIL
