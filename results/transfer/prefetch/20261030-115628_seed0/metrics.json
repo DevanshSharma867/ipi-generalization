@@ -1,0 +1,329 @@
+{
+  "hf_token": "valid",
+  "models": {
+    "protectai-v1": {
+      "repo": "protectai/deberta-v3-base-prompt-injection",
+      "revision": "373b6af0f8d16739cff5de28be326652246bfaa3",
+      "role": "liu",
+      "gated": false,
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "README.md",
+        "added_tokens.json",
+        "config.json",
+        "deberta-v3-base-prompt-injection-v1_emissions.csv",
+        "emissions.csv",
+        "model.safetensors",
+        "special_tokens_map.json",
+        "spm.model",
+        "tokenizer.json"
+      ],
+      "error": ""
+    },
+    "protectai-v2": {
+      "repo": "protectai/deberta-v3-base-prompt-injection-v2",
+      "revision": "90c9989b1a342275dd0d1a95aad283c04e075671",
+      "role": "liu",
+      "gated": false,
+      "access": "granted",
+      "complete": true,
+      "missing": [],
+      "error": ""
+    },
+    "protectai-small-v2": {
+      "repo": "protectai/deberta-v3-small-prompt-injection-v2",
+      "revision": "d7c8842daf06de3179cc3aca76b7b3a057acc5e7",
+      "role": "liu",
+      "gated": "auto",
+      "access": "not_requested",
+      "complete": false,
+      "missing": [],
+      "error": ""
+    },
+    "piguard": {
+      "repo": "leolee99/PIGuard",
+      "revision": "dd78b24e330193a22d2293ac66922dd4f982f563",
+      "role": "liu",
+      "gated": false,
+      "access": "granted",
+      "complete": true,
+      "missing": [],
+      "error": ""
+    },
+    "jasperls": {
+      "repo": "JasperLS/deberta-v3-base-injection",
+      "revision": "e44351e2ce3be04c5325f041124d8f49439abf7e",
+      "role": "liu",
+      "gated": false,
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        ".gitignore",
+        "LICENSE",
+        "README.md",
+        "added_tokens.json",
+        "config.json",
+        "pytorch_model.bin",
+        "runs/May08_14-20-04_843b3460659d/1683555613.3277614/events.out.tfevents.1683555613.843b3460659d.540.1",
+        "runs/May08_14-20-04_843b3460659d/events.out.tfevents.1683555613.843b3460659d.540.0",
+        "runs/May08_14-20-04_843b3460659d/events.out.tfevents.1683555654.843b3460659d.540.2"
+      ],
+      "error": ""
+    },
+    "testsavant-large": {
+      "repo": "testsavantai/prompt-injection-defender-large-v0",
+      "revision": "19bbde286abf8abef163c20222b70d137bb21455",
+      "role": "liu",
+      "gated": false,
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "README.md",
+        "added_tokens.json",
+        "config.json",
+        "model.safetensors",
+        "special_tokens_map.json",
+        "spm.model",
+        "tokenizer.json",
+        "tokenizer_config.json"
+      ],
+      "error": ""
+    },
+    "wolf-defender": {
+      "repo": "patronus-studio/wolf-defender-prompt-injection",
+      "revision": "6ed0617b86dcc2e06a1bf74d30f7e173e335ad63",
+      "role": "liu",
+      "gated": false,
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "LICENSE",
+        "README.md",
+        "assets/ai-parrot.png",
+        "assets/apache-camel.png",
+        "assets/delphi-security.png",
+        "assets/trustyai.png",
+        "assets/wolf-defender-banner.png",
+        "config.json",
+        "model.safetensors"
+      ],
+      "error": ""
+    },
+    "horizon-base": {
+      "repo": "Horizon-Labs/prompt-injection-guard-base",
+      "revision": "af3c52e6a9d8bccc8e8c3ed4ba9d7fa084a47e33",
+      "role": "liu",
+      "gated": false,
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "README.md",
+        "code/data/build_v0.py",
+        "code/data/build_v1.py",
+        "code/data/build_v2.py",
+        "code/data/langs.py",
+        "code/gen/gen_v1.py",
+        "code/gen/gen_v2.py",
+        "code/release/build_release_dir.py",
+        "code/research/prompt_injection_survey.md"
+      ],
+      "error": ""
+    },
+    "sheltron": {
+      "repo": "sheltron-ai/prompt-guard-68m",
+      "revision": "5505d7217794c5509d680d0be81b016f2b7398f4",
+      "role": "liu",
+      "gated": false,
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "LICENSE",
+        "README.md",
+        "calibration.json",
+        "config.json",
+        "model.safetensors",
+        "special_tokens_map.json",
+        "tokenizer.json",
+        "tokenizer_config.json"
+      ],
+      "error": ""
+    },
+    "prismor-1.5b": {
+      "repo": "prismor/prompt-guard-1.5b",
+      "revision": "cfaa8f95142d0d64d9d7e29602d43cd36df15ded",
+      "role": "liu",
+      "gated": false,
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "README.md",
+        "chat_template.jinja",
+        "config.json",
+        "generation_config.json",
+        "model.safetensors",
+        "tokenizer.json",
+        "tokenizer_config.json"
+      ],
+      "error": ""
+    },
+    "promptguard2-86m": {
+      "repo": "meta-llama/Llama-Prompt-Guard-2-86M",
+      "revision": "a8ded8e697ce7c355e395a0df51f94adb4a2fd27",
+      "role": "liu",
+      "gated": "manual",
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "LICENSE",
+        "README.md",
+        "USE_POLICY.md",
+        "checklist.chk",
+        "config.json",
+        "model.safetensors",
+        "special_tokens_map.json",
+        "tokenizer.json",
+        "tokenizer_config.json"
+      ],
+      "error": ""
+    },
+    "promptguard2-22m": {
+      "repo": "meta-llama/Llama-Prompt-Guard-2-22M",
+      "revision": "11614a155199674a0a95e6602d6ab0417b790ed0",
+      "role": "liu",
+      "gated": "manual",
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "LICENSE",
+        "MODEL_CARD.md",
+        "README.md",
+        "USE_POLICY.md",
+        "checklist.chk",
+        "config.json",
+        "model.safetensors",
+        "special_tokens_map.json",
+        "tokenizer.json"
+      ],
+      "error": ""
+    },
+    "promptguard1-86m": {
+      "repo": "meta-llama/Prompt-Guard-86M",
+      "revision": "1209add6ca7d9c1d815171b8e5571587fe3e7b03",
+      "role": "liu",
+      "gated": "manual",
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "LICENSE",
+        "Prompt-Guard-20240715180000.md5",
+        "README.md",
+        "USE_POLICY.md",
+        "config.json",
+        "model.safetensors",
+        "prompt_guard_visual.png",
+        "special_tokens_map.json",
+        "tokenizer.json"
+      ],
+      "error": ""
+    },
+    "qualifire-sentinel": {
+      "repo": "qualifire/prompt-injection-sentinel",
+      "revision": "e24131782819a4787c129ed2b9a4a67ae57a584e",
+      "role": "liu",
+      "gated": "auto",
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "LICENSE.md",
+        "README.md",
+        "config.json",
+        "model.safetensors",
+        "sentinel.png",
+        "special_tokens_map.json",
+        "tokenizer.json",
+        "tokenizer_config.json"
+      ],
+      "error": ""
+    },
+    "rogue-sentinel-v2": {
+      "repo": "rogue-security/prompt-injection-jailbreak-sentinel-v2",
+      "revision": "05ff9bfd1f28c5228e53121d5ee4427bb5205212",
+      "role": "liu",
+      "gated": "auto",
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "LICENSE.md",
+        "README.md",
+        "added_tokens.json",
+        "config.json",
+        "merges.txt",
+        "model.safetensors",
+        "sentinel.png",
+        "special_tokens_map.json",
+        "tokenizer.json"
+      ],
+      "error": ""
+    },
+    "judge-qwen": {
+      "repo": "Qwen/Qwen2.5-7B-Instruct",
+      "revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+      "role": "judge",
+      "gated": false,
+      "access": "granted",
+      "complete": true,
+      "missing": [],
+      "error": ""
+    },
+    "judge-llama": {
+      "repo": "meta-llama/Llama-3.1-8B-Instruct",
+      "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "role": "judge",
+      "gated": "manual",
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "LICENSE",
+        "README.md",
+        "USE_POLICY.md",
+        "config.json",
+        "generation_config.json",
+        "model-00001-of-00004.safetensors",
+        "model-00002-of-00004.safetensors",
+        "model-00003-of-00004.safetensors",
+        "model-00004-of-00004.safetensors"
+      ],
+      "error": ""
+    },
+    "deberta-v3-base": {
+      "repo": "microsoft/deberta-v3-base",
+      "revision": "8ccc9b6f36199bec6961081d44eb72fb3f7353f3",
+      "role": "ours",
+      "gated": false,
+      "access": "granted",
+      "complete": false,
+      "missing": [
+        ".gitattributes",
+        "README.md"
+      ],
+      "error": ""
+    }
+  },
+  "blocked": [
+    "protectai/deberta-v3-small-prompt-injection-v2"
+  ]
+}
