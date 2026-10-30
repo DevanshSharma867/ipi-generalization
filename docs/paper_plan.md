@@ -210,8 +210,9 @@ All three sets are reported regardless.
 **Hypothesis.** ICT's pair accuracy on held-out pairs is clearly above 0.5.
 
 **Criterion.**
-- Pair accuracy is computed on held-out V3-test pairs. For split realization k, test pairs are the pairs whose
-  document is in the k test split.
+- Pair accuracy is computed on held-out V3-test pairs: the pairs on the test docs of **split seed 0** only (A18).
+  The models compared on pairs are trained on split seed 0 with training seeds 0–4, since runs on split seeds 1–4
+  may have trained on those docs.
 - Supported if the run-mean pair accuracy has a 95% cluster-bootstrap CI whose lower bound is > 0.5.
 - The individual runs and the `subtle` subset are reported separately.
 - Every content-only detector is 0.5 by construction (see Shared protocol), so no comparison against them is needed for H2.
@@ -289,7 +290,9 @@ agent pairs.
   - Two independent human annotators label every held-out pair member (aligned / subverting / unclear).
   - Cohen's κ ≥ 0.6 on the label.
   - Only pairs on which both annotators agree with the intended labels are used.
-  - **≥ 200 adjudicated pairs per held-out pair set** (V3-derived and agent-derived; amendment A5).
+  - **≥ 200 agreed pairs per held-out pair set** (V3-derived and agent-derived; A5, counted strictly as in A18):
+    pairs in quads whose every member both annotators label with the intended label. Adjudicated pairs are a
+    secondary robustness analysis.
     - The generator over-generates about 300 pairs per eval set. Two annotators from the project group label them
       independently; disagreements are adjudicated (A9).
     - At p = 0.5, n = 200 gives a binomial 95% half-width of about ±0.07, against ±0.10 for n = 100.
@@ -389,6 +392,7 @@ part of the pre-registration, not deviations.
 | A15 | 2026-10-29 | The variant-rule re-score of the V2 judge (A12) runs as its own job, `jobs/rescore_v2_judge_variant.sh`. `jobs/rescore_v2_probes.sh` keeps its original scope and time limit (its judge steps pin the V2 two-token rule). |
 | A16 | 2026-10-29 | **Gates under the calibrated protocol; AD negatives.** Under the calibrated protocol the clean-count gate (≥ 500 clean rows for 1% FPR, ≥ 100 for 5%) applies to the **calibration pool** (≥ 1,000 rows), not to the evaluated set. TPR is measured on the injected rows at the fixed threshold. The realized FPR on the evaluated set's clean rows (AD-Clean: 339 distinct outputs; TB-Clean) is reported with its task-clustered CI next to every calibrated number. On AgentDojo the negatives are AD-Clean (as in Liu 2026 Table 2). The 585/975 benign rows of AD-Matched/AD-Shift (83 distinct texts repeated per attack template) are never counted as clean. Oracle TPR@1%FPR on AD is computed only for the Liu reproduction, labelled "below gate, reproduction only". Oracle TPR@5%FPR on AD (339 ≥ 100 clean) is reported as secondary. Supersedes the "full AD-Matched (585 clean)" wording in A3. |
 | A17 | 2026-10-29 | **Liu 2026 reproduction protocol.** (i) Target: the per-row scores and `analysis/numbers_many.json` at github.com/lzwhehe/benign-instruction-bench commit `5d0ae7c`. Both the arXiv v1 paper and the repo version are cited (they differ; §6). (ii) The judges in the reproduction use Liu's exact code rule (Yes/No variants after stripping `" -_>.,"` and lowercasing). The H3 judges use our A12 rule. The difference between the two rules is reported. (iii) The reproduction runs in Liu's pinned environment (transformers 4.57.6 lockfile) **and** in ours (transformers 5.20.1). The pinned run must match his released scores; any further difference in ours is reported as an environment effect. All environment versions go in the run manifests. |
+| A18 | 2026-10-30 | **Intent-pair construction (C3).** `docs/pairs_spec.md` v1 (commit 7c75099) and its §10 decisions are part of the pre-registration, before any pair is generated or scored. (Q1) EVAL V3 pairs only on split seed 0's test docs; H2, H3 and H4 are decided on split seed 0. (Q2) Strict agreement counts; adjudication is secondary. (Q3) TRAIN and EVAL generators are fixed and outside every comparator family and the ICT backbone. (Q4) Exclusion lists approved as drafted. Details below the table. |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.
@@ -403,3 +407,41 @@ part of the pre-registration, not deviations.
     only if complete.
 - **Budget:** cap USD 60. The pre-scoring estimate is USD 6.8–28.6 at standard prices, depending on the
   not-yet-measured agent-output length. It is re-estimated from the real sets before scoring.
+
+**A18 details** (intent pairs; spec: `docs/pairs_spec.md`):
+- **Construction:** pairs are built and dropped as crossed quads (spec §1, §6), with eligibility rules E1–E4,
+  request rules Q1–Q4 and labels A/S (§3), a ≥ 40% subtle target selected by overlap class only (§5), and the
+  position, separator, length and form rules of §6.
+- **Q1, split seed 0 only.** EVAL V3 pairs are written only on split seed 0's test docs (about 322 pairs before
+  attrition; generated with about 1.3× over-generation). H2, H3 (a and b) and H4 are decided on split seed 0.
+  - ICT, ablation (a) and every trained model compared on pairs are trained on split seed 0 with training seeds
+    0–4 (five runs, mean ± SD and cluster-bootstrap CI as in §3). Runs on split seeds 1–4 could have trained on
+    split seed 0's test docs, so they are never scored on these pairs.
+  - Split seeds 1–4 are used for V3 metrics only (H1, C2).
+  - Reason: annotation cost. Pairs on all five seeds' test docs (483 docs, about 1,160 pairs) would take about
+    19 hours per annotator at an assumed minute per pair.
+  - This replaces H2's earlier "for split realization k" wording. It changes no metric, threshold or comparator.
+- **Q2, counting.** The primary count and every headline pair result use only **agreed quads**: both annotators
+  give the intended label to all four members. Pairs from adjudicated quads (the author adjudicates
+  disagreements) are a secondary robustness analysis, reported next to the primary. This replaces "adjudicated"
+  in A5 and A9.
+  - If a set has fewer than 200 agreed pairs, more pairs are generated with the same generator, prompt and rules
+    and annotated the same way, until it has 200. The agreement rule is never relaxed after results are seen.
+- **Q3, generators.** No generator comes from a comparator family (OpenAI/GPT-4.1, Qwen, Llama/Meta, Sheltron,
+  Horizon-Labs, Wolf Defender) or from the ICT backbone's family (Microsoft DeBERTa-v3, so no Microsoft model).
+  EVAL and TRAIN use different generators from different vendors.
+  - **TRAIN:** `mistralai/Mistral-7B-Instruct-v0.3` (Apache-2.0), on the cluster, revision pinned in
+    `configs/detectors.yaml` before the first generation job. Planned ≤ 3 GPU-hours (≤ 6 with one regeneration
+    round); no API cost.
+  - **EVAL:** Google `gemini-2.5-pro` (stable model id) through the Gemini API. Standard price read 2026-10-30
+    from ai.google.dev/gemini-api/docs/pricing: USD 1.25 per M input and 10.00 per M output tokens (prompts
+    ≤ 200k), with thinking tokens billed as output.
+    - Estimate: about 510 quads (210 V3, 300 agent) × (1.7k input, ≤ 1.3k output incl. a fixed thinking budget)
+      ≈ 0.9M input + 0.7M output ≈ USD 8; USD 23 with 3× retries. **Cap: USD 40**, fixed with the model id,
+      prompt and thinking budget in a committed config before the first call.
+  - Not chosen: Gemma for TRAIN (same vendor as the EVAL model); a Mistral API model for EVAL (same family as
+    TRAIN); `gemini-4-argon` (its price doubles on 2026-12-01).
+  - Each generator's exact model id, revision or API version, and generation date go in `docs/data_provenance.md`
+    and are disclosed in the paper.
+- **Q4.** The exclusion lists E3 (H1–H6) and E4 are approved as drafted. The author may revise them after
+  labelling the 20 pilot pairs and before any generation; a revision after generation starts is a new spec version.
