@@ -654,3 +654,40 @@ V2 test has {{VTwoTprJudgeQwenTwoFiveSevenbVsumVTwoTestNclean}} clean rows in
 - Against the two-token judge (F007, F009, F012): every default-threshold value and the calibrated TPR@5%FPR are
   the same. Only the ranking-based values (AUROC, oracle TPR@5%FPR) differ, and their CIs overlap those of the
   two-token judge. No paired test was run.
+
+## F016. Transfer sets rebuilt from Liu (2026): Gate 1
+
+```finding
+id: F016
+status: full
+script: scripts/build_transfer_sets.sh (jobs/build_transfer_sets.sh) -> eval/transfer/gate1.py
+commit: 6c94421
+seeds: n/a (deterministic rebuild, PYTHONHASHSEED=0 as upstream)
+data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filescf00fcba
+eval_set: AD-Clean, AD-Matched, AD-Shift, TB-Matched, BIPIA (Liu), general corpus
+threshold_protocol: n/a (set sizes and row/label alignment only; no scores)
+date: 2026-10-30
+source:
+- results/transfer/set_build_gate1/20261030-124112_seed0
+macros:
+- TransferGateOne*
+```
+
+Gate 1 of the transfer harness (paper_plan A17): {{TransferGateOneStatus}}. The six sets were rebuilt from public
+sources with Liu's upstream scripts at github.com/lzwhehe/benign-instruction-bench commit `5d0ae7c`, unmodified.
+Each rebuilt set matches every score file Liu released for it in row count and, where the file carries labels, in
+label sequence. Its size also matches the paper. The manifest in the run's `metrics.json` records environments,
+HF dataset revisions and where each step ran.
+
+| Set | Rows | Released score files matched |
+|---|---|---|
+| AD-Clean | {{TransferGateOneAdCleanRows}} (clean) | {{TransferGateOneAdCleanFiles}} |
+| AD-Matched | {{TransferGateOneAdMatchedBenign}} benign, {{TransferGateOneAdMatchedInjected}} injected | {{TransferGateOneAdMatchedFiles}} |
+| AD-Shift | {{TransferGateOneAdShiftBenign}} benign, {{TransferGateOneAdShiftInjected}} injected | {{TransferGateOneAdShiftFiles}} |
+| TB-Matched | {{TransferGateOneTbMatchedBenign}} benign, {{TransferGateOneTbMatchedInjected}} injected | {{TransferGateOneTbMatchedFiles}} |
+| BIPIA (Liu) | {{TransferGateOneBipiaBenign}} benign, {{TransferGateOneBipiaInjectedTest}} injected (test half) | {{TransferGateOneBipiaFiles}} |
+| General corpus | {{TransferGateOneGeneralRows}} (clean) | {{TransferGateOneGeneralFiles}} |
+
+- AD-Matched and AD-Shift benign rows repeat a small set of distinct texts per attack template (A16); they are never counted as
+  clean (A16). AD-Clean is the AgentDojo negative set.
+- Gate 1 checks rows and labels only. Score agreement is Gate 2.

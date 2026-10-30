@@ -305,6 +305,25 @@ def table_v3_prefreeze_gates():
             put(macro_name(*p, "main", k), str(n))
 
 
+TRANSFER_SETS = {"agentdojo_benign_outputs.jsonl": "ad_clean", "agentdojo_pairs.jsonl": "ad_matched",
+                 "agentdojo_pairs_shift.jsonl": "ad_shift", "taubench_eval.jsonl": "tb_matched",
+                 "bipia_pairs.jsonl": "bipia", "corpus.jsonl": "general"}
+COUNT_KEYS = {"None": "rows", "0": "benign", "1": "injected", "1:test": "injected_test"}
+
+
+def macros_transfer_gate1():
+    """Gate 1 (paper_plan A17): rebuilt Liu (2026) set sizes, which match his paper and released score files."""
+    m, _ = latest_metrics("set_build_gate1", version="transfer")
+    if m is None:
+        return
+    put(macro_name("transfer", "gate1", "status"), "PASS" if m["pass"] else "FAIL")
+    for f, s in m["sets"].items():
+        p = ("transfer", "gate1", TRANSFER_SETS[f])
+        put(macro_name(*p, "files"), str(len(s["released_files"])))
+        for k, c in s["paper_counts"].items():
+            put(macro_name(*p, COUNT_KEYS[k]), str(c["rebuilt"]))
+
+
 def tables_probe_report():
     m, src = latest_metrics("probe_report")
     if m is None:
@@ -623,6 +642,7 @@ def main():
     table_summary_json_bug()
     tables_tpr_protocols()
     table_v3_prefreeze_gates()
+    macros_transfer_gate1()
     errors, owner = validate_entries()
     if errors:
         print(f"{len(errors)} PROVENANCE ERRORS (docs/findings.src.md):")

@@ -24,7 +24,7 @@ not `docs/findings.md`. Deviations from the pre-registered protocol: `docs/devia
   freezing before results cannot be shown; V2 judge results carry this caveat. V3 will use a new judge prompt committed
   separately before any scoring.
 
-Entries by status: full 9, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
+Entries by status: full 10, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
 
 ## F001. V2 TF-IDF+LR headline table (Phase 2 Table III)
 
@@ -402,3 +402,27 @@ V2 test has `\VTwoTprJudgeQwenTwoFiveSevenbVsumVTwoTestNclean` = 144 clean rows 
 - Against the two-token judge (F007, F009, F012): every default-threshold value and the calibrated TPR@5%FPR are
   the same. Only the ranking-based values (AUROC, oracle TPR@5%FPR) differ, and their CIs overlap those of the
   two-token judge. No paired test was run.
+
+## F016. Transfer sets rebuilt from Liu (2026): Gate 1
+
+> **F016** · status **`full`** · 2026-10-30 · data `transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filescf00fcba` · eval `AD-Clean, AD-Matched, AD-Shift, TB-Matched, BIPIA (Liu), general corpus` · threshold: n/a (set sizes and row/label alignment only; no scores) · seeds: n/a (deterministic rebuild, PYTHONHASHSEED=0 as upstream)  
+> script `scripts/build_transfer_sets.sh (jobs/build_transfer_sets.sh) -> eval/transfer/gate1.py` @ `6c94421` · source: `results/transfer/set_build_gate1/20261030-124112_seed0`
+
+Gate 1 of the transfer harness (paper_plan A17): `\TransferGateOneStatus` = PASS. The six sets were rebuilt from public
+sources with Liu's upstream scripts at github.com/lzwhehe/benign-instruction-bench commit `5d0ae7c`, unmodified.
+Each rebuilt set matches every score file Liu released for it in row count and, where the file carries labels, in
+label sequence. Its size also matches the paper. The manifest in the run's `metrics.json` records environments,
+HF dataset revisions and where each step ran.
+
+| Set | Rows | Released score files matched |
+|---|---|---|
+| AD-Clean | `\TransferGateOneAdCleanRows` = 339 (clean) | `\TransferGateOneAdCleanFiles` = 22 |
+| AD-Matched | `\TransferGateOneAdMatchedBenign` = 585 benign, `\TransferGateOneAdMatchedInjected` = 432 injected | `\TransferGateOneAdMatchedFiles` = 24 |
+| AD-Shift | `\TransferGateOneAdShiftBenign` = 975 benign, `\TransferGateOneAdShiftInjected` = 720 injected | `\TransferGateOneAdShiftFiles` = 20 |
+| TB-Matched | `\TransferGateOneTbMatchedBenign` = 1533 benign, `\TransferGateOneTbMatchedInjected` = 584 injected | `\TransferGateOneTbMatchedFiles` = 23 |
+| BIPIA (Liu) | `\TransferGateOneBipiaBenign` = 1200 benign, `\TransferGateOneBipiaInjectedTest` = 2435 injected (test half) | `\TransferGateOneBipiaFiles` = 20 |
+| General corpus | `\TransferGateOneGeneralRows` = 7504 (clean) | `\TransferGateOneGeneralFiles` = 18 |
+
+- AD-Matched and AD-Shift benign rows repeat a small set of distinct texts per attack template (A16); they are never counted as
+  clean (A16). AD-Clean is the AgentDojo negative set.
+- Gate 1 checks rows and labels only. Score agreement is Gate 2.
