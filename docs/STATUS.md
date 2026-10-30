@@ -20,8 +20,7 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   - Laptop: `scripts/cluster.sh run|watch` retries ssh with backoff.
 
 ## Next
-1. **b. Detector wrappers:** registry-driven, using Liu's documented loaders (cls / segmented / Sheltron / Prismor /
-   4-bit judges).
+1. **b. Detector wrappers:** registry-driven, Liu's loaders (cls / segmented / Sheltron / Prismor / 4-bit judges).
 2. **c. Metrics:** TPR@1%FPR on the same benchmark's benign outputs (A16), plus `task_block_rate`.
 3. **d. Gate 2, Liu reproduction:** in his pinned env (`.venv-liu`) and ours. Scores must match his released files;
    any env difference is reported (A17).
@@ -32,12 +31,10 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
 - **Access request (you):** `protectai/deberta-v3-small-prompt-injection-v2` is not requested yet (auto-approved).
 - **Findings entry for Gate 1:** set sizes may appear in the paper, so an F-entry is needed. It waits on another
   session's uncommitted `make_tables.py` / `make_findings.py` edits.
-- **Revision pins:** Liu records no revisions except Horizon. wolf-defender (2026-10-24) and prismor-1.5b
-  (2026-10-21) changed just before his last commit, so they are the first suspects if Gate 2 mismatches; re-pin
-  with a reason.
+- **Revision pins:** Liu pins only Horizon. wolf-defender and prismor-1.5b changed days before his last commit:
+  first suspects if Gate 2 mismatches (re-pin with a reason).
 - **VRAM cap:** MPS does not enforce `CUDA_MPS_PINNED_DEVICE_MEM_LIMIT` (smoke test, job 422476). Half-card VRAM
   must be capped in code, e.g. `torch.cuda.set_per_process_memory_fraction(0.5)`.
-- **Frontier comparator (c):** `OPENAI_API_KEY` is not set, so the one test call (c′) has not been made; score by
-  2026-12-31 (A11).
+- **Frontier comparator (c):** `OPENAI_API_KEY` not set, so the c′ test call is not made; score by 2026-12-31 (A11).
 - **Cluster notes:** the QoS needs `--gres=mps:50` even for CPU jobs; the template file
   `jobs/templates/mock_job_csisnlp18.sh` was never found, so the header is derived from the existing jobs.
