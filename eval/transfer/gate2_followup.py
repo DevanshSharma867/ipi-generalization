@@ -84,7 +84,7 @@ def cmd_gen(a):
         run_builder(a.set, out_dir / FILES[a.set], lambda s, t: m.get(s, {}).get(t, {}).get("index", 0))
         return
     n = max(len(get_suite("v1.2", s).injection_tasks) for s in SUITES)
-    for k in range(n):  # candidate k: every user task gets injection task k mod (suite's count)
+    for k in (a.k if a.k is not None else range(n)):  # candidate k: each user task gets injection task k mod count
         d = out_dir / f"c{k:02d}"
         if (d / FILES[a.set]).exists():
             continue
@@ -221,7 +221,11 @@ def probs(path):
     return json.load(open(path))["probs"]
 
 
+PARTS = ("batch", "pairing", "judge")
+
+
 def cmd_report(a):
+    """One run record per part (each job writes its own): exp gate2_followup_<part>."""
     import numpy as np
     from sklearn.metrics import roc_auc_score
     sys.path.insert(0, str(ROOT / "src"))
@@ -232,8 +236,8 @@ def cmd_report(a):
     work, g2 = Path(a.work).resolve(), Path(a.gate2).resolve()
     sets_dir = ROOT / "data" / "transfer" / "sets"
     manifest = json.load(open(sets_dir / "manifest.json"))
-    run = start_run(version="transfer", exp="gate2_followup", seed=0,
-                    args={"work": "<scratch>/" + work.name, "gate2_work": "<scratch>/" + g2.name,
+    run = start_run(version="transfer", exp=f"gate2_followup_{a.part}", seed=0,
+                    args={"part": a.part, "work": "<scratch>/" + work.name, "gate2_work": "<scratch>/" + g2.name,
                           "match_tol": MATCH_TOL, "valid_tol": VALID_TOL, "subset": [SUBSET_N, SUBSET_SEED],
                           "torchdynamo_disable": os.environ.get("TORCHDYNAMO_DISABLE"),
                           "upstream_commit": manifest["upstream"]["commit"]},
@@ -242,6 +246,37 @@ def cmd_report(a):
     res = {}
     bip_keep, tb_y = set_masks()
 
+    def ad_auroc(adm, clean):
+        d, neg = json.load(open(adm)), probs(clean)
+        y, p = np.array(d["labels"]), np.array(d["probs"])
+        pos = p[y == 1]
+        return dict(admatched_auroc=float(roc_auc_score(np.r_[np.ones(len(pos)), np.zeros(len(neg))],
+                                                        np.r_[pos, neg])),
+                    admatched_auroc_matchedneg=float(roc_auc_score(y, p)))
+
+    def judge_gap(setname, nf4_adm, nf4_clean, bf16_dir):
+        n = ad_auroc(nf4_adm, nf4_clean)
+        b = ad_auroc(bf16_dir / f"{JUDGE}__admatched.json", bf16_dir / f"{JUDGE}__adclean.json")
+        run.log(f"judge AD-Matched ({setname}) AUROC nf4 {n['admatched_auroc']:.4f} bf16 {b['admatched_auroc']:.4f} "
+                f"gap {b['admatched_auroc'] - n['admatched_auroc']:+.4f}")
+        return {"nf4": n, "bf16": b, "gap_bf16_minus_nf4": {k: b[k] - n[k] for k in n}}
+
+    {"pairing": report_pairing, "batch": report_batch, "judge": report_judge}[a.part](**locals())
+    res["envs"] = {"liu": env_versions(a.liu_py), "ours": env_versions(a.our_py)}
+    for sub in SUBDIRS[a.part]:
+        if (work / sub).exists():
+            shutil.copytree(work / sub, run.dir / "scores" / sub, dirs_exist_ok=True)
+    head = {"pairing": "recovery_pass", "batch": "batch_independent_ours_deberta", "judge": "judge_repeat_identical"}
+    run.save_metrics(res, headline=(head[a.part], float(res[head[a.part]])))
+    run.finish()
+
+
+SUBDIRS = {"pairing": ("recovered", "judge_nf4_rec", "judge_bf16_rec"), "batch": ("bs", "deberta_bs", "bipia500"),
+           "judge": ("judge_repeat", "judge_6gib", "judge_bf16_seeded")}
+
+
+def report_pairing(work, g2, sets_dir, run, res, bip_keep, tb_y, check_run, ci_ref, reference_check, released,
+                   JUDGE, judge_gap, **_):
     # 1. pairing recovery and validation
     rec_dir = work / "recovered"
     res["recovery"] = {s: {k: v for k, v in json.load(open(work / f"map_{s}.json")).items() if k != "map"}
@@ -299,6 +334,14 @@ def cmd_report(a):
     res["judge_nf4_recovered_rows_vs_liu"] = diff(probs(work / "judge_nf4_rec" / f"{JUDGE}__admatched.json"),
                                                   released(JUDGE, "admatched")[0])
 
+    res["judge_bf16_vs_nf4_admatched_recovered"] = judge_gap(
+        "recovered", work / "judge_nf4_rec" / f"{JUDGE}__admatched.json", g2 / "run2" / f"{JUDGE}__adclean.json",
+        work / "judge_bf16_rec")
+    for s in FILES:
+        shutil.copy(work / f"map_{s}.json", run.dir)
+
+
+def report_batch(work, run, res, np, **_):
     # 2. batch size and environment, 500-row BIPIA subset
     idx = json.load(open(work / "bipia500" / "indices.json"))
     bs = {}
@@ -323,7 +366,11 @@ def cmd_report(a):
         run.log(f"  deberta {r['checkpoint']:14s} bs1 vs bs16 max|Δ| {deb[r['checkpoint']]['max_abs']:.2e} "
                 f"rows > 1e-3 {deb[r['checkpoint']]['n_gt_1e3']} flips {deb[r['checkpoint']]['flips_at_05']}")
     res["deberta_v2_bs1_vs_bs16"] = deb
+    res["batch_independent_ours_deberta"] = bool(deb) and all(v["max_abs"] <= 1e-5 for v in deb.values())
+    run.log(f"our DeBERTa batch-independent (max|Δ| ≤ 1e-5): {res['batch_independent_ours_deberta']}")
 
+
+def report_judge(work, g2, run, res, bip_keep, np, roc_auc_score, released, tpr_at, JUDGE, judge_gap, **_):
     # 3. judge: run-to-run noise, 6 GiB, bf16 vs 4-bit
     def bipia_m(p):
         y, p = np.array(released(JUDGE, "bipia")[1])[bip_keep], np.array(p)[bip_keep]
@@ -345,32 +392,11 @@ def cmd_report(a):
                     f"vs run2 max|Δ| {j[name]['rows_vs_run2']['max_abs']:.2e}, "
                     f"vs Liu max|Δ| {j[name]['rows_vs_liu']['max_abs']:.2e}")
 
-    def ad_auroc(adm, clean):
-        d, neg = json.load(open(adm)), probs(clean)
-        y, p = np.array(d["labels"]), np.array(d["probs"])
-        pos = p[y == 1]
-        return dict(admatched_auroc=float(roc_auc_score(np.r_[np.ones(len(pos)), np.zeros(len(neg))],
-                                                        np.r_[pos, neg])),
-                    admatched_auroc_matchedneg=float(roc_auc_score(y, p)))
-    prec = {}
-    for setname, nf4, bf16 in (("seeded", g2 / "run2", work / "judge_bf16_seeded"),
-                               ("recovered", work / "judge_nf4_rec", work / "judge_bf16_rec")):
-        n = ad_auroc(nf4 / f"{JUDGE}__admatched.json", g2 / "run2" / f"{JUDGE}__adclean.json")
-        b = ad_auroc(bf16 / f"{JUDGE}__admatched.json", work / "judge_bf16_seeded" / f"{JUDGE}__adclean.json")
-        prec[setname] = {"nf4": n, "bf16": b, "gap_bf16_minus_nf4": {k: b[k] - n[k] for k in n}}
-        run.log(f"judge AD-Matched ({setname}) AUROC nf4 {n['admatched_auroc']:.4f} bf16 {b['admatched_auroc']:.4f} "
-                f"gap {b['admatched_auroc'] - n['admatched_auroc']:+.4f}")
-    res["judge_bf16_vs_nf4_admatched"] = prec
-
-    res["envs"] = {"liu": env_versions(a.liu_py), "ours": env_versions(a.our_py)}
-    for sub in ("recovered", "bs", "deberta_bs", "judge_repeat", "judge_6gib", "judge_nf4_rec", "judge_bf16_seeded",
-                "judge_bf16_rec", "bipia500"):
-        if (work / sub).exists():
-            shutil.copytree(work / sub, run.dir / "scores" / sub, dirs_exist_ok=True)
-    for s in FILES:
-        shutil.copy(work / f"map_{s}.json", run.dir)
-    run.save_metrics(res, headline=("recovery_pass", float(res["recovery_pass"])))
-    run.finish()
+    rep = j.get("judge_repeat", {}).get("rows_vs_run2")
+    res["judge_repeat_identical"] = bool(rep) and rep["max_abs"] == 0
+    res["judge_bf16_vs_nf4_admatched_seeded"] = judge_gap(
+        "seeded", g2 / "run2" / f"{JUDGE}__admatched.json", g2 / "run2" / f"{JUDGE}__adclean.json",
+        work / "judge_bf16_seeded")
 
 
 def main():
@@ -379,6 +405,7 @@ def main():
     ap.add_argument("--set", choices=list(FILES))
     ap.add_argument("--out_dir")
     ap.add_argument("--cands", action="store_true")
+    ap.add_argument("--k", type=int, nargs="+", help="with --cands: only these candidates")
     ap.add_argument("--map")
     ap.add_argument("--map_from_rows")
     ap.add_argument("--work")
@@ -388,6 +415,7 @@ def main():
     ap.add_argument("--out")
     ap.add_argument("--liu_py")
     ap.add_argument("--our_py", default=sys.executable)
+    ap.add_argument("--part", choices=PARTS)
     ap.add_argument("--allow-dirty", dest="allow_dirty", action="store_true")
     a = ap.parse_args()
     {"gen": cmd_gen, "match": cmd_match, "subset": cmd_subset, "deberta_bs": cmd_deberta_bs,
