@@ -8,18 +8,16 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   files (`5d0ae7c`) row for row and label for label, and the paper's set sizes. The manifest records envs, HF dataset
   revisions, and where each step ran.
 - **Build path:** `jobs/build_transfer_sets.sh` (sbatch, resumable) → `scripts/build_transfer_sets.sh`.
-  - Upstream scripts run unmodified.
-  - Tau-bench steps run in the AgentDojo env, because Liu's lockfile has no pydantic; this keeps his env identical
-    to his `requirements.txt`.
+  Upstream scripts run unmodified; tau-bench steps run in the AgentDojo env (Liu's lockfile has no pydantic), so his
+  env stays identical to his `requirements.txt`.
 - **Model registry and prefetch:** `configs/detectors.yaml` lists 19 entries with pinned revisions; InjecGuard is an
   alias of PIGuard (Liu §4.1). `scripts/prefetch_models.sh` (login node) downloads them and reports access to
   `results/transfer/prefetch/`. Current state: 17/18 granted and complete.
 - **Cluster storage** (`jobs/lib/scratch.sh`, sourced by every job):
   - On scratch: venvs, HF cache, uv/pip caches, the uv binary and rebuilt sets. Scratch purges files after 30
     days; each job re-touches it.
-  - In home: results and checkpoints. Home is at 17.6/40 G; each job fails early if less than 2 G is free.
-  - `HF_TOKEN_PATH` stays in home.
-- **Laptop monitoring:** `scripts/cluster.sh run|watch` (ssh retry with backoff).
+  - In home: results, checkpoints, the HF token. Home is at 17.6/40 G; jobs fail early under 2 G free.
+  - Laptop: `scripts/cluster.sh run|watch` retries ssh with backoff.
 
 ## Next
 1. **b. Detector wrappers:** registry-driven, using Liu's documented loaders (cls / segmented / Sheltron / Prismor /
@@ -41,6 +39,5 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   must be capped in code, e.g. `torch.cuda.set_per_process_memory_fraction(0.5)`.
 - **Frontier comparator (c):** `OPENAI_API_KEY` is not set, so the one test call (c′) has not been made; score by
   2026-12-31 (A11).
-- **QoS:** it requires `--gres=mps:50` even for CPU-only jobs, so the build holds half a card while it runs.
-- **Template file:** `jobs/templates/mock_job_csisnlp18.sh` was never found; the header is derived from the
-  existing jobs.
+- **Cluster notes:** the QoS needs `--gres=mps:50` even for CPU jobs; the template file
+  `jobs/templates/mock_job_csisnlp18.sh` was never found, so the header is derived from the existing jobs.
