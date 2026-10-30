@@ -78,10 +78,16 @@ step() {  # step <output> <python> <script> [args...]
   local out=$1 py=$2 script=$3; shift 3
   if [ -f "$out.done" ]; then echo ">>> done: $out"; return; fi
   echo ">>> $script $*"
-  "$py" "$BIB/scripts/$script" "$@"
+  if [ -n "${SKIP_FINALIZE:-}" ]; then
+    # the script runs unmodified; after it returns, exit without interpreter finalization (HF datasets streaming
+    # threads abort Python at shutdown, after the output is written). An exception in the script still exits 1.
+    "$py" -c 'import os, runpy, sys; sys.argv = sys.argv[1:]; sys.path.insert(0, os.path.dirname(sys.argv[0])); runpy.run_path(sys.argv[0], run_name="__main__"); sys.stdout.flush(); sys.stderr.flush(); os._exit(0)' "$BIB/scripts/$script" "$@"
+  else
+    "$py" "$BIB/scripts/$script" "$@"
+  fi
   touch "$out.done"; log_step "$script -> $out"
 }
-step corpus.jsonl "$VENV_LIU/bin/python" build_corpus.py --per_source 2500 --out corpus.jsonl
+SKIP_FINALIZE=1 step corpus.jsonl "$VENV_LIU/bin/python" build_corpus.py --per_source 2500 --out corpus.jsonl
 step agentdojo_benign_outputs.jsonl "$VENV_AD/bin/python" collect_agentdojo_outputs.py
 step agentdojo_pairs.jsonl "$VENV_AD/bin/python" collect_agentdojo_pairs.py \
   important_instructions,ignore_previous,direct agentdojo_pairs.jsonl
