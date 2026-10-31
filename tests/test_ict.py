@@ -52,7 +52,7 @@ def tiny_modernbert(tok, seed=0):
 VERBS = ["summarize", "translate", "list", "count"]
 
 
-def toy_data(n_docs=8, seed=0):
+def toy_data(n_docs=8, seed=0, prefix=""):
     """V3-like rows (attack = 'please <verb> the ...' injected, label 1) and crossed-quad-like pairs: the instruction
     'note <verb>' is aligned with the request naming the same verb and subverting for one naming another verb."""
     rng = np.random.default_rng(seed)
@@ -63,14 +63,16 @@ def toy_data(n_docs=8, seed=0):
         doc = " ".join(rng.choice(filler, 12))
         v1, v2 = rng.choice(VERBS, 2, replace=False)
         for k, (ctx, y) in enumerate([(doc, 0), (f"{doc} please {v1} the {task}", 1)]):
-            rows.append({"id": f"{task}_{d}_{k}", "doc_id": f"{task}_{d}", "split_seed": 0, "task_type": task,
+            rows.append({"id": f"{prefix}{task}_{d}_{k}", "doc_id": f"{prefix}{task}_{d}", "split_seed": 0,
+                         "task_type": task, "component": f"{prefix}{task}_{d // 4}",  # two docs per thread
                          "label": y, "user_intent": f"what is in this {task}", "text": ctx,
                          "attack_category": "x" if y else "", "attack_source": "", "insertion_mode": "",
                          "clean_type": "" if y else "raw"})
         for q, (vi, vo) in enumerate([(v1, v2), (v2, v1)]):
-            pairs.append({"pair_id": f"p{d}_{q}", "quad_id": f"q{d}", "doc_id": f"{task}_{d}", "task": task,
-                          "context": f"{doc} note {vi} the {task}", "request_aligned": f"{vi} this {task}",
-                          "request_subverting": f"{vo} this {task}"})
+            pairs.append({"pair_id": f"{prefix}p{d}_{q}", "quad_id": f"{prefix}q{d}", "doc_id": f"{prefix}{task}_{d}",
+                          "task": task, "context": f"{doc} note {vi} report", "instruction": f"note {vi} report",
+                          "char_offset": len(doc) + 1, "source": "toy",
+                          "request_aligned": f"{vi} this {task}", "request_subverting": f"{vo} this {task}"})
     return ict.v3_frame(pd.DataFrame(rows)), pairs
 
 
@@ -159,23 +161,37 @@ def test_training_loss_decreases(tok, tmp_path):
 # ─── ablation flags ──────────────────────────────────────────────────────────
 
 def test_presets_and_invalid_combinations():
-    assert ict.make_config("a").use_pairs is False and ict.make_config("a").margin_lambda == 0
-    assert ict.make_config("d").request_input == "none" and ict.make_config("e").request_input == "concat"
+    assert ict.make_config("a").use_pairs is False and ict.make_config("a").use_agent_data is False
+    assert ict.make_config("d").use_agent_data is False and ict.make_config("d").use_pairs
+    assert ict.make_config("e").request_input == "none" and not ict.make_config("e").use_pairs
     assert len({tuple(sorted(vars(ict.make_config(k)).items())) for k in ict.ABLATIONS}) == len(ict.ABLATIONS)
     with pytest.raises(ValueError):
         ict.ICTConfig(use_pairs=False)              # margin and swap need pairs
     with pytest.raises(ValueError):
         ict.ICTConfig(request_input="none")         # pair members would be identical inputs
+    with pytest.raises(ValueError):
+        ict.ICTConfig(request_input="concat")       # the V2 single-sequence variant is dropped (A22)
     assert ict.ICTConfig(backbone="modernbert-large").windowed and not ict.ICTConfig().windowed
 
 
+def test_selected_hparams_apply_but_presets_win():
+    hp = {"margin_lambda": 2.0, "margin": 0.5, "lr": 1e-5, "grid_index": 9, "selection_score": 0.8}
+    full, b = ict.make_config("full", hp), ict.make_config("b", hp)
+    assert (full.margin_lambda, full.margin, full.lr) == (2.0, 0.5, 1e-5)
+    assert (b.margin_lambda, b.margin, b.lr) == (0.0, 0.5, 1e-5)
+    assert ict.make_config("full", hp, lr=3e-5).lr == 3e-5
+    assert len(ict.GRID) == 12 and ict.GRID[0] == {"margin_lambda": 0.5, "margin": 0.5, "lr": 1e-5}
+
+
 def test_every_ablation_changes_items_inputs_or_loss(tok):
-    """Each preset differs from the full recipe in what it trains on, what the model sees, or the loss value."""
+    """Each preset differs from full ICT in what it trains on, what the model sees, or the loss value."""
     rows, pairs = toy_data()
+    arows, apairs = toy_data(n_docs=4, seed=1, prefix="ag")
     model = tiny_deberta(tok)
 
     def fingerprint(cfg):
-        items = ict.epoch_items(cfg, rows, pairs if cfg.use_pairs else [], 0)
+        r, p = ict.training_data(cfg, rows, pairs, arows, apairs)
+        items = ict.epoch_items(cfg, r, p, 0)
         enc = ict.make_encoder(tok, model, cfg)
         members = sorted(m for it in items for m in it["members"])
         ids = [tuple(enc(q, c)[0]["input_ids"]) for q, c, _ in members]
@@ -185,47 +201,92 @@ def test_every_ablation_changes_items_inputs_or_loss(tok):
 
     full = fingerprint(ict.make_config("full"))
     for k in "abcde":
-        cfg = ict.make_config(k)
-        assert fingerprint(cfg) != full, k
+        assert fingerprint(ict.make_config(k)) != full, k
     # specific behaviours
-    a_items = ict.epoch_items(ict.make_config("a"), rows, [], 0)
-    assert all(len(it["members"]) == 1 for it in a_items) and len(a_items) == len(rows)
+    r_a, p_a = ict.training_data(ict.make_config("a"), rows, pairs, arows, apairs)
+    assert len(r_a) == len(rows) and p_a == []                                         # V3 only, no pairs
+    r_d, p_d = ict.training_data(ict.make_config("d"), rows, pairs, arows, apairs)
+    assert len(r_d) == len(rows) and len(p_d) == len(pairs)                            # no agent rows or pairs
+    r_f, p_f = ict.training_data(ict.make_config("full"), rows, pairs, arows, apairs)
+    assert len(r_f) == len(rows) + len(arows) and len(p_f) == len(pairs) + len(apairs)
     b, c = ict.make_config("b"), ict.make_config("c")
     assert any(len(it["members"]) == 3 for it in ict.epoch_items(b, rows, pairs, 0))      # swap on, no margin
     assert all(len(it["members"]) <= 2 for it in ict.epoch_items(c, rows, pairs, 0))      # margin on, no swap
-    enc_d = ict.make_encoder(tok, model, ict.make_config("d"))
-    assert enc_d("summarize this email", "alpha beta") == enc_d("list this email", "alpha beta")
+    enc_e = ict.make_encoder(tok, model, ict.make_config("e"))
+    assert enc_e("summarize this email", "alpha beta") == enc_e("list this email", "alpha beta")
     enc_full = ict.make_encoder(tok, model, ict.make_config("full"))
     assert enc_full("summarize this email", "alpha beta") != enc_full("list this email", "alpha beta")
-    enc_e = ict.make_encoder(tok, model, ict.make_config("e"))
-    assert enc_e("list this email", "alpha beta")[0]["input_ids"] == tok("Intent: list this email | Context: alpha beta")["input_ids"]
 
 
-def test_request_swap_draws_other_docs_same_task_deterministically():
-    _, pairs = toy_data()
+def test_request_swap_draws_same_task_deterministically():
+    rows, pairs = toy_data()
+    pairs = ict.attach_components(pairs, rows)
     rng = lambda: np.random.default_rng([0, 3])  # noqa: E731
     s1, s2 = ict.swap_requests(pairs, rng()), ict.swap_requests(pairs, rng())
-    assert s1 == s2
-    own = {p["pair_id"]: {pp["request_aligned"] for pp in pairs if pp["doc_id"] == p["doc_id"]} for p in pairs}
-    task_reqs = {t: {r for pp in pairs if pp["task"] == t for r in (pp["request_aligned"], pp["request_subverting"])}
-                 for t in ("email", "table")}
+    assert s1 == s2 and all(s is not None for s in s1)
     for p, s in zip(pairs, s1):
-        assert s in task_reqs[p["task"]] and s.split()[-1] == p["task"]
+        assert s.split()[-1] == p["task"]
     items = ict.epoch_items(ict.ICTConfig(), pd.DataFrame(columns=["request", "context", "label"]), pairs, 0)
     for it in items:
         assert [m[2] for m in it["members"]] == [0, 1, 1] and it["pairs"] == [(0, 1), (0, 2)]
-    assert own  # the doc check is in swap_requests; the test data has one doc per quad
 
 
-def test_swap_never_uses_own_document():
-    pairs = [{"pair_id": f"p{i}", "doc_id": f"d{i // 2}", "task": "email", "context": "c",
-              "request_aligned": f"a{i // 2}", "request_subverting": f"s{i // 2}"} for i in range(6)]
+def test_swap_excludes_same_thread_and_shared_content_words():
+    rows, pairs = toy_data(n_docs=16)
+    pairs = [{**p, "request_aligned": f"{p['request_aligned']} {p['doc_id']}",            # unique per document
+              "request_subverting": f"{p['request_subverting']} {p['doc_id']}"} for p in ict.attach_components(pairs, rows)]
+    req_group = {r: ict._group(p) for p in pairs for r in (p["request_aligned"], p["request_subverting"])}
+    n_swaps = 0
     for seed in range(20):
         for p, s in zip(pairs, ict.swap_requests(pairs, np.random.default_rng(seed))):
-            assert s[1:] != p["doc_id"][1:]
-    lone = [{"pair_id": "x", "doc_id": "d0", "task": "code", "context": "c", "request_aligned": "a",
-             "request_subverting": "s"}]
+            if s is None:
+                continue
+            n_swaps += 1
+            same_thread = [q for q in pairs if ict._group(q) == ict._group(p)]
+            assert all(s not in (q["request_aligned"], q["request_subverting"]) for q in same_thread)
+            assert not (ict.content_tokens(s) & ict.content_tokens(p["instruction"]))  # e.g. not the same verb
+            assert s.split()[0] != p["instruction"].split()[1]
+            assert s.split()[-2] == p["task"]
+    assert n_swaps > 0 and len(set(req_group.values())) < len({p["doc_id"] for p in pairs})  # threads span docs
+    lone = [{"pair_id": "x", "doc_id": "d0", "task": "code", "context": "c", "instruction": "i",
+             "request_aligned": "a", "request_subverting": "s"}]
     assert ict.swap_requests(lone, np.random.default_rng(0)) == [None]
+
+
+def test_swap_audit_in_annotation_format():
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    from make_annotation_sheet import sheet_items
+    rows, pairs = toy_data(n_docs=40)
+    pairs = ict.attach_components(pairs, rows)
+    audit = ict.swap_audit(pairs, seed=0)
+    assert len(audit) == ict.SWAP_AUDIT_N and audit == ict.swap_audit(pairs, seed=0)
+    assert len({a["pair_id"] for a in audit}) == len(audit)
+    swaps = dict(zip([p["pair_id"] for p in pairs], ict.swap_requests(pairs, np.random.default_rng([0, 0]))))
+    for a in audit:
+        orig = a["notes"].split()[-1]
+        assert a["request_subverting"] == swaps[orig] and a["source"] == "swap_audit:toy"
+    assert len(sheet_items(audit, "ann1", "s")) == len(audit)
+
+
+def test_select_grid_picks_best_with_tie_break(tmp_path):
+    import json
+    root = tmp_path / "results"
+    scores = [0.5] * 12
+    scores[3] = scores[7] = 0.9                                     # tie: the earlier grid point wins
+    for i, v in enumerate(scores):
+        d = root / "v3" / "ict_grid" / f"2026110{i % 9}-00000{i}_seed0"
+        d.mkdir(parents=True)
+        (d / "config.json").write_text(json.dumps({"git_dirty": False, "args": {"grid_index": i}}))
+        (d / "finished.json").write_text("{}")
+        (d / "metrics.json").write_text(json.dumps({"best": {"value": v}}))
+    out = tmp_path / "hp.json"
+    choice = ict.select_grid(root, out)
+    assert choice["grid_index"] == 3 and {k: choice[k] for k in ict.GRID_KEYS} == ict.GRID[3]
+    with pytest.raises(FileExistsError):
+        ict.select_grid(root, out)
+    (next((root / "v3" / "ict_grid").glob("*00000" + "5_seed0")) / "finished.json").unlink()
+    with pytest.raises(RuntimeError):
+        ict.select_grid(root, tmp_path / "hp2.json")
 
 
 # ─── resume and save/load ────────────────────────────────────────────────────
@@ -256,8 +317,7 @@ def test_resume_matches_uninterrupted(tok, tmp_path):
 
 def test_best_checkpoint_selected_on_val_and_reloads(tok, tmp_path):
     rows, pairs = toy_data()
-    cfg = ict.ICTConfig(lr=3e-3, epochs=3, batch_size=4, grad_accum=1, max_length=64,
-                        select_metric="val_pairs:pair_accuracy")
+    cfg = ict.ICTConfig(lr=3e-3, epochs=3, batch_size=4, grad_accum=1, max_length=64)
     evals = {"val": ("rows", rows), "val_pairs": ("pairs", ict.pairs_frame(pairs))}
     model = tiny_deberta(tok)
     st = ict.train(cfg, model, tok, rows, pairs, evals, tmp_path, DEVICE, log=lambda m: None)
@@ -266,7 +326,9 @@ def test_best_checkpoint_selected_on_val_and_reloads(tok, tmp_path):
     m2, tok2, cfg2 = ict.load_model(tmp_path / "best")
     assert cfg2 == cfg
     metrics, _ = ict.evaluate(m2, ict.make_encoder(tok2, m2, cfg2), cfg2, evals, DEVICE)
-    assert metrics["val_pairs"]["pair_accuracy"] == pytest.approx(st["best"]["value"])
+    assert ict.selection_score(metrics) == pytest.approx(st["best"]["value"])
+    assert metrics["val"]["task_macro_auroc"] == pytest.approx(
+        np.mean([metrics["val"]["by_task"][t]["roc_auc"] for t in ("email", "table")]))
     preds = ict.predictions(evals["val"][1], np.zeros(len(rows)), cfg, "val", "ict_full")
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
     from runlog import validate_predictions
@@ -284,17 +346,29 @@ def test_cli_train_then_score(tok, tmp_path, monkeypatch):
     raw.to_csv(split / "train.csv", index=False)
     raw.to_csv(split / "val.csv", index=False)
     (tmp_path / "pairs.jsonl").write_text("\n".join(json.dumps(p) for p in pairs))
+    arows, _ = toy_data(n_docs=4, seed=1, prefix="ag")
+    agent = tmp_path / "agent"
+    agent.mkdir()
+    arows.rename(columns={"task": "task_type", "request": "user_intent", "context": "text"}).to_csv(
+        agent / "train.csv", index=False)
+    hp = tmp_path / "hp.json"
     monkeypatch.setattr(runlog, "start_run", lambda *a, **k: runlog.Run(*a, **k, results_root=tmp_path / "results"))
     monkeypatch.setattr(ict, "init_model", lambda cfg, device: (tiny_deberta(tok), tok))
     work = tmp_path / "work"
-    ict.main(["train", "--split_dir", str(split), "--train_pairs", str(tmp_path / "pairs.jsonl"),
-              "--val_pairs", str(tmp_path / "pairs.jsonl"), "--work_dir", str(work), "--seed", "0", "--epochs", "2",
-              "--lr", "0.003", "--max_length", "64", "--device", "cpu", "--allow-dirty"])
+    common = ["--split_dir", str(split), "--agent_dir", str(agent), "--train_pairs", str(tmp_path / "pairs.jsonl"),
+              "--val_pairs", str(tmp_path / "pairs.jsonl"), "--hparams", str(hp), "--device", "cpu", "--allow-dirty"]
+    with pytest.raises(SystemExit):  # no selected hyperparameters yet
+        ict.main(["train", *common, "--work_dir", str(tmp_path / "w0")])
+    with pytest.raises(SystemExit):  # the grid runs on seed 0 only
+        ict.main(["train", *common, "--grid_index", "0", "--seed", "1", "--work_dir", str(tmp_path / "w1")])
+    hp.write_text(json.dumps({"margin_lambda": 2.0, "margin": 0.5, "lr": 3e-3, "grid_index": 11}))
+    ict.main(["train", *common, "--work_dir", str(work), "--seed", "0", "--epochs", "2", "--max_length", "64"])
     run = next((tmp_path / "results" / "v3" / "ict_full").iterdir())
     m = json.loads((run / "metrics.json").read_text())
     assert set(m) >= {"best", "history", "val", "val_pairs"} and (run / "finished.json").exists()
     cfg = json.loads((run / "config.json").read_text())["args"]["ict_config"]
-    assert cfg["lr"] == 0.003 and cfg["epochs"] == 2 and cfg["use_pairs"] is True
+    assert (cfg["lr"], cfg["margin_lambda"], cfg["margin"], cfg["epochs"]) == (0.003, 2.0, 0.5, 2)
+    assert m["val"]["n"] == len(rows)
     p = pd.read_csv(run / "predictions.csv")
     assert set(p["eval_set"]) == {"val", "val_pairs"} and len(p) == len(rows) + 2 * len(pairs)
     ict.main(["score", "--ckpt", str(work / "best"), "--eval", f"test={split / 'val.csv'}", "--exp", "ict_full", "--seed", "0",
@@ -302,5 +376,6 @@ def test_cli_train_then_score(tok, tmp_path, monkeypatch):
     s = next((tmp_path / "results" / "v3" / "ict_full_score").iterdir())
     ps = pd.read_csv(s / "predictions.csv")
     assert np.allclose(ps["prob"].values, p[p["eval_set"] == "val"]["prob"].values, atol=1e-6)
-    with pytest.raises(SystemExit):  # an ablation that uses pairs without --train_pairs
-        ict.main(["train", "--split_dir", str(split), "--work_dir", str(tmp_path / "w2"), "--allow-dirty"])
+    with pytest.raises(SystemExit):  # full ICT without the agent-style data
+        ict.main(["train", *[c for c in common if c != str(agent) and c != "--agent_dir"],
+                  "--work_dir", str(tmp_path / "w2")])

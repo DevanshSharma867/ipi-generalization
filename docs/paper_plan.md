@@ -395,6 +395,7 @@ part of the pre-registration, not deviations.
 | A19 | 2026-10-30 | **Gate 2 (Liu reproduction) protocol**, fixed before any reproduction score exists. Scope: PIGuard, Prompt Guard 2 86M, Horizon-Labs (rev `af3c52e`) and the Qwen2.5-7B judge on AD-Matched (with AD-Clean, its negatives in Liu's table), TB-Matched and BIPIA. Three runs, a pass/fail rule at the metric level, and diagnostics. Details below the table. |
 | A20 | 2026-10-30 | **Judge precision.** For H3 (and every comparison involving our models), the task-aware LLM judges run in **bf16**. 4-bit NF4 is used only for the Liu reproduction (Gate 2). The bf16 − 4-bit AUROC gap of the Qwen judge on AD-Matched is reported, as Liu did (≤ 0.02 in his case). Fixed before any H3 score exists. |
 | A21 | 2026-10-31 | **Comparator (c) withdrawn (budget: the project runs at about zero cost).** H3 on pairs is decided against (a) the Qwen2.5-7B and Llama-3.1-8B task-aware judges (bf16, A20), (b) Sheltron with its user-goal segment, and (d) ICT ablation (a). A7 and A11 lapse; `configs/frontier_detector.yaml` and its prompt stay in the repo unused. Nothing had been scored with (c) (no API key was ever set). The loss is stated in §6. |
+| A22 | 2026-10-31 | **ICT ablations, model selection, swap safety, batch tolerance** (before any ICT training run). Ablations (a)–(e) replace the C4 row's single ablation; full ICT = every component on. Selection on validation only: mean of V3-val task-macro AUROC and pair accuracy on held-out TRAIN-side pairs; a 12-point grid on training seed 0 fixes λ, margin and lr for every later run. Request-swap exclusions and a 50-item audit; swap off in full ICT if the audit's label-noise rate exceeds 10%. bs=1 vs batched scores within 1e-5. Code: `src/models/ict.py`. Details below the table. |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.
@@ -471,3 +472,44 @@ part of the pre-registration, not deviations.
 - **Judge settings:** `GPU_MEM=18GiB`, as in his `reproduce.sh` (his script defaults to 6 GiB). It is within our
   half-card limit. Liu's yes/no rule is used (A17 ii). If his runs used 6 GiB, layers offloaded to the CPU are a
   possible source of small differences, and this is noted with the results.
+
+**A22 details** (ICT, C4; code `src/models/ict.py`, jobs `jobs/ict_train.sh`, `jobs/ict_score.sh`):
+- **Full ICT** = segment-pair cross-encoder (request, context) on V3 train rows + C3 TRAIN pairs + the agent-style
+  training data (`src/agent_pipeline.py` rows, plus agent-style TRAIN pairs where they exist), loss = BCE on every
+  member + λ · mean hinge max(0, margin − (s_subverting − s_aligned)) over pairs, with request-swap augmentation.
+- **Ablations** (each a config preset; same backbone, selection rule, hyperparameters and seeds as full ICT):
+  - (a) request given, no pairs, no margin, no swap; V3 data only, as pre-registered (H3 comparator d). It therefore
+    also lacks the agent-style data, so full − (a) combines the pairs/margin effect with the agent-data effect; (d)
+    measures the agent-data part separately.
+  - (b) pairs used as plain CE rows, no margin (λ = 0), swap on.
+  - (c) full ICT without request-swap augmentation.
+  - (d) full ICT without the agent-style training data (rows and agent pairs).
+  - (e) request withheld (content only: the context is the only input), same backbone; V3 data only, no pairs, so
+    (a) vs (e) differs only in the request.
+  - The V2-style single-sequence input ("Intent: … | Context: …") is not an ablation.
+- **Selection** (validation only; never test, EVAL pairs or agent benchmarks):
+  - Score = mean of (task-macro AUROC on V3 val: the unweighted mean of per-task AUROC) and (pair accuracy on
+    held-out TRAIN-side pairs: pairs from the TRAIN generator and prompt on V3 val docs; never EVAL pairs).
+  - The same score picks the checkpoint (best epoch) of every run.
+  - Grid, full ICT, training seed 0, split seed 0 only: λ ∈ {0.5, 1, 2} × margin ∈ {0.5, 1.0} × lr ∈ {1e-5, 2e-5}
+    (12 runs; other settings as `src/models/deberta.py`: 3 epochs, batch 8 × 2, warmup 0.1, weight decay 0.01).
+    The run with the highest best-epoch score wins; ties go to the first in the order listed (λ, then margin, then
+    lr, ascending). `ict.py select` writes the choice to `configs/ict_hparams.json`, committed before any other ICT
+    run. It is then fixed for full ICT and all ablations on seeds 0–4 (an ablation keeps its own fixed values,
+    e.g. λ = 0 for (b)). The grid runs are reported as selection runs, not as seed-0 results.
+- **Request-swap safety:**
+  - (i) A candidate request is excluded if it shares any content word with the pair's inserted instruction
+    (`pairs.content_tokens`: lower-cased words ≥ 2 characters, sklearn English stop words removed, Porter-stemmed),
+    or if it comes from a document of the same source thread. "Same source thread" is operationalized as the same
+    V3 near-duplicate component (`component`, Jaccard ≥ threshold within task; v3_design), or the same document where
+    no component is recorded. A pair with no admissible candidate gets no swapped member.
+  - (ii) Audit: 50 swapped examples drawn at random (seed 0) from the epoch-0 swap draw on split seed 0's TRAIN
+    pairs, exported as pair records in the annotation format (`ict.py swap_audit`; the original aligned request vs
+    the swapped request, intended label subverting). The two annotators label them in the same sessions as the
+    EVAL pairs.
+  - Label-noise rate = share of the 50 swapped members not labelled subverting by both annotators (aligned or
+    unclear by either annotator counts as noise), with a 95% Wilson CI; reported in the paper.
+  - If that rate is above 10%, the swap is reported (with the audit) but switched off in full ICT: full ICT is then
+    trained without it, and (c) coincides with full ICT and is reported as such. Decided before any result.
+- **Batch invariance:** a trained model's scores at batch size 1 and batched agree within 1e-5 (absolute, per row);
+  `tests/test_ict.py` checks it, and it is the criterion of the 2026-10-30 deviation for our own models.
