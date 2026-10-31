@@ -38,7 +38,8 @@ LIU = ROOT / "data" / "raw" / "benign-instruction-bench"
 LIU_COMMIT = "5d0ae7c438a7b01be2ac0a2e8bc943e45c8f851f"
 # Liu's set keys (score_many.SETS) for the rebuilt files in data/transfer/sets
 SETS = {"general": "corpus.jsonl", "adclean": "agentdojo_benign_outputs.jsonl", "admatched": "agentdojo_pairs.jsonl",
-        "adshift": "agentdojo_pairs_shift.jsonl", "bipia": "bipia_pairs.jsonl", "tbeval": "taubench_eval.jsonl"}
+        "adshift": "agentdojo_pairs_shift.jsonl", "bipia": "bipia_pairs.jsonl", "tbeval": "taubench_eval.jsonl",
+        "tbclean": "taubench_clean.jsonl", "calpool": "calibration_pool.jsonl"}  # last two: sets_adliu.py
 # Sheltron input variants (Liu scores them as separate detectors on one model)
 SHELTRON = {"sheltron": "plain", "sheltron-taskaware": "task", "sheltron-generic": "generic"}
 BS = 16
@@ -59,6 +60,8 @@ def load(path):
 
 def source_type(r):
     """Sheltron source-type token that best matches each set (AgentDojo outputs are tool results)."""
+    if "source_type" in r:  # calibration pool (sets_adliu.py)
+        return r["source_type"]
     s = r.get("suite", "")
     if s.startswith("bipia-"):
         return {"bipia-email": "email", "bipia-code": "code", "bipia-table": "table"}[s]
