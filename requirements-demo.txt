@@ -1,0 +1,3 @@
+# Course demo GUI (python demo.py --mode gui). Research code does not need it.
+-r requirements.txt
+gradio==6.29.1
