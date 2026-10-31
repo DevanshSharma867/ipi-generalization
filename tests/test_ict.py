@@ -381,12 +381,12 @@ def test_cli_train_then_score(tok, tmp_path, monkeypatch):
     cfg = json.loads((run / "config.json").read_text())["args"]["ict_config"]
     assert (cfg["lr"], cfg["margin_lambda"], cfg["margin"], cfg["epochs"]) == (0.003, 2.0, 0.5, 2)
     assert m["val"]["n"] == len(rows)
-    p = pd.read_csv(run / "predictions.csv")
+    p = pd.read_csv(runlog.predictions_file(run))
     assert set(p["eval_set"]) == {"val", "val_pairs"} and len(p) == len(rows) + 2 * len(pairs)
     ict.main(["score", "--ckpt", str(work / "best"), "--eval", f"test={split / 'val.csv'}", "--exp", "ict_full", "--seed", "0",
               "--device", "cpu", "--allow-dirty"])
     s = next((tmp_path / "results" / "v3" / "ict_full_score").iterdir())
-    ps = pd.read_csv(s / "predictions.csv")
+    ps = pd.read_csv(runlog.predictions_file(s))
     assert np.allclose(ps["prob"].values, p[p["eval_set"] == "val"]["prob"].values, atol=1e-6)
     with pytest.raises(SystemExit):  # full ICT without the agent-style data
         ict.main(["train", *[c for c in common if c != str(agent) and c != "--agent_dir"],

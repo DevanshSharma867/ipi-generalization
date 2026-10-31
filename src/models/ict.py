@@ -42,7 +42,7 @@ an ablation preset overrides it where it fixes the same field (e.g. (b) margin_l
 Batch invariance: every window is scored independently with an attention mask, so scores do not depend on the
 batch (tests/test_ict.py: bs=1 vs batched within 1e-5, the accepted criterion).
 
-    python src/models/ict.py train --grid_index i --split_dir data/v3/split_seed_0 --agent_dir data/agent_v1/split_seed_0
+    python src/models/ict.py train --grid_index i --split_dir data/v3/split_seed_0 --agent_dir data/agent_v2/split_seed_0
         --train_pairs P.jsonl --val_pairs V.jsonl --seed 0                      # grid, i in 0..11
     python src/models/ict.py select                                           # -> configs/ict_hparams.json
     python src/models/ict.py train --ablation full|a|b|c|d|e --split_dir ... --agent_dir ... --train_pairs P.jsonl

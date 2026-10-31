@@ -1,0 +1,55 @@
+{
+  "run_id": "20261031-171136_seed0",
+  "version": "agent_v1",
+  "exp": "form_cv",
+  "seed": 0,
+  "args": {
+    "split_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "folds": 5,
+    "groups": "doc_id",
+    "flag": 0.6
+  },
+  "git_commit": "518cacc6823735570ca092488dd13326cb3072ff",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "agent_v1",
+  "data_files_sha256": {
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_0/train.csv": "6012247a6e9bd50a44de52fb694166c62ad6bfe1ce6b87ec77473fb7cc2da001",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_1/train.csv": "3bf3216fc7bc8541da5a5ff48b23cda5eeb175547b76878c1eaf1d3db54d834e",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_2/train.csv": "c8904719cf3ed6a74e2900f22518bc5e113e28f7b55fbb9bf8c62aa201827d35",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_3/train.csv": "5fe8efbab4827db5bb7ea011e8181274f4bbb27bae2c5c9c915353f2a8585a1a",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_4/train.csv": "2c58672eb039b9fefec9454ac373cf08dee03dfbf43362a751fa198d6d2938c3"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null
+  },
+  "argv": [
+    "scripts/agent_form_cv.py"
+  ],
+  "started": "2026-10-31T17:11:37"
+}

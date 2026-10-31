@@ -11,7 +11,7 @@ Run bookkeeping for every new experiment.
     run.save_metrics(metrics, headline=("test_f1_macro", 0.81))
     run.finish()                                  # writes finished.json, regenerates results/REGISTRY.md
 
-Layout: results/<version>/<exp>/<YYYYmmdd-HHMMSS>_seed<k>/{config.json, metrics.json, predictions.csv, log.txt,
+Layout: results/<version>/<exp>/<YYYYmmdd-HHMMSS>_seed<k>/{config.json, metrics.json, predictions.csv.gz (earlier runs: .csv), log.txt,
 finished.json}. results/REGISTRY.md is a view generated from the run directories (`python src/runlog.py registry`);
 it is gitignored, so machines that add runs in parallel never conflict over it.
 
@@ -107,6 +107,14 @@ def is_frozen(path) -> bool:
         if p == fp or fp in p.parents:
             return True
     return False
+
+
+def predictions_file(run_dir) -> Optional[Path]:
+    """A run's predictions: predictions.csv.gz (runs from 2026-10-31 on) or predictions.csv (earlier runs)."""
+    for name in ("predictions.csv.gz", "predictions.csv"):
+        if (Path(run_dir) / name).exists():
+            return Path(run_dir) / name
+    return None
 
 
 def assert_not_frozen(path) -> None:
@@ -223,8 +231,8 @@ class Run:
 
     def save_predictions(self, df: pd.DataFrame) -> Path:
         df = validate_predictions(df.assign(run_id=self.run_id))
-        path = self.dir / "predictions.csv"
-        df.to_csv(path, index=False)
+        path = self.dir / "predictions.csv.gz"  # gzip so no committed file nears GitHub's 50 MB warning
+        df.to_csv(path, index=False, compression={"method": "gzip", "mtime": 0})
         return path
 
     def finish(self) -> None:

@@ -1,0 +1,78 @@
+{
+  "attack_categories": {
+    "train": [
+      "Alphanumeric Substitution",
+      "Anagramming",
+      "Clickbait",
+      "Content Creation",
+      "Homophonic Substitution",
+      "Information Retrieval",
+      "Language Translation",
+      "Learning and Tutoring",
+      "Malware Distribution",
+      "Misspelling Intentionally",
+      "Persuasion",
+      "Space Removal & Grouping"
+    ],
+    "val": [
+      "Instruction",
+      "Programming Help",
+      "Social Interaction"
+    ]
+  },
+  "calibration_pool_sha256": "2657cbf782b7c413b375be3efaab4a9e0b4fc322a24fba481494c745b00f1f71",
+  "counts": {
+    "train": {
+      "clean_a": 2280,
+      "clean_b": 2280,
+      "injected": 4560
+    },
+    "val": {
+      "clean_a": 1140,
+      "clean_b": 1140,
+      "injected": 2280
+    }
+  },
+  "docs_per_tool": {
+    "train": 120,
+    "val": 60
+  },
+  "donor_k": 2,
+  "files_sha256": {
+    "train.csv": "50f1940373eff3b9c24623186f661af8c224ee71b76348078eb669b20200acb4",
+    "val.csv": "6b81e19611a8808fe33eec813e730a33e6caed10d1f57d7e88d2ca9b9a657d7c"
+  },
+  "generator": "src/agent_pipeline.py + src/agent_tools.py",
+  "inputs_sha256": {
+    "text_attack_train.json": "63f95d3e67eac4178cdabdbdaf192cd05f2b6ed0702b578f1d30d556e5155670"
+  },
+  "margin": 6,
+  "max_n_tokens": 438,
+  "max_tokens": 512,
+  "n_tools": 19,
+  "span_cap_tokens": 24,
+  "split_seed": 3,
+  "tokenizer": "hf_cache/tokenizers_hpc/deberta_v2_ckpt",
+  "tools": [
+    "weather_forecast",
+    "web_search",
+    "calendar_export",
+    "email_message",
+    "file_listing",
+    "api_error",
+    "readme",
+    "package_metadata",
+    "ci_log",
+    "sql_result",
+    "git_log",
+    "issue_tracker",
+    "rss_feed",
+    "dictionary",
+    "pod_status",
+    "recipe",
+    "library_catalog",
+    "sensor_telemetry",
+    "encyclopedia"
+  ],
+  "version": "agent_v2"
+}

@@ -318,7 +318,7 @@ agent pairs.
 | P2 or P3 fails | any | not decidable | not decidable | not decidable | No pair-based claim. **Evaluation paper** if H1 is decided, otherwise **workshop**. Pairs are reported as a pilot with their failure. |
 | P4 fails | any | any | any | any | The leakage part of C1 is dropped from every paper type. Nothing else changes. |
 
-H1 is reported in every row. "Main venue" vs "workshop" means scope, not a specific venue (still TBD; CLAUDE.md).
+H1 is reported in every row. "Main venue" vs "workshop" means scope, not a specific venue (venues: §8).
 
 ## 5. Evaluation-set roles (fixed now)
 
@@ -365,6 +365,14 @@ Each step starts only after the previous one is done. The calibration pool is on
 6. **ICT**, its ablations, and the H3a comparators (a), (b) and (d).
 
 Comparator (c) and its 2026-12-31 deadline (A7, A11) were withdrawn by A21.
+
+## 8. Target venue (recorded 2026-10-31)
+
+- **Primary:** TrustNLP 2027 workshop at COLING 2027, submission deadline 2027-01-05.
+- **Fallbacks:** ICLR 2027 workshops (deadline about 2027-02-01, per workshop); NAACL 2027 workshops (2027-02-05).
+- **arXiv:** posted at submission.
+- Venue choice sets format and page limit only; it changes no hypothesis, set, metric or threshold (§4 scope rows
+  still decide what kind of paper this is). Dates from `docs/venues.md`.
 
 ## Amendments before scoring
 

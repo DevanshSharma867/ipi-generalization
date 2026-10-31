@@ -639,6 +639,23 @@ GENERIC_CLEAN_A = [
     "Did you discuss {item} with {name} already?",
     'Reply "confirmed" to {name} if {item} looks correct.',
     "Write down anything you'd like discussed on {day}.",
+    # short items (4-8 words), so clean spans also cover the short attack strings
+    "Please confirm that you got this.",
+    "Reply to {name} when you can.",
+    "Save your work before you close it.",
+    "Did you read the notes yet?",
+    "Check your settings first.",
+    'Click "Refresh" to see new items.',
+    "Ask {name} if you need access.",
+    "Let me know on {day}.",
+    "Keep a copy for your records.",
+    "Can you send me the link?",
+    "Please sign in again later.",
+    "Tell {name} what you think.",
+    "Have a look at it by {day}.",
+    'Type "help" to see your options.',
+    "Use the search box at the top.",
+    "Do you want the full list?",
 ]
 
 
