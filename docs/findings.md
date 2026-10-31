@@ -24,7 +24,7 @@ not `docs/findings.md`. Deviations from the pre-registered protocol: `docs/devia
   freezing before results cannot be shown; V2 judge results carry this caveat. V3 will use a new judge prompt committed
   separately before any scoring.
 
-Entries by status: full 12, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
+Entries by status: full 13, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
 
 ## F001. V2 TF-IDF+LR headline table (Phase 2 Table III)
 
@@ -491,3 +491,57 @@ transformers 4.57.6; ours: torch 2.11 / transformers 5.20.1). On `\TransferEnvRo
   (`\TransferEnvDebertaStatus` = PASS, bound 1e-5).
 - Consequence (docs/deviations.md, 2026-10-30): published detectors are scored in the environment their reference
   numbers came from; our models in ours.
+
+## F019. Agent-style synthetic tool outputs: calibration pool (A3), overlap audit and content-free gates
+
+> **F019** · status **`full`** · 2026-10-31 · data `agent_v1 (src/agent_pipeline.py + src/agent_tools.py @ cb7d881; BIPIA text_attack_train.json only)` · eval `calibration pool; agent_v1 val split of each split seed (gates; probes trained on the same seed's train split)` · threshold: n/a for the pool and audit; gates default tau=0.50 (learned probes), fixed rule, gate = macro-F1 <= 0.60 · seeds: split_seeds 0-4 (one build each; calibration pool seed-independent); probes deterministic; bootstrap B=1000 seed 42  
+> script `src/agent_pipeline.py -> scripts/agent_overlap_audit.py; scripts/artifact_baselines.py --dataset v3 --data_dir data/agent_v1 --eval_split val --split_seeds 0 1 2 3 4` @ `cb7d881` · source: `results/agent_v1/agent_overlap_audit/20261031-144736_seed0`, `results/agent_v1/artifact_baselines/20261031-144739_seed0`
+
+**Calibration pool (A3).** `data/agent_v1/calibration_pool.csv`: `\AgentVOneCalRows` = 1140 clean, raw synthetic tool
+outputs (19 tool types × 60), each with a user request, sha256 ``\AgentVOneCalSha` = 2657cbf782b7c413b375be3efaab4a9e0b4fc322a24fba481494c745b00f1f71`. Generated from its own
+RNG stream; every training realization rejects its texts and never uses it as a donor. Recorded here before any
+model is scored on an agent set. The pool is synthetic, from the same templates as the training data (§6 threat:
+realized FPR on AD-Clean/TB-Clean is reported next to every calibrated TPR).
+
+**Overlap audit**: `\AgentVOneAuditStatus` = PASS. Cells: texts sharing ≥ 1 word 8-gram with the corpus / reference
+instructions contained whole. AgentDojo = the 0.1.34 wheel's suite YAMLs and attack/task strings plus the rebuilt AD
+outputs; τ-bench = rebuilt TB outputs and requests; InjecAgent = attacker/user instructions and tool-response
+templates; BIPIA test = text and code test attacks. A positive control (corpus texts against their own corpus) hit
+on every corpus.
+
+| Unit | n | AgentDojo | τ-bench | InjecAgent | BIPIA test |
+|---|---|---|---|---|---|
+| Calibration pool outputs | `\AgentVOneAuditCalibrationPoolN` = 1140 | `\AgentVOneAuditCalibrationPoolAgentdojoEight` = 0 / `\AgentVOneAuditCalibrationPoolAgentdojoContained` = 0 | `\AgentVOneAuditCalibrationPoolTaubenchEight` = 0 / `\AgentVOneAuditCalibrationPoolTaubenchContained` = 0 | `\AgentVOneAuditCalibrationPoolInjecagentEight` = 0 / `\AgentVOneAuditCalibrationPoolInjecagentContained` = 0 | `\AgentVOneAuditCalibrationPoolBipiaTestEight` = 0 / `\AgentVOneAuditCalibrationPoolBipiaTestContained` = 0 |
+| Training/val outputs (span cut out) | `\AgentVOneAuditContextsN` = 17100 | `\AgentVOneAuditContextsAgentdojoEight` = 0 / `\AgentVOneAuditContextsAgentdojoContained` = 0 | `\AgentVOneAuditContextsTaubenchEight` = 0 / `\AgentVOneAuditContextsTaubenchContained` = 0 | `\AgentVOneAuditContextsInjecagentEight` = 0 / `\AgentVOneAuditContextsInjecagentContained` = 0 | `\AgentVOneAuditContextsBipiaTestEight` = 0 / `\AgentVOneAuditContextsBipiaTestContained` = 0 |
+| Clean-A spans (distinct) | `\AgentVOneAuditSpanCleanAN` = 8059 | `\AgentVOneAuditSpanCleanAAgentdojoEight` = 0 / `\AgentVOneAuditSpanCleanAAgentdojoContained` = 0 | `\AgentVOneAuditSpanCleanATaubenchEight` = 0 / `\AgentVOneAuditSpanCleanATaubenchContained` = 0 | `\AgentVOneAuditSpanCleanAInjecagentEight` = 0 / `\AgentVOneAuditSpanCleanAInjecagentContained` = 0 | `\AgentVOneAuditSpanCleanABipiaTestEight` = 0 / `\AgentVOneAuditSpanCleanABipiaTestContained` = 0 |
+| Clean-B spans (distinct) | `\AgentVOneAuditSpanCleanBN` = 7440 | `\AgentVOneAuditSpanCleanBAgentdojoEight` = 0 / `\AgentVOneAuditSpanCleanBAgentdojoContained` = 0 | `\AgentVOneAuditSpanCleanBTaubenchEight` = 0 / `\AgentVOneAuditSpanCleanBTaubenchContained` = 0 | `\AgentVOneAuditSpanCleanBInjecagentEight` = 0 / `\AgentVOneAuditSpanCleanBInjecagentContained` = 0 | `\AgentVOneAuditSpanCleanBBipiaTestEight` = 0 / `\AgentVOneAuditSpanCleanBBipiaTestContained` = 0 |
+| Injected spans (distinct; BIPIA train) | `\AgentVOneAuditSpanInjectedN` = 75 | `\AgentVOneAuditSpanInjectedAgentdojoEight` = 0 / `\AgentVOneAuditSpanInjectedAgentdojoContained` = 0 | `\AgentVOneAuditSpanInjectedTaubenchEight` = 0 / `\AgentVOneAuditSpanInjectedTaubenchContained` = 0 | `\AgentVOneAuditSpanInjectedInjecagentEight` = 0 / `\AgentVOneAuditSpanInjectedInjecagentContained` = 0 | `\AgentVOneAuditSpanInjectedBipiaTestEight` = 0 / `\AgentVOneAuditSpanInjectedBipiaTestContained` = 0 |
+
+**Content-free gates** (V3 rule R2 with tools in place of tasks: pooled macro-F1 ≤ 0.60 on every split seed and
+per-tool mean over seeds ≤ 0.60): `\AgentVOneGatesStatus` = PASS. Evaluated on the `val` split (attacks from V3's
+held-out val categories of the BIPIA train file), probes trained on `train`.
+
+| Probe | What it uses | Pooled macro-F1, range over seeds | Max per-tool mean (tool) | Gate |
+|---|---|---|---|---|
+| position_oracle | insertion position == start (metadata) | `\AgentVOnePositionOraclePooledMin` = 0.4702–`\AgentVOnePositionOraclePooledMax` = 0.5010 | `\AgentVOnePositionOracleToolMax` = 0.5129 (`\AgentVOnePositionOracleToolMaxName` = encyclopedia) | `\AgentVOnePositionOracleStatus` = PASS |
+| first_para_rule | first paragraph ≤ 30 words → injected; untrained | `\AgentVOneFirstParaRulePooledMin` = 0.4882–`\AgentVOneFirstParaRulePooledMax` = 0.4972 | `\AgentVOneFirstParaRuleToolMax` = 0.4910 (`\AgentVOneFirstParaRuleToolMaxName` = package_metadata) | `\AgentVOneFirstParaRuleStatus` = PASS |
+| prefix30_masked_tfidf_lr | first 30 words, span removed | `\AgentVOnePrefixThreeZeroMaskedTfidfLrPooledMin` = 0.3333–`\AgentVOnePrefixThreeZeroMaskedTfidfLrPooledMax` = 0.3333 | `\AgentVOnePrefixThreeZeroMaskedTfidfLrToolMax` = 0.3333 (`\AgentVOnePrefixThreeZeroMaskedTfidfLrToolMaxName` = api_error) | `\AgentVOnePrefixThreeZeroMaskedTfidfLrStatus` = PASS |
+| suffix30_masked_tfidf_lr | last 30 words, span removed | `\AgentVOneSuffixThreeZeroMaskedTfidfLrPooledMin` = 0.3333–`\AgentVOneSuffixThreeZeroMaskedTfidfLrPooledMax` = 0.3333 | `\AgentVOneSuffixThreeZeroMaskedTfidfLrToolMax` = 0.3333 (`\AgentVOneSuffixThreeZeroMaskedTfidfLrToolMaxName` = api_error) | `\AgentVOneSuffixThreeZeroMaskedTfidfLrStatus` = PASS |
+| insertion_site_tfidf_lr | ~15 tokens each side of the insertion point, span removed | `\AgentVOneInsertionSiteTfidfLrPooledMin` = 0.4956–`\AgentVOneInsertionSiteTfidfLrPooledMax` = 0.5083 | `\AgentVOneInsertionSiteTfidfLrToolMax` = 0.5195 (`\AgentVOneInsertionSiteTfidfLrToolMaxName` = dictionary) | `\AgentVOneInsertionSiteTfidfLrStatus` = PASS |
+| length_lr | chars and words of the full text | `\AgentVOneLengthLrPooledMin` = 0.4810–`\AgentVOneLengthLrPooledMax` = 0.4861 | `\AgentVOneLengthLrToolMax` = 0.4690 (`\AgentVOneLengthLrToolMaxName` = email_message) | `\AgentVOneLengthLrStatus` = PASS |
+| span_form_you_lr | span-form features + contains you/your | `\AgentVOneSpanFormYouLrPooledMin` = 0.2908–`\AgentVOneSpanFormYouLrPooledMax` = 0.3373 | `\AgentVOneSpanFormYouLrToolMax` = 0.3500 (`\AgentVOneSpanFormYouLrToolMaxName` = encyclopedia) | `\AgentVOneSpanFormYouLrStatus` = PASS |
+| second_person_lr | contains you/your only | `\AgentVOneSecondPersonLrPooledMin` = 0.4206–`\AgentVOneSecondPersonLrPooledMax` = 0.4268 | `\AgentVOneSecondPersonLrToolMax` = 0.4958 (`\AgentVOneSecondPersonLrToolMaxName` = encyclopedia) | `\AgentVOneSecondPersonLrStatus` = PASS |
+| boundary_kind_lr | boundary kind only | `\AgentVOneBoundaryKindLrPooledMin` = 0.4859–`\AgentVOneBoundaryKindLrPooledMax` = 0.5014 | `\AgentVOneBoundaryKindLrToolMax` = 0.5160 (`\AgentVOneBoundaryKindLrToolMaxName` = git_log) | `\AgentVOneBoundaryKindLrStatus` = PASS |
+| prefix30_tfidf_lr | first 30 words, unmasked (diagnostic) | `\AgentVOnePrefixThreeZeroTfidfLrPooledMin` = 0.7028–`\AgentVOnePrefixThreeZeroTfidfLrPooledMax` = 0.7196 | `\AgentVOnePrefixThreeZeroTfidfLrToolMax` = 0.9088 (`\AgentVOnePrefixThreeZeroTfidfLrToolMaxName` = sensor_telemetry) | `\AgentVOnePrefixThreeZeroTfidfLrStatus` = diag |
+| suffix30_tfidf_lr | last 30 words, unmasked (diagnostic) | `\AgentVOneSuffixThreeZeroTfidfLrPooledMin` = 0.6586–`\AgentVOneSuffixThreeZeroTfidfLrPooledMax` = 0.6645 | `\AgentVOneSuffixThreeZeroTfidfLrToolMax` = 0.7803 (`\AgentVOneSuffixThreeZeroTfidfLrToolMaxName` = api_error) | `\AgentVOneSuffixThreeZeroTfidfLrStatus` = diag |
+| span_content_tfidf | inserted span text (content ceiling; diagnostic) | `\AgentVOneSpanContentTfidfPooledMin` = 0.9302–`\AgentVOneSpanContentTfidfPooledMax` = 0.9302 | `\AgentVOneSpanContentTfidfToolMax` = 0.9330 (`\AgentVOneSpanContentTfidfToolMaxName` = api_error) | `\AgentVOneSpanContentTfidfStatus` = diag |
+| span_form_lr | 9 span-form features, no you/your (diagnostic) | `\AgentVOneSpanFormLrPooledMin` = 0.2281–`\AgentVOneSpanFormLrPooledMax` = 0.2776 | `\AgentVOneSpanFormLrToolMax` = 0.2897 (`\AgentVOneSpanFormLrToolMaxName` = file_listing) | `\AgentVOneSpanFormLrStatus` = diag |
+
+- Span-form probes score well below 0.5 on val. They learn "shorter span → injected" on train, and V3's val
+  categories (Instruction, Programming Help, Social Interaction) are longer strings than the train categories, so the
+  rule inverts. This is a property of the BIPIA attack pools, not of the insertion; V3 uses the same categories.
+  Form still separates labels somewhat within a split: an uncommitted doc-grouped cross-validation of the
+  span-form + you/your LR on split seed 0 train was above 0.60 (a diagnostic, inflated because the 60 attack strings
+  repeat across folds; no number from it is reported).
+- Clean-A templates were revised three times against these gates on dry runs (scratch builds, not recorded) before
+  this run: per-tool template spreading, profile-matched selection (V3 `choose_clean_b`), denser wording.

@@ -1,0 +1,65 @@
+{
+  "run_id": "20261031-144736_seed0",
+  "version": "agent_v1",
+  "exp": "agent_overlap_audit",
+  "seed": 0,
+  "args": {
+    "data_dir": "data/agent_v1",
+    "split_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "ngram": 8,
+    "min_instruction_words": 5,
+    "agentdojo_wheel": "agentdojo-0.1.34-py3-none-any.whl",
+    "agentdojo_wheel_sha256": "118668a065977e05b8d8e86ecdd69973d948a83adbf62c433462cb6b60e78689"
+  },
+  "git_commit": "cb7d881f920de16e776ba71863cf355a6104b9a2",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "agent_v1",
+  "data_files_sha256": {
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/calibration_pool.csv": "2657cbf782b7c413b375be3efaab4a9e0b4fc322a24fba481494c745b00f1f71",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_0/train.csv": "6012247a6e9bd50a44de52fb694166c62ad6bfe1ce6b87ec77473fb7cc2da001",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_0/val.csv": "a03eae6c8e38b0af852ade6281bde6621694d879d1c0980973a8f97bc0276ef3",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_1/train.csv": "3bf3216fc7bc8541da5a5ff48b23cda5eeb175547b76878c1eaf1d3db54d834e",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_1/val.csv": "b4fb90cc3b1eabe049fd1c3d0505400dc78dbdee543ff6b28ebd8fea50af9705",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_2/train.csv": "c8904719cf3ed6a74e2900f22518bc5e113e28f7b55fbb9bf8c62aa201827d35",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_2/val.csv": "debc86691ddab5fc997d3d21c0da602b24901dfebb99c9ca0085b081d513c1a1",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_3/train.csv": "5fe8efbab4827db5bb7ea011e8181274f4bbb27bae2c5c9c915353f2a8585a1a",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_3/val.csv": "a0fa6d69be3f1625ce438cd7bf4d59834c56d7602d12ffab6aef6f795d0380b3",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_4/train.csv": "2c58672eb039b9fefec9454ac373cf08dee03dfbf43362a751fa198d6d2938c3",
+    "/Users/devanshsharma/projects/nlp/data/agent_v1/split_seed_4/val.csv": "6db23ed6e7acbd93cc77b053c676fd3ba35af26c1f582e014a3ce94d7942abe2"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null
+  },
+  "argv": [
+    "scripts/agent_overlap_audit.py",
+    "--agentdojo_wheel",
+    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/6fb85338-64cf-4bba-a08a-cfe54f6434e5/scratchpad/ad_wheel/agentdojo-0.1.34-py3-none-any.whl"
+  ],
+  "started": "2026-10-31T14:47:36"
+}

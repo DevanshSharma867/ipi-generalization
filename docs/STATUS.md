@@ -118,3 +118,6 @@ withdrawn), A24 (EVAL generator), A25 (annotators). Nothing has been generated, 
 # Course demo (CS F429 Part 3, due 2026-11-21)
 - 2026-10-31: `demo.py --mode gui` (Gradio, `requirements-demo.txt`): side-by-side scores from cached TF-IDF / DeBERTa V2 (3 seeds; match frozen pairs_v0 scores to 2e-8) and V3/ICT when their checkpoints exist; pairs v0 tab; `paper/numbers.tex` tab; tiny CPU live training (TF-IDF ~3 s, DeBERTa 12 docs ~1.5 min). Next: rehearse; add V3/ICT checkpoints when trained.
 - 2026-10-31: Row-level leakage claim dropped (no P4 redo; `docs/deviations.md`); C1 rests on V2 artifacts and probes. `docs/venues.md`: 2027 venue scan from official pages (TrustNLP 2027 @ COLING confirmed, 5 Jan 2027; ACL-family/ICLR 2027 workshop dates confirmed; others guide-only). 8-page budget proposed, not applied.
+
+# Agent-style data (A3)
+- 2026-10-31: `src/agent_pipeline.py` (19 tool types, no LLM/GPU) built `data/agent_v1/`: calibration pool 1,140 clean outputs (sha256 `2657cbf7…`), training split seeds 0–4 from BIPIA train attacks only; overlap audit PASS, content-free gates PASS (F019). Next: V3 baselines / H1 with pool thresholds.
