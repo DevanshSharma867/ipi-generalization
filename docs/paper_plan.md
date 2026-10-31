@@ -229,11 +229,12 @@ than every **H3a comparator** (below), with each paired-bootstrap CI of (ICT −
 calibration set is the clean (aligned) members of the val pairs for V3 pairs, and the calibration pool (A3) for
 agent pairs.
 
-**H3a comparators (amendment A1).** H3 on pairs is decided against these four request-aware comparators only:
+**H3a comparators (amendments A1, A21).** H3 on pairs is decided against these request-aware comparators only:
+(a), (b) and (d). Comparator (c) was withdrawn by A21 before any scoring; its text is kept below for the record.
 - **(a) task-aware LLM judges:** Qwen2.5-7B and Llama-3.1-8B, with Liu 2026's judge prompt copied verbatim from the
   pinned release into a committed file before scoring.
 - **(b) Sheltron with its user-goal segment,** as in Liu 2026.
-- **(c) a PromptArmor-style frontier-LLM detector given the user request.**
+- **(c) [withdrawn, A21] a PromptArmor-style frontier-LLM detector given the user request.**
   - PromptArmor (Shi et al., arXiv:2507.15219) prompts an off-the-shelf LLM to detect injected prompts. Adding the
     user request is our adaptation, so it is labelled "PromptArmor-style".
   - One API model, with a dated model id.
@@ -347,7 +348,7 @@ H1 is reported in every row. "Main venue" vs "workshop" means scope, not a speci
 | **Liu 2026 exists in two versions.** The arXiv v1 numbers differ from those in the released repo (e.g. AD-Matched TPR@1%FPR: Horizon-Labs 82.2% in v1 vs 83.1% at commit 5d0ae7c; Qwen judge 57.4% vs 59.0%). Liu's judge rule also differs between paper text (case and whitespace variants) and code (also strips `-_>.,`). | We reproduce against the pinned repo (A17), cite both versions, and state which one each comparison uses. |
 | **Re-implemented baselines** (AlignSentinel-style) differ from the original. | Labelled re-implementation; outside the H3a comparator set (§2, A1). |
 | **The calibration pool is synthetic** (A3). Its clean distribution may differ from AgentDojo/τ-bench clean outputs, so the realized FPR can miss the target. | The realized FPR on each agent set's clean rows is reported next to every calibrated TPR. The task-disjoint-half protocol is reported as a secondary check. |
-| **Frontier-API comparator** (A1c): the model can change behind a fixed id, the budget may truncate scoring, and we cannot audit its training data. | Dated model id, the frozen prompt file, the scoring date, and the count of unscored rows are reported. It carries † like the unauditable detectors. |
+| **No frontier-LLM comparator** (A21). The strongest request-aware detectors in practice are large API models prompted with the request; H3a's judges are 7–8B open models. H3a therefore shows ICT beats small open judges, Sheltron-with-goal and its own no-pairs ablation, not that it beats a frontier LLM. | Stated in limitations and wherever H3a is reported. No claim of superiority over frontier-LLM detectors is made. The withdrawn design (A7) is kept in this file, so the gap is visible. |
 
 ## 7. Build order (amendment A8)
 
@@ -361,11 +362,9 @@ Each step starts only after the previous one is done. The calibration pool is on
 5. **Pairs.** Generation, two-annotator labelling, adjudication, and the P2/P3 checks.
    - **Pair generation** (not annotation) may start in parallel with step 2, since it does not depend on ICT (A14).
      Annotation and adjudication follow the order above.
-6. **ICT**, its ablations, and the H3a comparators. Comparator (c) is scored in the order fixed in
-   `configs/frontier_detector.yaml` (A7).
+6. **ICT**, its ablations, and the H3a comparators (a), (b) and (d).
 
-The GPT-4.1 snapshot in A7 shuts down on 2027-01-14. **Comparator (c) must be fully scored by 2026-12-31** (A11). In this order it
-needs the calibration pool (step 3) and the adjudicated pairs (step 5).
+Comparator (c) and its 2026-12-31 deadline (A7, A11) were withdrawn by A21.
 
 ## Amendments before scoring
 
@@ -395,6 +394,7 @@ part of the pre-registration, not deviations.
 | A18 | 2026-10-30 | **Intent-pair construction (C3).** `docs/pairs_spec.md` v1 (commit 7c75099) and its §10 decisions are part of the pre-registration, before any pair is generated or scored. (Q1) EVAL V3 pairs only on split seed 0's test docs; H2, H3 and H4 are decided on split seed 0. (Q2) Strict agreement counts; adjudication is secondary. (Q3) TRAIN and EVAL generators are fixed and outside every comparator family and the ICT backbone. (Q4) Exclusion lists approved as drafted. Details below the table. |
 | A19 | 2026-10-30 | **Gate 2 (Liu reproduction) protocol**, fixed before any reproduction score exists. Scope: PIGuard, Prompt Guard 2 86M, Horizon-Labs (rev `af3c52e`) and the Qwen2.5-7B judge on AD-Matched (with AD-Clean, its negatives in Liu's table), TB-Matched and BIPIA. Three runs, a pass/fail rule at the metric level, and diagnostics. Details below the table. |
 | A20 | 2026-10-30 | **Judge precision.** For H3 (and every comparison involving our models), the task-aware LLM judges run in **bf16**. 4-bit NF4 is used only for the Liu reproduction (Gate 2). The bf16 − 4-bit AUROC gap of the Qwen judge on AD-Matched is reported, as Liu did (≤ 0.02 in his case). Fixed before any H3 score exists. |
+| A21 | 2026-10-31 | **Comparator (c) withdrawn (budget: the project runs at about zero cost).** H3 on pairs is decided against (a) the Qwen2.5-7B and Llama-3.1-8B task-aware judges (bf16, A20), (b) Sheltron with its user-goal segment, and (d) ICT ablation (a). A7 and A11 lapse; `configs/frontier_detector.yaml` and its prompt stay in the repo unused. Nothing had been scored with (c) (no API key was ever set). The loss is stated in §6. |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.
