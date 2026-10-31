@@ -396,35 +396,45 @@ def macros_transfer_gate2():
         put(macro_name(*p, det, "fixed", "overbound"), str(m[det]["fixed"]["n_gt_1e3"]))
 
 
-def macros_agent_v1():
+def macros_agent(version):
     """Agent-style data (paper_plan A3): calibration pool size and sha256, overlap audit, content-free gates."""
-    m, src = latest_metrics("agent_overlap_audit", version="agent_v1")
+    v = version.split("_")[1]  # agent_v1 -> v1
+    m, src = latest_metrics("agent_overlap_audit", version=version)
     if m is not None:
         cfg = json.load(open(src / "config.json"))
-        cal = [v for k, v in cfg["data_files_sha256"].items() if k.endswith("calibration_pool.csv")]
-        put(macro_name("agent", "v1", "cal", "sha"), cal[0])
-        put(macro_name("agent", "v1", "cal", "rows"), str(m["units"]["calibration_pool"]["agentdojo"]["n"]))
-        put(macro_name("agent", "v1", "audit", "status"), "PASS" if m["verdict"]["pass"] else "FAIL")
+        cal = [x for k, x in cfg["data_files_sha256"].items() if k.endswith("calibration_pool.csv")]
+        put(macro_name("agent", v, "cal", "sha"), cal[0])
+        put(macro_name("agent", v, "cal", "rows"), str(m["units"]["calibration_pool"]["agentdojo"]["n"]))
+        put(macro_name("agent", v, "audit", "status"), "PASS" if m["verdict"]["pass"] else "FAIL")
         for u, cs in m["units"].items():
             for c, r in cs.items():
-                put(macro_name("agent", "v1", "audit", u, c, "eight"), str(r["n_sharing_8gram"]))
-                put(macro_name("agent", "v1", "audit", u, c, "five"), str(r["n_sharing_5gram"]))
-                put(macro_name("agent", "v1", "audit", u, c, "contained"), str(r["n_containments"]))
-            put(macro_name("agent", "v1", "audit", u, "n"), str(r["n"]))
-    m, src = latest_metrics("artifact_baselines", version="agent_v1")
-    if m is None:
-        return
-    g = m["gate_summary"]
-    for name, e in g["probes"].items():
-        p = ("agent", "v1", name)
-        pooled = list(e["pooled_by_seed"].values())
-        num(min(pooled), *p, "pooled_min")
-        num(max(pooled), *p, "pooled_max")
-        worst = max(e["per_task_mean"], key=e["per_task_mean"].get)
-        num(e["per_task_mean"][worst], *p, "tool_max")
-        put(macro_name(*p, "tool_max_name"), tex(worst))
-        put(macro_name(*p, "status"), ("PASS" if e["pass"] else "FAIL") if e["gate"] else "diag")
-    put(macro_name("agent", "v1", "gates", "status"), "PASS" if g["pass"] else "FAIL")
+                put(macro_name("agent", v, "audit", u, c, "eight"), str(r["n_sharing_8gram"]))
+                put(macro_name("agent", v, "audit", u, c, "five"), str(r["n_sharing_5gram"]))
+                put(macro_name("agent", v, "audit", u, c, "contained"), str(r["n_containments"]))
+            put(macro_name("agent", v, "audit", u, "n"), str(r["n"]))
+    m, src = latest_metrics("artifact_baselines", version=version)
+    if m is not None:
+        g = m["gate_summary"]
+        for name, e in g["probes"].items():
+            p = ("agent", v, name)
+            pooled = list(e["pooled_by_seed"].values())
+            num(min(pooled), *p, "pooled_min")
+            num(max(pooled), *p, "pooled_max")
+            worst = max(e["per_task_mean"], key=e["per_task_mean"].get)
+            num(e["per_task_mean"][worst], *p, "tool_max")
+            put(macro_name(*p, "tool_max_name"), tex(worst))
+            put(macro_name(*p, "status"), ("PASS" if e["pass"] else "FAIL") if e["gate"] else "diag")
+        put(macro_name("agent", v, "gates", "status"), "PASS" if g["pass"] else "FAIL")
+    m, src = latest_metrics("form_cv", version=version)
+    if m is not None:  # within-train CV (scripts/agent_form_cv.py); named AgentFormCv* so F019's glob does not own it
+        for name in m["summary"]:
+            vals = [r[name] for r in m["seeds"].values()]
+            p = ("agent", "form_cv", v, name)
+            num(min(x["f1_macro"] for x in vals), *p, "f1_min")
+            num(max(x["f1_macro"] for x in vals), *p, "f1_max")
+            num(min(x["roc_auc"] for x in vals), *p, "auroc_min")
+            num(max(x["roc_auc"] for x in vals), *p, "auroc_max")
+        put(macro_name("agent", "form_cv", v, "flagged"), tex(", ".join(m["flagged"]) or "none"))
 
 
 def tables_probe_report():
@@ -747,7 +757,8 @@ def main():
     table_v3_prefreeze_gates()
     macros_transfer_gate1()
     macros_transfer_gate2()
-    macros_agent_v1()
+    macros_agent("agent_v1")
+    macros_agent("agent_v2")
     errors, owner = validate_entries()
     if errors:
         print(f"{len(errors)} PROVENANCE ERRORS (docs/findings.src.md):")

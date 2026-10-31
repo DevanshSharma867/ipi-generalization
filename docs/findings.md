@@ -24,7 +24,7 @@ not `docs/findings.md`. Deviations from the pre-registered protocol: `docs/devia
   freezing before results cannot be shown; V2 judge results carry this caveat. V3 will use a new judge prompt committed
   separately before any scoring.
 
-Entries by status: full 13, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
+Entries by status: full 14, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
 
 ## F001. V2 TF-IDF+LR headline table (Phase 2 Table III)
 
@@ -556,3 +556,58 @@ held-out val categories of the BIPIA train file), probes trained on `train`.
   repeat across folds; no number from it is reported).
 - Clean-A templates were revised three times against these gates on dry runs (scratch builds, not recorded) before
   this run: per-tool template spreading, profile-matched selection (V3 `choose_clean_b`), denser wording.
+
+## F020. Agent-style training data v2: within-train shortcut check and rebuild
+
+> **F020** · status **`full`** · 2026-10-31 · data `agent_v2 (src/agent_pipeline.py @ 88400e3; pool = agent_v1, unchanged) and agent_v1 (pre-fix CV only)` · eval `train split of each split seed (CV); val split (gates); calibration pool + all outputs and spans (audit)` · threshold: CV flag = macro-F1 > 0.60 at tau 0.50; gates as F019 (R2) · seeds: split_seeds 0-4 (one build each); CV 5-fold GroupKFold by doc_id; probes deterministic; bootstrap B=1000 seed 42  
+> script `scripts/agent_form_cv.py; src/agent_pipeline.py -> scripts/agent_overlap_audit.py; scripts/artifact_baselines.py --dataset v3 --data_dir data/agent_v2 --eval_split val --split_seeds 0 1 2 3 4` @ `08be6d6` · source: `results/agent_v2/form_cv/20261031-172308_seed0`, `results/agent_v1/form_cv/20261031-171136_seed0`, `results/agent_v2/agent_overlap_audit/20261031-172311_seed0`, `results/agent_v2/artifact_baselines/20261031-172311_seed0`
+
+F019's span-form gate probes scored far below chance on val, i.e. form predicted the label with the sign flipped
+between splits. A 5-fold, doc-grouped CV inside TRAIN measures the signal directly (flag: macro-F1 > 0.60).
+agent_v1 was flagged (`\AgentFormCvVOneFlagged` = span_form_you, span_length). agent_v2 matches every clean span jointly (length, cap
+ratio, binary form) to an attack of the same split and adds short and length-variant clean-A templates; the
+calibration pool is unchanged (`\AgentVTwoCalSha` = 2657cbf782b7c413b375be3efaab4a9e0b4fc322a24fba481494c745b00f1f71; docs/deviations.md 2026-10-31). agent_v2 flagged:
+`\AgentFormCvVTwoFlagged` = none. Range over split seeds 0–4:
+
+| Data | Probe (within-train CV) | macro-F1 | AUROC |
+|---|---|---|---|
+| agent_v1 | span_form_you | `\AgentFormCvVOneSpanFormYouFOneMin` = 0.6142–`\AgentFormCvVOneSpanFormYouFOneMax` = 0.6374 | `\AgentFormCvVOneSpanFormYouAurocMin` = 0.7029–`\AgentFormCvVOneSpanFormYouAurocMax` = 0.7122 |
+| agent_v1 | span_length | `\AgentFormCvVOneSpanLengthFOneMin` = 0.6473–`\AgentFormCvVOneSpanLengthFOneMax` = 0.6552 | `\AgentFormCvVOneSpanLengthAurocMin` = 0.6796–`\AgentFormCvVOneSpanLengthAurocMax` = 0.6841 |
+| agent_v1 | text_length | `\AgentFormCvVOneTextLengthFOneMin` = 0.4984–`\AgentFormCvVOneTextLengthFOneMax` = 0.5065 | `\AgentFormCvVOneTextLengthAurocMin` = 0.5134–`\AgentFormCvVOneTextLengthAurocMax` = 0.5147 |
+| agent_v2 | span_form_you | `\AgentFormCvVTwoSpanFormYouFOneMin` = 0.5868–`\AgentFormCvVTwoSpanFormYouFOneMax` = 0.5988 | `\AgentFormCvVTwoSpanFormYouAurocMin` = 0.6180–`\AgentFormCvVTwoSpanFormYouAurocMax` = 0.6281 |
+| agent_v2 | span_length | `\AgentFormCvVTwoSpanLengthFOneMin` = 0.5626–`\AgentFormCvVTwoSpanLengthFOneMax` = 0.5749 | `\AgentFormCvVTwoSpanLengthAurocMin` = 0.5791–`\AgentFormCvVTwoSpanLengthAurocMax` = 0.5922 |
+| agent_v2 | text_length | `\AgentFormCvVTwoTextLengthFOneMin` = 0.5039–`\AgentFormCvVTwoTextLengthFOneMax` = 0.5093 | `\AgentFormCvVTwoTextLengthAurocMin` = 0.5074–`\AgentFormCvVTwoTextLengthAurocMax` = 0.5092 |
+
+- agent_v2's span-form probe sits just under the 0.60 flag and its AUROC is still above 0.6, so a weak form signal
+  remains. The proposed symmetric gate (|AUROC − 0.5| ≤ 0.10; docs/deviations.md, not applied) would fail it.
+
+**Content-free gates, agent_v2** (R2 as F019; agent_v1 values in F019): `\AgentVTwoGatesStatus` = FAIL. Only span_form_you_lr fails: pooled
+`\AgentVTwoSpanFormYouLrPooledMin` = 0.5870–`\AgentVTwoSpanFormYouLrPooledMax` = 0.6013 (over 0.60 on two seeds) and several per-tool
+means up to `\AgentVTwoSpanFormYouLrToolMax` = 0.6326. The agent_v1 inversion (below chance) is gone: the residual form signal
+now points the same way in train and val. **agent_v2 is therefore not cleared for training**; its status is open
+(docs/STATUS.md). Uncommitted scratch builds that weighted length and form differently traded the two criteria off:
+none had both within-train CV ≤ 0.60 and every gate ≤ 0.60, so tuning stopped rather than fit to the gate threshold.
+
+| Probe | agent_v2 pooled | agent_v2 max per-tool mean (tool) | agent_v2 gate |
+|---|---|---|---|
+| position_oracle | `\AgentVTwoPositionOraclePooledMin` = 0.4791–`\AgentVTwoPositionOraclePooledMax` = 0.5032 | `\AgentVTwoPositionOracleToolMax` = 0.5136 (`\AgentVTwoPositionOracleToolMaxName` = sql_result) | `\AgentVTwoPositionOracleStatus` = PASS |
+| first_para_rule | `\AgentVTwoFirstParaRulePooledMin` = 0.4907–`\AgentVTwoFirstParaRulePooledMax` = 0.4985 | `\AgentVTwoFirstParaRuleToolMax` = 0.4789 (`\AgentVTwoFirstParaRuleToolMaxName` = email_message) | `\AgentVTwoFirstParaRuleStatus` = PASS |
+| prefix30_masked_tfidf_lr | `\AgentVTwoPrefixThreeZeroMaskedTfidfLrPooledMin` = 0.3333–`\AgentVTwoPrefixThreeZeroMaskedTfidfLrPooledMax` = 0.3333 | `\AgentVTwoPrefixThreeZeroMaskedTfidfLrToolMax` = 0.3333 (`\AgentVTwoPrefixThreeZeroMaskedTfidfLrToolMaxName` = api_error) | `\AgentVTwoPrefixThreeZeroMaskedTfidfLrStatus` = PASS |
+| suffix30_masked_tfidf_lr | `\AgentVTwoSuffixThreeZeroMaskedTfidfLrPooledMin` = 0.3333–`\AgentVTwoSuffixThreeZeroMaskedTfidfLrPooledMax` = 0.3333 | `\AgentVTwoSuffixThreeZeroMaskedTfidfLrToolMax` = 0.3333 (`\AgentVTwoSuffixThreeZeroMaskedTfidfLrToolMaxName` = api_error) | `\AgentVTwoSuffixThreeZeroMaskedTfidfLrStatus` = PASS |
+| insertion_site_tfidf_lr | `\AgentVTwoInsertionSiteTfidfLrPooledMin` = 0.4907–`\AgentVTwoInsertionSiteTfidfLrPooledMax` = 0.5017 | `\AgentVTwoInsertionSiteTfidfLrToolMax` = 0.5060 (`\AgentVTwoInsertionSiteTfidfLrToolMaxName` = package_metadata) | `\AgentVTwoInsertionSiteTfidfLrStatus` = PASS |
+| length_lr | `\AgentVTwoLengthLrPooledMin` = 0.4977–`\AgentVTwoLengthLrPooledMax` = 0.5004 | `\AgentVTwoLengthLrToolMax` = 0.4990 (`\AgentVTwoLengthLrToolMaxName` = issue_tracker) | `\AgentVTwoLengthLrStatus` = PASS |
+| span_form_you_lr | `\AgentVTwoSpanFormYouLrPooledMin` = 0.5870–`\AgentVTwoSpanFormYouLrPooledMax` = 0.6013 | `\AgentVTwoSpanFormYouLrToolMax` = 0.6326 (`\AgentVTwoSpanFormYouLrToolMaxName` = email_message) | `\AgentVTwoSpanFormYouLrStatus` = FAIL |
+| second_person_lr | `\AgentVTwoSecondPersonLrPooledMin` = 0.4323–`\AgentVTwoSecondPersonLrPooledMax` = 0.4492 | `\AgentVTwoSecondPersonLrToolMax` = 0.5011 (`\AgentVTwoSecondPersonLrToolMaxName` = encyclopedia) | `\AgentVTwoSecondPersonLrStatus` = PASS |
+| boundary_kind_lr | `\AgentVTwoBoundaryKindLrPooledMin` = 0.4871–`\AgentVTwoBoundaryKindLrPooledMax` = 0.4958 | `\AgentVTwoBoundaryKindLrToolMax` = 0.5156 (`\AgentVTwoBoundaryKindLrToolMaxName` = ci_log) | `\AgentVTwoBoundaryKindLrStatus` = PASS |
+| span_form_lr | `\AgentVTwoSpanFormLrPooledMin` = 0.5874–`\AgentVTwoSpanFormLrPooledMax` = 0.6335 | `\AgentVTwoSpanFormLrToolMax` = 0.6578 (`\AgentVTwoSpanFormLrToolMaxName` = git_log) | `\AgentVTwoSpanFormLrStatus` = diag |
+| span_content_tfidf | `\AgentVTwoSpanContentTfidfPooledMin` = 0.8983–`\AgentVTwoSpanContentTfidfPooledMax` = 0.9324 | `\AgentVTwoSpanContentTfidfToolMax` = 0.9194 (`\AgentVTwoSpanContentTfidfToolMaxName` = api_error) | `\AgentVTwoSpanContentTfidfStatus` = diag |
+
+**Overlap audit, agent_v2**: `\AgentVTwoAuditStatus` = PASS (cells: texts sharing an 8-gram / contained instructions).
+
+| Unit | n | AgentDojo | τ-bench | InjecAgent | BIPIA test |
+|---|---|---|---|---|---|
+| calibration_pool | `\AgentVTwoAuditCalibrationPoolN` = 1140 | `\AgentVTwoAuditCalibrationPoolAgentdojoEight` = 0 / `\AgentVTwoAuditCalibrationPoolAgentdojoContained` = 0 | `\AgentVTwoAuditCalibrationPoolTaubenchEight` = 0 / `\AgentVTwoAuditCalibrationPoolTaubenchContained` = 0 | `\AgentVTwoAuditCalibrationPoolInjecagentEight` = 0 / `\AgentVTwoAuditCalibrationPoolInjecagentContained` = 0 | `\AgentVTwoAuditCalibrationPoolBipiaTestEight` = 0 / `\AgentVTwoAuditCalibrationPoolBipiaTestContained` = 0 |
+| contexts | `\AgentVTwoAuditContextsN` = 17100 | `\AgentVTwoAuditContextsAgentdojoEight` = 0 / `\AgentVTwoAuditContextsAgentdojoContained` = 0 | `\AgentVTwoAuditContextsTaubenchEight` = 0 / `\AgentVTwoAuditContextsTaubenchContained` = 0 | `\AgentVTwoAuditContextsInjecagentEight` = 0 / `\AgentVTwoAuditContextsInjecagentContained` = 0 | `\AgentVTwoAuditContextsBipiaTestEight` = 0 / `\AgentVTwoAuditContextsBipiaTestContained` = 0 |
+| span_clean_a | `\AgentVTwoAuditSpanCleanAN` = 4683 | `\AgentVTwoAuditSpanCleanAAgentdojoEight` = 0 / `\AgentVTwoAuditSpanCleanAAgentdojoContained` = 0 | `\AgentVTwoAuditSpanCleanATaubenchEight` = 0 / `\AgentVTwoAuditSpanCleanATaubenchContained` = 0 | `\AgentVTwoAuditSpanCleanAInjecagentEight` = 0 / `\AgentVTwoAuditSpanCleanAInjecagentContained` = 0 | `\AgentVTwoAuditSpanCleanABipiaTestEight` = 0 / `\AgentVTwoAuditSpanCleanABipiaTestContained` = 0 |
+| span_clean_b | `\AgentVTwoAuditSpanCleanBN` = 6534 | `\AgentVTwoAuditSpanCleanBAgentdojoEight` = 0 / `\AgentVTwoAuditSpanCleanBAgentdojoContained` = 0 | `\AgentVTwoAuditSpanCleanBTaubenchEight` = 0 / `\AgentVTwoAuditSpanCleanBTaubenchContained` = 0 | `\AgentVTwoAuditSpanCleanBInjecagentEight` = 0 / `\AgentVTwoAuditSpanCleanBInjecagentContained` = 0 | `\AgentVTwoAuditSpanCleanBBipiaTestEight` = 0 / `\AgentVTwoAuditSpanCleanBBipiaTestContained` = 0 |
+| span_injected | `\AgentVTwoAuditSpanInjectedN` = 75 | `\AgentVTwoAuditSpanInjectedAgentdojoEight` = 0 / `\AgentVTwoAuditSpanInjectedAgentdojoContained` = 0 | `\AgentVTwoAuditSpanInjectedTaubenchEight` = 0 / `\AgentVTwoAuditSpanInjectedTaubenchContained` = 0 | `\AgentVTwoAuditSpanInjectedInjecagentEight` = 0 / `\AgentVTwoAuditSpanInjectedInjecagentContained` = 0 | `\AgentVTwoAuditSpanInjectedBipiaTestEight` = 0 / `\AgentVTwoAuditSpanInjectedBipiaTestContained` = 0 |
