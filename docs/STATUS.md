@@ -1,4 +1,6 @@
-# Status: transfer harness (updated 2026-10-30)
+# Status (updated 2026-10-31)
+
+# Transfer harness
 
 Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproduction in Liu's pinned env and ours).
 
@@ -43,6 +45,32 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   first suspects if Gate 2 mismatches (re-pin with a reason).
 - **VRAM cap:** MPS does not enforce `CUDA_MPS_PINNED_DEVICE_MEM_LIMIT` (smoke test, job 422476). Half-card VRAM
   must be capped in code, e.g. `torch.cuda.set_per_process_memory_fraction(0.5)`.
-- **Frontier comparator (c):** `OPENAI_API_KEY` not set, so the c′ test call is not made; score by 2026-12-31 (A11).
+- **Frontier comparator (c):** withdrawn 2026-10-31 (A21, budget). No API key or scoring is needed.
 - **Cluster notes:** the QoS needs `--gres=mps:50` even for CPU jobs; the template file
   `jobs/templates/mock_job_csisnlp18.sh` was never found, so the header is derived from the existing jobs.
+
+# Intent pairs (C3)
+
+Plan: `docs/pairs_spec.md` v1, paper_plan A18 (construction, split seed 0 only, strict agreement), A21
+(comparator (c) withdrawn). Nothing has been generated, annotated or scored.
+
+## Done
+- Spec, annotation guide, `src/pairs.py` (validation, overlap class, complete quads), annotation page
+  (`scripts/make_annotation_sheet.py`), agreement script (`scripts/agreement.py`).
+- 20 LLM-drafted pilot pairs (10 quads) on split-seed-0 test docs: `data/pairs/pilot_v1.jsonl`. Never EVAL.
+- TRAIN generator fixed: `mistralai/Mistral-7B-Instruct-v0.3` on the cluster (A18).
+
+## Next
+1. **Author labels the pilot**: `open annotation/pilot_v1/devansh.html`, export `annotation/pilot_v1/devansh.csv`.
+   This measures time per pair and tests the rules; revise E3/E4 after it if needed (A18 Q4), before generation.
+2. **EVAL generator decision** (zero-cost): Gemini free tier vs an open Gemma model on the cluster. Pending; to be
+   recorded as an amendment before any generation.
+3. Generator prompts (EVAL and TRAIN, no shared 8-gram) and config, committed before the first call.
+4. EVAL generation on split-seed-0 test docs after the V3 freeze (the test-doc list may move at the rebuild);
+   TRAIN generation as ≤ 1 h sharded sbatch jobs, starting with a 20-doc timing job.
+5. Second annotator; κ, agreed quads (≥ 200 agreed pairs per set), P3 checks.
+
+## Open decisions / blockers
+- **EVAL generator** (above).
+- **Second annotator:** P2 needs two independent annotators; the author works solo. Who labels?
+- **Agent-pair sets** wait for AD-Clean/TB-Clean contexts (transfer harness) and the agent-style pipeline.
