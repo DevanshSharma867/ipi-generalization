@@ -23,6 +23,7 @@ Gate 2 follow-up (docs/deviations.md, 2026-10-30; paper_plan A19, A20). Three in
     deberta_bs --ckpts C... --data CSV --out D                        bs 1 vs 16 probabilities per checkpoint
     report   --part {batch,pairing,judge} --work W --gate2 G --liu_py P --our_py P
                                                      run record: results/transfer/gate2_followup_<part>/
+    envfix   --work W --device D           our env with tokenizer.json / local RoPE theta vs Liu's env (BIPIA subset)
     residual --work W --pairing_run R      PIGuard rows over the validation bound vs AgentDojo's set-ordered
                                            participant lists (calendar_client: list(set(participants)), hash-seed
                                            dependent) -> results/transfer/gate2_followup_residual/
@@ -447,9 +448,66 @@ def cmd_residual(a):
     run.finish()
 
 
+def cmd_envfix(a):
+    """Our env (transformers 5) with the two loader differences undone, on the BIPIA subset, vs Liu's env at bs 1:
+    PIGuard and PG2 tokenized with the repo's tokenizer.json (transformers 5 rebuilds the DeBERTa-v2 tokenizer from
+    spm.model / its own converter); Horizon's sliding-window layers given ModernBERT's local RoPE theta
+    (transformers 5 gives them the global theta). Also scores the unmodified loaders in the same process as a control."""
+    import torch
+    import transformers
+    from huggingface_hub import hf_hub_download
+    from transformers import AutoConfig, AutoTokenizer, PreTrainedTokenizerFast
+    sys.path.insert(0, str(ROOT / "src"))
+    sys.path.insert(0, str(ROOT / "eval" / "transfer"))
+    from detectors import load_registry
+    from runlog import start_run
+    work = Path(a.work).resolve()
+    manifest = ROOT / "data" / "transfer" / "sets" / "manifest.json"
+    run = start_run(version="transfer", exp="gate2_followup_envfix", seed=0,
+                    args={"work": "<scratch>/" + work.name, "device": a.device, "bs": 16,
+                          "transformers": transformers.__version__, "torch": torch.__version__},
+                    data_version=json.load(open(manifest))["data_version"], data_files=[manifest],
+                    allow_dirty=a.allow_dirty)
+    import detectors as D
+    reg, rows = load_registry(), load(work / "bipia500" / "bipia_pairs.jsonl")
+    texts = [r["text"] for r in rows]
+    D.BS = 16
+    res = {}
+    for det in ENCODERS:
+        e = reg[det]
+        repo, rev = e["repo"], e["revision"]
+        if det == "horizon-base":
+            raw = json.load(open(hf_hub_download(repo, "config.json", revision=rev)))
+            cfg = AutoConfig.from_pretrained(repo, revision=rev)
+            # its config.json has no local_rope_theta: 4.57 falls back to ModernBertConfig's default 10000,
+            # 5.x gives the sliding layers the global theta instead
+            cfg.rope_parameters["sliding_attention"]["rope_theta"] = float(raw.get("local_rope_theta", 10000.0))
+            fixed = {"model_kw": {"config": cfg}}
+        else:
+            auto = AutoTokenizer.from_pretrained(repo, revision=rev)
+            fixed = {"tok": PreTrainedTokenizerFast(
+                tokenizer_file=hf_hub_download(repo, "tokenizer.json", revision=rev),
+                **{k: v for k, v in auto.special_tokens_map.items() if isinstance(v, str)})}
+        ref = probs(work / "bs" / "liu_bs1" / f"{det}__bipia.json")
+        res[det] = {}
+        for name, kw in (("default", {}), ("fixed", fixed)):
+            if e["kind"] == "seg":
+                p, _ = D.run_segmented(repo, e["max_len"], texts, rev, a.device, **kw)
+            else:
+                p, _ = D.run_cls(repo, e["max_len"], e["inj_index"], e.get("trust_remote_code", False), texts, rev,
+                                 a.device, **kw)
+            res[det][name] = diff(p, ref)
+            run.log(f"{det:18s} {name:8s} vs Liu env bs1: max|Δ| {res[det][name]['max_abs']:.2e} "
+                    f"rows > 1e-3 {res[det][name]['n_gt_1e3']} flips {res[det][name]['flips_at_05']}")
+    res["explained"] = all(r["fixed"]["max_abs"] <= 1e-4 for r in res.values())
+    run.log(f"shift removed by the two fixes (max|Δ| ≤ 1e-4 for every detector): {res['explained']}")
+    run.save_metrics(res, headline=("explained", float(res["explained"])))
+    run.finish()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["gen", "match", "subset", "deberta_bs", "report", "residual"])
+    ap.add_argument("cmd", choices=["gen", "match", "subset", "deberta_bs", "report", "residual", "envfix"])
     ap.add_argument("--set", choices=list(FILES))
     ap.add_argument("--out_dir")
     ap.add_argument("--cands", action="store_true")
@@ -469,7 +527,7 @@ def main():
     ap.add_argument("--allow-dirty", dest="allow_dirty", action="store_true")
     a = ap.parse_args()
     {"gen": cmd_gen, "match": cmd_match, "subset": cmd_subset, "deberta_bs": cmd_deberta_bs,
-     "report": cmd_report, "residual": cmd_residual}[a.cmd](a)
+     "report": cmd_report, "residual": cmd_residual, "envfix": cmd_envfix}[a.cmd](a)
 
 
 if __name__ == "__main__":

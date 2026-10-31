@@ -67,10 +67,11 @@ def source_type(r):
     return {"web": "webpage", "email": "email"}.get(r.get("source", ""), "other")
 
 
-def run_cls(repo, max_len, idx, remote, texts, revision, dev):
-    tok = AutoTokenizer.from_pretrained(repo, revision=revision)
-    model = AutoModelForSequenceClassification.from_pretrained(repo, trust_remote_code=remote,
-                                                               revision=revision).to(dev).eval()
+def run_cls(repo, max_len, idx, remote, texts, revision, dev, tok=None, model_kw=None):
+    """tok, model_kw: override the tokenizer / extra from_pretrained arguments (gate2_followup.py envfix only)."""
+    tok = tok or AutoTokenizer.from_pretrained(repo, revision=revision)
+    model = AutoModelForSequenceClassification.from_pretrained(repo, trust_remote_code=remote, revision=revision,
+                                                               **(model_kw or {})).to(dev).eval()
     if model.config.pad_token_id is None and tok.pad_token_id is not None:  # decoder-based classifiers (Qwen3)
         model.config.pad_token_id = tok.pad_token_id
     probs, trunc = [], 0
@@ -84,10 +85,10 @@ def run_cls(repo, max_len, idx, remote, texts, revision, dev):
     return probs, trunc / len(texts)
 
 
-def run_segmented(repo, max_len, texts, revision, dev, pg1=False):
+def run_segmented(repo, max_len, texts, revision, dev, pg1=False, tok=None):
     """Prompt Guard cards: 512-token window; split longer inputs into segments and take the maximum score.
     Prompt Guard 1 (three labels): indirect-injection score = P(INJECTION) + P(JAILBREAK), as Meta's utilities do."""
-    tok = AutoTokenizer.from_pretrained(repo, revision=revision)
+    tok = tok or AutoTokenizer.from_pretrained(repo, revision=revision)
     model = AutoModelForSequenceClassification.from_pretrained(repo, revision=revision).to(dev).eval()
     room = max_len - 2
     probs, trunc = [], 0
