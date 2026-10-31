@@ -44,3 +44,4 @@ models:
   - {name: judge-llama, repo: meta-llama/Llama-3.1-8B-Instruct, role: judge, revision: 0e9e39f249a16976918f6564b8830bc894c89659, last_modified: 2024-09-25}
   - {name: deberta-v3-base, repo: microsoft/deberta-v3-base, role: ours,
      revision: 8ccc9b6f36199bec6961081d44eb72fb3f7353f3}
+  - {name: modernbert-large, repo: answerdotai/ModernBERT-large, role: ours, revision: 45bb4654a4d5aaff24dd11d4781fa46d39bf8c13, last_modified: 2025-01-15}
