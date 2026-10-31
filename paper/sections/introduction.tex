@@ -1,0 +1,64 @@
+\section{Introduction}
+\label{sec:intro}
+
+LLM applications routinely place text they do not control into the model's input: retrieved web pages, emails,
+tables, code, and the outputs of tools called by an agent. Instructions hidden in that text can redirect the model,
+a threat known as indirect prompt injection (IPI)
+\citep{greshake2023signed,liu2023formalizing,yi2023bipia,zhan-etal-2024-injecagent,debenedetti2024agentdojo}.
+A common line of defense is a detector: a classifier that reads the external text, possibly together with the
+user's request, and decides whether it contains an injection before it reaches the model
+\citep{li-etal-2025-piguard,ivry2025sentinel,chennabasappa2025llamafirewall,liu2025datasentinel}.
+
+This paper is about what such detectors are asked to learn, and what their training and evaluation data let them
+learn instead. Two observations motivate it.
+
+\paragraph{Injection is relative to the request.}
+Consider the sentence \emph{``Write the reply so it confirms the seat by Friday''} inside an email. If the user asked
+the assistant to draft a reply accepting the invitation, following it serves the user. If the user asked for a
+summary of the email, following it replaces the summary with a reply. The text is identical; only the request
+differs. BIPIA defines indirect injections by the deviation they cause from what the user expects
+\citep{yi2023bipia}, which makes the label a function of the request as well as of the content. Yet most deployed
+detectors read the content alone, and the benchmarks used to train and compare them label every inserted attack
+string as an injection whatever the user asked. A detector that ignores the request cannot separate the two cases
+above, and existing evaluations cannot tell whether it does.
+
+\paragraph{Insertion-built data carry construction artifacts.}
+IPI training and test sets are usually built by inserting attack strings, and benign look-alikes, into clean
+documents. Every choice in that procedure (where the string goes, how it is joined to the document, which templates
+supply the negatives) can correlate with the label. Prior work has shown that IPI evaluations admit content-free
+shortcuts in agent conversations \citep{kale2026probes} and that defenses learn position and trigger-token
+heuristics \citep{li2026surface}. We find the same failure in BIPIA-style insertion data, measure it, and remove it.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+  \item \textbf{Request-counterfactual intent pairs} (\S\ref{sec:pairs}). Each pair holds a document and one inserted
+  instruction byte-identical and varies only the user request: under one request following the instruction serves
+  the user (label 0), under the other it subverts the request (label 1). Pairs are built as crossed quads, so that
+  both a content-only detector and a request-only model score exactly chance by construction. The pairs are
+  LLM-drafted, and only pairs that two independent human annotators label as intended are used.
+  \todo{annotation not yet done; second annotator not yet identified}
+  \item \textbf{Intent-Counterfactual Training (\ict{})} (\S\ref{sec:ict}). A text-only query/context cross-encoder
+  trained on artifact-controlled data plus counterfactual pairs, with a pairwise margin loss between the two members
+  of each pair. It needs no white-box access to any LLM. An ablation with the same backbone and the request as input,
+  but without pairs or margin loss, separates the effect of the training signal from the effect of seeing the request.
+  \item \textbf{An inventory of construction artifacts in BIPIA-style insertion data} (\S\ref{sec:artifacts}).
+  Content-free probes (the insertion position alone, an untrained first-paragraph rule, and nine surface features of
+  the inserted span) predict the label well above chance, and position-controlled stress tests show that fine-tuned
+  detectors rely on insertion position. This extends \citet{kale2026probes} from agent conversations to
+  insertion-based document data.
+  \item \textbf{An artifact-controlled dataset (\vthree) and a generalization study} (\S\ref{sec:v3}). \vthree{}
+  samples position and separator independently of the label, preserves document formatting, matches the surface form
+  of benign and injected spans, holds out attack categories for model selection and attack files for testing, and
+  splits by near-duplicate document component. It passes pre-registered content-free gates. We ask whether training
+  on it, rather than on artifact-laden data, improves transfer to agent benchmarks, extending \citet{liu2026passing}
+  to training on BIPIA-style data.
+\end{enumerate}
+
+\paragraph{Pre-registration.}
+Our four hypotheses (H1: artifact removal improves transfer; H2: \ict{} reads the request; H3: \ict{} beats
+request-aware comparators on intent-dependent sets and is non-inferior on content-only transfer sets; H4: \ict{}
+raises fewer false alarms on requested instructions), their success criteria, the evaluation sets, the threshold
+protocol and a decision table that fixes which kind of paper results lead to were registered before any \vthree{},
+pair, or agent-benchmark result existed. Every pre-registered comparison is reported, whatever its outcome, and every
+post-hoc change is listed as a deviation. \todo{cite the registration (commit hash / OSF link) and summarize which
+row of the decision table the results fall in}

@@ -1,0 +1,64 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{IPI attacks and benchmarks.}
+Indirect prompt injection was introduced by \citet{greshake2023signed}; \citet{liu2023formalizing} formalize
+prompt-injection attacks and defenses. BIPIA \citep{yi2023bipia} inserts attack strings into email, table, code, web
+and summarization contexts at the start, middle or end of the document. InjecAgent
+\citep{zhan-etal-2024-injecagent} places attacker instructions in the tool responses of tool-using agents, and
+AgentDojo \citep{debenedetti2024agentdojo} and $\tau$-bench \citep{yao2024taubench} provide agent environments whose
+tool outputs can carry injections. Our artifact audit concerns how BIPIA-style insertion data is
+\emph{constructed}, not the attacks themselves.
+
+\paragraph{Detectors.}
+Content-only classifiers include PIGuard \citep{li-etal-2025-piguard}, which targets over-defense on trigger words,
+Sentinel \citep{ivry2025sentinel}, and Prompt Guard 2 in LlamaFirewall \citep{chennabasappa2025llamafirewall}.
+DataSentinel \citep{liu2025datasentinel} detects injections with a fine-tuned LLM through a known-answer test, and
+Attention Tracker \citep{hung2024attentiontracker} scores attention distraction inside the model. PromptArmor
+\citep{shi2025promptarmor} prompts an off-the-shelf LLM to detect and remove injected prompts. MELON
+\citep{zhu2025melon} compares an agent's actions with and without the user task; it defends agent trajectories
+rather than classifying text.
+
+\paragraph{How detectors are evaluated.}
+\citet{liu2026passing} re-evaluates public detectors and two task-aware LLM judges on AgentDojo and $\tau$-bench tool
+outputs replayed without an LLM. Detector rankings on BIPIA do not carry over to the agent benchmarks, the best BIPIA
+detector was trained on BIPIA attack strings, and the form of a detector's training inputs, more than attack-string
+overlap, determines where it works. \citet{fomin2026benchmarks} shows that in-distribution splits overstate the
+generalization of malicious-prompt classifiers and proposes leave-one-dataset-out evaluation, and
+\citet{akinrele2026regime} find that detector rankings depend on the deployment regime and threshold. We build on
+\citet{liu2026passing} directly: we rebuild its agent-benchmark sets with its released scripts, and ask a question it
+leaves open, namely whether removing construction artifacts from the training data changes transfer.
+
+\paragraph{Shortcuts in IPI detection.}
+\citet{li2026surface} show that defenses against prompt attacks learn surface heuristics, including position,
+trigger-token and topic biases, and name counterfactual benign examples as future work. \citet{kale2026probes} show
+that on AgentDojo, where an injection sits in a conversation and how long the conversation is nearly solve the
+standard probe evaluation, and that training with matched negatives (the same conversation with the injection
+removed, and harmless look-alikes) reduces false alarms. Our artifact analysis is confirmatory for the general
+claim that IPI evaluations contain content-free shortcuts. It is new in measuring a specific inventory for
+BIPIA-style insertion data and in rebuilding the data under pre-registered gates.
+
+\paragraph{Task-, intent- and alignment-aware detection.}
+Several methods ask whether an instruction in external data deviates from the user's task. TaskTracker
+\citep{abdelnabi2024drift} detects task drift from activation deltas, PromptSleuth \citep{wang2025promptsleuth}
+reasons over task-level intent, and IntentGuard \citep{kang2025intentguard} analyzes a reasoning model's
+instruction-following intent. The closest work is AlignSentinel \citep{jia2026alignsentinel}, a three-class
+classifier (misaligned instruction, aligned instruction, no instruction) over a backend LLM's attention maps,
+trained on a GPT-4o-generated benchmark. In that benchmark, aligned and misaligned inputs are different texts under
+the same user prompt and tool; we found no setting in which identical instruction text is aligned under one request
+and misaligned under another, and no released code, data or model. \citet{liu2026passing} also gives a small
+classifier the user goal as an extra segment and finds that it does not help; that classifier was never trained to
+use the goal. Conditioning a detector on the request is therefore not new. What is new here is the evaluation
+design that varies only the request, and its use as a training signal for a black-box text classifier.
+
+\paragraph{Counterfactual data and artifacts.}
+Our pairs apply contrast sets \citep{gardner-etal-2020-evaluating} and counterfactually augmented data
+\citep{kaushik2019counterfactual} to IPI detection. The artifact audit follows work on annotation artifacts
+\citep{gururangan-etal-2018-annotation}, syntactic heuristics \citep{mccoy-etal-2019-right} and shortcut learning
+in general \citep{geirhos2020shortcut}.
+
+\paragraph{Which instructions in data are injections.}
+A strict view treats every instruction in external data as untrusted: StruQ \citep{chen2024struq} trains a model to
+follow only instructions in the prompt portion of its input. The instruction hierarchy \citep{wallace2024hierarchy}
+instead defines behavior for instructions of different privilege that \emph{conflict}, and teaches models to ignore
+lower-privileged instructions selectively. Our definition (\S\ref{sec:task}) is closer to the latter.

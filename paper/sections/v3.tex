@@ -1,0 +1,109 @@
+\section{\vthree{}: An Artifact-Controlled Insertion Dataset}
+\label{sec:v3}
+
+\vthree{} keeps \vtwo{}'s source documents, tasks and attack files, and changes how rows are built so that the label
+depends only on the content of one inserted span. \todo{\vthree{} is not yet frozen: the benign pool is under human
+review, and the numbers below are from the pre-freeze build on the draft pool. Replace with the frozen build
+(tag \texttt{v3-frozen}) and re-gate.}
+
+\paragraph{One span per row, identical procedure for every class.}
+Every row of the main set carries exactly one inserted span, so ``has a span'' no longer predicts the label. Each
+document yields four rows: two injected rows (two different attack strings from the split's attack pool), a
+\emph{clean-A} row with a benign item addressed to the human reader, and a \emph{clean-B} row with a span spliced
+from another document of the same task and split (an email sentence, a prose line with its code block, or, for
+tables, which contain no prose, a sentence rendered from a donor table's header and one row). Clean-B spans come
+from real documents of the same register, so they share the formatting of attacks without being instructions.
+
+\paragraph{Position and separator sampled independently of the label.}
+For every row, the position (start, middle or end) and the separator (\verb|\n\n| or \verb|\n|) are drawn uniformly
+and independently with a seeded generator, identically for all four row types. Insertion never re-joins words: the
+span is placed at an existing boundary, trying line, paragraph, email field delimiter, then sentence boundary, the
+same order for both classes, and never inside a code fence. The boundary kind and character offset are recorded for
+every row, and every span is recoverable from them. A document with no internal boundary is moved to an
+evaluation-only slice rather than having its middle rows silently moved to the end.
+
+\paragraph{Matched surface form.}
+The benign items are written to match the attack pool's surface form per register (text or code). For each of the
+span-form features of \S\ref{sec:artifacts:baselines}, plus whether the span contains ``you'' or ``your'', clean-A
+items target the rate $2a - b$, where $a$ is the rate in the training attack file and $b$ the rate measured on the
+clean-B spans, so that the pooled clean rows match the injected rows. Rates come from the training attack files
+only. The pool includes benign questions to the reader, benign quoted text, dates and amounts, and for code a prose
+lead-in with a fenced benign snippet. Model-directed items (``Act as\ldots'', ``System:\ldots'') are removed from the
+benign pool and kept as a separate evaluation-only \emph{ambiguous} slice. Every benign item is reviewed by a human
+before the freeze. \todo{review status and pool sizes at freeze}
+
+\paragraph{Held-out attacks for selection and test.}
+BIPIA's training and test attack files are disjoint. Within the training files, a fixed seeded draw holds out whole
+attack categories for validation (three text categories and two code categories), so model selection measures
+generalization to unseen categories rather than to unseen documents with seen attacks. An in-distribution slice
+(validation documents with training-category attacks) is reported but never used for selection. Test documents
+receive attacks only from the test file. One category name occurs in both text files; test results are reported
+with and without it.
+
+\paragraph{Length control.}
+Over-length inputs would hide end-position spans from a 512-token encoder, which reintroduces a position effect
+(\S\ref{sec:artifacts:probes}). Code and table documents that do not fit are trimmed, before insertion and
+identically for all rows of a document, to a window of whole lines that never cuts a code fence (tables keep their
+header and contiguous rows). Email documents that do not fit are moved to an evaluation-only \emph{long} slice.
+Every main row fits in 512 DeBERTa-v3 tokens, checked with the real tokenizer after insertion.
+
+\paragraph{Requests.}
+BIPIA's code rows have no question, which made the \vtwo{} CodeQA intent a constant. \vthree{} uses
+\emph{``Fix this error in my code: $\langle$last line of the error message$\rangle$''}, which gives nearly every code
+document a distinct request.
+
+\paragraph{Splits.}
+Documents are grouped into connected components of near-duplicates (word 5-gram Jaccard $\geq 0.5$ within a task),
+and each component goes to one split. We build five split realizations (split seeds 0--4), each a document-level
+70/15/15 split per task with exact 1:1 class balance per task and split. With split seed 0, the main set has
+\val{VThreePrefreezeIntegritySeedZeroMainEmailTrain}/\val{VThreePrefreezeIntegritySeedZeroMainEmailVal}/%
+\val{VThreePrefreezeIntegritySeedZeroMainEmailTest} EmailQA rows,
+\val{VThreePrefreezeIntegritySeedZeroMainTableTrain}/\val{VThreePrefreezeIntegritySeedZeroMainTableVal}/%
+\val{VThreePrefreezeIntegritySeedZeroMainTableTest} TableQA rows and
+\val{VThreePrefreezeIntegritySeedZeroMainCodeTrain}/\val{VThreePrefreezeIntegritySeedZeroMainCodeVal}/%
+\val{VThreePrefreezeIntegritySeedZeroMainCodeTest} CodeQA rows (train/val/test). TableQA dominates pooled numbers,
+so \vthree{} headline metrics are task-macro averages, with pooled and per-task values alongside.
+
+\paragraph{Integrity checks.}
+An independent re-read of the written files checks, for every split seed, that document ids, exact texts,
+near-duplicate components, attack strings, benign items and donor texts are disjoint across splits; that validation
+and training attack categories are disjoint; that classes are balanced exactly; that every main row fits the token
+budget; and that every span is recoverable from its offset. All five pre-freeze builds pass
+(\val{VThreePrefreezeIntegrityStatus}).
+
+\subsection{Content-free gates}
+\label{sec:v3:gates}
+Before any model is trained on \vthree{}, the data must pass pre-registered gates: each content-free probe must reach
+a pooled macro-F1 of at most \val{VThreePrefreezeGateThreshold} on every split seed, and a per-task mean over seeds of
+at most \val{VThreePrefreezeGateThreshold}. The gate probes are the \vtwo{} probes adapted to \vthree{}: a position
+model on position, separator, boundary kind and relative offset; the first-paragraph rule; prefix-30 and suffix-30
+TF-IDF probes with the span cut out; an insertion-site probe on about 15 tokens on each side of the insertion point,
+span removed; a length model; the span-form features with and without the second-person feature; the second-person
+feature alone; and the boundary kind alone. Probes that see the span's words (unmasked prefix and suffix, span
+content) are diagnostics, since they are content probes.
+
+Table~\ref{tab:v3-gates} shows the pre-freeze result: every gate passes (\val{VThreePrefreezeGatesStatus}). On \vtwo{}, the
+position field alone reached \ci{VTwoArtifactPositionOracleFOneMacro}; on \vthree{}, a position model on
+all insertion metadata ranges over
+\val{VThreePrefreezePositionOraclePooledMin}--\val{VThreePrefreezePositionOraclePooledMax} across split seeds, and the
+first-paragraph rule over \val{VThreePrefreezeFirstParaRulePooledMin}--\val{VThreePrefreezeFirstParaRulePooledMax}.
+The span-masked prefix and suffix probes predict a constant
+(\val{VThreePrefreezePrefixThreeZeroMaskedTfidfLrPooledMin}). The span-content ceiling remains high
+(\val{VThreePrefreezeSpanContentTfidfPooledMin}--\val{VThreePrefreezeSpanContentTfidfPooledMax}): the label is still
+learnable, from the span's words.
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/v3_prefreeze_gates.tex}}
+\caption{\vthree{} content-free gates, pre-freeze build on the draft benign pool. Pooled macro-F1 range over split
+seeds 0--4 and per-task means over seeds. Gate: $\leq$\,\val{VThreePrefreezeGateThreshold} on every seed and every
+task mean. \emph{diag}: content probes, reported but not gated.}
+\label{tab:v3-gates}
+\end{table}
+
+\paragraph{What \vthree{} does not control.}
+In \vthree{}, as in BIPIA, the request is not needed to predict the label: an attack string subverts every request
+and a benign item serves every request. \vthree{} tests whether detectors read span content instead of construction
+cues; whether they read the request is the question of \S\ref{sec:pairs}. Table clean-B sentences are templated
+rather than natural, and inserting any span into a table or into an email without newlines is itself unnatural.
+We report results with and without clean-B rows, and report raw documents only as an evaluation slice.

@@ -1,0 +1,43 @@
+% Paper draft. Build: see paper/README.md (tectonic main.tex).
+% Every number in the text is a macro from numbers.tex (scripts/make_tables.py) or a generated table in tables/.
+% legacy_numbers.tex is never \input.
+\documentclass[11pt]{article}
+
+\usepackage[review]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+
+\input{numbers.tex}
+\input{macros.tex}
+
+\title{Generalization Limits of Indirect Prompt-Injection Detectors\todo{working title}}
+
+\author{Anonymous submission}
+
+\begin{document}
+\maketitle
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/task}
+\input{sections/artifacts}
+\input{sections/v3}
+\input{sections/pairs}
+\input{sections/ict}
+\input{sections/results}
+\input{sections/conclusion}
+\input{sections/limitations}
+
+\bibliography{references}
+
+\end{document}
