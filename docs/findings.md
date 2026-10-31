@@ -451,7 +451,8 @@ the per-row checks. Independent validation, max per-row |Δ| vs Liu on AD-Matche
 `\TransferGateTwoAdmatchedHorizonBaseMaxdiff` = 1.1e-05, Prompt Guard 2 `\TransferGateTwoAdmatchedPromptguardTwoEightSixmMaxdiff` = 3.8e-05,
 PIGuard `\TransferGateTwoAdmatchedPiguardMaxdiff` = 1.5e-03. The pre-registered rule (PIGuard and Horizon ≤ 1e-3 per row) gives
 `\TransferGateTwoRecoveryStatus` = FAIL: PIGuard exceeds it on `\TransferGateTwoAdmatchedPiguardOverbound` = 6 AD-Matched and
-`\TransferGateTwoAdshiftPiguardOverbound` = 5 AD-Shift rows, with no label flips at 0.5.
+`\TransferGateTwoAdshiftPiguardOverbound` = 5 AD-Shift rows, with no label flips at 0.5. The recovered pairing was adopted for every
+detector anyway (docs/deviations.md, 2026-10-31), on the residual evidence below.
 
 **Residual.** Every row over the bound is a calendar event with two or more participants
 (`\TransferGateTwoResidualStatus` = PASS). AgentDojo builds that list with `list(set(participants))`, so its order depends
@@ -472,7 +473,7 @@ bf16 − 4-bit AUROC on AD-Matched (A20): `\TransferGateTwoJudgeSeededGap` = -0.
 ## F018. Detector scores depend on the transformers version (4.57.6 vs 5.20.1), not on batching
 
 > **F018** · status **`full`** · 2026-10-31 · data `transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filescf00fcba` · eval `500-row random subset of BIPIA (Liu); V2 test (our DeBERTa checkpoints, seeds 42/123/999)` · threshold: per-row |Δ| of P(injection); flips at 0.5 · seeds: n/a (deterministic scoring); BIPIA subset rng seed 0  
-> script `jobs/gate2_fu_batch.sh -> eval/transfer/gate2_followup.py (subset, deberta_bs, report --part batch)` @ `007c5a5` · source: `results/transfer/gate2_followup_batch/20261030-195313_seed0`
+> script `jobs/gate2_fu_batch.sh -> eval/transfer/gate2_followup.py (subset, deberta_bs, report --part batch)` @ `007c5a5` · source: `results/transfer/gate2_followup_batch/20261030-195313_seed0`, `results/transfer/gate2_followup_envfix/20261031-172529_seed0`
 
 Same GPU, same weights and revisions, same inputs; only the library stack differs (Liu's env: torch 2.8 /
 transformers 4.57.6; ours: torch 2.11 / transformers 5.20.1). On `\TransferEnvRows` = 500 BIPIA rows at batch size 1:
@@ -484,9 +485,19 @@ transformers 4.57.6; ours: torch 2.11 / transformers 5.20.1). On `\TransferEnvRo
 | Horizon base | `\TransferEnvHorizonBaseMax` = 0.83 | `\TransferEnvHorizonBaseOverbound` = 389 | `\TransferEnvHorizonBaseFlips` = 34 | `\TransferEnvHorizonBaseBatch` = 7.2e-06 | `\TransferEnvHorizonBaseLiuenv` = 7.3e-06 |
 
 - The shift is already present at batch size 1 and batching changes nothing, so it is not padding. Liu's env
-  reproduces his released scores; ours does not. Where in the stack it arises is not localized. An uncommitted
-  spot check (not a paper number) suggests Prompt Guard 2's transformers-5 tokenizer treats whitespace differently,
-  while PIGuard's and Horizon's token ids agree, which would put their shift on the model side.
+  reproduces his released scores; ours does not.
+- **Cause (both found; `\TransferEnvFixStatus` = PASS).** Loaded weights, dtype and attention backend are identical in
+  the two envs. (1) PIGuard and Prompt Guard 2: transformers 5 does not load the repo's `tokenizer.json` but rebuilds
+  the DeBERTa-v2 tokenizer from `spm.model` with its own converter, which normalizes text differently (e.g. a
+  non-breaking space becomes `[UNK]`). (2) Horizon (ModernBERT): its config has no `local_rope_theta`; 4.57 uses the
+  class default (10000) for the sliding-window layers, 5.x gives them the global theta (160000). In our env with the
+  repo tokenizer (PIGuard, Prompt Guard 2) or the local theta restored (Horizon), max per-row |Δ| to Liu's env is
+  `\TransferEnvPiguardFixed` = 1.7e-06, `\TransferEnvPromptguardTwoEightSixmFixed` = 3.6e-06 and `\TransferEnvHorizonBaseFixed` = 7.2e-06
+  (`\TransferEnvPiguardFixedOverbound` = 0, `\TransferEnvPromptguardTwoEightSixmFixedOverbound` = 0 and
+  `\TransferEnvHorizonBaseFixedOverbound` = 0 rows over 1e-3).
+- Not checked: whether other DeBERTa-v2/v3 or ModernBERT detectors (or Wolf Defender, which Liu scored under
+  transformers ≥ 5.6) are affected the same way. Our own DeBERTa models are trained and scored with the same
+  transformers-5 tokenizer, so their scores are internally consistent.
 - Our V2 DeBERTa checkpoints are batch-independent: bs 1 vs 16 max |Δ| `\TransferEnvDebertaBatch` = 3.6e-06
   (`\TransferEnvDebertaStatus` = PASS, bound 1e-5).
 - Consequence (docs/deviations.md, 2026-10-30): published detectors are scored in the environment their reference

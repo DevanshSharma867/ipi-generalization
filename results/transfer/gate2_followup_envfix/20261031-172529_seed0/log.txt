@@ -1,0 +1,7 @@
+[17:26:02] piguard            default  vs Liu env bs1: max|Δ| 9.46e-01 rows > 1e-3 46 flips 9
+[17:26:05] piguard            fixed    vs Liu env bs1: max|Δ| 1.67e-06 rows > 1e-3 0 flips 0
+[17:26:19] promptguard2-86m   default  vs Liu env bs1: max|Δ| 9.75e-01 rows > 1e-3 228 flips 6
+[17:26:23] promptguard2-86m   fixed    vs Liu env bs1: max|Δ| 3.58e-06 rows > 1e-3 0 flips 0
+[17:26:53] horizon-base       default  vs Liu env bs1: max|Δ| 8.34e-01 rows > 1e-3 389 flips 34
+[17:27:04] horizon-base       fixed    vs Liu env bs1: max|Δ| 7.15e-06 rows > 1e-3 0 flips 0
+[17:27:04] shift removed by the two fixes (max|Δ| ≤ 1e-4 for every detector): True
