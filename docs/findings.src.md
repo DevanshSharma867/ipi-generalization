@@ -909,23 +909,23 @@ calibration pool is unchanged ({{AgentVTwoCalSha}}; docs/deviations.md 2026-10-3
 **Content-free gates, agent_v2** (R2 as F019; agent_v1 values in F019): {{AgentVTwoGatesStatus}}. Only span_form_you_lr fails: pooled
 {{AgentVTwoSpanFormYouLrPooledMin}}–{{AgentVTwoSpanFormYouLrPooledMax}} (over 0.60 on two seeds) and several per-tool
 means up to {{AgentVTwoSpanFormYouLrToolMax}}. The agent_v1 inversion (below chance) is gone: the residual form signal
-now points the same way in train and val. **agent_v2 is therefore not cleared for training**; its status is open
-(docs/STATUS.md). Uncommitted scratch builds that weighted length and form differently traded the two criteria off:
+now points the same way in train and val. agent_v2 fails R2 on this probe
+(see the acceptance below). Uncommitted scratch builds that weighted length and form differently traded the two criteria off:
 none had both within-train CV ≤ 0.60 and every gate ≤ 0.60, so tuning stopped rather than fit to the gate threshold.
 
-| Probe | agent_v2 pooled | agent_v2 max per-tool mean (tool) | agent_v2 gate |
-|---|---|---|---|
-| position_oracle | {{AgentVTwoPositionOraclePooledMin}}–{{AgentVTwoPositionOraclePooledMax}} | {{AgentVTwoPositionOracleToolMax}} ({{AgentVTwoPositionOracleToolMaxName}}) | {{AgentVTwoPositionOracleStatus}} |
-| first_para_rule | {{AgentVTwoFirstParaRulePooledMin}}–{{AgentVTwoFirstParaRulePooledMax}} | {{AgentVTwoFirstParaRuleToolMax}} ({{AgentVTwoFirstParaRuleToolMaxName}}) | {{AgentVTwoFirstParaRuleStatus}} |
-| prefix30_masked_tfidf_lr | {{AgentVTwoPrefixThreeZeroMaskedTfidfLrPooledMin}}–{{AgentVTwoPrefixThreeZeroMaskedTfidfLrPooledMax}} | {{AgentVTwoPrefixThreeZeroMaskedTfidfLrToolMax}} ({{AgentVTwoPrefixThreeZeroMaskedTfidfLrToolMaxName}}) | {{AgentVTwoPrefixThreeZeroMaskedTfidfLrStatus}} |
-| suffix30_masked_tfidf_lr | {{AgentVTwoSuffixThreeZeroMaskedTfidfLrPooledMin}}–{{AgentVTwoSuffixThreeZeroMaskedTfidfLrPooledMax}} | {{AgentVTwoSuffixThreeZeroMaskedTfidfLrToolMax}} ({{AgentVTwoSuffixThreeZeroMaskedTfidfLrToolMaxName}}) | {{AgentVTwoSuffixThreeZeroMaskedTfidfLrStatus}} |
-| insertion_site_tfidf_lr | {{AgentVTwoInsertionSiteTfidfLrPooledMin}}–{{AgentVTwoInsertionSiteTfidfLrPooledMax}} | {{AgentVTwoInsertionSiteTfidfLrToolMax}} ({{AgentVTwoInsertionSiteTfidfLrToolMaxName}}) | {{AgentVTwoInsertionSiteTfidfLrStatus}} |
-| length_lr | {{AgentVTwoLengthLrPooledMin}}–{{AgentVTwoLengthLrPooledMax}} | {{AgentVTwoLengthLrToolMax}} ({{AgentVTwoLengthLrToolMaxName}}) | {{AgentVTwoLengthLrStatus}} |
-| span_form_you_lr | {{AgentVTwoSpanFormYouLrPooledMin}}–{{AgentVTwoSpanFormYouLrPooledMax}} | {{AgentVTwoSpanFormYouLrToolMax}} ({{AgentVTwoSpanFormYouLrToolMaxName}}) | {{AgentVTwoSpanFormYouLrStatus}} |
-| second_person_lr | {{AgentVTwoSecondPersonLrPooledMin}}–{{AgentVTwoSecondPersonLrPooledMax}} | {{AgentVTwoSecondPersonLrToolMax}} ({{AgentVTwoSecondPersonLrToolMaxName}}) | {{AgentVTwoSecondPersonLrStatus}} |
-| boundary_kind_lr | {{AgentVTwoBoundaryKindLrPooledMin}}–{{AgentVTwoBoundaryKindLrPooledMax}} | {{AgentVTwoBoundaryKindLrToolMax}} ({{AgentVTwoBoundaryKindLrToolMaxName}}) | {{AgentVTwoBoundaryKindLrStatus}} |
-| span_form_lr | {{AgentVTwoSpanFormLrPooledMin}}–{{AgentVTwoSpanFormLrPooledMax}} | {{AgentVTwoSpanFormLrToolMax}} ({{AgentVTwoSpanFormLrToolMaxName}}) | {{AgentVTwoSpanFormLrStatus}} |
-| span_content_tfidf | {{AgentVTwoSpanContentTfidfPooledMin}}–{{AgentVTwoSpanContentTfidfPooledMax}} | {{AgentVTwoSpanContentTfidfToolMax}} ({{AgentVTwoSpanContentTfidfToolMaxName}}) | {{AgentVTwoSpanContentTfidfStatus}} |
+| Probe | agent_v2 pooled macro-F1 | max per-tool mean (tool) | gate | max \|AUROC − 0.5\| (pooled; reported, not a gate) |
+|---|---|---|---|---|
+| position_oracle | {{AgentVTwoPositionOraclePooledMin}}–{{AgentVTwoPositionOraclePooledMax}} | {{AgentVTwoPositionOracleToolMax}} ({{AgentVTwoPositionOracleToolMaxName}}) | {{AgentVTwoPositionOracleStatus}} | {{AgentVTwoPositionOracleAurocDevMax}} |
+| first_para_rule | {{AgentVTwoFirstParaRulePooledMin}}–{{AgentVTwoFirstParaRulePooledMax}} | {{AgentVTwoFirstParaRuleToolMax}} ({{AgentVTwoFirstParaRuleToolMaxName}}) | {{AgentVTwoFirstParaRuleStatus}} | {{AgentVTwoFirstParaRuleAurocDevMax}} |
+| prefix30_masked_tfidf_lr | {{AgentVTwoPrefixThreeZeroMaskedTfidfLrPooledMin}}–{{AgentVTwoPrefixThreeZeroMaskedTfidfLrPooledMax}} | {{AgentVTwoPrefixThreeZeroMaskedTfidfLrToolMax}} ({{AgentVTwoPrefixThreeZeroMaskedTfidfLrToolMaxName}}) | {{AgentVTwoPrefixThreeZeroMaskedTfidfLrStatus}} | {{AgentVTwoPrefixThreeZeroMaskedTfidfLrAurocDevMax}} |
+| suffix30_masked_tfidf_lr | {{AgentVTwoSuffixThreeZeroMaskedTfidfLrPooledMin}}–{{AgentVTwoSuffixThreeZeroMaskedTfidfLrPooledMax}} | {{AgentVTwoSuffixThreeZeroMaskedTfidfLrToolMax}} ({{AgentVTwoSuffixThreeZeroMaskedTfidfLrToolMaxName}}) | {{AgentVTwoSuffixThreeZeroMaskedTfidfLrStatus}} | {{AgentVTwoSuffixThreeZeroMaskedTfidfLrAurocDevMax}} |
+| insertion_site_tfidf_lr | {{AgentVTwoInsertionSiteTfidfLrPooledMin}}–{{AgentVTwoInsertionSiteTfidfLrPooledMax}} | {{AgentVTwoInsertionSiteTfidfLrToolMax}} ({{AgentVTwoInsertionSiteTfidfLrToolMaxName}}) | {{AgentVTwoInsertionSiteTfidfLrStatus}} | {{AgentVTwoInsertionSiteTfidfLrAurocDevMax}} |
+| length_lr | {{AgentVTwoLengthLrPooledMin}}–{{AgentVTwoLengthLrPooledMax}} | {{AgentVTwoLengthLrToolMax}} ({{AgentVTwoLengthLrToolMaxName}}) | {{AgentVTwoLengthLrStatus}} | {{AgentVTwoLengthLrAurocDevMax}} |
+| span_form_you_lr | {{AgentVTwoSpanFormYouLrPooledMin}}–{{AgentVTwoSpanFormYouLrPooledMax}} | {{AgentVTwoSpanFormYouLrToolMax}} ({{AgentVTwoSpanFormYouLrToolMaxName}}) | {{AgentVTwoSpanFormYouLrStatus}} | {{AgentVTwoSpanFormYouLrAurocDevMax}} |
+| second_person_lr | {{AgentVTwoSecondPersonLrPooledMin}}–{{AgentVTwoSecondPersonLrPooledMax}} | {{AgentVTwoSecondPersonLrToolMax}} ({{AgentVTwoSecondPersonLrToolMaxName}}) | {{AgentVTwoSecondPersonLrStatus}} | {{AgentVTwoSecondPersonLrAurocDevMax}} |
+| boundary_kind_lr | {{AgentVTwoBoundaryKindLrPooledMin}}–{{AgentVTwoBoundaryKindLrPooledMax}} | {{AgentVTwoBoundaryKindLrToolMax}} ({{AgentVTwoBoundaryKindLrToolMaxName}}) | {{AgentVTwoBoundaryKindLrStatus}} | {{AgentVTwoBoundaryKindLrAurocDevMax}} |
+| span_form_lr | {{AgentVTwoSpanFormLrPooledMin}}–{{AgentVTwoSpanFormLrPooledMax}} | {{AgentVTwoSpanFormLrToolMax}} ({{AgentVTwoSpanFormLrToolMaxName}}) | {{AgentVTwoSpanFormLrStatus}} | {{AgentVTwoSpanFormLrAurocDevMax}} |
+| span_content_tfidf | {{AgentVTwoSpanContentTfidfPooledMin}}–{{AgentVTwoSpanContentTfidfPooledMax}} | {{AgentVTwoSpanContentTfidfToolMax}} ({{AgentVTwoSpanContentTfidfToolMaxName}}) | {{AgentVTwoSpanContentTfidfStatus}} | {{AgentVTwoSpanContentTfidfAurocDevMax}} |
 
 **Overlap audit, agent_v2**: {{AgentVTwoAuditStatus}} (cells: texts sharing an 8-gram / contained instructions).
 
@@ -936,3 +936,9 @@ none had both within-train CV ≤ 0.60 and every gate ≤ 0.60, so tuning stoppe
 | span_clean_a | {{AgentVTwoAuditSpanCleanAN}} | {{AgentVTwoAuditSpanCleanAAgentdojoEight}} / {{AgentVTwoAuditSpanCleanAAgentdojoContained}} | {{AgentVTwoAuditSpanCleanATaubenchEight}} / {{AgentVTwoAuditSpanCleanATaubenchContained}} | {{AgentVTwoAuditSpanCleanAInjecagentEight}} / {{AgentVTwoAuditSpanCleanAInjecagentContained}} | {{AgentVTwoAuditSpanCleanABipiaTestEight}} / {{AgentVTwoAuditSpanCleanABipiaTestContained}} |
 | span_clean_b | {{AgentVTwoAuditSpanCleanBN}} | {{AgentVTwoAuditSpanCleanBAgentdojoEight}} / {{AgentVTwoAuditSpanCleanBAgentdojoContained}} | {{AgentVTwoAuditSpanCleanBTaubenchEight}} / {{AgentVTwoAuditSpanCleanBTaubenchContained}} | {{AgentVTwoAuditSpanCleanBInjecagentEight}} / {{AgentVTwoAuditSpanCleanBInjecagentContained}} | {{AgentVTwoAuditSpanCleanBBipiaTestEight}} / {{AgentVTwoAuditSpanCleanBBipiaTestContained}} |
 | span_injected | {{AgentVTwoAuditSpanInjectedN}} | {{AgentVTwoAuditSpanInjectedAgentdojoEight}} / {{AgentVTwoAuditSpanInjectedAgentdojoContained}} | {{AgentVTwoAuditSpanInjectedTaubenchEight}} / {{AgentVTwoAuditSpanInjectedTaubenchContained}} | {{AgentVTwoAuditSpanInjectedInjecagentEight}} / {{AgentVTwoAuditSpanInjectedInjecagentContained}} | {{AgentVTwoAuditSpanInjectedBipiaTestEight}} / {{AgentVTwoAuditSpanInjectedBipiaTestContained}} |
+
+**Accepted for training (author decision, 2026-10-31; docs/deviations.md).** agent_v2 is used for ICT training
+despite the span_form_you_lr failure, without further rebuilds, to avoid tuning the data against the gate. The agent
+data is training-only and transfer is measured on independent external sets (AD/TB), so a residual training-data
+shortcut can lower but not inflate transfer results; ICT ablation (d) measures the agent data's contribution.
+The |AUROC − 0.5| column is a transparency metric, not a retroactive pass/fail criterion.

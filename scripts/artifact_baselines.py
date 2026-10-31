@@ -199,7 +199,9 @@ def gate_summary(per_seed):
         task_mean = {t: float(np.mean([r["per_task"][t]["bootstrap"]["f1_macro"]["point"] for r in rs.values()]))
                      for t in tasks}
         entry = {"gate": name in V3_GATES, "pooled_by_seed": pooled, "pooled_mean": float(np.mean(list(pooled.values()))),
-                 "per_task_mean": task_mean}
+                 "per_task_mean": task_mean,
+                 # transparency metric, not a pass/fail criterion (docs/deviations.md 2026-10-31)
+                 "auroc_dev_by_seed": {s: abs(r["bootstrap"]["roc_auc"]["point"] - 0.5) for s, r in rs.items()}}
         if name in V3_GATES:
             entry["fail"] = [f"seed{s}" for s, v in pooled.items() if v > GATE] + \
                             [f"{t}_mean" for t, v in task_mean.items() if v > GATE]
