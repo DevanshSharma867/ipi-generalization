@@ -24,6 +24,7 @@ are diagnostics only.
 
     python scripts/artifact_baselines.py                                   # V2, results/v2_probes/
     python scripts/artifact_baselines.py --dataset v3 --split_seeds 0 1 2 3 4 [--data_dir data/v3] [--exp ...]
+    python scripts/artifact_baselines.py --dataset v3 --data_dir data/agent_v1 --eval_split val --split_seeds 0 1 2 3 4
 """
 
 import argparse
@@ -99,16 +100,16 @@ def lr_probe(X_tr, y_tr, X_te, scale=True):
     return clf.predict_proba(X_te)[:, 1], clf
 
 
-def load(dataset, data_dir, split_seed):
+def load(dataset, data_dir, split_seed, eval_split="test"):
     if dataset == "v2":
         train, test = (with_spans(pd.read_csv(DATA / f"{s}.csv")) for s in ("train", "test"))
         return train, test, [DATA / "train.csv", DATA / "test.csv"], "v2_test"
     d = Path(data_dir) / f"split_seed_{split_seed}"
-    train, test = (pd.read_csv(d / f"{s}.csv", keep_default_na=False) for s in ("train", "test"))
+    train, test = (pd.read_csv(d / f"{s}.csv", keep_default_na=False) for s in ("train", eval_split))
     for df in (train, test):
         df["span"] = [t[int(o):int(o) + int(n)] for t, o, n in zip(df["text"], df["char_offset"], df["span_len"])]
         assert (df["span"] == df["span_text"]).all()
-    return train, test, [d / "train.csv", d / "test.csv", d / "manifest.json"], "v3_test"
+    return train, test, [d / "train.csv", d / f"{eval_split}.csv", d / "manifest.json"], f"{d.parent.name}_{eval_split}"
 
 
 SITE_TOK = 15
@@ -215,14 +216,15 @@ def main():
     ap.add_argument("--data_dir", default=str(ROOT / "data" / "v3"))
     ap.add_argument("--data_version", default=None)
     ap.add_argument("--exp", default="artifact_baselines")
+    ap.add_argument("--eval_split", default="test", help="v3 layout: the held-out split to evaluate (agent_v1: val)")
     a = add_run_args(ap).parse_args()
     seeds = a.split_seeds or [a.split_seed]
-    loaded = {s: load(a.dataset, a.data_dir, s) for s in (seeds if a.dataset == "v3" else [None])}
+    loaded = {s: load(a.dataset, a.data_dir, s, a.eval_split) for s in (seeds if a.dataset == "v3" else [None])}
     files = [f for v in loaded.values() for f in v[2]]
-    version = "v2_probes" if a.dataset == "v2" else "v3"
+    version = "v2_probes" if a.dataset == "v2" else Path(a.data_dir).name  # data/v3 -> v3, data/agent_v1 -> agent_v1
     run = start_run(version=version, exp=a.exp, seed=42 if a.dataset == "v2" else seeds[0],
                     args={"dataset": a.dataset, "split_seeds": seeds if a.dataset == "v3" else None,
-                          "data_dir": str(a.data_dir), "n_tokens": N_TOK, "site_tokens": SITE_TOK,
+                          "data_dir": str(a.data_dir), "eval_split": a.eval_split, "n_tokens": N_TOK, "site_tokens": SITE_TOK,
                           "tfidf": TFIDF_PARAMS, "lr": LR_PARAMS, "span_features": SPAN_FEATURES, "gate": GATE,
                           "gates": V3_GATES if a.dataset == "v3" else None, "bootstrap": {"B": 1000, "seed": 42}},
                     data_version=a.data_version or a.dataset, data_files=files, allow_dirty=a.allow_dirty)

@@ -389,6 +389,37 @@ def macros_transfer_gate2():
     put(macro_name(*p, "deberta", "status"), "PASS" if m["batch_independent_ours_deberta"] else "FAIL")
 
 
+def macros_agent_v1():
+    """Agent-style data (paper_plan A3): calibration pool size and sha256, overlap audit, content-free gates."""
+    m, src = latest_metrics("agent_overlap_audit", version="agent_v1")
+    if m is not None:
+        cfg = json.load(open(src / "config.json"))
+        cal = [v for k, v in cfg["data_files_sha256"].items() if k.endswith("calibration_pool.csv")]
+        put(macro_name("agent", "v1", "cal", "sha"), cal[0])
+        put(macro_name("agent", "v1", "cal", "rows"), str(m["units"]["calibration_pool"]["agentdojo"]["n"]))
+        put(macro_name("agent", "v1", "audit", "status"), "PASS" if m["verdict"]["pass"] else "FAIL")
+        for u, cs in m["units"].items():
+            for c, r in cs.items():
+                put(macro_name("agent", "v1", "audit", u, c, "eight"), str(r["n_sharing_8gram"]))
+                put(macro_name("agent", "v1", "audit", u, c, "five"), str(r["n_sharing_5gram"]))
+                put(macro_name("agent", "v1", "audit", u, c, "contained"), str(r["n_containments"]))
+            put(macro_name("agent", "v1", "audit", u, "n"), str(r["n"]))
+    m, src = latest_metrics("artifact_baselines", version="agent_v1")
+    if m is None:
+        return
+    g = m["gate_summary"]
+    for name, e in g["probes"].items():
+        p = ("agent", "v1", name)
+        pooled = list(e["pooled_by_seed"].values())
+        num(min(pooled), *p, "pooled_min")
+        num(max(pooled), *p, "pooled_max")
+        worst = max(e["per_task_mean"], key=e["per_task_mean"].get)
+        num(e["per_task_mean"][worst], *p, "tool_max")
+        put(macro_name(*p, "tool_max_name"), tex(worst))
+        put(macro_name(*p, "status"), ("PASS" if e["pass"] else "FAIL") if e["gate"] else "diag")
+    put(macro_name("agent", "v1", "gates", "status"), "PASS" if g["pass"] else "FAIL")
+
+
 def tables_probe_report():
     m, src = latest_metrics("probe_report")
     if m is None:
@@ -709,6 +740,7 @@ def main():
     table_v3_prefreeze_gates()
     macros_transfer_gate1()
     macros_transfer_gate2()
+    macros_agent_v1()
     errors, owner = validate_entries()
     if errors:
         print(f"{len(errors)} PROVENANCE ERRORS (docs/findings.src.md):")

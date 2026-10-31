@@ -22,3 +22,6 @@ results/REGISTRY.md
 
 # Generated annotation pages (scripts/make_annotation_sheet.py); exported CSVs next to them are tracked
 annotation/*/*.html
+
+# Agent-style training realizations (python src/agent_pipeline.py regenerates them byte-identically; sha256 in each manifest.json)
+data/agent_v1/split_seed_*/*.csv
