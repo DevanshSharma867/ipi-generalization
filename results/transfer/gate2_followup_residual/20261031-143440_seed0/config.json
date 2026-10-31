@@ -13,7 +13,7 @@
   "allow_dirty": false,
   "data_version": "transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filescf00fcba",
   "data_files_sha256": {
-    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/b5989b4d-c742-4c9a-a94e-30ab83c5b349/scratchpad/wt/data/transfer/sets/manifest.json": "4cb69b85f469c74d589f8e2d85a740e80ae71f159259845e417448108b1fac9c"
+    "<worktree>/data/transfer/sets/manifest.json": "4cb69b85f469c74d589f8e2d85a740e80ae71f159259845e417448108b1fac9c"
   },
   "library_versions": {
     "python": "3.14.3",
@@ -41,7 +41,7 @@
     "eval/transfer/gate2_followup.py",
     "residual",
     "--work",
-    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/b5989b4d-c742-4c9a-a94e-30ab83c5b349/scratchpad/fuw",
+    "<scratch>/fuw",
     "--pairing_run",
     "results/transfer/gate2_followup_pairing/20261030-201440_seed0"
   ],

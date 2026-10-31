@@ -39,7 +39,8 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
     the hash seed (`results/transfer/gate2_followup_residual/`). Decision pending (Next 1).
   - Judge: deterministic (repeat ≤ 7e-8; 6 GiB identical, fully on GPU). Row gap to Liu (up to 0.77) is
     hardware/kernel, not noise. bf16 − 4-bit AD-Matched AUROC: −0.018 (seeded), −0.012 (recovered).
-  - CPU diagnostic (laptop, `~/nlp_cpu_diag/`): running; recorded as `gate2_followup_batch_cpu`, not a reference.
+  - CPU diagnostic (laptop; `results/transfer/gate2_followup_batch_cpu/`, not a reference) agrees: batch ≤ 6e-6
+    for every model (our DeBERTa ≤ 1.8e-7); env shift identical in rows over 1e-3 and flips (46/9, 228/6, 389/34).
 
 ## Next
 1. **AD-Matched decision (yours):** adopt the recovered pairing (all 97+97 user tasks matched, A19 metrics PASS) despite

@@ -1,0 +1,66 @@
+{
+  "run_id": "20261031-170129_seed0",
+  "version": "transfer",
+  "exp": "gate2_followup_batch_cpu",
+  "seed": 0,
+  "args": {
+    "part": "batch",
+    "device": "cpu",
+    "work": "<scratch>/g2fu_cpu",
+    "gate2_work": "<scratch>/gate2_stub",
+    "match_tol": 0.0001,
+    "valid_tol": 0.001,
+    "subset": [
+      500,
+      0
+    ],
+    "torchdynamo_disable": null,
+    "upstream_commit": "5d0ae7c438a7b01be2ac0a2e8bc943e45c8f851f"
+  },
+  "git_commit": "cb7d881f920de16e776ba71863cf355a6104b9a2",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filescf00fcba",
+  "data_files_sha256": {
+    "<worktree>/data/transfer/sets/manifest.json": "4cb69b85f469c74d589f8e2d85a740e80ae71f159259845e417448108b1fac9c"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null
+  },
+  "argv": [
+    "eval/transfer/gate2_followup.py",
+    "report",
+    "--part",
+    "batch",
+    "--device",
+    "cpu",
+    "--work",
+    "/Users/devanshsharma/nlp_cpu_diag/g2fu_cpu",
+    "--gate2",
+    "/Users/devanshsharma/nlp_cpu_diag/g2fu_cpu/gate2_stub",
+    "--liu_py",
+    "/Users/devanshsharma/nlp_cpu_diag/venv-liu/bin/python",
+    "--our_py",
+    "/Users/devanshsharma/nlp_cpu_diag/venv-ours/bin/python"
+  ],
+  "started": "2026-10-31T17:01:29"
+}
