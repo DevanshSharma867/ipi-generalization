@@ -26,12 +26,12 @@ the label-noise rate can be measured (A22: above 10%, the swap is reported but s
 Training data: V3 train rows, C3 TRAIN pairs, and the agent-style training data (src/agent_pipeline.py rows in V3
 columns, plus agent TRAIN pairs if given), each gated by its config flag.
 
-Ablations (paper_plan A22; full ICT = every component on):
-    a  request given, V3 only, no pairs, no margin                (pre-registered; H3 comparator d)
+Ablations (paper_plan A22, A23; full ICT = every component on; each removes exactly one factor):
+    a  full ICT minus pairs and margin (so no swap); same data      (pre-registered; H3 comparator d; data per A23)
     b  pairs as plain CE rows, no margin (margin_lambda = 0)
     c  full ICT without request-swap augmentation
     d  full ICT without the agent-style training data
-    e  request withheld (content only), V3 only, no pairs; same backbone and recipe as (a)
+    e  (a) with the request withheld (content only)
 
 Model selection (A22, validation only): per epoch and across the hyperparameter grid, the score is the mean of the
 task-macro AUROC on V3 val and the pair accuracy on held-out TRAIN-side pairs (`--val_pairs`; never EVAL pairs).
@@ -126,12 +126,11 @@ class ICTConfig:
 
 ABLATIONS: Dict[str, Dict] = {
     "full": {},
-    "a": {"use_pairs": False, "margin_lambda": 0.0, "request_swap": False, "use_agent_data": False},
+    "a": {"use_pairs": False, "margin_lambda": 0.0, "request_swap": False},
     "b": {"margin_lambda": 0.0},
     "c": {"request_swap": False},
     "d": {"use_agent_data": False},
-    "e": {"request_input": "none", "use_pairs": False, "margin_lambda": 0.0, "request_swap": False,
-          "use_agent_data": False},
+    "e": {"request_input": "none", "use_pairs": False, "margin_lambda": 0.0, "request_swap": False},
 }
 
 
