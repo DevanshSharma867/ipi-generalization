@@ -21,7 +21,11 @@ Gate 2 follow-up (docs/deviations.md, 2026-10-30; paper_plan A19, A20). Three in
     match    --set S --work W                                         PG2 candidates vs Liu -> W/map_<set>.json
     subset   --work W                                                 W/bipia500/bipia_pairs.jsonl (+ indices)
     deberta_bs --ckpts C... --data CSV --out D                        bs 1 vs 16 probabilities per checkpoint
-    report   --work W --gate2 G --liu_py P --our_py P                 run record: results/transfer/gate2_followup/
+    report   --part {batch,pairing,judge} --work W --gate2 G --liu_py P --our_py P
+                                                     run record: results/transfer/gate2_followup_<part>/
+    residual --work W --pairing_run R      PIGuard rows over the validation bound vs AgentDojo's set-ordered
+                                           participant lists (calendar_client: list(set(participants)), hash-seed
+                                           dependent) -> results/transfer/gate2_followup_residual/
 """
 
 import argparse
@@ -400,9 +404,50 @@ def report_judge(work, g2, run, res, bip_keep, np, roc_auc_score, released, tpr_
         work / "judge_bf16_seeded")
 
 
+def multi_participant(text):
+    """create/get calendar event output with 2+ participants: their order follows set iteration (hash seed)."""
+    block = text.split("participants:\n", 1)
+    return len(block) == 2 and block[1].split("\n- ")[0].startswith("- ") and block[1].count("@") >= 2
+
+
+def cmd_residual(a):
+    import numpy as np
+    sys.path.insert(0, str(ROOT / "src"))
+    from runlog import start_run
+    rec = Path(a.pairing_run).resolve()
+    run = start_run(version="transfer", exp="gate2_followup_residual", seed=0,
+                    args={"pairing_run": str(rec.relative_to(ROOT)), "work": "<scratch>/" + Path(a.work).name,
+                          "valid_tol": VALID_TOL}, allow_dirty=a.allow_dirty)
+    res = {}
+    for s, f in FILES.items():
+        rows = load(rec / "scores" / "recovered" / f)
+        td = set(time_dependent(a.work, s))
+        keep = [i for i in range(len(rows)) if i not in td]
+        multi = [i for i in keep if multi_participant(rows[i]["text"])]
+        other = [i for i in keep if i not in set(multi)]
+        res[s] = {}
+        for det in ENCODERS:
+            d = np.abs(np.array(probs(rec / "scores" / "recovered" / "scores" / f"{det}__{s}.json"))
+                       - np.array(liu_file(det, s)["probs"]))
+            over = [i for i in keep if d[i] > VALID_TOL]
+            res[s][det] = dict(rows_over_bound=len(over),
+                               over_bound_multi_participant=sum(i in set(multi) for i in over),
+                               multi_participant_rows=len(multi), max_abs_multi_participant=float(d[multi].max()),
+                               max_abs_other=float(d[other].max()), n_other=len(other))
+            run.log(f"{s:9s} {det:18s} rows > {VALID_TOL}: {len(over)} ({res[s][det]['over_bound_multi_participant']} "
+                    f"multi-participant); multi-participant rows {len(multi)} max|Δ| "
+                    f"{res[s][det]['max_abs_multi_participant']:.2e}; other {len(other)} rows max|Δ| "
+                    f"{res[s][det]['max_abs_other']:.2e}")
+    res["explained"] = all(r["piguard"]["rows_over_bound"] == r["piguard"]["over_bound_multi_participant"]
+                           and r[d]["max_abs_other"] <= VALID_TOL for r in res.values() for d in ENCODERS)
+    run.log(f"every row over the bound is a multi-participant row: {res['explained']}")
+    run.save_metrics(res, headline=("explained", float(res["explained"])))
+    run.finish()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["gen", "match", "subset", "deberta_bs", "report"])
+    ap.add_argument("cmd", choices=["gen", "match", "subset", "deberta_bs", "report", "residual"])
     ap.add_argument("--set", choices=list(FILES))
     ap.add_argument("--out_dir")
     ap.add_argument("--cands", action="store_true")
@@ -415,13 +460,14 @@ def main():
     ap.add_argument("--data")
     ap.add_argument("--out")
     ap.add_argument("--liu_py")
+    ap.add_argument("--pairing_run")
     ap.add_argument("--our_py", default=sys.executable)
     ap.add_argument("--part", choices=PARTS)
     ap.add_argument("--device", default="cuda", help="deberta_bs; report: cpu marks a CPU diagnostic run")
     ap.add_argument("--allow-dirty", dest="allow_dirty", action="store_true")
     a = ap.parse_args()
     {"gen": cmd_gen, "match": cmd_match, "subset": cmd_subset, "deberta_bs": cmd_deberta_bs,
-     "report": cmd_report}[a.cmd](a)
+     "report": cmd_report, "residual": cmd_residual}[a.cmd](a)
 
 
 if __name__ == "__main__":
