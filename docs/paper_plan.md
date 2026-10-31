@@ -294,8 +294,8 @@ agent pairs.
   - **≥ 200 agreed pairs per held-out pair set** (V3-derived and agent-derived; A5, counted strictly as in A18):
     pairs in quads whose every member both annotators label with the intended label. Adjudicated pairs are a
     secondary robustness analysis.
-    - The generator over-generates about 300 pairs per eval set. Two annotators from the project group label them
-      independently; disagreements are adjudicated (A9).
+    - The generator over-generates about 300 pairs per eval set. Two external annotators label each set
+      independently (A25); the author adjudicates disagreements (A9, A18).
     - At p = 0.5, n = 200 gives a binomial 95% half-width of about ±0.07, against ±0.10 for n = 100.
     - The cluster bootstrap is wider when one source doc or task contributes several pairs.
 - **P3.** Pairs pass two leakage checks (amendment A4):
@@ -397,6 +397,8 @@ part of the pre-registration, not deviations.
 | A21 | 2026-10-31 | **Comparator (c) withdrawn (budget: the project runs at about zero cost).** H3 on pairs is decided against (a) the Qwen2.5-7B and Llama-3.1-8B task-aware judges (bf16, A20), (b) Sheltron with its user-goal segment, and (d) ICT ablation (a). A7 and A11 lapse; `configs/frontier_detector.yaml` and its prompt stay in the repo unused. Nothing had been scored with (c) (no API key was ever set). The loss is stated in §6. |
 | A22 | 2026-10-31 | **ICT ablations, model selection, swap safety, batch tolerance** (before any ICT training run). Ablations (a)–(e) replace the C4 row's single ablation; full ICT = every component on. Selection on validation only: mean of V3-val task-macro AUROC and pair accuracy on held-out TRAIN-side pairs; a 12-point grid on training seed 0 fixes λ, margin and lr for every later run. Request-swap exclusions and a 50-item audit; swap off in full ICT if the audit's label-noise rate exceeds 10%. bs=1 vs batched scores within 1e-5. Code: `src/models/ict.py`. Details below the table. |
 | A23 | 2026-10-31 | **Amends A22: ablations (a) and (e) redefined so each ablation removes exactly one factor.** (a) = full ICT minus pairs and margin, trained on the same data as full ICT (V3 + agent-style data, request given); (e) = (a) with the request withheld. (b), (c), (d) unchanged. This changes the training data of the pre-registered (a) (H3 comparator d) from V3 only to V3 + agent-style data, to remove a confound: under A22, full − (a) mixed the pairs/margin effect with the agent-data effect. Made before any ICT training run, so it is an amendment, not a deviation. Details below the table. |
+| A24 | 2026-10-31 | **EVAL pair generator changed before any generation:** `google/gemma-3-27b-it` (open weights, revision `005ad34`, 4-bit NF4) on our cluster replaces `gemini-2.5-pro` (A18 Q3). Reasons: zero cost, no quota uncertainty, no data sent to a third party, and open weights make the EVAL pairs exactly reproducible. TRAIN stays Mistral (vendor separation holds). Details below the table. |
+| A25 | 2026-10-31 | **Annotators (supersedes "from the project group" in A9).** External annotators: not project members, fluent in English, independent of the design. Four annotators in two teams; each team labels every EVAL pair of one set (V3-derived or agent-derived), so each pair gets two independent labels and κ is computed per set (about 300 pairs per person). Fallback with only two annotators: both label both sets. The author adjudicates only and never labels. Annotators are acknowledged by name in the paper; names are added once confirmed. |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.
@@ -437,7 +439,7 @@ part of the pre-registration, not deviations.
   - **TRAIN:** `mistralai/Mistral-7B-Instruct-v0.3` (Apache-2.0), on the cluster, revision pinned in
     `configs/detectors.yaml` before the first generation job. Planned ≤ 3 GPU-hours (≤ 6 with one regeneration
     round); no API cost.
-  - **EVAL:** Google `gemini-2.5-pro` (stable model id) through the Gemini API. Standard price read 2026-10-30
+  - **EVAL (superseded by A24: Gemma 3 27B on the cluster):** Google `gemini-2.5-pro` (stable model id) through the Gemini API. Standard price read 2026-10-30
     from ai.google.dev/gemini-api/docs/pricing: USD 1.25 per M input and 10.00 per M output tokens (prompts
     ≤ 200k), with thinking tokens billed as output.
     - Estimate: about 510 quads (210 V3, 300 agent) × (1.7k input, ≤ 1.3k output incl. a fixed thinking budget)
@@ -532,3 +534,14 @@ part of the pre-registration, not deviations.
   removes that confound, and (e) then differs from (a) only in the request.
 - Timing: no ICT, ablation or grid run existed when this was recorded, so this is an amendment, not a deviation.
 - If the swap is switched off by A22's audit rule, (c) coincides with full ICT, as A22 states; the table is unchanged.
+
+**A24 details** (EVAL generator):
+- **Model:** `google/gemma-3-27b-it`, revision `005ad3404e59d6023443cb575daa05336842228a` (pinned in
+  `configs/detectors.yaml` as `gen-eval-gemma`). 4-bit NF4 (bitsandbytes, already in the cluster env), so it fits half
+  a card. Access confirmed on the cluster token 2026-10-31.
+- **Family check:** Google is neither a comparator family (A18 Q3, A21) nor the ICT backbone's.
+- **Decoding** (temperature, max tokens, seed) is fixed in the committed generator config with the prompt, before the
+  first EVAL generation. Generation is seeded, so the EVAL pairs can be regenerated exactly from the pinned weights.
+- **Timing first:** a 20-document timing job (STATUS, "Intent pairs") on V3 **val** docs measures throughput, VRAM
+  and output validity. Its outputs are discarded and never used as EVAL or TRAIN pairs.
+- The A18 Gemini cost estimate and cap lapse; the project spends nothing on generation.

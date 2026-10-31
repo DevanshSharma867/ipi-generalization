@@ -252,7 +252,7 @@ Horizon-Labs or Wolf Defender families, nor from the ICT backbone's (Microsoft).
 - A generator from a comparator's family could give that comparator a home advantage on the pairs it wrote
   (EVAL), or make ICT learn that comparator's notion of intent (TRAIN).
 
-**Options** (decided in §10: T1 for TRAIN, E1 = `gemini-2.5-pro` for EVAL).
+**Options** (decided in §10: T1 for TRAIN; EVAL `google/gemma-3-27b-it`, 4-bit, on the cluster, paper_plan A24).
 
 | Option | Role | Model | Runs on | Notes |
 |---|---|---|---|---|
@@ -324,8 +324,9 @@ The open questions of the first draft were answered by the author before any gen
 - **Q2. Strict counting.** Primary: pairs in quads where both annotators give the intended label to every member.
   Adjudicated quads (the author adjudicates) are a secondary robustness analysis. Fewer than 200 agreed pairs in
   a set means more generation and annotation under the same rules, never a relaxed rule.
-- **Q3. Generators.** TRAIN: `mistralai/Mistral-7B-Instruct-v0.3` on the cluster (T1). EVAL: Google
-  `gemini-2.5-pro` through the API (E1), cap USD 40. Exclusions, cost and rejected options: paper_plan A18. The
+- **Q3. Generators.** TRAIN: `mistralai/Mistral-7B-Instruct-v0.3` on the cluster (T1). EVAL: `google/gemma-3-27b-it`
+  in 4-bit NF4 on the cluster (paper_plan A24; it replaced the first choice, `gemini-2.5-pro`, before any generation).
+  Exclusions and rejected options: paper_plan A18, A24. The
   exact model ids and dates are recorded in `docs/data_provenance.md` and disclosed in the paper.
 - **Q4. Exclusion lists** E3 and E4 approved as drafted, to be revisited after the author labels the pilot and
   before generation.

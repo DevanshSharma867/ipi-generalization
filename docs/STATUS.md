@@ -51,28 +51,46 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
 
 # Intent pairs (C3)
 
-Plan: `docs/pairs_spec.md` v1, paper_plan A18 (construction, split seed 0 only, strict agreement), A21
-(comparator (c) withdrawn). Nothing has been generated, annotated or scored.
+Plan: `docs/pairs_spec.md` v1; paper_plan A18 (construction, split seed 0 only, strict agreement), A21 (comparator (c)
+withdrawn), A24 (EVAL generator), A25 (annotators). Nothing has been generated, annotated or scored.
 
 ## Done
 - Spec, annotation guide, `src/pairs.py` (validation, overlap class, complete quads), annotation page
   (`scripts/make_annotation_sheet.py`), agreement script (`scripts/agreement.py`).
 - 20 LLM-drafted pilot pairs (10 quads) on split-seed-0 test docs: `data/pairs/pilot_v1.jsonl`. Never EVAL.
-- TRAIN generator fixed: `mistralai/Mistral-7B-Instruct-v0.3` on the cluster (A18).
+- Generators fixed and pinned in `configs/detectors.yaml` (role `generator`); access granted on the cluster token
+  (2026-10-31):
+  - TRAIN `gen-train-mistral`: `mistralai/Mistral-7B-Instruct-v0.3` @ `c170c70` (A18).
+  - EVAL `gen-eval-gemma`: `google/gemma-3-27b-it` @ `005ad34`, 4-bit NF4 (A24).
 
 ## Next
-1. **Author labels the pilot**: `open annotation/pilot_v1/devansh.html`, export `annotation/pilot_v1/devansh.csv`.
-   This measures time per pair and tests the rules; revise E3/E4 after it if needed (A18 Q4), before generation.
-2. **EVAL generator decision** (zero-cost): Gemini free tier vs an open Gemma model on the cluster. Pending; to be
-   recorded as an amendment before any generation.
-3. Generator prompts (EVAL and TRAIN, no shared 8-gram) and config, committed before the first call.
-4. EVAL generation on split-seed-0 test docs after the V3 freeze (the test-doc list may move at the rebuild);
-   TRAIN generation as ≤ 1 h sharded sbatch jobs, starting with a 20-doc timing job.
-5. Second annotator; κ, agreed quads (≥ 200 agreed pairs per set), P3 checks.
+1. **Author labels the pilot** (blocks generation): `open annotation/pilot_v1/devansh.html`, export
+   `annotation/pilot_v1/devansh.csv`. Measures time per pair and tests the rules; revise E3/E4 after it if needed
+   (A18 Q4).
+2. **Prefetch the generators** as an sbatch job (Gemma 55 GB, Mistral 29 GB of safetensors; standing rule 10 rules
+   out a long login-node download), then `prefetch status`.
+3. **Generator prompts and config** (EVAL and TRAIN, no shared word 8-gram; decoding settings and seed), committed
+   before any generation.
+4. **20-document timing job** (`jobs/`, sbatch, ≤ 1 h, half card with `set_per_process_memory_fraction(0.5)`):
+   - Input: 20 V3 **val** docs of split seed 0 (7 email, 7 table, 6 code), never test docs. Outputs discarded,
+     never EVAL or TRAIN.
+   - Runs both generators: Gemma 27B NF4 (EVAL prompt) and Mistral 7B bf16 (TRAIN prompt).
+   - Records per generator: load time, prefill and decode tokens/s, s/quad, peak VRAM, the JSON-parse rate and the
+     `pairs.validate` pass rate. Extrapolates GPU-hours for about 210 EVAL V3 quads and about 3,141 TRAIN quads.
+   - Output: a runlog run under `results/pairs/gen_timing/`.
+5. EVAL generation on split-seed-0 test docs after the V3 freeze (the test-doc list may move at the rebuild);
+   TRAIN generation as ≤ 1 h sharded sbatch jobs.
+6. Annotation (A25), then κ per set, agreed quads (≥ 200 agreed pairs per set), P3 checks.
+
+## Annotators (A25)
+- External annotators: not project members, fluent in English, independent of the design. The author adjudicates only.
+- Four annotators in two teams; each team labels every EVAL pair of one set (V3-derived or agent-derived), about 300
+  pairs per person, κ per set. Fallback with two people: both label both sets.
+- Acknowledged by name in the paper. **Names: not yet confirmed** (to add here and in the paper once confirmed).
 
 ## Open decisions / blockers
-- **EVAL generator** (above).
-- **Second annotator:** P2 needs two independent annotators; the author works solo. Who labels?
+- **Pilot labels** from the author (Next 1).
+- **Annotator recruitment** (A25).
 - **Agent-pair sets** wait for AD-Clean/TB-Clean contexts (transfer harness) and the agent-style pipeline.
 
 # Paper draft
