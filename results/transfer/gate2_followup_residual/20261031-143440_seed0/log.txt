@@ -1,0 +1,7 @@
+[14:34:41] admatched piguard            rows > 0.001: 6 (6 multi-participant); multi-participant rows 21 max|Δ| 1.45e-03; other 945 rows max|Δ| 2.71e-06
+[14:34:41] admatched promptguard2-86m   rows > 0.001: 0 (0 multi-participant); multi-participant rows 21 max|Δ| 3.79e-05; other 945 rows max|Δ| 1.47e-05
+[14:34:41] admatched horizon-base       rows > 0.001: 0 (0 multi-participant); multi-participant rows 21 max|Δ| 1.05e-05; other 945 rows max|Δ| 3.81e-06
+[14:34:41] adshift   piguard            rows > 0.001: 5 (5 multi-participant); multi-participant rows 35 max|Δ| 1.01e-03; other 1575 rows max|Δ| 3.10e-06
+[14:34:41] adshift   promptguard2-86m   rows > 0.001: 0 (0 multi-participant); multi-participant rows 35 max|Δ| 3.79e-05; other 1575 rows max|Δ| 1.11e-05
+[14:34:41] adshift   horizon-base       rows > 0.001: 0 (0 multi-participant); multi-participant rows 35 max|Δ| 1.05e-05; other 1575 rows max|Δ| 3.49e-06
+[14:34:41] every row over the bound is a multi-participant row: True

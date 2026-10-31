@@ -1,0 +1,29 @@
+[19:53:13] batch size / environment, BIPIA 500-row subset (max|Δ|, rows > 1e-3):
+[19:53:13]   piguard            liu_bs1_vs_bs16              1.67e-06    0 flips 0
+[19:53:13]   piguard            ours_bs1_vs_bs16             1.67e-06    0 flips 0
+[19:53:13]   piguard            bs1_ours_vs_liu_env          9.46e-01   46 flips 9
+[19:53:13]   piguard            bs16_ours_vs_liu_env         9.46e-01   46 flips 9
+[19:53:13]   piguard            liu_bs1_vs_released          2.21e-06    0 flips 0
+[19:53:13]   piguard            liu_bs16_vs_released         1.61e-06    0 flips 0
+[19:53:13]   piguard            ours_bs1_vs_released         9.46e-01   46 flips 9
+[19:53:13]   piguard            ours_bs16_vs_released        9.46e-01   46 flips 9
+[19:53:13]   promptguard2-86m   liu_bs1_vs_bs16              3.58e-06    0 flips 0
+[19:53:13]   promptguard2-86m   ours_bs1_vs_bs16             1.94e-06    0 flips 0
+[19:53:13]   promptguard2-86m   bs1_ours_vs_liu_env          9.75e-01  228 flips 6
+[19:53:13]   promptguard2-86m   bs16_ours_vs_liu_env         9.75e-01  228 flips 6
+[19:53:13]   promptguard2-86m   liu_bs1_vs_released          1.72e-05    0 flips 0
+[19:53:13]   promptguard2-86m   liu_bs16_vs_released         1.72e-05    0 flips 0
+[19:53:13]   promptguard2-86m   ours_bs1_vs_released         9.75e-01  228 flips 6
+[19:53:13]   promptguard2-86m   ours_bs16_vs_released        9.75e-01  228 flips 6
+[19:53:13]   horizon-base       liu_bs1_vs_bs16              7.15e-06    0 flips 0
+[19:53:13]   horizon-base       ours_bs1_vs_bs16             7.15e-06    0 flips 0
+[19:53:13]   horizon-base       bs1_ours_vs_liu_env          8.34e-01  389 flips 34
+[19:53:13]   horizon-base       bs16_ours_vs_liu_env         8.34e-01  389 flips 34
+[19:53:13]   horizon-base       liu_bs1_vs_released          7.27e-06    0 flips 0
+[19:53:13]   horizon-base       liu_bs16_vs_released         6.97e-06    0 flips 0
+[19:53:13]   horizon-base       ours_bs1_vs_released         8.34e-01  389 flips 34
+[19:53:13]   horizon-base       ours_bs16_vs_released        8.34e-01  389 flips 34
+[19:53:13]   deberta deberta_s123   bs1 vs bs16 max|Δ| 3.56e-06 rows > 1e-3 0 flips 0
+[19:53:13]   deberta deberta_s42    bs1 vs bs16 max|Δ| 3.14e-06 rows > 1e-3 0 flips 0
+[19:53:13]   deberta deberta_s999   bs1 vs bs16 max|Δ| 2.98e-06 rows > 1e-3 0 flips 0
+[19:53:13] our DeBERTa batch-independent (max|Δ| ≤ 1e-5): True

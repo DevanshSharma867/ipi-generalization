@@ -24,7 +24,7 @@ not `docs/findings.md`. Deviations from the pre-registered protocol: `docs/devia
   freezing before results cannot be shown; V2 judge results carry this caveat. V3 will use a new judge prompt committed
   separately before any scoring.
 
-Entries by status: full 10, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
+Entries by status: full 12, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
 
 ## F001. V2 TF-IDF+LR headline table (Phase 2 Table III)
 
@@ -426,3 +426,68 @@ HF dataset revisions and where each step ran.
 - AD-Matched and AD-Shift benign rows repeat a small set of distinct texts per attack template (A16); they are never counted as
   clean (A16). AD-Clean is the AgentDojo negative set.
 - Gate 1 checks rows and labels only. Score agreement is Gate 2.
+
+## F017. Liu (2026) reproduction: Gate 2 with the recovered AgentDojo pairing
+
+> **F017** · status **`full`** · 2026-10-31 · data `transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filescf00fcba` · eval `AD-Matched (recovered pairing), AD-Clean, TB-Matched, BIPIA (Liu)` · threshold: Liu's (AUROC; TPR at 1% FPR on his negatives); per-row |Δ| vs his released score files · seeds: n/a (deterministic scoring; judge greedy)  
+> script `jobs/gate2_fu_pairing.sh, jobs/gate2_fu_judge.sh -> eval/transfer/gate2_followup.py (report, residual)` @ `007c5a5` · source: `results/transfer/gate2_followup_pairing/20261030-201440_seed0`, `results/transfer/gate2_followup_residual/20261031-143440_seed0`, `results/transfer/gate2_followup_judge/20261030-202708_seed0`
+
+Gate 2 (paper_plan A19) in Liu's environment (torch 2.8, transformers 4.57.6), with AD-Matched rebuilt using the
+injection-task pairing recovered from his released Prompt Guard 2 scores (docs/deviations.md, 2026-10-30). Other sets
+are Gate 2 run 2 (`results/transfer/liu_repro_gate2/20261030-160800_seed0`). A19 metric checks: `\TransferGateTwoStatus` = PASS.
+
+| Detector | AD-Matched AUROC (ours / Liu) | AD-Matched TPR@1% | BIPIA AUROC | TB-Matched AUROC |
+|---|---|---|---|---|
+| PIGuard | `\TransferGateTwoPiguardAdmatchedAurocOurs` = 0.7570 / `\TransferGateTwoPiguardAdmatchedAurocLiu` = 0.7567 | `\TransferGateTwoPiguardAdmatchedTprOneOurs` = 0.0162 / `\TransferGateTwoPiguardAdmatchedTprOneLiu` = 0.0162 | `\TransferGateTwoPiguardBipiaAurocOurs` = 0.9924 / `\TransferGateTwoPiguardBipiaAurocLiu` = 0.9924 | `\TransferGateTwoPiguardTbevalAurocOurs` = 0.9256 / `\TransferGateTwoPiguardTbevalAurocLiu` = 0.9256 |
+| Prompt Guard 2 86M | `\TransferGateTwoPromptguardTwoEightSixmAdmatchedAurocOurs` = 0.8858 / `\TransferGateTwoPromptguardTwoEightSixmAdmatchedAurocLiu` = 0.8861 | `\TransferGateTwoPromptguardTwoEightSixmAdmatchedTprOneOurs` = 0.5741 / `\TransferGateTwoPromptguardTwoEightSixmAdmatchedTprOneLiu` = 0.5741 | `\TransferGateTwoPromptguardTwoEightSixmBipiaAurocOurs` = 0.6664 / `\TransferGateTwoPromptguardTwoEightSixmBipiaAurocLiu` = 0.6664 | `\TransferGateTwoPromptguardTwoEightSixmTbevalAurocOurs` = 0.9836 / `\TransferGateTwoPromptguardTwoEightSixmTbevalAurocLiu` = 0.9836 |
+| Horizon base | `\TransferGateTwoHorizonBaseAdmatchedAurocOurs` = 0.9077 / `\TransferGateTwoHorizonBaseAdmatchedAurocLiu` = 0.9084 | `\TransferGateTwoHorizonBaseAdmatchedTprOneOurs` = 0.8310 / `\TransferGateTwoHorizonBaseAdmatchedTprOneLiu` = 0.8310 | `\TransferGateTwoHorizonBaseBipiaAurocOurs` = 0.7356 / `\TransferGateTwoHorizonBaseBipiaAurocLiu` = 0.7356 | `\TransferGateTwoHorizonBaseTbevalAurocOurs` = 1.0000 / `\TransferGateTwoHorizonBaseTbevalAurocLiu` = 1.0000 |
+| Qwen2.5-7B judge (4-bit) | `\TransferGateTwoJudgeQwenAdmatchedAurocOurs` = 0.9138 / `\TransferGateTwoJudgeQwenAdmatchedAurocLiu` = 0.9128 | `\TransferGateTwoJudgeQwenAdmatchedTprOneOurs` = 0.5903 / `\TransferGateTwoJudgeQwenAdmatchedTprOneLiu` = 0.5903 | `\TransferGateTwoJudgeQwenBipiaAurocOurs` = 0.8069 / `\TransferGateTwoJudgeQwenBipiaAurocLiu` = 0.8061 | `\TransferGateTwoJudgeQwenTbevalAurocOurs` = 0.9579 / `\TransferGateTwoJudgeQwenTbevalAurocLiu` = 0.9572 |
+
+**Pairing recovery.** Every user task matched one candidate (Prompt Guard 2 per row ≤ 1e-4): AD-Matched
+`\TransferGateTwoAdmatchedMatched` = 97/`\TransferGateTwoAdmatchedGroups` = 97, AD-Shift
+`\TransferGateTwoAdshiftMatched` = 97/`\TransferGateTwoAdshiftGroups` = 97, no ambiguous matches. Rows carrying AgentDojo's
+wall-clock `last_modified` (`\TransferGateTwoAdmatchedTimedep` = 51 and `\TransferGateTwoAdshiftTimedep` = 85) are left out of
+the per-row checks. Independent validation, max per-row |Δ| vs Liu on AD-Matched: Horizon
+`\TransferGateTwoAdmatchedHorizonBaseMaxdiff` = 1.1e-05, Prompt Guard 2 `\TransferGateTwoAdmatchedPromptguardTwoEightSixmMaxdiff` = 3.8e-05,
+PIGuard `\TransferGateTwoAdmatchedPiguardMaxdiff` = 1.5e-03. The pre-registered rule (PIGuard and Horizon ≤ 1e-3 per row) gives
+`\TransferGateTwoRecoveryStatus` = FAIL: PIGuard exceeds it on `\TransferGateTwoAdmatchedPiguardOverbound` = 6 AD-Matched and
+`\TransferGateTwoAdshiftPiguardOverbound` = 5 AD-Shift rows, with no label flips at 0.5.
+
+**Residual.** Every row over the bound is a calendar event with two or more participants
+(`\TransferGateTwoResidualStatus` = PASS). AgentDojo builds that list with `list(set(participants))`, so its order depends
+on the process's hash seed, independently of the pairing. Outside those rows (`\TransferGateTwoAdmatchedMultipart` = 21
+and `\TransferGateTwoAdshiftMultipart` = 35 multi-participant rows), PIGuard's max |Δ| is
+`\TransferGateTwoAdmatchedPiguardMaxother` = 2.7e-06 (AD-Matched) and `\TransferGateTwoAdshiftPiguardMaxother` = 3.1e-06 (AD-Shift).
+Inferred, not verified: Liu's text cannot be checked, only his scores.
+
+**Judge.** Two identical 4-bit runs on BIPIA differ by at most `\TransferGateTwoJudgeRepeatVsrun` = 7.2e-08 per row
+(`\TransferGateTwoJudgeRepeatFlips` = 1 flip at 0.5, a row at the boundary); the run at GPU_MEM=6GiB differs from
+run 2 by `\TransferGateTwoJudgeSixgibVsrun` = 5.6e-08 (all modules on the GPU in both). Against Liu's released file the
+judge differs by up to `\TransferGateTwoJudgeVsliuMax` = 0.77 per row (`\TransferGateTwoJudgeVsliuOverbound` = 1284 of
+`\TransferGateTwoJudgeBipiaRows` = 6000 rows over 1e-3, `\TransferGateTwoJudgeVsliuFlips` = 34 flips): neither run-to-run noise
+nor the memory setting, so a hardware/kernel difference in 4-bit inference. Metrics still match (table).
+bf16 − 4-bit AUROC on AD-Matched (A20): `\TransferGateTwoJudgeSeededGap` = -0.0180 on our seeded build,
+`\TransferGateTwoJudgeRecoveredGap` = -0.0122 on the recovered one (Liu: within 0.02).
+
+## F018. Detector scores depend on the transformers version (4.57.6 vs 5.20.1), not on batching
+
+> **F018** · status **`full`** · 2026-10-31 · data `transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filescf00fcba` · eval `500-row random subset of BIPIA (Liu); V2 test (our DeBERTa checkpoints, seeds 42/123/999)` · threshold: per-row |Δ| of P(injection); flips at 0.5 · seeds: n/a (deterministic scoring); BIPIA subset rng seed 0  
+> script `jobs/gate2_fu_batch.sh -> eval/transfer/gate2_followup.py (subset, deberta_bs, report --part batch)` @ `007c5a5` · source: `results/transfer/gate2_followup_batch/20261030-195313_seed0`
+
+Same GPU, same weights and revisions, same inputs; only the library stack differs (Liu's env: torch 2.8 /
+transformers 4.57.6; ours: torch 2.11 / transformers 5.20.1). On `\TransferEnvRows` = 500 BIPIA rows at batch size 1:
+
+| Detector | max per-row |Δ| ours vs Liu env | rows > 1e-3 | flips at 0.5 | bs 1 vs 16 (either env) | Liu env vs released |
+|---|---|---|---|---|---|
+| PIGuard | `\TransferEnvPiguardMax` = 0.95 | `\TransferEnvPiguardOverbound` = 46 | `\TransferEnvPiguardFlips` = 9 | `\TransferEnvPiguardBatch` = 1.7e-06 | `\TransferEnvPiguardLiuenv` = 2.2e-06 |
+| Prompt Guard 2 86M | `\TransferEnvPromptguardTwoEightSixmMax` = 0.98 | `\TransferEnvPromptguardTwoEightSixmOverbound` = 228 | `\TransferEnvPromptguardTwoEightSixmFlips` = 6 | `\TransferEnvPromptguardTwoEightSixmBatch` = 3.6e-06 | `\TransferEnvPromptguardTwoEightSixmLiuenv` = 1.7e-05 |
+| Horizon base | `\TransferEnvHorizonBaseMax` = 0.83 | `\TransferEnvHorizonBaseOverbound` = 389 | `\TransferEnvHorizonBaseFlips` = 34 | `\TransferEnvHorizonBaseBatch` = 7.2e-06 | `\TransferEnvHorizonBaseLiuenv` = 7.3e-06 |
+
+- The shift is already present at batch size 1 and batching changes nothing, so it is not padding. Liu's env
+  reproduces his released scores; ours does not. Where in the stack it arises is not localized. An uncommitted
+  spot check (not a paper number) suggests Prompt Guard 2's transformers-5 tokenizer treats whitespace differently,
+  while PIGuard's and Horizon's token ids agree, which would put their shift on the model side.
+- Our V2 DeBERTa checkpoints are batch-independent: bs 1 vs 16 max |Δ| `\TransferEnvDebertaBatch` = 3.6e-06
+  (`\TransferEnvDebertaStatus` = PASS, bound 1e-5).
+- Consequence (docs/deviations.md, 2026-10-30): published detectors are scored in the environment their reference
+  numbers came from; our models in ours.

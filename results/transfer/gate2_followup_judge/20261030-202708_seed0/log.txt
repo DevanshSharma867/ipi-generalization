@@ -1,0 +1,4 @@
+[20:27:08] judge BIPIA: run2 {'bipia_auroc': 0.8068560917180014, 'bipia_tpr1': 0.15071868583162218}, Liu {'bipia_auroc': 0.8061498973305955, 'bipia_tpr1': 0.1486652977412731}
+[20:27:08]   judge_repeat: {'bipia_auroc': 0.8068548939082821, 'bipia_tpr1': 0.15071868583162218, 'placement': {'0': 1}}; vs run2 max|Δ| 7.17e-08, vs Liu max|Δ| 7.65e-01
+[20:27:08]   judge_6gib: {'bipia_auroc': 0.8068564339493498, 'bipia_tpr1': 0.15071868583162218, 'placement': {'0': 1}}; vs run2 max|Δ| 5.59e-08, vs Liu max|Δ| 7.65e-01
+[20:27:08] judge AD-Matched (seeded) AUROC nf4 0.9217 bf16 0.9037 gap -0.0180
