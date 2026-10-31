@@ -25,7 +25,7 @@ clean-A, clean-B) shares an 8-gram with agentdojo or taubench. Injected spans ar
 overlap with each corpus (e.g. InjecAgent, BIPIA test) is reported, not gated.
 
     python scripts/agent_overlap_audit.py --agentdojo_wheel <path>/agentdojo-0.1.34-py3-none-any.whl \\
-        --data_dir data/agent_v1 --split_seeds 0 1 2 3 4
+        --data_dir data/agent_v2 --split_seeds 0 1 2 3 4
 """
 
 import argparse
@@ -134,18 +134,19 @@ def audit_unit(texts, corpus):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--agentdojo_wheel", type=Path, required=True)
-    ap.add_argument("--data_dir", type=Path, default=ROOT / "data" / "agent_v1")
+    ap.add_argument("--data_dir", type=Path, default=ROOT / "data" / "agent_v2")
+    ap.add_argument("--calibration", type=Path, default=ROOT / "data" / "agent_v1" / "calibration_pool.csv")
     ap.add_argument("--split_seeds", type=int, nargs="+", default=[0, 1, 2, 3, 4])
     ap.add_argument("--exp", default="agent_overlap_audit")
     a = add_run_args(ap).parse_args()
-    cal_path = a.data_dir / "calibration_pool.csv"
+    cal_path = a.calibration
     split_files = [a.data_dir / f"split_seed_{k}" / f"{s}.csv" for k in a.split_seeds for s in ("train", "val")]
     wheel_sha = hashlib.sha256(a.agentdojo_wheel.read_bytes()).hexdigest()
-    run = start_run(version="agent_v1", exp=a.exp, seed=a.split_seeds[0],
+    run = start_run(version=a.data_dir.name, exp=a.exp, seed=a.split_seeds[0],
                     args={"data_dir": str(a.data_dir.relative_to(ROOT)), "split_seeds": a.split_seeds, "ngram": N,
                           "min_instruction_words": MIN_WORDS, "agentdojo_wheel": a.agentdojo_wheel.name,
                           "agentdojo_wheel_sha256": wheel_sha},
-                    data_version="agent_v1", data_files=[cal_path, *split_files], allow_dirty=a.allow_dirty)
+                    data_version=a.data_dir.name, data_files=[cal_path, *split_files], allow_dirty=a.allow_dirty)
     C = corpora(a.agentdojo_wheel)
     run.log("corpus sizes: " + ", ".join(f"{k} {len(v['texts'])} texts / {len(v['instructions'])} instructions"
                                           for k, v in C.items()))
