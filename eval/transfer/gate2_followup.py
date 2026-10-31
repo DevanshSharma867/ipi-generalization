@@ -415,9 +415,11 @@ def cmd_residual(a):
     sys.path.insert(0, str(ROOT / "src"))
     from runlog import start_run
     rec = Path(a.pairing_run).resolve()
+    manifest = ROOT / "data" / "transfer" / "sets" / "manifest.json"
     run = start_run(version="transfer", exp="gate2_followup_residual", seed=0,
                     args={"pairing_run": str(rec.relative_to(ROOT)), "work": "<scratch>/" + Path(a.work).name,
-                          "valid_tol": VALID_TOL}, allow_dirty=a.allow_dirty)
+                          "valid_tol": VALID_TOL}, data_version=json.load(open(manifest))["data_version"],
+                    data_files=[manifest], allow_dirty=a.allow_dirty)
     res = {}
     for s, f in FILES.items():
         rows = load(rec / "scores" / "recovered" / f)
