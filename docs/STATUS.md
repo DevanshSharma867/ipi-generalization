@@ -77,3 +77,6 @@ Plan: `docs/pairs_spec.md` v1, paper_plan A18 (construction, split seed 0 only, 
 
 # Paper draft
 - 2026-10-31: `paper/` started (ACL template, builds with `tectonic`, 13 pp., no errors). Drafted intro, related work (31 refs re-verified against arXiv/Anthology), threat model, C1 artifacts (macros only), V3 construction (pre-freeze numbers, flagged), intent pairs, limitations; ICT, setup and results are `\todo{}` stubs.
+
+# ICT (C4)
+- 2026-10-31: `src/models/ict.py` (segment-pair cross-encoder, BCE + λ·pair hinge, request-swap augmentation, ablation presets a–e; ModernBERT-large option with windowed max-pool), `tests/test_ict.py` (15 CPU tests incl. bs=1 vs batched), `jobs/ict_train.sh`, `jobs/ict_score.sh`; ModernBERT-large pinned in `configs/detectors.yaml`. Nothing trained. **Before training:** amend paper_plan with ablations (b)–(e) (only (a) is pre-registered), the selection metric (`--select_metric`, default `val:roc_auc`), λ/margin values, and the swap-label assumption.
