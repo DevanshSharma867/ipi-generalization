@@ -942,3 +942,46 @@ despite the span_form_you_lr failure, without further rebuilds, to avoid tuning 
 data is training-only and transfer is measured on independent external sets (AD/TB), so a residual training-data
 shortcut can lower but not inflate transfer results; ICT ablation (d) measures the agent data's contribution.
 The |AUROC − 0.5| column is a transparency metric, not a retroactive pass/fail criterion.
+
+## F021. Published detectors on the agent transfer sets: calibrated and oracle protocols
+
+```finding
+id: F021
+status: full
+script: jobs/transfer_scores_{encoders,wolf,judges}.sh (eval/transfer/detectors.py, record_scores.py) -> eval/transfer/transfer_metrics.py
+commit: 640f907
+seeds: n/a (deterministic scoring; judges greedy); bootstrap seed 42, B = 1000
+data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded
+eval_set: AD-Matched, AD-Shift (recovered pairing), TB-Matched; negatives AD-Clean / TB-Clean; calibration pool (A3)
+threshold_protocol: calibrated (1%/5% FPR on the calibration pool, primary) and oracle (on the evaluated clean rows, MIN_CLEAN gates)
+date: 2026-10-31
+source:
+- results/transfer/transfer_metrics/20261031-190127_seed42
+upstream:
+- results/transfer/transfer_scores_liuenv/20261031-182528_seed0
+- results/transfer/transfer_scores_wolf/20261031-182747_seed0
+- results/transfer/transfer_scores_judges_nf4/20261031-185021_seed0
+- results/transfer/transfer_scores_judges_bf16/20261031-190043_seed0
+macros:
+- TransferDet*
+```
+
+Every published detector Liu (2026) scored, except protectai-small-v2 (access pending), scored in his environment
+(Wolf Defender in ours, transformers 5.20.1, as he did), plus his two LLM judges with his Yes/No rule in 4-bit (his
+setting) and bf16 (A20). Sets from `eval/transfer/sets_adliu.py`: AD-Matched/AD-Shift with the recovered pairing
+(deviations 2026-10-31), TB-Matched, AD-Clean, TB-Clean, and the 1,140-row calibration pool as jsonl. On AgentDojo
+the negatives are AD-Clean (A16). Clusters for every CI: user task. Full table: `paper/tables/transfer_detectors.tex`.
+
+- **The calibration pool's thresholds do not transfer evenly.** At a 1% FPR target the realized FPR on AD-Clean
+  ranges from {{TransferDetHorizonBaseLiuenvAdmatchedCalOnepctFprFpr}} (Horizon) to
+  {{TransferDetPiguardLiuenvAdmatchedCalOnepctFprFpr}} (PIGuard) and
+  {{TransferDetTestsavantLargeLiuenvAdmatchedCalOnepctFprFpr}} (TestSavant large). JasperLS flags
+  {{TransferDetJasperlsLiuenvCalpoolFlag}} of the calibration pool at 0.5, so its calibrated threshold sits near 1.
+  Calibrated TPR must always be read next to its realized FPR (the risk paper_plan §8 names).
+- Strongest calibrated operating point on AD-Matched at a realized FPR ≤ 1%: Horizon, TPR@1%FPR
+  {{TransferDetHorizonBaseLiuenvAdmatchedCalOnepctFprTpr}} [{{TransferDetHorizonBaseLiuenvAdmatchedCalOnepctFprTprCiLo}},
+  {{TransferDetHorizonBaseLiuenvAdmatchedCalOnepctFprTprCiHi}}]. The 4-bit Qwen judge reaches
+  {{TransferDetJudgeQwenJudgesNfFourAdmatchedCalOnepctFprTpr}} but at a realized FPR of
+  {{TransferDetJudgeQwenJudgesNfFourAdmatchedCalOnepctFprFpr}}.
+- Oracle TPR@1%FPR on AgentDojo is `n/a` (AD-Clean has 339 rows < 500); oracle TPR@5%FPR is reported per cell.
+- No hypothesis is decided here: these are the published-detector baselines H1–H3 compare against.

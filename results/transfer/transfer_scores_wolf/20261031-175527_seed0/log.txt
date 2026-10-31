@@ -1,0 +1,6 @@
+[17:55:28] wolf-defender__admatched                 n= 1017 truncated=0.015 {'bs': 16}
+[17:55:28] wolf-defender__adshift                   n= 1695 truncated=0.015 {'bs': 16}
+[17:55:28] wolf-defender__tbeval                    n= 2117 truncated=0.000 {'bs': 16}
+[17:55:28] wolf-defender__adclean                   n=  339 truncated=0.015 {'bs': 16}
+[17:55:28] wolf-defender__tbclean                   n= 1533 truncated=0.000 {'bs': 16}
+[17:55:28] wolf-defender__calpool                   n= 1140 truncated=0.000 {'bs': 16}

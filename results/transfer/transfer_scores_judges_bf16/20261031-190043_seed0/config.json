@@ -1,0 +1,89 @@
+{
+  "run_id": "20261031-190043_seed0",
+  "version": "transfer",
+  "exp": "transfer_scores_judges_bf16",
+  "seed": 0,
+  "args": {
+    "detectors": [
+      "judge-qwen",
+      "judge-llama"
+    ],
+    "sets": [
+      "admatched",
+      "adshift",
+      "tbeval",
+      "adclean",
+      "tbclean",
+      "calpool"
+    ],
+    "sets_dir": "sets_adliu",
+    "out": "<scratch>/judges_bf16",
+    "note": "",
+    "revisions": {
+      "judge-qwen": "a09a35458c702b33eeacc393d103063234e8bc28",
+      "judge-llama": "0e9e39f249a16976918f6564b8830bc894c89659"
+    },
+    "scorer_env": {
+      "python": "3.12.15",
+      "torch": "2.8.0+cu128",
+      "transformers": "4.57.6",
+      "tokenizers": "0.22.2",
+      "bitsandbytes": "0.50.2",
+      "accelerate": "1.15.0"
+    }
+  },
+  "git_commit": "640f907d12e7fdd27bcc12a431f6b81a2a6ae75b",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded",
+  "data_files_sha256": {
+    "/home/csisnlp_18/nlp_harness/data/transfer/sets_adliu/manifest.json": "612fbc19ff25a2dd5fc9b15d744d24ac4afce7a4c5ae6dcced426a4c662a1cb4"
+  },
+  "library_versions": {
+    "python": "3.11.13",
+    "numpy": "2.4.6",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.17.1",
+    "torch": "2.11.0+cu128",
+    "transformers": "5.20.1",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": null
+  },
+  "hardware": {
+    "platform": "Linux-4.18.0-553.109.1.el8_10.x86_64-x86_64-with-glibc2.28",
+    "machine": "x86_64",
+    "node": "gpunode8.sharanga.local",
+    "cpu_count": 64,
+    "slurm_job_id": "426037",
+    "cuda": true,
+    "cuda_device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "mps": false
+  },
+  "argv": [
+    "eval/transfer/record_scores.py",
+    "--exp",
+    "transfer_scores_judges_bf16",
+    "--out",
+    "/scratch/csisnlp_18/nlp_harness/transfer_scores/transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded/judges_bf16",
+    "--sets_dir",
+    "/home/csisnlp_18/nlp_harness/data/transfer/sets_adliu",
+    "--detectors",
+    "judge-qwen",
+    "judge-llama",
+    "--sets",
+    "admatched",
+    "adshift",
+    "tbeval",
+    "adclean",
+    "tbclean",
+    "calpool",
+    "--scorer_py",
+    "/home/csisnlp_18/nlp_harness/.venv-liu/bin/python"
+  ],
+  "started": "2026-10-31T19:00:44"
+}
