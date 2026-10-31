@@ -1,0 +1,230 @@
+{
+  "units": {
+    "calibration_pool": {
+      "agentdojo": {
+        "n": 1140,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "taubench": {
+        "n": 1140,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "injecagent": {
+        "n": 1140,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "bipia_test": {
+        "n": 1140,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      }
+    },
+    "contexts": {
+      "agentdojo": {
+        "n": 17100,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "taubench": {
+        "n": 17100,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "injecagent": {
+        "n": 17100,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "bipia_test": {
+        "n": 17100,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      }
+    },
+    "span_clean_a": {
+      "agentdojo": {
+        "n": 4683,
+        "n_sharing_5gram": 733,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "taubench": {
+        "n": 4683,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "injecagent": {
+        "n": 4683,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "bipia_test": {
+        "n": 4683,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      }
+    },
+    "span_clean_b": {
+      "agentdojo": {
+        "n": 6534,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "taubench": {
+        "n": 6534,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "injecagent": {
+        "n": 6534,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "bipia_test": {
+        "n": 6534,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      }
+    },
+    "span_injected": {
+      "agentdojo": {
+        "n": 75,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "taubench": {
+        "n": 75,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "injecagent": {
+        "n": 75,
+        "n_sharing_5gram": 0,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      },
+      "bipia_test": {
+        "n": 75,
+        "n_sharing_5gram": 6,
+        "n_sharing_8gram": 0,
+        "share_sharing_8gram": 0.0,
+        "top_shared_8grams": [],
+        "n_containments": 0,
+        "contained_instructions": []
+      }
+    }
+  },
+  "verdict": {
+    "pass": true,
+    "fail": []
+  },
+  "positive_control": {
+    "agentdojo": {
+      "texts_hit": 50,
+      "texts": 50,
+      "instr_found": 67,
+      "instr": 50
+    },
+    "taubench": {
+      "texts_hit": 50,
+      "texts": 50,
+      "instr_found": 0,
+      "instr": 0
+    },
+    "injecagent": {
+      "texts_hit": 50,
+      "texts": 50,
+      "instr_found": 50,
+      "instr": 50
+    },
+    "bipia_test": {
+      "texts_hit": 50,
+      "texts": 50,
+      "instr_found": 50,
+      "instr": 50
+    }
+  },
+  "corpus_sizes": {
+    "agentdojo": 10085,
+    "taubench": 8898,
+    "injecagent": 8432,
+    "bipia_test": 125
+  }
+}

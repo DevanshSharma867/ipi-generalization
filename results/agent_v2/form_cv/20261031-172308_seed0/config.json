@@ -1,0 +1,57 @@
+{
+  "run_id": "20261031-172308_seed0",
+  "version": "agent_v2",
+  "exp": "form_cv",
+  "seed": 0,
+  "args": {
+    "split_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "folds": 5,
+    "groups": "doc_id",
+    "flag": 0.6
+  },
+  "git_commit": "08be6d6d60ace3634661e0e2467cd1a5e41f5a07",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "agent_v2",
+  "data_files_sha256": {
+    "data/agent_v2/split_seed_0/train.csv": "5c9291d533a6bc9b9147845c2318c259c126f7d4b9b0d343ed81ad8425d8611f",
+    "data/agent_v2/split_seed_1/train.csv": "c33b597ade1ab939962db2c53f84af39283f11cd4c3102430849f7b367f73999",
+    "data/agent_v2/split_seed_2/train.csv": "a419331894039e16eaf6b3d76ded813bce19aba0c901161b4c4fe2d3e0f004ec",
+    "data/agent_v2/split_seed_3/train.csv": "50f1940373eff3b9c24623186f661af8c224ee71b76348078eb669b20200acb4",
+    "data/agent_v2/split_seed_4/train.csv": "d125eb4823b89d6909eca84e58dce4d009173b7b67f83cff6f68ce0d26c18d9f"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null
+  },
+  "argv": [
+    "scripts/agent_form_cv.py",
+    "--data_dir",
+    "data/agent_v2"
+  ],
+  "started": "2026-10-31T17:23:08"
+}
