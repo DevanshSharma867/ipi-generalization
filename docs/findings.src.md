@@ -731,7 +731,8 @@ the per-row checks. Independent validation, max per-row |Δ| vs Liu on AD-Matche
 {{TransferGateTwoAdmatchedHorizonBaseMaxdiff}}, Prompt Guard 2 {{TransferGateTwoAdmatchedPromptguardTwoEightSixmMaxdiff}},
 PIGuard {{TransferGateTwoAdmatchedPiguardMaxdiff}}. The pre-registered rule (PIGuard and Horizon ≤ 1e-3 per row) gives
 {{TransferGateTwoRecoveryStatus}}: PIGuard exceeds it on {{TransferGateTwoAdmatchedPiguardOverbound}} AD-Matched and
-{{TransferGateTwoAdshiftPiguardOverbound}} AD-Shift rows, with no label flips at 0.5.
+{{TransferGateTwoAdshiftPiguardOverbound}} AD-Shift rows, with no label flips at 0.5. The recovered pairing was adopted for every
+detector anyway (docs/deviations.md, 2026-10-31), on the residual evidence below.
 
 **Residual.** Every row over the bound is a calendar event with two or more participants
 ({{TransferGateTwoResidualStatus}}). AgentDojo builds that list with `list(set(participants))`, so its order depends
@@ -763,6 +764,7 @@ threshold_protocol: per-row |Δ| of P(injection); flips at 0.5
 date: 2026-10-31
 source:
 - results/transfer/gate2_followup_batch/20261030-195313_seed0
+- results/transfer/gate2_followup_envfix/20261031-172529_seed0
 macros:
 - TransferEnv*
 ```
@@ -777,9 +779,19 @@ transformers 4.57.6; ours: torch 2.11 / transformers 5.20.1). On {{TransferEnvRo
 | Horizon base | {{TransferEnvHorizonBaseMax}} | {{TransferEnvHorizonBaseOverbound}} | {{TransferEnvHorizonBaseFlips}} | {{TransferEnvHorizonBaseBatch}} | {{TransferEnvHorizonBaseLiuenv}} |
 
 - The shift is already present at batch size 1 and batching changes nothing, so it is not padding. Liu's env
-  reproduces his released scores; ours does not. Where in the stack it arises is not localized. An uncommitted
-  spot check (not a paper number) suggests Prompt Guard 2's transformers-5 tokenizer treats whitespace differently,
-  while PIGuard's and Horizon's token ids agree, which would put their shift on the model side.
+  reproduces his released scores; ours does not.
+- **Cause (both found; {{TransferEnvFixStatus}}).** Loaded weights, dtype and attention backend are identical in
+  the two envs. (1) PIGuard and Prompt Guard 2: transformers 5 does not load the repo's `tokenizer.json` but rebuilds
+  the DeBERTa-v2 tokenizer from `spm.model` with its own converter, which normalizes text differently (e.g. a
+  non-breaking space becomes `[UNK]`). (2) Horizon (ModernBERT): its config has no `local_rope_theta`; 4.57 uses the
+  class default (10000) for the sliding-window layers, 5.x gives them the global theta (160000). In our env with the
+  repo tokenizer (PIGuard, Prompt Guard 2) or the local theta restored (Horizon), max per-row |Δ| to Liu's env is
+  {{TransferEnvPiguardFixed}}, {{TransferEnvPromptguardTwoEightSixmFixed}} and {{TransferEnvHorizonBaseFixed}}
+  ({{TransferEnvPiguardFixedOverbound}}, {{TransferEnvPromptguardTwoEightSixmFixedOverbound}} and
+  {{TransferEnvHorizonBaseFixedOverbound}} rows over 1e-3).
+- Not checked: whether other DeBERTa-v2/v3 or ModernBERT detectors (or Wolf Defender, which Liu scored under
+  transformers ≥ 5.6) are affected the same way. Our own DeBERTa models are trained and scored with the same
+  transformers-5 tokenizer, so their scores are internally consistent.
 - Our V2 DeBERTa checkpoints are batch-independent: bs 1 vs 16 max |Δ| {{TransferEnvDebertaBatch}}
   ({{TransferEnvDebertaStatus}}, bound 1e-5).
 - Consequence (docs/deviations.md, 2026-10-30): published detectors are scored in the environment their reference

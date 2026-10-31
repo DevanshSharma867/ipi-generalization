@@ -387,6 +387,13 @@ def macros_transfer_gate2():
     put(macro_name(*p, "rows"), str(e["n"]))
     sci(max(v["max_abs"] for v in m["deberta_v2_bs1_vs_bs16"].values()), *p, "deberta", "batch")
     put(macro_name(*p, "deberta", "status"), "PASS" if m["batch_independent_ours_deberta"] else "FAIL")
+    m, _ = latest_metrics("gate2_followup_envfix", version="transfer")
+    if m is None:
+        return
+    put(macro_name(*p, "fix", "status"), "PASS" if m["explained"] else "FAIL")
+    for det in ("piguard", "promptguard2-86m", "horizon-base"):
+        sci(m[det]["fixed"]["max_abs"], *p, det, "fixed")
+        put(macro_name(*p, det, "fixed", "overbound"), str(m[det]["fixed"]["n_gt_1e3"]))
 
 
 def macros_agent_v1():

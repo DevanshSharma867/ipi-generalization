@@ -36,16 +36,23 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
     Policy (deviations 2026-10-30): published detectors are scored in Liu's env; our models in ours.
   - AD pairing recovered: 97/97 user tasks in both sets; A19 metrics PASS with it. Pre-registered row validation
     FAIL on PIGuard only (6 + 5 rows, max 1.5e-3, no flips), all on calendar rows whose participant order depends on
-    the hash seed (`results/transfer/gate2_followup_residual/`). Decision pending (Next 1).
+    the hash seed (`results/transfer/gate2_followup_residual/`). **Adopted** for every detector (deviations
+    2026-10-31); timestamp rows (51/85) stay out of matching and are reported separately.
   - Judge: deterministic (repeat ≤ 7e-8; 6 GiB identical, fully on GPU). Row gap to Liu (up to 0.77) is
     hardware/kernel, not noise. bf16 − 4-bit AD-Matched AUROC: −0.018 (seeded), −0.012 (recovered).
+  - Cause of the transformers-5 shift found (job 425896, F018): PIGuard/PG2 tokenizer rebuilt from spm.model
+    instead of the repo's tokenizer.json; Horizon's sliding-window RoPE theta set to the global value. Undoing
+    both: ≤ 7e-6 to Liu's env, 0 rows over 1e-3. Scoring policy unchanged.
+  - **Gate 2: PASS** (A19 metrics, all four detectors, all sets, recovered AD pairing, Liu's env).
   - CPU diagnostic (laptop; `results/transfer/gate2_followup_batch_cpu/`, not a reference) agrees: batch ≤ 6e-6
     for every model (our DeBERTa ≤ 1.8e-7); env shift identical in rows over 1e-3 and flips (46/9, 228/6, 389/34).
 
 ## Next
-1. **AD-Matched decision (yours):** adopt the recovered pairing (all 97+97 user tasks matched, A19 metrics PASS) despite
-   the 11 PIGuard rows over 1e-3 (explained: hash-ordered participant lists, F017), via a deviation entry; or apply the
-   pre-registered fallback (seeded build; reproduction claimed on BIPIA and TB-Matched only).
+1. **Transfer scoring (submitted 2026-10-31):** `jobs/transfer_scores_{encoders,wolf,judges}.sh` score every published
+   detector Liu scored (minus protectai-small-v2, access pending) and both judges (4-bit and bf16) on AD-Matched,
+   AD-Shift (recovered pairing), TB-Matched, AD-Clean, TB-Clean and the calibration pool, from
+   `data/transfer/sets_adliu` (`eval/transfer/sets_adliu.py`; data version `…files69e403d1`). Run records:
+   `results/transfer/transfer_scores_*`. Oracle and calibrated metrics come after (item 2).
 2. **c. Metrics:** TPR@1%FPR on the same benchmark's benign outputs (A16), plus `task_block_rate`.
 3. **e. Results layout:** `results/transfer/<detector>/<set>/<run_id>`, which needs a nested-exp change in
    `src/runlog.py`.
