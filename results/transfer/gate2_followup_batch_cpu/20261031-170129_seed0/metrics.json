@@ -1,0 +1,293 @@
+{
+  "batch_env_bipia500": {
+    "piguard": {
+      "liu_bs1_vs_bs16": {
+        "n": 500,
+        "max_abs": 2.086162567138672e-07,
+        "mean_abs": 8.60891304910183e-09,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "ours_bs1_vs_bs16": {
+        "n": 500,
+        "max_abs": 1.7881393432617188e-07,
+        "mean_abs": 9.151699487119913e-09,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "bs1_ours_vs_liu_env": {
+        "n": 500,
+        "max_abs": 0.9456072486937046,
+        "mean_abs": 0.020615142141468822,
+        "n_gt_1e3": 46,
+        "flips_at_05": 9
+      },
+      "bs16_ours_vs_liu_env": {
+        "n": 500,
+        "max_abs": 0.9456073194742203,
+        "mean_abs": 0.020615142790658864,
+        "n_gt_1e3": 46,
+        "flips_at_05": 9
+      },
+      "liu_bs1_vs_released": {
+        "n": 500,
+        "max_abs": 2.592802047729492e-06,
+        "mean_abs": 4.899577470496297e-08,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "liu_bs16_vs_released": {
+        "n": 500,
+        "max_abs": 2.562999725341797e-06,
+        "mean_abs": 5.0268543418496845e-08,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "ours_bs1_vs_released": {
+        "n": 500,
+        "max_abs": 0.9456072486937046,
+        "mean_abs": 0.02061516899749404,
+        "n_gt_1e3": 46,
+        "flips_at_05": 9
+      },
+      "ours_bs16_vs_released": {
+        "n": 500,
+        "max_abs": 0.9456073194742203,
+        "mean_abs": 0.02061516975099221,
+        "n_gt_1e3": 46,
+        "flips_at_05": 9
+      }
+    },
+    "promptguard2-86m": {
+      "liu_bs1_vs_bs16": {
+        "n": 500,
+        "max_abs": 7.748603820800781e-07,
+        "mean_abs": 3.4775584936141968e-09,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "ours_bs1_vs_bs16": {
+        "n": 500,
+        "max_abs": 6.780028343200684e-07,
+        "mean_abs": 3.948807716369629e-09,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "bs1_ours_vs_liu_env": {
+        "n": 500,
+        "max_abs": 0.9750700201839209,
+        "mean_abs": 0.013392185597564095,
+        "n_gt_1e3": 228,
+        "flips_at_05": 6
+      },
+      "bs16_ours_vs_liu_env": {
+        "n": 500,
+        "max_abs": 0.9750700201839209,
+        "mean_abs": 0.013392183376359753,
+        "n_gt_1e3": 228,
+        "flips_at_05": 6
+      },
+      "liu_bs1_vs_released": {
+        "n": 500,
+        "max_abs": 9.834766387939453e-06,
+        "mean_abs": 1.6236817464232444e-07,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "liu_bs16_vs_released": {
+        "n": 500,
+        "max_abs": 9.834766387939453e-06,
+        "mean_abs": 1.6159983351826669e-07,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "ours_bs1_vs_released": {
+        "n": 500,
+        "max_abs": 0.9750701393932104,
+        "mean_abs": 0.013392215678351931,
+        "n_gt_1e3": 228,
+        "flips_at_05": 6
+      },
+      "ours_bs16_vs_released": {
+        "n": 500,
+        "max_abs": 0.9750701393932104,
+        "mean_abs": 0.013392215035739355,
+        "n_gt_1e3": 228,
+        "flips_at_05": 6
+      }
+    },
+    "horizon-base": {
+      "liu_bs1_vs_bs16": {
+        "n": 500,
+        "max_abs": 5.8710575103759766e-06,
+        "mean_abs": 3.3035693559213543e-07,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "ours_bs1_vs_bs16": {
+        "n": 500,
+        "max_abs": 4.559755325317383e-06,
+        "mean_abs": 3.053001792068244e-07,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "bs1_ours_vs_liu_env": {
+        "n": 500,
+        "max_abs": 0.8340361043810844,
+        "mean_abs": 0.07046972748813096,
+        "n_gt_1e3": 389,
+        "flips_at_05": 34
+      },
+      "bs16_ours_vs_liu_env": {
+        "n": 500,
+        "max_abs": 0.8340362086892128,
+        "mean_abs": 0.07046968061378993,
+        "n_gt_1e3": 389,
+        "flips_at_05": 34
+      },
+      "liu_bs1_vs_released": {
+        "n": 500,
+        "max_abs": 9.059906005859375e-06,
+        "mean_abs": 4.26329023866856e-07,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "liu_bs16_vs_released": {
+        "n": 500,
+        "max_abs": 7.092952728271484e-06,
+        "mean_abs": 5.0614313204278e-07,
+        "n_gt_1e3": 0,
+        "flips_at_05": 0
+      },
+      "ours_bs1_vs_released": {
+        "n": 500,
+        "max_abs": 0.8340365216135979,
+        "mean_abs": 0.07046981195048192,
+        "n_gt_1e3": 389,
+        "flips_at_05": 34
+      },
+      "ours_bs16_vs_released": {
+        "n": 500,
+        "max_abs": 0.8340369388461113,
+        "mean_abs": 0.0704697633326141,
+        "n_gt_1e3": 389,
+        "flips_at_05": 34
+      }
+    }
+  },
+  "deberta_v2_bs1_vs_bs16": {
+    "deberta_s123": {
+      "n": 288,
+      "max_abs": 1.1920928955078125e-07,
+      "mean_abs": 4.9375456809583636e-09,
+      "n_gt_1e3": 0,
+      "flips_at_05": 0
+    },
+    "deberta_s42": {
+      "n": 288,
+      "max_abs": 1.7881393432617188e-07,
+      "mean_abs": 5.187757778912783e-09,
+      "n_gt_1e3": 0,
+      "flips_at_05": 0
+    },
+    "deberta_s999": {
+      "n": 288,
+      "max_abs": 1.1920928955078125e-07,
+      "mean_abs": 8.286507282820013e-09,
+      "n_gt_1e3": 0,
+      "flips_at_05": 0
+    }
+  },
+  "batch_independent_ours_deberta": true,
+  "envs": {
+    "liu": {
+      "python": "3.12.13",
+      "scikit-learn": "1.9.1",
+      "setuptools": "84.2.1",
+      "cloudpickle": "3.1.2",
+      "packaging": "26.3",
+      "accelerate": "1.15.0",
+      "narwhals": "2.28.0",
+      "networkx": "3.7",
+      "joblib": "1.6.0",
+      "requests": "2.34.2",
+      "certifi": "2026.10.23",
+      "filelock": "4.2.5",
+      "torch": "2.8.0",
+      "numpy": "2.5.4",
+      "sympy": "1.14.0",
+      "huggingface_hub": "0.36.2",
+      "safetensors": "0.8.0",
+      "tqdm": "4.70.1",
+      "urllib3": "2.8.0",
+      "mpmath": "1.3.0",
+      "pyyaml": "6.0.3",
+      "fsspec": "2026.9.0",
+      "transformers": "4.57.6",
+      "jinja2": "3.1.6",
+      "regex": "2026.9.29",
+      "threadpoolctl": "3.7.0",
+      "typing_extensions": "4.16.0",
+      "markupsafe": "3.0.4",
+      "hf-xet": "1.8.0",
+      "tokenizers": "0.22.2",
+      "psutil": "7.2.2",
+      "charset-normalizer": "3.5.2",
+      "scipy": "1.18.1",
+      "idna": "3.20"
+    },
+    "ours": {
+      "python": "3.11.15",
+      "shellingham": "1.5.4",
+      "transformers": "5.20.1",
+      "scikit-learn": "1.9.1",
+      "cloudpickle": "3.1.2",
+      "click": "8.5.0",
+      "packaging": "26.3",
+      "accelerate": "1.15.0",
+      "narwhals": "2.28.0",
+      "joblib": "1.6.0",
+      "protobuf": "7.36.2",
+      "tokenizers": "0.23.3",
+      "pygments": "2.21.0",
+      "defusedxml": "0.7.1",
+      "rich": "15.0.0",
+      "filelock": "4.2.5",
+      "networkx": "3.6.1",
+      "pandas": "3.1.0",
+      "sentencepiece": "0.2.2",
+      "numpy": "2.4.6",
+      "torch": "2.11.0",
+      "setuptools": "81.0.0",
+      "sympy": "1.14.0",
+      "safetensors": "0.8.0",
+      "tqdm": "4.70.1",
+      "h11": "0.16.0",
+      "mdurl": "0.1.2",
+      "mpmath": "1.3.0",
+      "pyyaml": "6.0.3",
+      "httpcore2": "2.16.0",
+      "fsspec": "2026.9.0",
+      "huggingface_hub": "2.2.0",
+      "truststore": "0.10.5",
+      "httpx2": "2.16.0",
+      "typer": "0.27.3",
+      "scipy": "1.17.1",
+      "jinja2": "3.1.6",
+      "regex": "2026.9.29",
+      "markdown-it-py": "4.2.0",
+      "tzdata": "2026.6",
+      "annotated-doc": "0.0.5",
+      "threadpoolctl": "3.7.0",
+      "typing_extensions": "4.16.0",
+      "markupsafe": "3.0.4",
+      "hf-xet": "1.8.0",
+      "psutil": "7.2.2",
+      "python-dateutil": "3.0.0",
+      "nltk": "3.10.3",
+      "anyio": "4.15.1",
+      "six": "1.17.0",
+      "idna": "3.20"
+    }
+  }
+}
