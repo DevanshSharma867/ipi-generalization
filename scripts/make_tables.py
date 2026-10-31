@@ -424,6 +424,8 @@ def macros_agent(version):
             num(e["per_task_mean"][worst], *p, "tool_max")
             put(macro_name(*p, "tool_max_name"), tex(worst))
             put(macro_name(*p, "status"), ("PASS" if e["pass"] else "FAIL") if e["gate"] else "diag")
+            # transparency only, never pass/fail (docs/deviations.md 2026-10-31): pooled |AUROC - 0.5|, max over seeds
+            num(max(abs(r[name]["bootstrap"]["roc_auc"]["point"] - 0.5) for r in m["seeds"].values()), *p, "auroc_dev_max")
         put(macro_name("agent", v, "gates", "status"), "PASS" if g["pass"] else "FAIL")
     m, src = latest_metrics("form_cv", version=version)
     if m is not None:  # within-train CV (scripts/agent_form_cv.py); named AgentFormCv* so F019's glob does not own it
