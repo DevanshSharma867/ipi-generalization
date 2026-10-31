@@ -161,7 +161,7 @@ def test_training_loss_decreases(tok, tmp_path):
 # ─── ablation flags ──────────────────────────────────────────────────────────
 
 def test_presets_and_invalid_combinations():
-    assert ict.make_config("a").use_pairs is False and ict.make_config("a").use_agent_data is False
+    assert ict.make_config("a").use_pairs is False and ict.make_config("a").use_agent_data is True
     assert ict.make_config("d").use_agent_data is False and ict.make_config("d").use_pairs
     assert ict.make_config("e").request_input == "none" and not ict.make_config("e").use_pairs
     assert len({tuple(sorted(vars(ict.make_config(k)).items())) for k in ict.ABLATIONS}) == len(ict.ABLATIONS)
@@ -172,6 +172,18 @@ def test_presets_and_invalid_combinations():
     with pytest.raises(ValueError):
         ict.ICTConfig(request_input="concat")       # the V2 single-sequence variant is dropped (A22)
     assert ict.ICTConfig(backbone="modernbert-large").windowed and not ict.ICTConfig().windowed
+
+
+def test_each_ablation_removes_exactly_one_factor():
+    """A23: (a)-(d) differ from full ICT, and (e) from (a), in one factor. (a)'s factor is pairs+margin; the swap
+    is part of it (request_swap needs pairs)."""
+    factors = {"pairs_margin": ("use_pairs", "margin_lambda", "request_swap"), "margin": ("margin_lambda",),
+               "swap": ("request_swap",), "agent_data": ("use_agent_data",), "request": ("request_input",)}
+    expected = {"a": ("full", "pairs_margin"), "b": ("full", "margin"), "c": ("full", "swap"),
+                "d": ("full", "agent_data"), "e": ("a", "request")}
+    for k, (ref, factor) in expected.items():
+        a, r = vars(ict.make_config(k)), vars(ict.make_config(ref))
+        assert {f for f in a if a[f] != r[f]} == set(factors[factor]), k
 
 
 def test_selected_hparams_apply_but_presets_win():
@@ -204,7 +216,7 @@ def test_every_ablation_changes_items_inputs_or_loss(tok):
         assert fingerprint(ict.make_config(k)) != full, k
     # specific behaviours
     r_a, p_a = ict.training_data(ict.make_config("a"), rows, pairs, arows, apairs)
-    assert len(r_a) == len(rows) and p_a == []                                         # V3 only, no pairs
+    assert len(r_a) == len(rows) + len(arows) and p_a == []                            # same data, no pairs
     r_d, p_d = ict.training_data(ict.make_config("d"), rows, pairs, arows, apairs)
     assert len(r_d) == len(rows) and len(p_d) == len(pairs)                            # no agent rows or pairs
     r_f, p_f = ict.training_data(ict.make_config("full"), rows, pairs, arows, apairs)

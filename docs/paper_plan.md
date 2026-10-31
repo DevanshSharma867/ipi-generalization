@@ -396,6 +396,7 @@ part of the pre-registration, not deviations.
 | A20 | 2026-10-30 | **Judge precision.** For H3 (and every comparison involving our models), the task-aware LLM judges run in **bf16**. 4-bit NF4 is used only for the Liu reproduction (Gate 2). The bf16 − 4-bit AUROC gap of the Qwen judge on AD-Matched is reported, as Liu did (≤ 0.02 in his case). Fixed before any H3 score exists. |
 | A21 | 2026-10-31 | **Comparator (c) withdrawn (budget: the project runs at about zero cost).** H3 on pairs is decided against (a) the Qwen2.5-7B and Llama-3.1-8B task-aware judges (bf16, A20), (b) Sheltron with its user-goal segment, and (d) ICT ablation (a). A7 and A11 lapse; `configs/frontier_detector.yaml` and its prompt stay in the repo unused. Nothing had been scored with (c) (no API key was ever set). The loss is stated in §6. |
 | A22 | 2026-10-31 | **ICT ablations, model selection, swap safety, batch tolerance** (before any ICT training run). Ablations (a)–(e) replace the C4 row's single ablation; full ICT = every component on. Selection on validation only: mean of V3-val task-macro AUROC and pair accuracy on held-out TRAIN-side pairs; a 12-point grid on training seed 0 fixes λ, margin and lr for every later run. Request-swap exclusions and a 50-item audit; swap off in full ICT if the audit's label-noise rate exceeds 10%. bs=1 vs batched scores within 1e-5. Code: `src/models/ict.py`. Details below the table. |
+| A23 | 2026-10-31 | **Amends A22: ablations (a) and (e) redefined so each ablation removes exactly one factor.** (a) = full ICT minus pairs and margin, trained on the same data as full ICT (V3 + agent-style data, request given); (e) = (a) with the request withheld. (b), (c), (d) unchanged. This changes the training data of the pre-registered (a) (H3 comparator d) from V3 only to V3 + agent-style data, to remove a confound: under A22, full − (a) mixed the pairs/margin effect with the agent-data effect. Made before any ICT training run, so it is an amendment, not a deviation. Details below the table. |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.
@@ -478,14 +479,13 @@ part of the pre-registration, not deviations.
   training data (`src/agent_pipeline.py` rows, plus agent-style TRAIN pairs where they exist), loss = BCE on every
   member + λ · mean hinge max(0, margin − (s_subverting − s_aligned)) over pairs, with request-swap augmentation.
 - **Ablations** (each a config preset; same backbone, selection rule, hyperparameters and seeds as full ICT):
-  - (a) request given, no pairs, no margin, no swap; V3 data only, as pre-registered (H3 comparator d). It therefore
-    also lacks the agent-style data, so full − (a) combines the pairs/margin effect with the agent-data effect; (d)
-    measures the agent-data part separately.
+  - (a) request given, no pairs, no margin, no swap; V3 data only, as pre-registered (H3 comparator d).
+    **Superseded by A23** (same data as full ICT).
   - (b) pairs used as plain CE rows, no margin (λ = 0), swap on.
   - (c) full ICT without request-swap augmentation.
   - (d) full ICT without the agent-style training data (rows and agent pairs).
-  - (e) request withheld (content only: the context is the only input), same backbone; V3 data only, no pairs, so
-    (a) vs (e) differs only in the request.
+  - (e) request withheld (content only: the context is the only input), same backbone; V3 data only, no pairs.
+    **Superseded by A23** ((a) with the request withheld).
   - The V2-style single-sequence input ("Intent: … | Context: …") is not an ablation.
 - **Selection** (validation only; never test, EVAL pairs or agent benchmarks):
   - Score = mean of (task-macro AUROC on V3 val: the unweighted mean of per-task AUROC) and (pair accuracy on
@@ -513,3 +513,22 @@ part of the pre-registration, not deviations.
     trained without it, and (c) coincides with full ICT and is reported as such. Decided before any result.
 - **Batch invariance:** a trained model's scores at batch size 1 and batched agree within 1e-5 (absolute, per row);
   `tests/test_ict.py` checks it, and it is the criterion of the 2026-10-30 deviation for our own models.
+
+**A23 details** (amends A22's ablations; recorded 2026-10-31, before any ICT training run; code `ABLATIONS` in
+`src/models/ict.py`, checked by `tests/test_ict.py::test_each_ablation_removes_exactly_one_factor`):
+- Every ablation differs from its reference in exactly one factor:
+
+  | Ablation | Reference | Single factor removed | Isolates |
+  |---|---|---|---|
+  | (a) | full ICT | pairs + margin loss (the request swap goes too: it is built from pairs) | pairs + margin |
+  | (b) | full ICT | margin loss (λ = 0; pairs stay as plain CE rows) | margin |
+  | (c) | full ICT | request-swap augmentation | swap |
+  | (d) | full ICT | agent-style training data (rows and agent pairs) | agent-style data |
+  | (e) | (a) | the request (context is the only input) | the request |
+
+- (a) and (e) are trained on V3 + agent-style data (the full-ICT rows). The training data of the pre-registered (a)
+  (H3 comparator d) therefore changes from V3 only (C4 row, A1, A22) to V3 + agent-style data.
+- Reason: under A22, full − (a) mixed the pairs/margin effect with the agent-data effect. Giving (a) the same data
+  removes that confound, and (e) then differs from (a) only in the request.
+- Timing: no ICT, ablation or grid run existed when this was recorded, so this is an amendment, not a deviation.
+- If the swap is switched off by A22's audit rule, (c) coincides with full ICT, as A22 states; the table is unchanged.

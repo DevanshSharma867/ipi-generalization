@@ -81,6 +81,7 @@ Plan: `docs/pairs_spec.md` v1, paper_plan A18 (construction, split seed 0 only, 
 # ICT (C4)
 - 2026-10-31: `src/models/ict.py` (segment-pair cross-encoder, BCE + λ·pair hinge, request-swap augmentation; ModernBERT-large option with windowed max-pool), `tests/test_ict.py` (18 CPU tests), `jobs/ict_train.sh`, `jobs/ict_score.sh`. Nothing trained.
 - 2026-10-31: **A22 recorded** (ablations a–e, val-only selection rule + 12-point grid on seed 0, swap exclusions + 50-item audit with a 10% noise switch-off, 1e-5 batch tolerance) and implemented (`ict.py select`, `ict.py swap_audit`, `GRID=1` mode in `jobs/ict_train.sh`).
+- 2026-10-31: **A23** amends A22: (a) = full ICT minus pairs+margin on the same data (V3 + agent-style), (e) = (a) minus the request; one factor per ablation (table in A23, unit test). Nothing trained.
 - **Next:** needs frozen V3, agent-style data, TRAIN pairs and held-out TRAIN-side val pairs; then grid → `select` → commit `configs/ict_hparams.json` → seeds 0–4 × {full, a–e}. Export the swap audit with the EVAL annotation batch.
 
 # Course demo (CS F429 Part 3, due 2026-11-21)
