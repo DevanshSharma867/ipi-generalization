@@ -193,14 +193,14 @@ def cmd_deberta_bs(a):
         if out.exists():
             continue
         tok = AutoTokenizer.from_pretrained(ck)
-        model = AutoModelForSequenceClassification.from_pretrained(ck, dtype=torch.float32).to("cuda").eval()
+        model = AutoModelForSequenceClassification.from_pretrained(ck, dtype=torch.float32).to(a.device).eval()
         rec = {"checkpoint": Path(ck).name, "labels": df["label"].tolist()}
         for bs in (1, 16):
             p = []
             with torch.no_grad():
                 for i in range(0, len(texts), bs):
                     enc = tok(texts[i:i + bs], truncation=True, max_length=512, padding=True,
-                              return_tensors="pt").to("cuda")
+                              return_tensors="pt").to(a.device)
                     p += torch.softmax(model(**enc).logits.float(), -1)[:, 1].cpu().tolist()
             rec[f"bs{bs}"] = p
         json.dump(rec, open(out, "w"))
@@ -236,11 +236,12 @@ def cmd_report(a):
     work, g2 = Path(a.work).resolve(), Path(a.gate2).resolve()
     sets_dir = ROOT / "data" / "transfer" / "sets"
     manifest = json.load(open(sets_dir / "manifest.json"))
-    run = start_run(version="transfer", exp=f"gate2_followup_{a.part}", seed=0,
-                    args={"part": a.part, "work": "<scratch>/" + work.name, "gate2_work": "<scratch>/" + g2.name,
-                          "match_tol": MATCH_TOL, "valid_tol": VALID_TOL, "subset": [SUBSET_N, SUBSET_SEED],
-                          "torchdynamo_disable": os.environ.get("TORCHDYNAMO_DISABLE"),
-                          "upstream_commit": manifest["upstream"]["commit"]},
+    run = start_run(version="transfer", exp=f"gate2_followup_{a.part}" + ("_cpu" if a.device == "cpu" else ""),
+                    seed=0, args={"part": a.part, "device": a.device, "work": "<scratch>/" + work.name,
+                                  "gate2_work": "<scratch>/" + g2.name,
+                                  "match_tol": MATCH_TOL, "valid_tol": VALID_TOL, "subset": [SUBSET_N, SUBSET_SEED],
+                                  "torchdynamo_disable": os.environ.get("TORCHDYNAMO_DISABLE"),
+                                  "upstream_commit": manifest["upstream"]["commit"]},
                     data_version=manifest["data_version"], data_files=[sets_dir / "manifest.json"],
                     allow_dirty=a.allow_dirty)
     res = {}
@@ -416,6 +417,7 @@ def main():
     ap.add_argument("--liu_py")
     ap.add_argument("--our_py", default=sys.executable)
     ap.add_argument("--part", choices=PARTS)
+    ap.add_argument("--device", default="cuda", help="deberta_bs; report: cpu marks a CPU diagnostic run")
     ap.add_argument("--allow-dirty", dest="allow_dirty", action="store_true")
     a = ap.parse_args()
     {"gen": cmd_gen, "match": cmd_match, "subset": cmd_subset, "deberta_bs": cmd_deberta_bs,
