@@ -59,7 +59,7 @@
   "argv": [
     "scripts/agent_overlap_audit.py",
     "--agentdojo_wheel",
-    "/private/tmp/claude-501/-Users-devanshsharma-projects-nlp/6fb85338-64cf-4bba-a08a-cfe54f6434e5/scratchpad/ad_wheel/agentdojo-0.1.34-py3-none-any.whl"
+    "<scratch>/agentdojo-0.1.34-py3-none-any.whl"
   ],
   "started": "2026-10-31T14:47:36"
 }

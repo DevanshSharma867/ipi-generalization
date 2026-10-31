@@ -27,7 +27,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from metrics import df_metrics, doc_cluster_bootstrap, tpr_at_fpr_protocols
-from runlog import add_run_args, start_run
+from runlog import add_run_args, predictions_file, start_run
 
 STD = ROOT / "results" / "v2_std"
 PROBES = ROOT / "results" / "v2_probes"
@@ -45,8 +45,8 @@ DATA_VERSION = {"injecagent": "InjecAgent@f19c9f2 + build bab750e", "deepset": "
 
 
 def latest_probe_run(name):
-    runs = sorted((PROBES / f"score_{name}").glob("*/predictions.csv"))
-    return runs[-1] if runs else None
+    runs = sorted(p.parent for p in (PROBES / f"score_{name}").glob("*/predictions.csv*"))
+    return predictions_file(runs[-1]) if runs else None
 
 
 def sources():

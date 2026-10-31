@@ -46,7 +46,7 @@ def test_run_layout(tmp_path):
     assert cfg["data_files_sha256"][str(data)] == runlog.sha256(data)
     assert len(cfg["git_commit"]) == 40 and isinstance(cfg["git_dirty"], bool)
     assert json.loads((run.dir / "metrics.json").read_text())["nan"] is None
-    assert list(pd.read_csv(run.dir / "predictions.csv").columns) == runlog.PRED_COLUMNS
+    assert list(pd.read_csv(runlog.predictions_file(run.dir)).columns) == runlog.PRED_COLUMNS
     assert "hello" in (run.dir / "log.txt").read_text()
     assert run.run_id.endswith("_seed7") and run.run_id in (tmp_path / "results" / "REGISTRY.md").read_text()
     assert json.loads((run.dir / "finished.json").read_text())["headline"] == ["f1", 0.5]

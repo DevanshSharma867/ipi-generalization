@@ -35,7 +35,7 @@ from sklearn.metrics import f1_score
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from metrics import df_metrics, doc_cluster_bootstrap, paired_bootstrap
-from runlog import add_run_args, start_run
+from runlog import add_run_args, predictions_file, start_run
 
 PROBES_RES = ROOT / "results" / "v2_probes"
 POSITIONS = ("start", "middle", "end")
@@ -91,10 +91,10 @@ def latest_predictions():
         if exp.name.endswith("_v2val"):  # V2 val calibration scores (v2_tpr_metrics.py), not a probe model
             continue
         per_set = {}
-        for run in sorted(p for p in exp.iterdir() if (p / "predictions.csv").exists()):
-            df = pd.read_csv(run / "predictions.csv", keep_default_na=False)
+        for run in sorted(p for p in exp.iterdir() if predictions_file(p)):
+            df = pd.read_csv(predictions_file(run), keep_default_na=False)
             for s, g in df.groupby("eval_set"):
-                per_set[s] = (g, run / "predictions.csv")
+                per_set[s] = (g, predictions_file(run))
         if per_set:
             frames = pd.concat([g for g, _ in per_set.values()], ignore_index=True)
             found[exp.name[len("score_"):]] = (frames, sorted({str(p.relative_to(ROOT)) for _, p in per_set.values()}))

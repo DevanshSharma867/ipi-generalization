@@ -1,0 +1,6 @@
+[17:11:37] seed 0: span_form_you F1 0.6374 AUROC 0.7122  span_length F1 0.6552 AUROC 0.6841  text_length F1 0.5065 AUROC 0.5147
+[17:11:37] seed 1: span_form_you F1 0.6270 AUROC 0.7067  span_length F1 0.6487 AUROC 0.6832  text_length F1 0.5019 AUROC 0.5141
+[17:11:37] seed 2: span_form_you F1 0.6313 AUROC 0.7117  span_length F1 0.6473 AUROC 0.6810  text_length F1 0.4984 AUROC 0.5134
+[17:11:38] seed 3: span_form_you F1 0.6142 AUROC 0.7035  span_length F1 0.6504 AUROC 0.6802  text_length F1 0.5011 AUROC 0.5141
+[17:11:38] seed 4: span_form_you F1 0.6248 AUROC 0.7029  span_length F1 0.6521 AUROC 0.6796  text_length F1 0.5047 AUROC 0.5142
+[17:11:38] flagged (> 0.6): ['span_form_you', 'span_length']
