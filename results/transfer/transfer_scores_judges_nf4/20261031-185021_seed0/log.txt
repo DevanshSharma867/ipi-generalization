@@ -1,0 +1,12 @@
+[18:50:21] judge-qwen__admatched                    n= 1017 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:21] judge-qwen__adshift                      n= 1695 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:21] judge-qwen__tbeval                       n= 2117 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:21] judge-qwen__adclean                      n=  339 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:21] judge-qwen__tbclean                      n= 1533 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:21] judge-qwen__calpool                      n= 1140 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:22] judge-llama__admatched                   n= 1017 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:22] judge-llama__adshift                     n= 1695 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:22] judge-llama__tbeval                      n= 2117 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:22] judge-llama__adclean                     n=  339 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:22] judge-llama__tbclean                     n= 1533 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}
+[18:50:22] judge-llama__calpool                     n= 1140 truncated=- {'precision': 'nf4', 'gpu_mem': '18GiB', 'judge_rule': 'liu', 'placement': {'0': 1}}

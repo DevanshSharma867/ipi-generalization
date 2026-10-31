@@ -43,18 +43,20 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   - Cause of the transformers-5 shift found (job 425896, F018): PIGuard/PG2 tokenizer rebuilt from spm.model
     instead of the repo's tokenizer.json; Horizon's sliding-window RoPE theta set to the global value. Undoing
     both: ≤ 7e-6 to Liu's env, 0 rows over 1e-3. Scoring policy unchanged.
+  - **Transfer scoring done (F021):** 15 classifiers (Liu's env), Wolf Defender (ours), 2 judges × {4-bit, bf16} on
+    AD-Matched, AD-Shift, TB-Matched, AD-Clean, TB-Clean and the calibration pool (`data/transfer/sets_adliu`,
+    `…filesfb0afded`; jobs 425944–425946, 426037). Metrics: `eval/transfer/transfer_metrics.py` →
+    `results/transfer/transfer_metrics/`, table `paper/tables/transfer_detectors.tex`. Calibration-pool thresholds
+    give realized FPR on AD-Clean from 0.003 to 0.23 at a 1% target; JasperLS flags the whole pool.
+    Rescoring is bit-identical (96/96 files vs the first pass, `…files69e403d1`, kept as superseded runs).
   - **Gate 2: PASS** (A19 metrics, all four detectors, all sets, recovered AD pairing, Liu's env).
   - CPU diagnostic (laptop; `results/transfer/gate2_followup_batch_cpu/`, not a reference) agrees: batch ≤ 6e-6
     for every model (our DeBERTa ≤ 1.8e-7); env shift identical in rows over 1e-3 and flips (46/9, 228/6, 389/34).
 
 ## Next
-1. **Transfer scoring (submitted 2026-10-31):** `jobs/transfer_scores_{encoders,wolf,judges}.sh` score every published
-   detector Liu scored (minus protectai-small-v2, access pending) and both judges (4-bit and bf16) on AD-Matched,
-   AD-Shift (recovered pairing), TB-Matched, AD-Clean, TB-Clean and the calibration pool, from
-   `data/transfer/sets_adliu` (`eval/transfer/sets_adliu.py`; data version `…files69e403d1`). Run records:
-   `results/transfer/transfer_scores_*`. Oracle and calibrated metrics come after (item 2).
-2. **c. Metrics:** TPR@1%FPR on the same benchmark's benign outputs (A16), plus `task_block_rate`.
-3. **e. Results layout:** `results/transfer/<detector>/<set>/<run_id>`, which needs a nested-exp change in
+1. **Next for the harness:** secondary protocol (task-disjoint halves, A3) and `task_block_rate`; protectai-small-v2 once
+   access is granted; decide the judges' primary precision (4-bit = Liu's setting, bf16 = A20).
+2. **e. Results layout:** `results/transfer/<detector>/<set>/<run_id>`, which needs a nested-exp change in
    `src/runlog.py`.
 
 ## Open decisions / blockers

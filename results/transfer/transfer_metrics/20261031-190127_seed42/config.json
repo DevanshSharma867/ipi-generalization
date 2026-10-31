@@ -1,0 +1,59 @@
+{
+  "run_id": "20261031-190127_seed42",
+  "version": "transfer",
+  "exp": "transfer_metrics",
+  "seed": 42,
+  "args": {
+    "runs": [
+      "results/transfer/transfer_scores_liuenv/20261031-182528_seed0",
+      "results/transfer/transfer_scores_wolf/20261031-182747_seed0",
+      "results/transfer/transfer_scores_judges_nf4/20261031-185021_seed0",
+      "results/transfer/transfer_scores_judges_bf16/20261031-190043_seed0"
+    ],
+    "B": 1000,
+    "sets_dir": "sets_adliu"
+  },
+  "git_commit": "640f907d12e7fdd27bcc12a431f6b81a2a6ae75b",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded",
+  "data_files_sha256": {
+    "data/transfer/sets_adliu/manifest.json": "612fbc19ff25a2dd5fc9b15d744d24ac4afce7a4c5ae6dcced426a4c662a1cb4"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null,
+    "cuda": false,
+    "cuda_device": null,
+    "mps": true
+  },
+  "argv": [
+    "eval/transfer/transfer_metrics.py",
+    "--sets_dir",
+    "data/transfer/sets_adliu",
+    "--runs",
+    "results/transfer/transfer_scores_liuenv/20261031-182528_seed0",
+    "results/transfer/transfer_scores_wolf/20261031-182747_seed0",
+    "results/transfer/transfer_scores_judges_nf4/20261031-185021_seed0",
+    "results/transfer/transfer_scores_judges_bf16/20261031-190043_seed0"
+  ],
+  "started": "2026-10-31T19:01:27"
+}

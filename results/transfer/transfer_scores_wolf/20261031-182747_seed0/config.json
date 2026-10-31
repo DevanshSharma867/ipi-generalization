@@ -1,0 +1,86 @@
+{
+  "run_id": "20261031-182747_seed0",
+  "version": "transfer",
+  "exp": "transfer_scores_wolf",
+  "seed": 0,
+  "args": {
+    "detectors": [
+      "wolf-defender"
+    ],
+    "sets": [
+      "admatched",
+      "adshift",
+      "tbeval",
+      "adclean",
+      "tbclean",
+      "calpool"
+    ],
+    "sets_dir": "sets_adliu",
+    "out": "<scratch>/wolf",
+    "note": "",
+    "revisions": {
+      "wolf-defender": "6ed0617b86dcc2e06a1bf74d30f7e173e335ad63"
+    },
+    "scorer_env": {
+      "python": "3.11.13",
+      "torch": "2.11.0+cu128",
+      "transformers": "5.20.1",
+      "tokenizers": "0.23.3",
+      "bitsandbytes": "0.50.2",
+      "accelerate": "1.15.0"
+    }
+  },
+  "git_commit": "12a141919211679dfde346793d61f7dada98503e",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded",
+  "data_files_sha256": {
+    "/home/csisnlp_18/nlp_harness/data/transfer/sets_adliu/manifest.json": "612fbc19ff25a2dd5fc9b15d744d24ac4afce7a4c5ae6dcced426a4c662a1cb4"
+  },
+  "library_versions": {
+    "python": "3.11.13",
+    "numpy": "2.4.6",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.17.1",
+    "torch": "2.11.0+cu128",
+    "transformers": "5.20.1",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": null
+  },
+  "hardware": {
+    "platform": "Linux-4.18.0-553.109.1.el8_10.x86_64-x86_64-with-glibc2.28",
+    "machine": "x86_64",
+    "node": "gpunode8.sharanga.local",
+    "cpu_count": 64,
+    "slurm_job_id": "425945",
+    "cuda": true,
+    "cuda_device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "mps": false
+  },
+  "argv": [
+    "eval/transfer/record_scores.py",
+    "--exp",
+    "transfer_scores_wolf",
+    "--out",
+    "/scratch/csisnlp_18/nlp_harness/transfer_scores/transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded/wolf",
+    "--sets_dir",
+    "/home/csisnlp_18/nlp_harness/data/transfer/sets_adliu",
+    "--detectors",
+    "wolf-defender",
+    "--sets",
+    "admatched",
+    "adshift",
+    "tbeval",
+    "adclean",
+    "tbclean",
+    "calpool",
+    "--scorer_py",
+    "/home/csisnlp_18/nlp_harness/.venv/bin/python"
+  ],
+  "started": "2026-10-31T18:27:47"
+}
