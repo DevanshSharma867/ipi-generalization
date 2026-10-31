@@ -324,6 +324,71 @@ def macros_transfer_gate1():
             put(macro_name(*p, COUNT_KEYS[k]), str(c["rebuilt"]))
 
 
+def sci(value, *parts) -> str:
+    return put(macro_name(*parts), f"{value:.1e}")
+
+
+def macros_transfer_gate2():
+    """Gate 2 (paper_plan A19, A20; docs/deviations.md 2026-10-30): Liu (2026) reproduction in his environment with
+    the recovered AgentDojo pairing, the judge's precision and run-to-run noise, and the library-version effect."""
+    m, _ = latest_metrics("gate2_followup_pairing", version="transfer")
+    if m is None:
+        return
+    p = ("transfer", "gate2")
+    a19 = m["a19_with_recovered_admatched"]
+    put(macro_name(*p, "status"), "PASS" if a19["pass"] else "FAIL")
+    for k, c in a19["checks"].items():
+        det, metric = k.split("/")
+        num(c["ours"], *p, det, metric, "ours")
+        num(c["liu"], *p, det, metric, "liu")
+    put(macro_name(*p, "recovery", "status"), "PASS" if m["recovery_pass"] else "FAIL")
+    for s, r in m["recovery"].items():
+        put(macro_name(*p, s, "groups"), str(r["groups"]))
+        put(macro_name(*p, s, "matched"), str(r["matched"]))
+        put(macro_name(*p, s, "timedep"), str(r["time_dependent_rows"]))
+    for k, v in m["validation_rows_vs_liu"].items():
+        det, s = k.split("/")
+        sci(v["max_abs"], *p, s, det, "maxdiff")
+        put(macro_name(*p, s, det, "overbound"), str(v["n_gt_1e3"]))
+    g = m["judge_bf16_vs_nf4_admatched_recovered"]
+    num(g["gap_bf16_minus_nf4"]["admatched_auroc"], *p, "judge", "recovered", "gap")
+    num(g["bf16"]["admatched_auroc"], *p, "judge", "recovered", "bf16")
+    m, _ = latest_metrics("gate2_followup_residual", version="transfer")
+    if m is not None:
+        put(macro_name(*p, "residual", "status"), "PASS" if m["explained"] else "FAIL")
+        for s in ("admatched", "adshift"):
+            r = m[s]["piguard"]
+            put(macro_name(*p, s, "multipart"), str(r["multi_participant_rows"]))
+            sci(r["max_abs_other"], *p, s, "piguard", "maxother")
+    m, _ = latest_metrics("gate2_followup_judge", version="transfer")
+    if m is not None:
+        j = m["judge_bipia"]
+        for run in ("judge_repeat", "judge_6gib"):
+            sci(j[run]["rows_vs_run2"]["max_abs"], *p, run, "vsrun")
+            put(macro_name(*p, run, "flips"), str(j[run]["rows_vs_run2"]["flips_at_05"]))
+        r = j["judge_repeat"]["rows_vs_liu"]
+        num(r["max_abs"], *p, "judge", "vsliu", "max", digits=2)
+        put(macro_name(*p, "judge", "vsliu", "overbound"), str(r["n_gt_1e3"]))
+        put(macro_name(*p, "judge", "vsliu", "flips"), str(r["flips_at_05"]))
+        put(macro_name(*p, "judge", "bipia", "rows"), str(r["n"]))
+        g = m["judge_bf16_vs_nf4_admatched_seeded"]
+        num(g["gap_bf16_minus_nf4"]["admatched_auroc"], *p, "judge", "seeded", "gap")
+    m, _ = latest_metrics("gate2_followup_batch", version="transfer")
+    if m is None:
+        return
+    p = ("transfer", "env")
+    for det, d in m["batch_env_bipia500"].items():
+        e = d["bs1_ours_vs_liu_env"]
+        num(e["max_abs"], *p, det, "max", digits=2)
+        put(macro_name(*p, det, "overbound"), str(e["n_gt_1e3"]))
+        put(macro_name(*p, det, "flips"), str(e["flips_at_05"]))
+        sci(max(d["liu_bs1_vs_bs16"]["max_abs"], d["ours_bs1_vs_bs16"]["max_abs"]), *p, det, "batch")
+        sci(d["liu_bs1_vs_released"]["max_abs"], *p, det, "liuenv")
+    put(macro_name(*p, "rows"), str(e["n"]))
+    sci(max(v["max_abs"] for v in m["deberta_v2_bs1_vs_bs16"].values()), *p, "deberta", "batch")
+    put(macro_name(*p, "deberta", "status"), "PASS" if m["batch_independent_ours_deberta"] else "FAIL")
+
+
 def tables_probe_report():
     m, src = latest_metrics("probe_report")
     if m is None:
@@ -643,6 +708,7 @@ def main():
     tables_tpr_protocols()
     table_v3_prefreeze_gates()
     macros_transfer_gate1()
+    macros_transfer_gate2()
     errors, owner = validate_entries()
     if errors:
         print(f"{len(errors)} PROVENANCE ERRORS (docs/findings.src.md):")

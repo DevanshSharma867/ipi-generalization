@@ -29,18 +29,28 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   AD-Matched injected rows differ (273/432 for PIGuard): the set text differs, not the models. Run 3 (our env,
   transformers 5) shifts scores heavily: PG2 tokenizes differently; PIGuard and Horizon tokenize identically but
   still shift on BIPIA. Judge rows differ up to 0.77 vs Liu even in run 1 (bound 0.02); metrics mostly within tolerance.
+- **Gate 2 follow-up (jobs 424070–424072, commit `007c5a5`; F017, F018):**
+  - Batch test: scores do not depend on batch size (≤ 7e-6, published encoders in both envs; our 3 V2 DeBERTa
+    checkpoints ≤ 3.6e-6). No batch-policy change needed; dynamic padding stays.
+  - The transformers-5 shift is not padding: it is present at bs 1. Liu's env reproduces his files; ours does not.
+    Policy (deviations 2026-10-30): published detectors are scored in Liu's env; our models in ours.
+  - AD pairing recovered: 97/97 user tasks in both sets; A19 metrics PASS with it. Pre-registered row validation
+    FAIL on PIGuard only (6 + 5 rows, max 1.5e-3, no flips), all on calendar rows whose participant order depends on
+    the hash seed (`results/transfer/gate2_followup_residual/`). Decision pending (Next 1).
+  - Judge: deterministic (repeat ≤ 7e-8; 6 GiB identical, fully on GPU). Row gap to Liu (up to 0.77) is
+    hardware/kernel, not noise. bf16 − 4-bit AD-Matched AUROC: −0.018 (seeded), −0.012 (recovered).
+  - CPU diagnostic (laptop, `~/nlp_cpu_diag/`): running; recorded as `gate2_followup_batch_cpu`, not a reference.
 
 ## Next
-1. **Gate 2 follow-up:** identify the AD-Matched text difference (injection-task assignment via `hash()`?) and the
-   transformers-5 shift; decide whether scoring uses Liu's env.
+1. **AD-Matched decision (yours):** adopt the recovered pairing (all 97+97 user tasks matched, A19 metrics PASS) despite
+   the 11 PIGuard rows over 1e-3 (explained: hash-ordered participant lists, F017), via a deviation entry; or apply the
+   pre-registered fallback (seeded build; reproduction claimed on BIPIA and TB-Matched only).
 2. **c. Metrics:** TPR@1%FPR on the same benchmark's benign outputs (A16), plus `task_block_rate`.
 3. **e. Results layout:** `results/transfer/<detector>/<set>/<run_id>`, which needs a nested-exp change in
    `src/runlog.py`.
 
 ## Open decisions / blockers
 - **Access request:** `protectai/deberta-v3-small-prompt-injection-v2` requested 2026-10-30; re-run prefetch to confirm.
-- **Cluster backup:** `~/run_backup_20261030/` holds byte-identical copies of 12 committed run files moved aside
-  for a `git pull`; safe to delete once you confirm.
 - **Revision pins:** Liu pins only Horizon. wolf-defender and prismor-1.5b changed days before his last commit:
   first suspects if Gate 2 mismatches (re-pin with a reason).
 - **VRAM cap:** MPS does not enforce `CUDA_MPS_PINNED_DEVICE_MEM_LIMIT` (smoke test, job 422476). Half-card VRAM
