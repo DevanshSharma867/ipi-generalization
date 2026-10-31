@@ -4,7 +4,8 @@ sets_adliu.py
 The transfer sets used for scoring (docs/deviations.md 2026-10-31): the Gate 1 rebuild (data/transfer/sets) with
 AD-Matched and AD-Shift replaced by the builds with the pairing recovered from Liu's released scores
 (results/transfer/gate2_followup_pairing/<run>/scores/recovered), plus the A3 calibration pool as jsonl
-(data/agent_v1/calibration_pool.csv: clean synthetic tool outputs; user_intent becomes user_request).
+(data/agent_v1/calibration_pool.csv: clean synthetic tool outputs; user_intent becomes user_request,
+task_type the tool name `function`).
 Unchanged files are copied. manifest.json keeps the base manifest, records what was replaced and from where, and
 recomputes data_version with manifest.py's formula over the new file hashes. Idempotent.
 
@@ -40,6 +41,7 @@ def main():
     with open(CALPOOL, newline="") as fin, open(a.out / "calibration_pool.jsonl", "w") as fout:
         for r in csv.DictReader(fin):
             fout.write(json.dumps({"id": r["id"], "suite": "agent_v1-" + r["task_type"], "task": r["doc_id"],
+                                   "function": r["task_type"],  # the tool name in Liu's judge prompt
                                    "text": r["text"], "user_request": r["user_intent"], "label": int(r["label"]),
                                    "source_type": "tool_result"}) + "\n")
     m = json.load(open(a.base / "manifest.json"))
