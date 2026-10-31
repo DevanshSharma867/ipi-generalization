@@ -1,0 +1,23 @@
+[14:47:37] corpus sizes: agentdojo 10085 texts / 1168 instructions, taubench 8898 texts / 0 instructions, injecagent 8432 texts / 4216 instructions, bipia_test 125 texts / 125 instructions
+[14:47:39] positive control: {'agentdojo': {'texts_hit': 50, 'texts': 50, 'instr_found': 67, 'instr': 50}, 'taubench': {'texts_hit': 50, 'texts': 50, 'instr_found': 0, 'instr': 0}, 'injecagent': {'texts_hit': 50, 'texts': 50, 'instr_found': 50, 'instr': 50}, 'bipia_test': {'texts_hit': 50, 'texts': 50, 'instr_found': 50, 'instr': 50}}
+[14:47:41] calibration_pool   vs agentdojo : n=  1140 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:42] calibration_pool   vs taubench  : n=  1140 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:42] calibration_pool   vs injecagent: n=  1140 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:42] calibration_pool   vs bipia_test: n=  1140 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:45] contexts           vs agentdojo : n= 17100 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:48] contexts           vs taubench  : n= 17100 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:49] contexts           vs injecagent: n= 17100 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:51] contexts           vs bipia_test: n= 17100 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:52] span_clean_a       vs agentdojo : n=  8059 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:53] span_clean_a       vs taubench  : n=  8059 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:53] span_clean_a       vs injecagent: n=  8059 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:54] span_clean_a       vs bipia_test: n=  8059 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:54] span_clean_b       vs agentdojo : n=  7440 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:55] span_clean_b       vs taubench  : n=  7440 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:56] span_clean_b       vs injecagent: n=  7440 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:56] span_clean_b       vs bipia_test: n=  7440 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:57] span_injected      vs agentdojo : n=    75 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:58] span_injected      vs taubench  : n=    75 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:58] span_injected      vs injecagent: n=    75 sharing 5-gram     0, 8-gram     0 (0.0000), containments 0
+[14:47:58] span_injected      vs bipia_test: n=    75 sharing 5-gram     6, 8-gram     0 (0.0000), containments 0
+[14:47:58] audit: PASS
