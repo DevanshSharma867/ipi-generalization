@@ -1,0 +1,14 @@
+% Writing helpers. No numbers here: numbers come only from numbers.tex.
+\newcommand{\todo}[1]{{\color{red}[TODO: #1]}}
+
+% \val{Name}: the value of macro \Name, failing the build if it does not exist.
+\newcommand{\val}[1]{%
+  \ifcsname #1\endcsname\csname #1\endcsname
+  \else\PackageError{macros}{Number macro \string\\#1 is undefined (not in numbers.tex)}{}\fi}
+% \ci{Name}: value plus its 95% CI from \NameCiLo / \NameCiHi.
+\newcommand{\ci}[1]{\mbox{\val{#1}~{\footnotesize[\val{#1CiLo}, \val{#1CiHi}]}}}
+
+\newcommand{\vtwo}{V2}
+\newcommand{\vthree}{V3}
+\newcommand{\ict}{ICT}
+\newcommand{\inp}[2]{\texttt{Intent:}~#1~\texttt{|}~\texttt{Context:}~#2}

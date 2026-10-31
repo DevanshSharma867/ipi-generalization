@@ -74,3 +74,6 @@ Plan: `docs/pairs_spec.md` v1, paper_plan A18 (construction, split seed 0 only, 
 - **EVAL generator** (above).
 - **Second annotator:** P2 needs two independent annotators; the author works solo. Who labels?
 - **Agent-pair sets** wait for AD-Clean/TB-Clean contexts (transfer harness) and the agent-style pipeline.
+
+# Paper draft
+- 2026-10-31: `paper/` started (ACL template, builds with `tectonic`, 13 pp., no errors). Drafted intro, related work (31 refs re-verified against arXiv/Anthology), threat model, C1 artifacts (macros only), V3 construction (pre-freeze numbers, flagged), intent pairs, limitations; ICT, setup and results are `\todo{}` stubs.

@@ -1,0 +1,28 @@
+\section{Experimental Setup}
+\label{sec:setup}
+
+\todo{Evaluation sets and their roles (paper\_plan \S5): AD-Matched, AD-Shift and TB-Matched rebuilt with the
+released scripts of \citet{liu2026passing} (set build verified row for row: \val{TransferGateOneStatus}), \vthree{}
+test over five split seeds, \vthree{}-test and agent pairs, InjecAgent and deepset as descriptive sets. Detectors with
+pinned Hugging Face ids and revisions. Calibration pool for agent sets. Training details and seeds.}
+
+\section{Results}
+\label{sec:results}
+
+\subsection{H1: Does artifact removal improve transfer?}
+\todo{\vtwo{}- vs \vthree{}-trained DeBERTa on AD-Matched, AD-Shift, TB-Matched; calibrated TPR@1\%FPR; paired
+bootstrap; decision per paper\_plan H1.}
+
+\subsection{H2: Does \ict{} read the request?}
+\todo{Pair accuracy on \vthree{}-test pairs (split seed 0), all pairs and subtle subset; lexical baselines;
+\vthree{}-DeBERTa without pairs alongside.}
+
+\subsection{H3: Request-aware comparators and content-only transfer}
+\todo{H3a: pair accuracy and calibrated TPR@5\%FPR vs the task-aware LLM judges, Sheltron with its goal segment, and
+ablation (a). H3b: non-inferiority on the agent sets vs the best published detector.}
+
+\subsection{H4: False alarms on requested instructions}
+\todo{FPR on aligned members at matched TPR 0.80 vs every content-only detector.}
+
+\subsection{Pre-registered decision}
+\todo{Prerequisites P1--P4, the row of the decision table, and every deviation from docs/deviations.md.}

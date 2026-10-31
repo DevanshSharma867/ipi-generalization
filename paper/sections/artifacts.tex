@@ -1,0 +1,169 @@
+\section{Construction Artifacts in Insertion-Based IPI Data}
+\label{sec:artifacts}
+
+We audit a BIPIA-derived dataset, \vtwo{}, built the way insertion-based IPI data is commonly built, and ask how
+much of its label can be predicted without reading the inserted content, and whether detectors trained on it use
+those cues. All numbers in this section are on the \vtwo{} test split, which is artifact-laden by design of the
+audit; fine-tuned results on it are not headline results and appear only next to the shortcut baselines.
+
+\subsection{The \vtwo{} construction}
+\vtwo{} uses the EmailQA, TableQA and CodeQA tasks of BIPIA \citep{yi2023bipia}. Documents are deduplicated and split
+at the document level, per task, into train, validation and test (70/15/15), so no document appears in two splits.
+Train and validation draw attack strings from BIPIA's training attack file and test draws from its disjoint test file;
+benign imperative sentences come from two disjoint hand-written pools for train and test. Each document yields four
+rows: two injected rows (an attack string inserted), one benign row (a benign imperative inserted), and the raw
+document. Classes are balanced exactly per task and split. The test split has \val{VTwoTprTfidfCOneVTwoTestNclusters}
+documents, \val{VTwoTprTfidfCOneVTwoTestNclean} clean rows and as many injected rows. The input is
+\inp{$q$}{$c$}; for CodeQA, BIPIA provides no question, so every CodeQA row carries the same constant intent.
+
+\paragraph{The artifacts.}
+Reading the construction code, rather than the data, gives four label-dependent choices.
+\begin{itemize}
+  \item \textbf{Position.} Attack strings are inserted either at the start of the document or in the middle;
+  benign imperatives are always inserted in the middle; no span is ever inserted at the end. Every row with a span at
+  the start is therefore injected.
+  \item \textbf{Whitespace.} Middle insertion splits the document on whitespace and re-joins it with single spaces,
+  which deletes every newline. Raw documents keep their formatting, start insertions keep it, and every benign row
+  loses it, so the presence of a newline is informative about the row type.
+  \item \textbf{Span surface form.} Inserted spans differ by class in form: every benign imperative ends in a period
+  and none contains a question mark, quotation marks or a newline, whereas attack strings vary on all of these.
+  \item \textbf{Template reuse.} A handful of benign templates recur across documents, including a ``Note: \ldots''
+  template, and some test-pool benign items are addressed to the model (``Act as a helpful assistant\ldots'',
+  ``System: \ldots''), which makes their label ambiguous under any definition.
+\end{itemize}
+\todo{Row-level leakage: re-establish with committed code (pre-registration P4) before any claim about row-level
+splits appears; until then this section claims nothing about leakage.}
+
+\subsection{Content-free baselines}
+\label{sec:artifacts:baselines}
+Table~\ref{tab:artifact-baselines} reports probes that never see the user request and, except the last, never see
+the content of the inserted span. The \emph{position oracle} reads only the recorded insertion mode and predicts
+``injected'' for a span at the start. The \emph{first-paragraph rule} is untrained: it flags a row whose first
+\verb|\n\n|-separated paragraph has at most 30 words. \emph{Prefix-30} and \emph{suffix-30} are TF-IDF + logistic
+regression models on the first or last 30 words of the context. \emph{Span-form} is a logistic regression on nine
+content-free features of the inserted span (word and character counts; whether it ends in a question mark,
+period or exclamation mark; whether it contains a quote, a digit, or a newline or code character; and its share of
+capital letters),
+evaluated on the rows that have a span. The learned probes are trained on \vtwo{} train only.
+
+For reference, a TF-IDF + logistic regression detector on the full input reaches macro-F1
+\ci{VTwoTfidfCOneFOneMacro} and AUROC \ci{VTwoTfidfCOneRocAuc}. The position field alone reaches macro-F1
+\ci{VTwoArtifactPositionOracleFOneMacro}, and the untrained first-paragraph rule
+\ci{VTwoArtifactFirstParaRuleFOneMacro}: both CIs lie above chance and below the TF-IDF detector's point estimate.
+The first 30 words carry far more signal than the last 30 (\ci{VTwoArtifactPrefixThreeZeroTfidfLrFOneMacro} vs
+\ci{VTwoArtifactSuffixThreeZeroTfidfLrFOneMacro}; the CIs do not overlap), which is what the position artifact
+predicts. The surface form of the span alone, with no access to its words, gives macro-F1
+\ci{VTwoArtifactSpanFormLrFOneMacro} on rows with an inserted span.
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/v2_artifact_baselines.tex}}
+\caption{Content-free probes on \vtwo{} test. None reads the user request; the learned probes are trained on
+\vtwo{} train. Span-form is evaluated on rows with an inserted span. Brackets: 95\% document-cluster bootstrap CI.}
+\label{tab:artifact-baselines}
+\end{table}
+
+\subsection{Do trained detectors use position?}
+\label{sec:artifacts:probes}
+A content-free probe that solves the data shows that a shortcut is available, not that a detector takes it. We
+therefore build four stress tests from the \vtwo{} test documents, with a formatting-preserving insertion that splits
+only at existing line, sentence or word boundaries and never re-joins words. In each, the same span is placed at the
+start, middle and end of the same document, so position effects are paired within document.
+\textbf{P1} inserts a neutral declarative sentence (label 0), spliced from another test document of the same task
+where possible. \textbf{P2} moves the benign imperative that the document already carries in \vtwo{} (label 0).
+\textbf{P3} moves each of the document's two test attacks (label 1). \textbf{P4} applies \vtwo{}'s whitespace
+collapse to the raw document and inserts nothing (label 0).
+
+We score a TF-IDF detector, DeBERTa-v3-base \citep{he2021debertav3} fine-tuned on \vtwo{} train (three seeds),
+two public content-only detectors (PIGuard \citep{li-etal-2025-piguard} and ProtectAI v2\footnote{Hugging Face
+\texttt{protectai/\allowbreak deberta-v3-base-\allowbreak prompt-injection-v2}. \todo{revision used for the \vtwo{} scores}}), and a
+Qwen2.5-7B-Instruct LLM judge given the request and the context. The judge's prompt was committed together with
+its first scores, so we cannot show that it was fixed before any result was seen; the judges used for our
+hypotheses use a separately frozen prompt. Figure~\ref{fig:position} shows the
+flag rates and Table~\ref{tab:position-contrasts} the paired contrasts.
+
+\paragraph{Fine-tuned DeBERTa.}
+On its own test split, the fine-tuned DeBERTa looks nearly perfect: macro-F1
+\val{VTwoTprDebertaMeanVTwoTestFOneMacroMean}~$\pm$~\val{VTwoTprDebertaMeanVTwoTestFOneMacroSd} and AUROC
+\val{VTwoTprDebertaMeanVTwoTestRocAucMean}~$\pm$~\val{VTwoTprDebertaMeanVTwoTestRocAucSd} (mean $\pm$ SD over
+seeds). The stress tests show that position matters to it. Moving the same benign imperative from the middle to the
+start raises its flag rate by \ci{VTwoProbeDebertaMeanPTwoStartMinusMiddle} (seed mean), and the increase is positive
+with a CI excluding 0 for every seed. Moving an attack from the start to the end lowers recall (end $-$ start:
+\ci{VTwoTruncDebertaMeanPThreeendminusstartFull}).
+
+Part of the end-position drop is truncation: DeBERTa reads \val{VTwoTruncWindowTokens} tokens, and a fraction
+\val{VTwoTruncDebertaMeanPThreeendtruncated} of P3 end rows lose part of the span. On the matched subset of
+documents whose span is fully visible at all three positions, the end $-$ start difference shrinks to
+\ci{VTwoTruncDebertaMeanPThreeendminusstartMatched} but still excludes 0 for every seed, and the P2 contrast is
+unchanged (\ci{VTwoTruncDebertaMeanPTwostartminusmiddleMatched}). Training on data in which only attacks appear at
+the start produces a detector that treats ``at the start'' as evidence of an attack.
+
+\paragraph{The shortcut depends on the seed.}
+The three DeBERTa seeds have overlapping test macro-F1 CIs (Table~\ref{tab:seed-variance}), yet they use position to
+different degrees. Even a neutral sentence is flagged more often at the start than in the middle for seed 999
+(\ci{VTwoProbeDebertaSNineNineNinePOneStartMinusMiddle}), while for seeds 42 and 123 the difference is
+\val{VTwoProbeDebertaSFourTwoPOneStartMinusMiddle} and \val{VTwoProbeDebertaSOneTwoThreePOneStartMinusMiddle}.
+The P2 contrast of seed 999 (\ci{VTwoProbeDebertaSNineNineNinePTwoStartMinusMiddle}) does not overlap those of the
+other seeds. In-distribution test scores cannot reveal which seed learned the shortcut.
+
+\paragraph{Whitespace.}
+P4 isolates the whitespace artifact. The DeBERTa-v3 tokenizer maps a space, \verb|\n| and \verb|\n\n| to the same
+tokens and our TF-IDF pipeline collapses whitespace, so neither model can see it: their flag rates on P4 equal those
+on the raw documents (P4 $-$ raw clean: \val{VTwoGroupsDebertaMeanPfourminusrawclean} for DeBERTa,
+\val{VTwoGroupsTfidfCOnePfourminusrawclean} for TF-IDF). For these models the live artifacts are position and span
+form. Whitespace remains visible to any model whose input keeps newlines, such as the LLM judge, for which
+P4 $-$ raw clean is \ci{VTwoGroupsJudgeQwenTwoFiveSevenbPfourminusrawclean}.
+
+\paragraph{Detectors not trained on \vtwo{}.}
+The public detectors and the judge show a different picture. PIGuard's training data contains most of BIPIA's
+training-half attack strings \citep{liu2026passing}, so its \vtwo{} numbers are not zero-shot. Neither public classifier shows a P3
+position effect whose CI excludes 0 (PIGuard \ci{VTwoProbePiguardPThreeEndMinusStart}, ProtectAI
+\ci{VTwoProbeProtectaiPThreeEndMinusStart}). The LLM judge, which reads the whole input with no truncation, loses
+recall towards the end of the document (end $-$ start: \ci{VTwoProbeJudgeQwenTwoFiveSevenbPThreeEndMinusStart}), a position effect
+that cannot come from \vtwo{} training. PIGuard catches most \vtwo{} test attacks (recall
+\ci{VTwoGroupsPiguardRecall}) and never flags a raw document (\val{VTwoGroupsPiguardRawcleanflag}), but flags
+\ci{VTwoGroupsPiguardBenignflag} of the benign imperatives: it separates ``contains an instruction'' from ``contains
+none'', which is the strict definition of \S\ref{sec:task}, not the intent-based one. ProtectAI's recall
+(\ci{VTwoGroupsProtectaiRecall}) is below its flag rate on raw documents (\ci{VTwoGroupsProtectaiRawcleanflag}).
+Table~\ref{tab:test-groups} gives all row groups.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/position_flag_rates.pdf}
+\caption{Position stress tests on \vtwo{} test documents. Each panel shows, for one detector, the rate at which
+rows are flagged as injected when the same span is placed at the start, middle or end of the same document: a neutral
+sentence (P1), the document's benign imperative (P2), and its attacks (P3, recall). Error bars: 95\%
+document-cluster bootstrap CI. Default thresholds. \texttt{vsum}: the same judge scored with a rule that sums all
+case and whitespace variants of Yes/No.}
+\label{fig:position}
+\end{figure*}
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/v2_position_contrasts.tex}}
+\caption{Paired within-document position contrasts on the stress tests (full probe sets, default threshold).
+Brackets: paired document-cluster bootstrap 95\% CI.}
+\label{tab:position-contrasts}
+\end{table}
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/v2_seed_shortcut_variance.tex}}
+\caption{Three DeBERTa seeds with indistinguishable \vtwo{} test scores use the position shortcut to different
+degrees.}
+\label{tab:seed-variance}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\resizebox{\textwidth}{!}{\input{tables/v2_test_groups.tex}}
+\caption{\vtwo{} test by row group: recall on injected rows, flag rates on benign-imperative rows, raw documents
+and their whitespace-collapsed version (P4), and the paired P4 $-$ raw clean difference. Default thresholds.}
+\label{tab:test-groups}
+\end{table*}
+
+\subsection{Summary}
+In \vtwo{}, where a span is inserted and what it looks like predict the label without its content, and a
+fine-tuned detector with near-perfect test scores uses insertion position to a degree that varies across seeds and
+is invisible in those scores. These are properties of the construction procedure, so any detector trained or
+compared on data built this way is affected. \S\ref{sec:v3} removes them.

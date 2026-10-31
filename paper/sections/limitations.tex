@@ -1,0 +1,40 @@
+\section*{Limitations}
+
+\paragraph{The definition of an injection is a choice.}
+Our pairs label an instruction by whether following it serves the user's request. Under the strict view that every
+instruction in data is untrusted \citep{chen2024struq}, both members of every pair are injections, and a detector that
+flags requested instructions is behaving correctly. The pair-based hypotheses (H2, H3 on pairs, H4) are meaningful
+only under our definition; the artifact analysis, the \vthree{} gates and transfer to agent benchmarks are not
+affected by it. We exclude instructions that are unsafe to follow even when requested, but deployments that never act
+on data-borne instructions lose nothing by flagging aligned ones.
+
+\paragraph{Pairs are LLM-drafted.}
+Request phrasing may carry generator artifacts, and a model trained on pairs from one generator could learn that
+generator rather than intent. We separate evaluation and training generators and templates, keep only pairs on which
+two human annotators agree, remove request-only and content-only shortcuts by construction, and report lexical
+baselines and a subtle subset. These measures cannot rule out every generator artifact.
+
+\paragraph{Small and synthetic evaluation data.}
+BIPIA-derived test splits are small (\vtwo{} test has \val{VTwoTaskEmailNdocs} EmailQA documents), so per-task
+intervals are wide and per-task results are descriptive only. We use three of BIPIA's five tasks. Table clean-B
+spans in \vthree{} are templated, and inserting text into tables and newline-free emails is unnatural. The agent
+benchmarks are simulations with static attacks; the $\tau$-bench injection point is chosen by the set builder. Our
+TPR values are therefore upper bounds against adaptive attackers, and we make no adaptive-attack claim.
+
+\paragraph{Detectors whose training data cannot be audited.}
+PIGuard was trained on most BIPIA and InjecAgent attack strings \citep{liu2026passing}, and some public detectors do
+not disclose their training data. We flag these detectors in every table and never call them zero-shot.
+
+\paragraph{No frontier-LLM comparator.}
+The request-aware comparators are open 7--8B LLM judges, a small classifier with a goal segment, and our own
+ablation. The strongest request-aware detectors in practice are large API models prompted with the request; to keep
+the project at no monetary cost we do not evaluate one, and we make no claim of superiority over them.
+
+\paragraph{Calibration.}
+Calibrated thresholds for agent sets come from a synthetic pool of clean tool outputs, whose distribution may differ
+from the benchmarks' clean outputs, so the realized false-positive rate can miss its target. We report the realized
+rate next to every calibrated TPR.
+
+\paragraph{Seeds.}
+The \vtwo{} DeBERTa results in \S\ref{sec:artifacts} use three training seeds, and show that seeds with
+indistinguishable test scores differ in shortcut use. \todo{five seeds for every reported model, as pre-registered}

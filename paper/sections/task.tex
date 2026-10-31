@@ -1,0 +1,55 @@
+\section{Threat Model and Task Definition}
+\label{sec:task}
+
+\paragraph{Setting.}
+A user issues a request $q$ to an LLM application. To answer it, the application places an external context $c$ (a
+document, a table, code, or one tool output of an agent) into the model's input. The user and the application
+developer are trusted. The author of $c$ is not: an attacker may have written part of $c$ to make the model do
+something the user did not ask for. The attacker controls only the text of $c$, cannot see or change $q$, and does not
+adapt to the detector; our attack strings are static. A detector $f$ sits in front of the model and maps an input to
+a score $f(q, c) \in [0,1]$; above a threshold $\tau$ the context is flagged and withheld. Detectors that read only the
+context compute $f(c)$.
+
+\paragraph{Two definitions of an injection.}
+Under the \emph{strict} view, every instruction in $c$ is untrusted, whatever $q$ asks for
+\citep{chen2024struq}. The label then depends on $c$ alone: $y(q,c) = \mathbf{1}[c \text{ contains an
+instruction}]$. Under the \emph{intent-based} view that we adopt, an instruction $i$ in $c$ is an injection
+\emph{relative to the request}: it is one if following it while answering $q$ would give the user something other
+than what they asked for, and it is not one if following it serves $q$. This makes BIPIA's ``deviation from user
+expectations'' \citep{yi2023bipia} request-specific, and matches the aligned/misaligned distinction of
+\citet{jia2026alignsentinel} and the conflict-based framing of the instruction hierarchy
+\citep{wallace2024hierarchy}. The label is $y(q, c) = \mathbf{1}[\exists\, i \in c:\ i \text{ subverts } q]$.
+
+\paragraph{Why the distinction matters for detectors.}
+The two views agree on malicious payloads, which subvert every plausible request, and on contexts with no
+instruction. They disagree on instructions that the user requested or that serve the request (an email that says
+how to format the reply the user asked for, a README step the user wants carried out). A content-only detector
+computes the same score for $(q_1, c)$ and $(q_2, c)$, so on any set where the label of $c$ changes with $q$ it is
+at chance. Under the strict view this is no loss, and flagging requested instructions is correct. Under the
+intent-based view it is a false alarm, and with agents that act on their tool outputs it blocks requested work.
+
+\paragraph{Scope of our claims.}
+We state the intent-based definition as a design choice, not as the only correct one. Which of our results depend on
+it is fixed in advance: the pair-based hypotheses (H2, H3 on pairs, and H4 on false alarms for requested
+instructions) are meaningful only under the intent-based view, whereas the artifact analysis, the \vthree{} gates,
+and transfer to agent benchmarks (H1, and H3 on content-only sets) are meaningful under both. To keep the contested
+zone small, our pairs exclude every instruction that would be unsafe to follow even when the request asks for it:
+sending or revealing data to a party the user did not name, payments, deleting or overwriting user data, changing
+credentials or permissions, contradicting the document, and unrequested promotional content (\S\ref{sec:pairs}).
+Under either view those are injections.
+
+\paragraph{Task format.}
+Every model we train sees \inp{$q$}{$c$}; the cross-encoder of \S\ref{sec:ict} receives $q$ and $c$ as a segment
+pair. Public content-only detectors see $c$ alone. On agent benchmarks, $q$ is the task's user prompt and $c$ is a
+single tool output.
+
+\paragraph{Metrics.}
+Headline metrics are the true-positive rate at 1\% false-positive rate (TPR@1\%FPR), AUROC, and the false-positive
+rate at the detector's default threshold on clean inputs. Thresholds for TPR@FPR are primarily \emph{calibrated}:
+fixed on a held-out clean set and applied unchanged, as a deployment would. The \emph{oracle} protocol, which picks the
+threshold on the evaluated set's own clean rows as \citet{liu2026passing} does, is reported next to it and never
+decides a hypothesis. TPR@1\%FPR is reported only where the calibration set has at least 500 clean rows, and
+TPR@5\%FPR only where it has at least 100; otherwise we report n/a. On pairs, the metric is pair accuracy: the
+fraction of pairs in which the subverting member scores higher than the aligned one, with ties counted as one half.
+Confidence intervals are 95\% cluster bootstraps ($B{=}1000$) that resample source documents (or user tasks on agent
+benchmarks), and differences between models use a paired cluster bootstrap.

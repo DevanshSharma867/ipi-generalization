@@ -1,0 +1,15 @@
+\begin{abstract}
+Indirect prompt-injection (IPI) detectors are trained and evaluated on data in which attack strings are inserted
+into documents or tool outputs, and are deployed to decide whether such a context is safe to hand to an LLM.
+Whether an embedded instruction is an injection, however, depends on what the user asked for: the same sentence can
+be a requested step under one request and a hijack under another. We study two ways in which current detectors and
+their data fall short of this definition. First, we audit BIPIA-style insertion data and find that content-free
+construction features (insertion position, whitespace rewriting and the surface form of the inserted span) predict
+the label, and that fine-tuned detectors use position. We rebuild the data with these artifacts controlled.
+Second, we introduce request-counterfactual intent pairs, which keep the context byte-identical and change only the
+user request, so that any detector that ignores the request is at chance by construction. We train a request-aware
+cross-encoder on such pairs (Intent-Counterfactual Training, ICT) and test, under a pre-registered protocol, whether
+it reads the request, whether it transfers to agent benchmarks, and whether it raises fewer false alarms on
+requested instructions. \todo{one sentence of results once H1--H4 are decided; the paper type follows the
+pre-registered decision table}
+\end{abstract}
