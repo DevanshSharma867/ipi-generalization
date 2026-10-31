@@ -57,7 +57,8 @@ def main():
         r = json.load(open(f))
         opts = {k: r[k] for k in ("bs", "precision", "gpu_mem", "judge_rule", "placement") if k in r}
         summary[f.stem] = dict(n=len(r["probs"]), truncated=r["truncated"], **opts)
-        run.log(f"{f.stem:40s} n={len(r['probs']):5d} truncated={r['truncated']:.3f} {opts}")
+        tr = "-" if r["truncated"] is None else f"{r['truncated']:.3f}"  # judges record none
+        run.log(f"{f.stem:40s} n={len(r['probs']):5d} truncated={tr} {opts}")
     run.save_metrics({"files": summary, "scorer_env": env}, headline=("files", len(files)))
     run.finish()
 
