@@ -67,8 +67,10 @@ withdrawn), A24 (EVAL generator), A25 (annotators). Nothing has been generated, 
 1. **Author labels the pilot** (blocks generation): `open annotation/pilot_v1/devansh.html`, export
    `annotation/pilot_v1/devansh.csv`. Measures time per pair and tests the rules; revise E3/E4 after it if needed
    (A18 Q4).
-2. **Prefetch the generators** as an sbatch job (Gemma 55 GB, Mistral 29 GB of safetensors; standing rule 10 rules
-   out a long login-node download), then `prefetch status`.
+2. **Generator download: job 425712** (`jobs/prefetch_generators.sh`, started 2026-10-31 14:27 on gpunode8, 2 h limit;
+   Gemma 55 GB + Mistral 29 GB into `$HF_HOME` on scratch). Check: `ssh -q bits-hpc 'tail ~/nlp_harness/logs/slurm_prefetch_gen_425712.log'`.
+   Resume after a timeout or failure: `sbatch jobs/prefetch_generators.sh` (finished files are skipped). Done when the
+   log ends with "both generators complete".
 3. **Generator prompts and config** (EVAL and TRAIN, no shared word 8-gram; decoding settings and seed), committed
    before any generation.
 4. **20-document timing job** (`jobs/`, sbatch, ≤ 1 h, half card with `set_per_process_memory_fraction(0.5)`):
