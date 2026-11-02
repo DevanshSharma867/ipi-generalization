@@ -424,7 +424,8 @@ def table_transfer_detectors():
                 put(macro_name(*p, "oracle", k, "tpr"), f"{o['tpr']['point']:.3f}" if o["status"] == "ok" else "n/a")
                 if k == "1pct_fpr":
                     cells.append(f"{c_tpr} & {c_fpr}")
-                for proto, h in e["task_halves"].items():  # secondary protocol, same evaluation half
+                for proto in ("task_half", "calibration_pool"):  # secondary protocol, same evaluation half
+                    h = e["task_halves"][proto]
                     hk = h[f"calibrated@{k}"]
                     if hk["status"] == "ok":
                         num(hk["tpr"]["point"], *p, "halves", proto, k, "tpr", digits=3)

@@ -949,26 +949,29 @@ The |AUROC − 0.5| column is a transparency metric, not a retroactive pass/fail
 id: F021
 status: full
 script: jobs/transfer_scores_{encoders,wolf,judges}.sh (eval/transfer/detectors.py, record_scores.py) -> eval/transfer/transfer_metrics.py
-commit: 640f907
+commit: 79d7a1e
 seeds: n/a (deterministic scoring; judges greedy); bootstrap seed 42, B = 1000
 data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded
 eval_set: AD-Matched, AD-Shift (recovered pairing), TB-Matched; negatives AD-Clean / TB-Clean; calibration pool (A3)
 threshold_protocol: calibrated (1%/5% FPR on the calibration pool, primary) and oracle (on the evaluated clean rows, MIN_CLEAN gates)
-date: 2026-10-31
+date: 2026-11-02 (first version 2026-10-31, run 20261031-190127_seed42, superseded: it also listed the 4-bit judges)
 source:
-- results/transfer/transfer_metrics/20261031-190127_seed42
+- results/transfer/transfer_metrics/20261102-115039_seed42
 upstream:
 - results/transfer/transfer_scores_liuenv/20261031-182528_seed0
 - results/transfer/transfer_scores_wolf/20261031-182747_seed0
-- results/transfer/transfer_scores_judges_nf4/20261031-185021_seed0
 - results/transfer/transfer_scores_judges_bf16/20261031-190043_seed0
 macros:
 - TransferDet*
+- "!TransferDet*Halves*"
 ```
 
-Every published detector Liu (2026) scored, except protectai-small-v2 (access pending), scored in his environment
-(Wolf Defender in ours, transformers 5.20.1, as he did), plus his two LLM judges with his Yes/No rule in 4-bit (his
-setting) and bf16 (A20). Sets from `eval/transfer/sets_adliu.py`: AD-Matched/AD-Shift with the recovered pairing
+Every published detector Liu (2026) scored, except protectai-small-v2 (access granted 2026-11-02; its scoring job
+failed twice on an uncorrectable GPU ECC error, jobs 429434/429443), scored in his environment (Wolf Defender in ours,
+transformers 5.20.1, as he did), plus his two LLM judges with his Yes/No rule.
+**Judge precision: bf16** (A20; author decision 2026-11-02). Every published-detector baseline and every H3
+comparison uses the bf16 judges. The 4-bit NF4 judges (Liu's setting) are reported only for the Liu reproduction
+(Gate 2, F017); their transfer scores (`transfer_scores_judges_nf4/20261031-185021_seed0`) are kept but enter no table. Sets from `eval/transfer/sets_adliu.py`: AD-Matched/AD-Shift with the recovered pairing
 (deviations 2026-10-31), TB-Matched, AD-Clean, TB-Clean, and the 1,140-row calibration pool as jsonl. On AgentDojo
 the negatives are AD-Clean (A16). Clusters for every CI: user task. Full table: `paper/tables/transfer_detectors.tex`.
 
@@ -980,8 +983,71 @@ the negatives are AD-Clean (A16). Clusters for every CI: user task. Full table: 
   Calibrated TPR must always be read next to its realized FPR (the risk paper_plan §8 names).
 - Strongest calibrated operating point on AD-Matched at a realized FPR ≤ 1%: Horizon, TPR@1%FPR
   {{TransferDetHorizonBaseLiuenvAdmatchedCalOnepctFprTpr}} [{{TransferDetHorizonBaseLiuenvAdmatchedCalOnepctFprTprCiLo}},
-  {{TransferDetHorizonBaseLiuenvAdmatchedCalOnepctFprTprCiHi}}]. The 4-bit Qwen judge reaches
-  {{TransferDetJudgeQwenJudgesNfFourAdmatchedCalOnepctFprTpr}} but at a realized FPR of
-  {{TransferDetJudgeQwenJudgesNfFourAdmatchedCalOnepctFprFpr}}.
+  {{TransferDetHorizonBaseLiuenvAdmatchedCalOnepctFprTprCiHi}}]. The bf16 Qwen judge reaches
+  {{TransferDetJudgeQwenJudgesBfOneSixAdmatchedCalOnepctFprTpr}} but at a realized FPR of
+  {{TransferDetJudgeQwenJudgesBfOneSixAdmatchedCalOnepctFprFpr}}.
+- **task_block_rate** (Liu's definition: share of user tasks with at least one clean output flagged; CI resamples
+  tasks). At 0.5, PIGuard blocks {{TransferDetPiguardLiuenvAdcleanBlockAtZeroFive}} of AD-Clean tasks and
+  {{TransferDetPiguardLiuenvTbcleanBlockAtZeroFive}} of TB-Clean tasks; Horizon
+  {{TransferDetHorizonBaseLiuenvAdcleanBlockAtZeroFive}} and {{TransferDetHorizonBaseLiuenvTbcleanBlockAtZeroFive}};
+  the bf16 judges {{TransferDetJudgeQwenJudgesBfOneSixAdcleanBlockAtZeroFive}} (Qwen) and
+  {{TransferDetJudgeLlamaJudgesBfOneSixAdcleanBlockAtZeroFive}} (Llama) on AD-Clean. At the calibration pool's 1%
+  threshold PIGuard still blocks {{TransferDetPiguardLiuenvAdcleanBlockCalibratedOnepctFpr}} of AD-Clean tasks.
+  Every detector, at 0.5 and both calibrated thresholds, is in the run's `metrics.json` (`*_task_block_rate`).
 - Oracle TPR@1%FPR on AgentDojo is `n/a` (AD-Clean has 339 rows < 500); oracle TPR@5%FPR is reported per cell.
 - No hypothesis is decided here: these are the published-detector baselines H1–H3 compare against.
+
+## F022. Calibration transfer: realized FPR of the calibration-pool thresholds on the agent sets
+
+```finding
+id: F022
+status: full
+script: eval/transfer/transfer_metrics.py (task_halves; calibration-pool thresholds, paper_plan A3) -> scripts/make_tables.py
+commit: 79d7a1e
+seeds: n/a (deterministic scores); task-half split seed 0 (sha256 of "0:<suite>/<task>"); bootstrap seed 42, B = 1000
+data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded
+eval_set: AD-Matched, AD-Shift, TB-Matched (negatives AD-Clean / TB-Clean); calibration pool (A3)
+threshold_protocol: calibrated on the calibration pool (primary) vs task-disjoint halves (secondary, A3; never decides)
+date: 2026-11-02
+source:
+- results/transfer/transfer_metrics/20261102-115039_seed42
+upstream:
+- results/transfer/transfer_scores_liuenv/20261031-182528_seed0
+- results/transfer/transfer_scores_wolf/20261031-182747_seed0
+- results/transfer/transfer_scores_judges_bf16/20261031-190043_seed0
+macros:
+- TransferCaltransfer*
+- TransferDet*Halves*
+```
+
+The calibration pool (1,140 synthetic clean tool outputs, F019) fixes every agent-set threshold (A3). This entry
+measures how far those thresholds miss their FPR target on the agent sets' real clean outputs, for the
+{{TransferCaltransferAdmatchedOnepctFprN}} detectors of F021 (bf16 judges).
+
+- **AgentDojo (AD-Clean negatives; AD-Matched and AD-Shift share them, so their FPR rows are identical).** At the 1%
+  target, {{TransferCaltransferAdmatchedOnepctFprAbove}} of {{TransferCaltransferAdmatchedOnepctFprN}} detectors
+  have a realized-FPR CI entirely above 1% and {{TransferCaltransferAdmatchedOnepctFprBelow}} entirely below; median
+  realized FPR {{TransferCaltransferAdmatchedOnepctFprMedian}}. At 5%:
+  {{TransferCaltransferAdmatchedFivepctFprAbove}} above, {{TransferCaltransferAdmatchedFivepctFprBelow}} below,
+  median {{TransferCaltransferAdmatchedFivepctFprMedian}}.
+- **τ-bench (TB-Clean negatives).** At 1%: {{TransferCaltransferTbevalOnepctFprAbove}} above,
+  {{TransferCaltransferTbevalOnepctFprBelow}} below, median {{TransferCaltransferTbevalOnepctFprMedian}}. At 5%:
+  {{TransferCaltransferTbevalFivepctFprAbove}} above, {{TransferCaltransferTbevalFivepctFprBelow}} below, median
+  {{TransferCaltransferTbevalFivepctFprMedian}}. The miss is smaller on τ-bench than on AgentDojo.
+- **In-domain contrast (secondary protocol, task-disjoint halves).** Each set's user tasks are split 50/50 by a
+  seeded hash; thresholds from the calibration half's clean rows, evaluated on the other half, next to the pool
+  threshold on the same evaluation half. At 5% on AgentDojo the median realized FPR is
+  {{TransferCaltransferAdmatchedFivepctFprHalvesTaskHalfMedian}} with in-domain thresholds against
+  {{TransferCaltransferAdmatchedFivepctFprHalvesCalibrationPoolMedian}} with the pool's; on τ-bench at 1%,
+  {{TransferCaltransferTbevalOnepctFprHalvesTaskHalfMedian}} against
+  {{TransferCaltransferTbevalOnepctFprHalvesCalibrationPoolMedian}}. Example: PIGuard on AgentDojo at 5%,
+  {{TransferDetPiguardLiuenvAdmatchedHalvesTaskHalfFivepctFprFpr}} (in-domain) vs
+  {{TransferDetPiguardLiuenvAdmatchedHalvesCalibrationPoolFivepctFprFpr}} (pool).
+- In-domain TPR@1%FPR on AgentDojo is `n/a` for every detector: the calibration half has 169 AD-Clean rows (< 500,
+  MIN_CLEAN). Half sizes: AD 47/50 user tasks, TB 348/327 (in `metrics.json`). The split depends only on task ids;
+  it was fixed in code before these metrics were computed, but after the scores existed.
+- Reading: the pool thresholds are too low for most detectors on AgentDojo's clean outputs (the synthetic pool is
+  easier than real tool outputs), so calibrated TPR on AD is inflated by a realized FPR well above target. This is
+  the A3 risk (paper_plan §8): every calibrated TPR is reported next to its realized FPR, and H1 still uses the pool
+  (pre-registered); the halves protocol is reported, never decides.
+
