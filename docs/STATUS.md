@@ -1,4 +1,4 @@
-# Status (updated 2026-10-31)
+# Status (updated 2026-11-02)
 
 # Transfer harness
 
@@ -50,17 +50,27 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
     give realized FPR on AD-Clean from 0.003 to 0.23 at a 1% target; JasperLS flags the whole pool.
     Rescoring is bit-identical (96/96 files vs the first pass, `…files69e403d1`, kept as superseded runs).
   - **Gate 2: PASS** (A19 metrics, all four detectors, all sets, recovered AD pairing, Liu's env).
+  - **2026-11-02: judges are bf16** for every baseline and H3 comparison (A20); 4-bit only for the Liu reproduction.
+    F021 re-rendered from `results/transfer/transfer_metrics/20261102-115039_seed42` (bf16 judges only; adds
+    task_block_rate on AD-Clean/TB-Clean). The crashed uncommitted run `transfer_scores_judges_nf4/20261031-184508_seed0`
+    was deleted on the cluster.
+  - **Secondary protocol (task-disjoint halves) and calibration transfer: F022.** The pool's thresholds miss their
+    target on AgentDojo for most detectors (1% target: 12/18 with the realized-FPR CI above 1%, median 0.052); with
+    in-domain half thresholds the median realized FPR at 5% is 0.053 vs 0.118 with the pool's on the same half.
   - CPU diagnostic (laptop; `results/transfer/gate2_followup_batch_cpu/`, not a reference) agrees: batch ≤ 6e-6
     for every model (our DeBERTa ≤ 1.8e-7); env shift identical in rows over 1e-3 and flips (46/9, 228/6, 389/34).
 
 ## Next
-1. **Next for the harness:** secondary protocol (task-disjoint halves, A3) and `task_block_rate`; protectai-small-v2 once
-   access is granted; decide the judges' primary precision (4-bit = Liu's setting, bf16 = A20).
+1. **protectai-small-v2:** access granted and downloaded (2026-11-02), added to `jobs/transfer_scores_encoders.sh`.
+   Jobs 429434 and 429443 both failed at start with `CUDA error: uncorrectable ECC error` on gpunode8 (the partition's
+   only node). Report the faulty GPU to the cluster admins, then `sbatch jobs/transfer_scores_encoders.sh` (finished
+   scores are skipped) and rerun `eval/transfer/transfer_metrics.py` with the new liuenv run; F021/F022 update via
+   `make_tables.py`.
 2. **e. Results layout:** `results/transfer/<detector>/<set>/<run_id>`, which needs a nested-exp change in
    `src/runlog.py`.
 
 ## Open decisions / blockers
-- **Access request:** `protectai/deberta-v3-small-prompt-injection-v2` requested 2026-10-30; re-run prefetch to confirm.
+- **GPU fault:** uncorrectable ECC errors on gpunode8 (jobs 429434, 429443); blocks all GPU jobs that land on that GPU.
 - **Revision pins:** Liu pins only Horizon. wolf-defender and prismor-1.5b changed days before his last commit:
   first suspects if Gate 2 mismatches (re-pin with a reason).
 - **VRAM cap:** MPS does not enforce `CUDA_MPS_PINNED_DEVICE_MEM_LIMIT` (smoke test, job 422476). Half-card VRAM
@@ -87,10 +97,8 @@ withdrawn), A24 (EVAL generator), A25 (annotators). Nothing has been generated, 
 1. **Author labels the pilot** (blocks generation): `open annotation/pilot_v1/devansh.html`, export
    `annotation/pilot_v1/devansh.csv`. Measures time per pair and tests the rules; revise E3/E4 after it if needed
    (A18 Q4).
-2. **Generator download: job 425712** (`jobs/prefetch_generators.sh`, started 2026-10-31 14:27 on gpunode8, 2 h limit;
-   Gemma 55 GB + Mistral 29 GB into `$HF_HOME` on scratch). Check: `ssh -q bits-hpc 'tail ~/nlp_harness/logs/slurm_prefetch_gen_425712.log'`.
-   Resume after a timeout or failure: `sbatch jobs/prefetch_generators.sh` (finished files are skipped). Done when the
-   log ends with "both generators complete".
+2. **Generator download: done.** Job 425712 completed in 23 min ("both generators complete", 2026-10-31 14:50);
+   prefetch status 2026-11-02: both complete.
 3. **Generator prompts and config** (EVAL and TRAIN, no shared word 8-gram; decoding settings and seed), committed
    before any generation.
 4. **20-document timing job** (`jobs/`, sbatch, ≤ 1 h, half card with `set_per_process_memory_fraction(0.5)`):

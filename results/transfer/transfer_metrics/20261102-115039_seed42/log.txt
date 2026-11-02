@@ -1,0 +1,144 @@
+[11:50:42] protectai-v1@liuenv                admatched AUROC 0.601  cal TPR@1% 0.252 (FPR 0.224)  cal TPR@5% 0.280 (FPR 0.227)  oracle TPR@5% 0.197
+[11:50:42] protectai-v1@liuenv                admatched halves: task-half cal TPR@5% 0.178 (FPR 0.035)  pool cal TPR@5% 0.267 (FPR 0.218)
+[11:50:45] protectai-v1@liuenv                adshift   AUROC 0.629  cal TPR@1% 0.315 (FPR 0.224)  cal TPR@5% 0.319 (FPR 0.227)  oracle TPR@5% 0.228
+[11:50:45] protectai-v1@liuenv                adshift   halves: task-half cal TPR@5% 0.208 (FPR 0.035)  pool cal TPR@5% 0.293 (FPR 0.218)
+[11:50:51] protectai-v1@liuenv                tbeval    AUROC 0.728  cal TPR@1% 0.476 (FPR 0.138)  cal TPR@5% 0.479 (FPR 0.143)  oracle TPR@5% 0.473
+[11:50:51] protectai-v1@liuenv                tbeval    halves: task-half cal TPR@5% 0.444 (FPR 0.062)  pool cal TPR@5% 0.455 (FPR 0.161)
+[11:50:51] protectai-v1@liuenv                adclean   task_block_rate at_0.5 0.124  calibrated@1pct_fpr 0.464  calibrated@5pct_fpr 0.464
+[11:50:51] protectai-v1@liuenv                tbclean   task_block_rate at_0.5 0.068  calibrated@1pct_fpr 0.178  calibrated@5pct_fpr 0.187
+[11:50:55] protectai-v2@liuenv                admatched AUROC 0.752  cal TPR@1% 0.530 (FPR 0.189)  cal TPR@5% 0.569 (FPR 0.251)  oracle TPR@5% 0.225
+[11:50:55] protectai-v2@liuenv                admatched halves: task-half cal TPR@5% 0.218 (FPR 0.047)  pool cal TPR@5% 0.524 (FPR 0.241)
+[11:50:58] protectai-v2@liuenv                adshift   AUROC 0.768  cal TPR@1% 0.547 (FPR 0.189)  cal TPR@5% 0.607 (FPR 0.251)  oracle TPR@5% 0.158
+[11:50:58] protectai-v2@liuenv                adshift   halves: task-half cal TPR@5% 0.173 (FPR 0.047)  pool cal TPR@5% 0.597 (FPR 0.241)
+[11:51:04] protectai-v2@liuenv                tbeval    AUROC 0.586  cal TPR@1% 0.490 (FPR 0.083)  cal TPR@5% 0.509 (FPR 0.225)  oracle TPR@5% 0.476
+[11:51:04] protectai-v2@liuenv                tbeval    halves: task-half cal TPR@5% 0.424 (FPR 0.051)  pool cal TPR@5% 0.448 (FPR 0.237)
+[11:51:04] protectai-v2@liuenv                adclean   task_block_rate at_0.5 0.691  calibrated@1pct_fpr 0.495  calibrated@5pct_fpr 0.588
+[11:51:04] protectai-v2@liuenv                tbclean   task_block_rate at_0.5 0.803  calibrated@1pct_fpr 0.119  calibrated@5pct_fpr 0.289
+[11:51:07] piguard@liuenv                     admatched AUROC 0.757  cal TPR@1% 0.391 (FPR 0.206)  cal TPR@5% 0.553 (FPR 0.218)  oracle TPR@5% 0.035
+[11:51:07] piguard@liuenv                     admatched halves: task-half cal TPR@5% 0.022 (FPR 0.047)  pool cal TPR@5% 0.524 (FPR 0.206)
+[11:51:10] piguard@liuenv                     adshift   AUROC 0.780  cal TPR@1% 0.460 (FPR 0.206)  cal TPR@5% 0.600 (FPR 0.218)  oracle TPR@5% 0.121
+[11:51:10] piguard@liuenv                     adshift   halves: task-half cal TPR@5% 0.155 (FPR 0.047)  pool cal TPR@5% 0.581 (FPR 0.206)
+[11:51:16] piguard@liuenv                     tbeval    AUROC 0.926  cal TPR@1% 0.519 (FPR 0.005)  cal TPR@5% 0.539 (FPR 0.028)  oracle TPR@5% 0.623
+[11:51:16] piguard@liuenv                     tbeval    halves: task-half cal TPR@5% 0.583 (FPR 0.047)  pool cal TPR@5% 0.510 (FPR 0.030)
+[11:51:16] piguard@liuenv                     adclean   task_block_rate at_0.5 0.598  calibrated@1pct_fpr 0.495  calibrated@5pct_fpr 0.495
+[11:51:16] piguard@liuenv                     tbclean   task_block_rate at_0.5 0.209  calibrated@1pct_fpr 0.010  calibrated@5pct_fpr 0.058
+[11:51:19] jasperls@liuenv                    admatched AUROC 0.862  cal TPR@1% 0.275 (FPR 0.009)  cal TPR@5% 0.345 (FPR 0.024)  oracle TPR@5% 0.412
+[11:51:19] jasperls@liuenv                    admatched halves: task-half cal TPR@5% 0.422 (FPR 0.059)  pool cal TPR@5% 0.333 (FPR 0.024)
+[11:51:22] jasperls@liuenv                    adshift   AUROC 0.880  cal TPR@1% 0.267 (FPR 0.009)  cal TPR@5% 0.328 (FPR 0.024)  oracle TPR@5% 0.417
+[11:51:22] jasperls@liuenv                    adshift   halves: task-half cal TPR@5% 0.440 (FPR 0.059)  pool cal TPR@5% 0.328 (FPR 0.024)
+[11:51:28] jasperls@liuenv                    tbeval    AUROC 0.597  cal TPR@1% 0.000 (FPR 0.000)  cal TPR@5% 0.000 (FPR 0.000)  oracle TPR@5% 0.301
+[11:51:28] jasperls@liuenv                    tbeval    halves: task-half cal TPR@5% 0.260 (FPR 0.060)  pool cal TPR@5% 0.000 (FPR 0.000)
+[11:51:28] jasperls@liuenv                    adclean   task_block_rate at_0.5 0.979  calibrated@1pct_fpr 0.031  calibrated@5pct_fpr 0.082
+[11:51:28] jasperls@liuenv                    tbclean   task_block_rate at_0.5 0.996  calibrated@1pct_fpr 0.000  calibrated@5pct_fpr 0.000
+[11:51:32] testsavant-large@liuenv            admatched AUROC 0.635  cal TPR@1% 0.426 (FPR 0.233)  cal TPR@5% 0.505 (FPR 0.295)  oracle TPR@5% 0.278
+[11:51:32] testsavant-large@liuenv            admatched halves: task-half cal TPR@5% 0.276 (FPR 0.035)  pool cal TPR@5% 0.520 (FPR 0.306)
+[11:51:35] testsavant-large@liuenv            adshift   AUROC 0.604  cal TPR@1% 0.350 (FPR 0.233)  cal TPR@5% 0.458 (FPR 0.295)  oracle TPR@5% 0.247
+[11:51:35] testsavant-large@liuenv            adshift   halves: task-half cal TPR@5% 0.299 (FPR 0.035)  pool cal TPR@5% 0.491 (FPR 0.306)
+[11:51:40] testsavant-large@liuenv            tbeval    AUROC 0.950  cal TPR@1% 0.861 (FPR 0.134)  cal TPR@5% 0.914 (FPR 0.144)  oracle TPR@5% 0.729
+[11:51:40] testsavant-large@liuenv            tbeval    halves: task-half cal TPR@5% 0.656 (FPR 0.035)  pool cal TPR@5% 0.861 (FPR 0.130)
+[11:51:40] testsavant-large@liuenv            adclean   task_block_rate at_0.5 0.103  calibrated@1pct_fpr 0.268  calibrated@5pct_fpr 0.412
+[11:51:41] testsavant-large@liuenv            tbclean   task_block_rate at_0.5 0.034  calibrated@1pct_fpr 0.135  calibrated@5pct_fpr 0.145
+[11:51:44] horizon-base@liuenv                admatched AUROC 0.908  cal TPR@1% 0.810 (FPR 0.003)  cal TPR@5% 0.847 (FPR 0.035)  oracle TPR@5% 0.866
+[11:51:44] horizon-base@liuenv                admatched halves: task-half cal TPR@5% 0.867 (FPR 0.059)  pool cal TPR@5% 0.849 (FPR 0.053)
+[11:51:47] horizon-base@liuenv                adshift   AUROC 0.911  cal TPR@1% 0.875 (FPR 0.003)  cal TPR@5% 0.882 (FPR 0.035)  oracle TPR@5% 0.882
+[11:51:47] horizon-base@liuenv                adshift   halves: task-half cal TPR@5% 0.880 (FPR 0.059)  pool cal TPR@5% 0.880 (FPR 0.053)
+[11:51:52] horizon-base@liuenv                tbeval    AUROC 1.000  cal TPR@1% 1.000 (FPR 0.016)  cal TPR@5% 1.000 (FPR 0.061)  oracle TPR@5% 1.000
+[11:51:52] horizon-base@liuenv                tbeval    halves: task-half cal TPR@5% 1.000 (FPR 0.043)  pool cal TPR@5% 1.000 (FPR 0.052)
+[11:51:52] horizon-base@liuenv                adclean   task_block_rate at_0.5 0.000  calibrated@1pct_fpr 0.010  calibrated@5pct_fpr 0.103
+[11:51:53] horizon-base@liuenv                tbclean   task_block_rate at_0.5 0.016  calibrated@1pct_fpr 0.037  calibrated@5pct_fpr 0.121
+[11:51:55] sheltron@liuenv                    admatched AUROC 0.835  cal TPR@1% 0.308 (FPR 0.091)  cal TPR@5% 0.456 (FPR 0.106)  oracle TPR@5% 0.296
+[11:51:55] sheltron@liuenv                    admatched halves: task-half cal TPR@5% 0.316 (FPR 0.059)  pool cal TPR@5% 0.471 (FPR 0.112)
+[11:51:59] sheltron@liuenv                    adshift   AUROC 0.896  cal TPR@1% 0.446 (FPR 0.091)  cal TPR@5% 0.558 (FPR 0.106)  oracle TPR@5% 0.433
+[11:51:59] sheltron@liuenv                    adshift   halves: task-half cal TPR@5% 0.475 (FPR 0.059)  pool cal TPR@5% 0.589 (FPR 0.112)
+[11:52:04] sheltron@liuenv                    tbeval    AUROC 0.995  cal TPR@1% 0.933 (FPR 0.010)  cal TPR@5% 0.973 (FPR 0.040)  oracle TPR@5% 0.981
+[11:52:04] sheltron@liuenv                    tbeval    halves: task-half cal TPR@5% 0.962 (FPR 0.043)  pool cal TPR@5% 0.955 (FPR 0.039)
+[11:52:04] sheltron@liuenv                    adclean   task_block_rate at_0.5 0.289  calibrated@1pct_fpr 0.247  calibrated@5pct_fpr 0.289
+[11:52:05] sheltron@liuenv                    tbclean   task_block_rate at_0.5 0.067  calibrated@1pct_fpr 0.022  calibrated@5pct_fpr 0.058
+[11:52:08] sheltron-taskaware@liuenv          admatched AUROC 0.862  cal TPR@1% 0.354 (FPR 0.062)  cal TPR@5% 0.470 (FPR 0.083)  oracle TPR@5% 0.312
+[11:52:08] sheltron-taskaware@liuenv          admatched halves: task-half cal TPR@5% 0.302 (FPR 0.041)  pool cal TPR@5% 0.498 (FPR 0.076)
+[11:52:11] sheltron-taskaware@liuenv          adshift   AUROC 0.903  cal TPR@1% 0.482 (FPR 0.062)  cal TPR@5% 0.604 (FPR 0.083)  oracle TPR@5% 0.451
+[11:52:11] sheltron-taskaware@liuenv          adshift   halves: task-half cal TPR@5% 0.448 (FPR 0.041)  pool cal TPR@5% 0.653 (FPR 0.076)
+[11:52:16] sheltron-taskaware@liuenv          tbeval    AUROC 0.959  cal TPR@1% 0.776 (FPR 0.057)  cal TPR@5% 0.921 (FPR 0.173)  oracle TPR@5% 0.767
+[11:52:16] sheltron-taskaware@liuenv          tbeval    halves: task-half cal TPR@5% 0.792 (FPR 0.082)  pool cal TPR@5% 0.906 (FPR 0.181)
+[11:52:16] sheltron-taskaware@liuenv          adclean   task_block_rate at_0.5 0.474  calibrated@1pct_fpr 0.165  calibrated@5pct_fpr 0.206
+[11:52:17] sheltron-taskaware@liuenv          tbclean   task_block_rate at_0.5 0.850  calibrated@1pct_fpr 0.084  calibrated@5pct_fpr 0.259
+[11:52:20] sheltron-generic@liuenv            admatched AUROC 0.859  cal TPR@1% 0.414 (FPR 0.041)  cal TPR@5% 0.514 (FPR 0.047)  oracle TPR@5% 0.535
+[11:52:20] sheltron-generic@liuenv            admatched halves: task-half cal TPR@5% 0.564 (FPR 0.059)  pool cal TPR@5% 0.524 (FPR 0.053)
+[11:52:23] sheltron-generic@liuenv            adshift   AUROC 0.912  cal TPR@1% 0.517 (FPR 0.041)  cal TPR@5% 0.625 (FPR 0.047)  oracle TPR@5% 0.632
+[11:52:23] sheltron-generic@liuenv            adshift   halves: task-half cal TPR@5% 0.659 (FPR 0.059)  pool cal TPR@5% 0.645 (FPR 0.053)
+[11:52:29] sheltron-generic@liuenv            tbeval    AUROC 0.997  cal TPR@1% 0.954 (FPR 0.027)  cal TPR@5% 0.985 (FPR 0.050)  oracle TPR@5% 0.985
+[11:52:29] sheltron-generic@liuenv            tbeval    halves: task-half cal TPR@5% 0.972 (FPR 0.048)  pool cal TPR@5% 0.972 (FPR 0.050)
+[11:52:29] sheltron-generic@liuenv            adclean   task_block_rate at_0.5 0.711  calibrated@1pct_fpr 0.134  calibrated@5pct_fpr 0.155
+[11:52:29] sheltron-generic@liuenv            tbclean   task_block_rate at_0.5 0.941  calibrated@1pct_fpr 0.039  calibrated@5pct_fpr 0.074
+[11:52:32] prismor-1.5b@liuenv                admatched AUROC 0.915  cal TPR@1% 0.016 (FPR 0.000)  cal TPR@5% 0.199 (FPR 0.000)  oracle TPR@5% 0.569
+[11:52:32] prismor-1.5b@liuenv                admatched halves: task-half cal TPR@5% 0.556 (FPR 0.047)  pool cal TPR@5% 0.200 (FPR 0.000)
+[11:52:35] prismor-1.5b@liuenv                adshift   AUROC 0.935  cal TPR@1% 0.018 (FPR 0.000)  cal TPR@5% 0.239 (FPR 0.000)  oracle TPR@5% 0.678
+[11:52:35] prismor-1.5b@liuenv                adshift   halves: task-half cal TPR@5% 0.627 (FPR 0.047)  pool cal TPR@5% 0.197 (FPR 0.000)
+[11:52:41] prismor-1.5b@liuenv                tbeval    AUROC 0.844  cal TPR@1% 0.000 (FPR 0.000)  cal TPR@5% 0.199 (FPR 0.011)  oracle TPR@5% 0.354
+[11:52:41] prismor-1.5b@liuenv                tbeval    halves: task-half cal TPR@5% 0.333 (FPR 0.060)  pool cal TPR@5% 0.167 (FPR 0.012)
+[11:52:41] prismor-1.5b@liuenv                adclean   task_block_rate at_0.5 0.186  calibrated@1pct_fpr 0.000  calibrated@5pct_fpr 0.000
+[11:52:41] prismor-1.5b@liuenv                tbclean   task_block_rate at_0.5 0.689  calibrated@1pct_fpr 0.000  calibrated@5pct_fpr 0.025
+[11:52:44] promptguard2-86m@liuenv            admatched AUROC 0.886  cal TPR@1% 0.660 (FPR 0.038)  cal TPR@5% 0.688 (FPR 0.038)  oracle TPR@5% 0.688
+[11:52:44] promptguard2-86m@liuenv            admatched halves: task-half cal TPR@5% 0.636 (FPR 0.024)  pool cal TPR@5% 0.689 (FPR 0.024)
+[11:52:47] promptguard2-86m@liuenv            adshift   AUROC 0.918  cal TPR@1% 0.762 (FPR 0.038)  cal TPR@5% 0.778 (FPR 0.038)  oracle TPR@5% 0.782
+[11:52:47] promptguard2-86m@liuenv            adshift   halves: task-half cal TPR@5% 0.755 (FPR 0.024)  pool cal TPR@5% 0.789 (FPR 0.024)
+[11:52:53] promptguard2-86m@liuenv            tbeval    AUROC 0.984  cal TPR@1% 0.652 (FPR 0.023)  cal TPR@5% 0.848 (FPR 0.027)  oracle TPR@5% 0.973
+[11:52:53] promptguard2-86m@liuenv            tbeval    halves: task-half cal TPR@5% 0.965 (FPR 0.050)  pool cal TPR@5% 0.875 (FPR 0.031)
+[11:52:53] promptguard2-86m@liuenv            adclean   task_block_rate at_0.5 0.021  calibrated@1pct_fpr 0.124  calibrated@5pct_fpr 0.124
+[11:52:54] promptguard2-86m@liuenv            tbclean   task_block_rate at_0.5 0.000  calibrated@1pct_fpr 0.040  calibrated@5pct_fpr 0.046
+[11:52:57] promptguard2-22m@liuenv            admatched AUROC 0.862  cal TPR@1% 0.562 (FPR 0.006)  cal TPR@5% 0.616 (FPR 0.109)  oracle TPR@5% 0.609
+[11:52:57] promptguard2-22m@liuenv            admatched halves: task-half cal TPR@5% 0.604 (FPR 0.006)  pool cal TPR@5% 0.609 (FPR 0.118)
+[11:53:00] promptguard2-22m@liuenv            adshift   AUROC 0.871  cal TPR@1% 0.576 (FPR 0.006)  cal TPR@5% 0.640 (FPR 0.109)  oracle TPR@5% 0.636
+[11:53:00] promptguard2-22m@liuenv            adshift   halves: task-half cal TPR@5% 0.632 (FPR 0.006)  pool cal TPR@5% 0.637 (FPR 0.118)
+[11:53:05] promptguard2-22m@liuenv            tbeval    AUROC 0.930  cal TPR@1% 0.577 (FPR 0.008)  cal TPR@5% 0.781 (FPR 0.067)  oracle TPR@5% 0.750
+[11:53:05] promptguard2-22m@liuenv            tbeval    halves: task-half cal TPR@5% 0.750 (FPR 0.038)  pool cal TPR@5% 0.785 (FPR 0.060)
+[11:53:05] promptguard2-22m@liuenv            adclean   task_block_rate at_0.5 0.000  calibrated@1pct_fpr 0.021  calibrated@5pct_fpr 0.237
+[11:53:06] promptguard2-22m@liuenv            tbclean   task_block_rate at_0.5 0.000  calibrated@1pct_fpr 0.019  calibrated@5pct_fpr 0.132
+[11:53:09] promptguard1-86m@liuenv            admatched AUROC 0.622  cal TPR@1% 0.343 (FPR 0.150)  cal TPR@5% 0.440 (FPR 0.316)  oracle TPR@5% 0.255
+[11:53:09] promptguard1-86m@liuenv            admatched halves: task-half cal TPR@5% 0.311 (FPR 0.065)  pool cal TPR@5% 0.444 (FPR 0.294)
+[11:53:12] promptguard1-86m@liuenv            adshift   AUROC 0.726  cal TPR@1% 0.468 (FPR 0.150)  cal TPR@5% 0.610 (FPR 0.316)  oracle TPR@5% 0.201
+[11:53:12] promptguard1-86m@liuenv            adshift   halves: task-half cal TPR@5% 0.373 (FPR 0.065)  pool cal TPR@5% 0.592 (FPR 0.294)
+[11:53:18] promptguard1-86m@liuenv            tbeval    AUROC 0.939  cal TPR@1% 0.502 (FPR 0.037)  cal TPR@5% 0.534 (FPR 0.046)  oracle TPR@5% 0.555
+[11:53:18] promptguard1-86m@liuenv            tbeval    halves: task-half cal TPR@5% 0.503 (FPR 0.028)  pool cal TPR@5% 0.538 (FPR 0.036)
+[11:53:18] promptguard1-86m@liuenv            adclean   task_block_rate at_0.5 0.536  calibrated@1pct_fpr 0.216  calibrated@5pct_fpr 0.536
+[11:53:19] promptguard1-86m@liuenv            tbclean   task_block_rate at_0.5 0.093  calibrated@1pct_fpr 0.073  calibrated@5pct_fpr 0.090
+[11:53:22] qualifire-sentinel@liuenv          admatched AUROC 0.875  cal TPR@1% 0.625 (FPR 0.021)  cal TPR@5% 0.694 (FPR 0.142)  oracle TPR@5% 0.641
+[11:53:22] qualifire-sentinel@liuenv          admatched halves: task-half cal TPR@5% 0.622 (FPR 0.029)  pool cal TPR@5% 0.689 (FPR 0.159)
+[11:53:26] qualifire-sentinel@liuenv          adshift   AUROC 0.891  cal TPR@1% 0.688 (FPR 0.021)  cal TPR@5% 0.742 (FPR 0.142)  oracle TPR@5% 0.697
+[11:53:26] qualifire-sentinel@liuenv          adshift   halves: task-half cal TPR@5% 0.701 (FPR 0.029)  pool cal TPR@5% 0.744 (FPR 0.159)
+[11:53:32] qualifire-sentinel@liuenv          tbeval    AUROC 0.911  cal TPR@1% 0.038 (FPR 0.000)  cal TPR@5% 0.063 (FPR 0.000)  oracle TPR@5% 0.416
+[11:53:32] qualifire-sentinel@liuenv          tbeval    halves: task-half cal TPR@5% 0.378 (FPR 0.051)  pool cal TPR@5% 0.059 (FPR 0.000)
+[11:53:32] qualifire-sentinel@liuenv          adclean   task_block_rate at_0.5 0.031  calibrated@1pct_fpr 0.072  calibrated@5pct_fpr 0.320
+[11:53:32] qualifire-sentinel@liuenv          tbclean   task_block_rate at_0.5 0.000  calibrated@1pct_fpr 0.000  calibrated@5pct_fpr 0.000
+[11:53:36] rogue-sentinel-v2@liuenv           admatched AUROC 0.870  cal TPR@1% 0.678 (FPR 0.088)  cal TPR@5% 0.762 (FPR 0.271)  oracle TPR@5% 0.546
+[11:53:36] rogue-sentinel-v2@liuenv           admatched halves: task-half cal TPR@5% 0.582 (FPR 0.059)  pool cal TPR@5% 0.764 (FPR 0.288)
+[11:53:39] rogue-sentinel-v2@liuenv           adshift   AUROC 0.906  cal TPR@1% 0.776 (FPR 0.088)  cal TPR@5% 0.829 (FPR 0.271)  oracle TPR@5% 0.661
+[11:53:39] rogue-sentinel-v2@liuenv           adshift   halves: task-half cal TPR@5% 0.707 (FPR 0.059)  pool cal TPR@5% 0.835 (FPR 0.288)
+[11:53:45] rogue-sentinel-v2@liuenv           tbeval    AUROC 0.976  cal TPR@1% 0.803 (FPR 0.031)  cal TPR@5% 0.902 (FPR 0.073)  oracle TPR@5% 0.858
+[11:53:45] rogue-sentinel-v2@liuenv           tbeval    halves: task-half cal TPR@5% 0.795 (FPR 0.028)  pool cal TPR@5% 0.861 (FPR 0.058)
+[11:53:45] rogue-sentinel-v2@liuenv           adclean   task_block_rate at_0.5 0.072  calibrated@1pct_fpr 0.237  calibrated@5pct_fpr 0.474
+[11:53:45] rogue-sentinel-v2@liuenv           tbclean   task_block_rate at_0.5 0.012  calibrated@1pct_fpr 0.052  calibrated@5pct_fpr 0.119
+[11:53:48] wolf-defender@wolf                 admatched AUROC 0.863  cal TPR@1% 0.715 (FPR 0.012)  cal TPR@5% 0.745 (FPR 0.018)  oracle TPR@5% 0.792
+[11:53:48] wolf-defender@wolf                 admatched halves: task-half cal TPR@5% 0.791 (FPR 0.065)  pool cal TPR@5% 0.742 (FPR 0.024)
+[11:53:51] wolf-defender@wolf                 adshift   AUROC 0.887  cal TPR@1% 0.828 (FPR 0.012)  cal TPR@5% 0.846 (FPR 0.018)  oracle TPR@5% 0.849
+[11:53:51] wolf-defender@wolf                 adshift   halves: task-half cal TPR@5% 0.861 (FPR 0.065)  pool cal TPR@5% 0.856 (FPR 0.024)
+[11:53:57] wolf-defender@wolf                 tbeval    AUROC 0.995  cal TPR@1% 0.774 (FPR 0.000)  cal TPR@5% 0.830 (FPR 0.001)  oracle TPR@5% 0.943
+[11:53:57] wolf-defender@wolf                 tbeval    halves: task-half cal TPR@5% 0.941 (FPR 0.026)  pool cal TPR@5% 0.809 (FPR 0.001)
+[11:53:57] wolf-defender@wolf                 adclean   task_block_rate at_0.5 0.031  calibrated@1pct_fpr 0.041  calibrated@5pct_fpr 0.062
+[11:53:58] wolf-defender@wolf                 tbclean   task_block_rate at_0.5 0.000  calibrated@1pct_fpr 0.000  calibrated@5pct_fpr 0.003
+[11:54:01] judge-qwen@judges_bf16             admatched AUROC 0.902  cal TPR@1% 0.769 (FPR 0.080)  cal TPR@5% 0.880 (FPR 0.271)  oracle TPR@5% 0.711
+[11:54:01] judge-qwen@judges_bf16             admatched halves: task-half cal TPR@5% 0.733 (FPR 0.100)  pool cal TPR@5% 0.867 (FPR 0.259)
+[11:54:04] judge-qwen@judges_bf16             adshift   AUROC 0.918  cal TPR@1% 0.821 (FPR 0.080)  cal TPR@5% 0.885 (FPR 0.271)  oracle TPR@5% 0.787
+[11:54:04] judge-qwen@judges_bf16             adshift   halves: task-half cal TPR@5% 0.819 (FPR 0.100)  pool cal TPR@5% 0.885 (FPR 0.259)
+[11:54:10] judge-qwen@judges_bf16             tbeval    AUROC 0.977  cal TPR@1% 0.880 (FPR 0.048)  cal TPR@5% 0.978 (FPR 0.258)  oracle TPR@5% 0.889
+[11:54:10] judge-qwen@judges_bf16             tbeval    halves: task-half cal TPR@5% 0.854 (FPR 0.050)  pool cal TPR@5% 0.969 (FPR 0.250)
+[11:54:10] judge-qwen@judges_bf16             adclean   task_block_rate at_0.5 0.186  calibrated@1pct_fpr 0.134  calibrated@5pct_fpr 0.485
+[11:54:10] judge-qwen@judges_bf16             tbclean   task_block_rate at_0.5 0.136  calibrated@1pct_fpr 0.104  calibrated@5pct_fpr 0.443
+[11:54:13] judge-llama@judges_bf16            admatched AUROC 0.906  cal TPR@1% 0.685 (FPR 0.027)  cal TPR@5% 0.859 (FPR 0.124)  oracle TPR@5% 0.822
+[11:54:13] judge-llama@judges_bf16            admatched halves: task-half cal TPR@5% 0.844 (FPR 0.065)  pool cal TPR@5% 0.858 (FPR 0.118)
+[11:54:17] judge-llama@judges_bf16            adshift   AUROC 0.912  cal TPR@1% 0.718 (FPR 0.027)  cal TPR@5% 0.876 (FPR 0.124)  oracle TPR@5% 0.843
+[11:54:17] judge-llama@judges_bf16            adshift   halves: task-half cal TPR@5% 0.859 (FPR 0.065)  pool cal TPR@5% 0.880 (FPR 0.118)
+[11:54:23] judge-llama@judges_bf16            tbeval    AUROC 0.991  cal TPR@1% 0.659 (FPR 0.001)  cal TPR@5% 0.969 (FPR 0.065)  oracle TPR@5% 0.957
+[11:54:23] judge-llama@judges_bf16            tbeval    halves: task-half cal TPR@5% 0.941 (FPR 0.035)  pool cal TPR@5% 0.962 (FPR 0.059)
+[11:54:23] judge-llama@judges_bf16            adclean   task_block_rate at_0.5 0.186  calibrated@1pct_fpr 0.093  calibrated@5pct_fpr 0.320
+[11:54:23] judge-llama@judges_bf16            tbclean   task_block_rate at_0.5 0.031  calibrated@1pct_fpr 0.001  calibrated@5pct_fpr 0.092

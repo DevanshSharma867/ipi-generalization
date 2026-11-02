@@ -949,12 +949,12 @@ The |AUROC − 0.5| column is a transparency metric, not a retroactive pass/fail
 id: F021
 status: full
 script: jobs/transfer_scores_{encoders,wolf,judges}.sh (eval/transfer/detectors.py, record_scores.py) -> eval/transfer/transfer_metrics.py
-commit: 79d7a1e
+commit: ae2502c
 seeds: n/a (deterministic scoring; judges greedy); bootstrap seed 42, B = 1000
 data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded
 eval_set: AD-Matched, AD-Shift (recovered pairing), TB-Matched; negatives AD-Clean / TB-Clean; calibration pool (A3)
 threshold_protocol: calibrated (1%/5% FPR on the calibration pool, primary) and oracle (on the evaluated clean rows, MIN_CLEAN gates)
-date: 2026-11-02 (first version 2026-10-31, run 20261031-190127_seed42, superseded: it also listed the 4-bit judges)
+date: 2026-11-02 (first version 2026-10-31, run 20261031-190127_seed42, superseded since it also listed the 4-bit judges)
 source:
 - results/transfer/transfer_metrics/20261102-115039_seed42
 upstream:
@@ -1003,7 +1003,7 @@ the negatives are AD-Clean (A16). Clusters for every CI: user task. Full table: 
 id: F022
 status: full
 script: eval/transfer/transfer_metrics.py (task_halves; calibration-pool thresholds, paper_plan A3) -> scripts/make_tables.py
-commit: 79d7a1e
+commit: ae2502c
 seeds: n/a (deterministic scores); task-half split seed 0 (sha256 of "0:<suite>/<task>"); bootstrap seed 42, B = 1000
 data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded
 eval_set: AD-Matched, AD-Shift, TB-Matched (negatives AD-Clean / TB-Clean); calibration pool (A3)
@@ -1046,8 +1046,8 @@ measures how far those thresholds miss their FPR target on the agent sets' real 
 - In-domain TPR@1%FPR on AgentDojo is `n/a` for every detector: the calibration half has 169 AD-Clean rows (< 500,
   MIN_CLEAN). Half sizes: AD 47/50 user tasks, TB 348/327 (in `metrics.json`). The split depends only on task ids;
   it was fixed in code before these metrics were computed, but after the scores existed.
-- Reading: the pool thresholds are too low for most detectors on AgentDojo's clean outputs (the synthetic pool is
-  easier than real tool outputs), so calibrated TPR on AD is inflated by a realized FPR well above target. This is
+- Reading: for most detectors the pool's clean outputs score lower than AgentDojo's (cause not tested), so the pool
+  thresholds sit too low there and calibrated TPR on AD comes with a realized FPR well above target. This is
   the A3 risk (paper_plan §8): every calibrated TPR is reported next to its realized FPR, and H1 still uses the pool
   (pre-registered); the halves protocol is reported, never decides.
 
