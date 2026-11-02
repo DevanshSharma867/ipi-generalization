@@ -11,6 +11,13 @@ from the score run records of jobs/transfer_scores_*.sh (eval/transfer/record_sc
 - Oracle (reported next to it, never decides): threshold on the evaluated clean rows, src/metrics MIN_CLEAN gates
   (so oracle TPR@1%FPR on AgentDojo is n/a: AD-Clean has 339 rows).
 - AUROC and FPR at the 0.5 default threshold on the clean rows, with cluster CIs.
+- task_block_rate on AD-Clean and TB-Clean (Liu 2026 analysis/compute_all.py): the share of user tasks with at least
+  one clean output flagged, at 0.5 (his threshold) and at the calibrated 1% / 5% thresholds; CI resamples tasks.
+- Secondary protocol (paper_plan §3, A3; never decides): task-disjoint halves. Each eval set's user tasks are split
+  50/50 by sha256("0:<suite>/<task>") (seed 0; even = calibration half); thresholds on the calibration half's clean
+  rows, TPR and realized FPR on the evaluation half (MIN_CLEAN gates on the calibration half's clean rows). The
+  calibration-pool thresholds are applied to the same evaluation half, so the two protocols' realized FPR compare
+  like for like (calibration transfer).
 Clusters are user tasks (suite/task). B = 1000, seed 42 (src/metrics defaults).
 
     python eval/transfer/transfer_metrics.py --sets_dir data/transfer/sets_adliu \\
@@ -18,6 +25,7 @@ Clusters are user tasks (suite/task). B = 1000, seed 42 (src/metrics defaults).
 """
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -31,11 +39,13 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "eval" / "transfer"))
 
 from detectors import SETS  # noqa: E402
-from metrics import doc_cluster_bootstrap, tpr_at_fpr_protocols  # noqa: E402
+from metrics import calibrated_threshold, doc_cluster_bootstrap, tpr_at_fpr_protocols  # noqa: E402
 from runlog import start_run  # noqa: E402
 
 EVAL = {"admatched": "adclean", "adshift": "adclean", "tbeval": None}  # eval set -> clean set (None: its own)
 CLEAN_ONLY = ["adclean", "tbclean", "calpool"]
+BLOCK_SETS = ["adclean", "tbclean"]
+HALF_SEED = 0
 
 
 def frame(sets_dir, scores, det, s, neg):
@@ -48,6 +58,37 @@ def frame(sets_dir, scores, det, s, neg):
                           "cluster": [f"{r['suite']}/{r['task']}" for r in rows]})
         return d if only is None else d[d["label"] == only]
     return pd.concat([part(s, 1), part(neg, 0).assign(label=0)] if neg else [part(s)], ignore_index=True)
+
+
+def task_half(cluster, seed=HALF_SEED):
+    """0 = calibration half, 1 = evaluation half (seeded hash of the user task id; paper_plan §3 secondary)."""
+    return int(hashlib.sha256(f"{seed}:{cluster}".encode()).hexdigest(), 16) % 2
+
+
+def task_block_rate(sets_dir, scores, det, s, thresholds, B):
+    """{threshold name: {"point", "ci"}}: share of user tasks with >= 1 output of clean set `s` scoring >= threshold."""
+    d = frame(sets_dir, scores, det, s, None)
+    out = {"n_outputs": len(d), "n_tasks": int(d["cluster"].nunique())}
+    for name, thr in thresholds.items():
+        t = (d["prob"] >= thr).groupby(d["cluster"]).any().astype(float).reset_index(name="blocked")
+        out[name] = doc_cluster_bootstrap(t, lambda x: float(x["blocked"].mean()), B=B, cluster_col="cluster")
+    return out
+
+
+def task_halves(d, calib, B):
+    """Secondary protocol on frame d: in-domain thresholds from the calibration half vs the calibration pool's,
+    both evaluated on the evaluation half."""
+    h = d["cluster"].map(task_half)
+    cal, ev = d[(h == 0) & (d["label"] == 0)]["prob"].values, d[h == 1]
+    keep = lambda m: {k: v for k, v in m.items() if k.startswith("calibrated@")}  # noqa: E731
+    return {"n_tasks": {"calibration": int(d["cluster"][h == 0].nunique()),
+                        "evaluation": int(d["cluster"][h == 1].nunique())},
+            "n_clean_calibration_half": len(cal), "n_injected_eval": int((ev["label"] == 1).sum()),
+            "n_clean_eval": int((ev["label"] == 0).sum()),
+            "task_half": keep(tpr_at_fpr_protocols(ev, calib_clean_scores=cal, B=B, cluster_col="cluster",
+                                                   calib_gate_eval=False)),
+            "calibration_pool": keep(tpr_at_fpr_protocols(ev, calib_clean_scores=calib, B=B, cluster_col="cluster",
+                                                          calib_gate_eval=False))}
 
 
 def auroc_and_default_fpr(d):
@@ -85,6 +126,7 @@ def main():
                                          calib_gate_eval=False)  # A16
                 m.update(doc_cluster_bootstrap(d, auroc_and_default_fpr, B=a.B, cluster_col="cluster"))
                 m["n_injected"], m["n_clean"] = int((d["label"] == 1).sum()), int((d["label"] == 0).sum())
+                m["task_halves"] = task_halves(d, calib, a.B)
                 res[key][s] = m
                 c1, c5 = m["calibrated@1pct_fpr"], m["calibrated@5pct_fpr"]
                 fmt = lambda e: (f"{e['tpr']['point']:.3f} (FPR {e['realized_fpr']['point']:.3f})"  # noqa: E731
@@ -93,6 +135,15 @@ def main():
                 o5 = f"{o5['tpr']['point']:.3f}" if o5["status"] == "ok" else o5["status"]
                 run.log(f"{key:34s} {s:9s} AUROC {m['auroc']['point']:.3f}  cal TPR@1% {fmt(c1)}  "
                         f"cal TPR@5% {fmt(c5)}  oracle TPR@5% {o5}")
+                th = m["task_halves"]
+                run.log(f"{key:34s} {s:9s} halves: task-half cal TPR@5% {fmt(th['task_half']['calibrated@5pct_fpr'])}"
+                        f"  pool cal TPR@5% {fmt(th['calibration_pool']['calibrated@5pct_fpr'])}")
+            thr = {"at_0.5": 0.5, "calibrated@1pct_fpr": calibrated_threshold(calib, 0.01),
+                   "calibrated@5pct_fpr": calibrated_threshold(calib, 0.05)}
+            for s in BLOCK_SETS:
+                res[key][f"{s}_task_block_rate"] = b = task_block_rate(a.sets_dir, r / "scores", det, s, thr, a.B)
+                run.log(f"{key:34s} {s:9s} task_block_rate " + "  ".join(
+                    f"{n} {b[n]['point']:.3f}" for n in thr))
     run.save_metrics(res, headline=("detectors", len(res)))
     run.finish()
 
