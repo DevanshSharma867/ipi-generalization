@@ -82,16 +82,19 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   must be capped in code, e.g. `torch.cuda.set_per_process_memory_fraction(0.5)`.
 - **Frontier comparator (c):** withdrawn 2026-10-31 (A21, budget). No API key or scoring is needed.
 - **History rewrite (2026-11-04):** trailer removed from every commit message, trees identical; map in
-  `docs/commit_rewrites.md`. `~/nlp_harness` reset to the new main. **Cluster `~/nlp` and `~/nlp_probe` still hold the
-  old history and are not cleaned** (no local-only commits, but unique uncommitted work): `~/nlp` (main at `01d1c78`) has uncommitted edits from 2026-10-17 to `.gitignore`,
-  `src/evaluate.py`, `src/models/deberta.py`, `submit_train.sh`; `~/nlp_probe` has 11 untracked
-  `results/v2_probes/score_*` run dirs (2026-10-29). Author to decide (keep/diff/discard) before reset and worktree removal.
+  `docs/commit_rewrites.md`. Cluster clones cleaned the same day: `~/nlp_harness` and `~/nlp` reset to the new main
+  (commit-msg hook in both); the `~/nlp_probe` worktree and branches `probe-v2`, `probe-v2-next` (old-history commits)
+  removed. Its 11 untracked `results/v2_probes/score_*` dirs (55 files) matched the laptop by sha256 and were deleted.
+  Archived in cluster `~/archive/`: `nlp_uncommitted_20261017.patch` (2026-10-17 edits; all already in main, the rest
+  superseded), `nlp_untracked_20261017.tar.gz` (57 untracked files, which main already has or supersedes),
+  `nlp_probe_logs_20261104.tar.gz` (Slurm logs of jobs 404384, 404404, 407923, 422174). `~/nlp_probe` no longer
+  exists; the CLAUDE.md code-map line about it is out of date.
 - **Cluster notes:** the QoS needs `--gres=mps:50` even for CPU jobs; the template file
   `jobs/templates/mock_job_csisnlp18.sh` was never found, so the header is derived from the existing jobs.
 
 # Intent pairs (C3)
 
-Plan: `docs/pairs_spec.md` v2 (A26); paper_plan A18 (construction, split seed 0 only, strict agreement), A21 (comparator (c)
+Plan: `docs/pairs_spec.md` v3 (A26, A27); paper_plan A18 (construction, split seed 0 only, strict agreement), A21 (comparator (c)
 withdrawn), A24 (EVAL generator), A25 (annotators), A26 (pilot-based label rules). Nothing has been generated (except the timing
 job's discarded val-doc outputs), annotated or scored.
 
@@ -111,7 +114,7 @@ job's discarded val-doc outputs), annotated or scored.
    (A26): restating the request's task or constraints is aligned (case 12b), case 12 narrowed, guide rule 5 and
    example 11, notes only for unclear/low-confidence/suspect items. E3/E4 unchanged.
 2. **Generator download: done.** Job 425712 (2026-10-31); prefetch status 2026-11-02: both complete.
-3. **Generator prompts and config: done, v1-frozen** (2026-11-04), committed before any generation call:
+3. **Generator prompts and config: v1-frozen, superseded by v2 (A27, E5) before any EVAL/TRAIN generation** (2026-11-04), committed before any generation call:
    `configs/pairs_gen_v1.yaml` (decoding, seed 20261104, quads per doc per mode; pins read from detectors.yaml),
    `configs/prompts/pairs_eval_v1.txt` (Gemma) and `pairs_train_v1.txt` (Mistral), written independently, no shared
    word 8-gram (`tests/test_pairs_gen.py`). Pipeline: `src/pairs_gen.py` (mode guards: eval = split-seed-0 test only,
@@ -136,14 +139,17 @@ job's discarded val-doc outputs), annotated or scored.
 
 ## Open decisions / blockers
 - **Timing job 432585** queued (ReqNodeNotAvail: gpunode8 drained). It runs whatever `~/nlp_harness` holds at start
-  (the queued script's `--length_tokenizer` flag is now an ignored no-op) and times the v1 prompts.
+  (the queued script's `--length_tokenizer` flag is now an ignored no-op).
 - **Generation fixes (2026-11-04):** length rules use only the V3 tokenizer (sha256-pinned in `pairs_gen.py`; repo
   copy or `$HF_HOME/tokenizers_hpc/deberta_v2_ckpt`, synced to the cluster; fails loudly if missing; eval refuses to
   run without it); near-duplicate quads within a doc (content-word Jaccard ≥ 0.8 on requests or instructions) are
   regenerated up to 3 times, counted in `dup_rejections`; parser takes the first complete JSON object (bug found by
   the laptop smoke test: tiny instruct model on MPS through the real HF path, NF4 skipped; not a result).
-- **Proposed, not applied: rule E5 / spec v3 / A27** (no external action, no target from the content; prompts
-  v2-frozen). Awaiting author approval.
+- **Rule E5 applied (2026-11-04): spec v3, A27.** Instructions may only shape the answer; actions and targets from
+  the context are excluded. Guide rule 8 + example 12; `configs/pairs_gen_v2.yaml` + prompts v2-frozen (now the
+  default; `pairs_gen` refuses eval/train with v1). H4 narrowed in paper_plan §3 and the paper to aligned
+  answer-shaping instructions. pairs_v0 items 0–23 marked excluded in data_provenance (file kept).
+  The queued timing job 432585 now loads the default config, so it times the v2 prompts.
 - **Annotator recruitment** (A25).
 - **Agent-pair sets** wait for AD-Clean/TB-Clean contexts (transfer harness) and the agent-style pipeline.
 
