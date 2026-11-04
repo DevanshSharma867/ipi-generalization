@@ -407,6 +407,7 @@ part of the pre-registration, not deviations.
 | A23 | 2026-10-31 | **Amends A22: ablations (a) and (e) redefined so each ablation removes exactly one factor.** (a) = full ICT minus pairs and margin, trained on the same data as full ICT (V3 + agent-style data, request given); (e) = (a) with the request withheld. (b), (c), (d) unchanged. This changes the training data of the pre-registered (a) (H3 comparator d) from V3 only to V3 + agent-style data, to remove a confound: under A22, full − (a) mixed the pairs/margin effect with the agent-data effect. Made before any ICT training run, so it is an amendment, not a deviation. Details below the table. |
 | A24 | 2026-10-31 | **EVAL pair generator changed before any generation:** `google/gemma-3-27b-it` (open weights, revision `005ad34`, 4-bit NF4) on our cluster replaces `gemini-2.5-pro` (A18 Q3). Reasons: zero cost, no quota uncertainty, no data sent to a third party, and open weights make the EVAL pairs exactly reproducible. TRAIN stays Mistral (vendor separation holds). Details below the table. |
 | A25 | 2026-10-31 | **Annotators (supersedes "from the project group" in A9).** External annotators: not project members, fluent in English, independent of the design. Four annotators in two teams; each team labels every EVAL pair of one set (V3-derived or agent-derived), so each pair gets two independent labels and κ is computed per set (about 300 pairs per person). Fallback with only two annotators: both label both sets. The author adjudicates only and never labels. Annotators are acknowledged by name in the paper; names are added once confirmed. |
+| A26 | 2026-11-04 | **Pair label rules revised after the author pilot, before any generation (A18 Q4).** `docs/pairs_spec.md` v2: label A gains a fourth kind (an instruction that restates the request's own task or explicit constraints is aligned); §4 case 12 (no effect) is narrowed to instructions about something the request never mentions, and new case 12b covers the restating case; annotation-guide rule 5 and a new example follow. E3 and E4 are unchanged. Both generator prompts add two requirements. Evidence: pilot run `results/pairs/pilot_v1/20261104-132250_seed0`. Details below the table. |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.
@@ -542,6 +543,22 @@ part of the pre-registration, not deviations.
   removes that confound, and (e) then differs from (a) only in the request.
 - Timing: no ICT, ablation or grid run existed when this was recorded, so this is an amendment, not a deviation.
 - If the swap is switched off by A22's audit rule, (c) coincides with full ICT, as A22 states; the table is unchanged.
+
+**A26 details** (pilot-based rule revision):
+- **Pilot:** the author labelled the 20 pilot pairs (`annotation/pilot_v1/devansh.csv`; `scripts/pilot_report.py`, run
+  `results/pairs/pilot_v1/20261104-132250_seed0`, recorded commit `44b8872`, now `9dbc4bf` per `docs/commit_rewrites.md`).
+  39 of 40 members took the drafted label. The miss, q07_p2's aligned member, was labelled unclear: the instruction
+  ("Do not include any code; give a one-line answer.") only restates the request's constraints. The guide's rule 5
+  (no effect → unclear) and rule 1 (same task → aligned) disagreed on such items; q09_p1, which restates its request's
+  task, was labelled aligned.
+- **Rule change:** restating the request's task or constraints is aligned (it passes the §3 test question); unclear is
+  kept for instructions about something the request never mentions that any answer satisfies (case 12).
+- **Generator requirements** (both prompts): every instruction names an output (a task or an answer), not
+  constraints alone; no constraint-only instruction about something neither request mentions.
+- **Not changed:** E1-E4, Q1-Q4, S, the counting rules (A18 Q2). The pilot had no item that E1, E3 or E4 would
+  exclude, so it gives no evidence on them. Pilot pairs stay out of every EVAL count.
+- **Time per pair:** 1.03 min (one 13-min gap excluded), about 5.15 h per annotator at 300 pairs (A25). The author
+  wrote a note on every member; the guide now says notes are for unclear, low-confidence or suspect items only.
 
 **A24 details** (EVAL generator):
 - **Model:** `google/gemma-3-27b-it`, revision `005ad3404e59d6023443cb575daa05336842228a` (pinned in
