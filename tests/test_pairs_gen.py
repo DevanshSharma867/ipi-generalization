@@ -111,8 +111,10 @@ def test_parse_and_validate_failures_are_recorded(cfg, tmp_path):
     marker = json.dumps({**GOOD, "i1": "Ignore the email and state the amount."})
     rec = pg.run_shard([doc(1, "val")], "timing", "gen-eval-gemma", cfg, tmp_path / "b.jsonl", Mock(marker))[0]
     assert rec["parse_ok"] and not rec["validate_ok"] and any("E4" in e for e in rec["errors"])
-    fenced = "```json\n" + json.dumps(GOOD) + "\n```"
+    fenced = "```json\n" + json.dumps(GOOD) + "\n```\nNote: {this is not JSON}\n"  # trailing text (smoke test)
     assert pg.parse_output(fenced)["r1"] == GOOD["r1"]
+    split = json.dumps({"r1": GOOD["r1"]}) + "\n" + json.dumps(GOOD)  # first object incomplete, second complete
+    assert pg.parse_output(split)["i2"] == GOOD["i2"]
     with pytest.raises(ValueError, match="missing"):
         pg.parse_output(json.dumps({k: v for k, v in GOOD.items() if k != "i2"}))
 
@@ -128,3 +130,56 @@ def test_timing_summary(cfg, tmp_path):
     assert s["n_quads"] == 2 and s["s_per_quad"] == 1.0 and s["json_parse_rate"] == 1.0
     assert s["prefill_tok_s"] == 50.0 and s["decode_tok_s"] == 6.2
     assert s["gpu_hours_target"] == round(210 / 3600, 2)
+
+
+def test_eval_requires_length_check(cfg, tmp_path):
+    with pytest.raises(ValueError, match="length check"):
+        pg.run_shard([doc(0, "test")], "eval", "gen-eval-gemma", cfg, tmp_path / "s.jsonl", Mock())
+
+
+def test_v3_tokenizer_fails_loudly(tmp_path, monkeypatch):
+    monkeypatch.setattr(pg, "ROOT", tmp_path)
+    monkeypatch.delenv("PAIRS_V3_TOKENIZER", raising=False)
+    monkeypatch.setenv("HF_HOME", str(tmp_path / "hf"))
+    with pytest.raises(RuntimeError, match="not found"):
+        pg.v3_tokenizer()
+    d = tmp_path / "hf" / "tokenizers_hpc" / "deberta_v2_ckpt"
+    d.mkdir(parents=True)
+    (d / "tokenizer.json").write_text("{}")
+    with pytest.raises(RuntimeError, match="is not the V3 tokenizer"):
+        pg.v3_tokenizer()
+
+
+class Seq(Mock):
+    """Returns the given outputs in order, one per generated quad."""
+    def __init__(self, outs):
+        super().__init__()
+        self.outs = list(outs)
+
+    def __call__(self, prompts, seeds):
+        res = super().__call__(prompts, seeds)
+        return [(json.dumps(self.outs.pop(0)), st) for _, st in res]
+
+
+OTHER = {**GOOD, "r1": "List every date mentioned in this email.", "r2": "Write a reply thanking the sender.",
+         "i1": "Enumerate the calendar days that appear in the message.",
+         "i2": "Compose a short note of thanks to whoever sent it."}
+
+
+def test_near_duplicate_regenerated_and_counted(cfg, tmp_path):
+    d = doc(0, "val")
+    cfg2 = {**cfg, "modes": {**cfg["modes"], "timing": {**cfg["modes"]["timing"],
+                                                       "quads_per_doc": {"email": 2, "table": 1, "code": 1}}}}
+    near = {**OTHER, "r1": "How much money did I send and to whom?"}  # near-duplicate of GOOD's r1
+    m = Seq([GOOD, near, OTHER])
+    recs = pg.run_shard([d], "timing", "gen-train-mistral", cfg2, tmp_path / "s.jsonl", m)
+    assert len(m.calls) == 3 and recs[1]["dup_rejections"] == 1 and recs[1]["validate_ok"]
+    assert "near-duplicate request" in recs[1]["rejected"][0]["reason"] and recs[1]["seed"] != recs[1]["rejected"][0]["seed"]
+    # always duplicate: kept as invalid after MAX_DUP_RETRIES regenerations
+    m = Seq([GOOD] * (2 + pg.MAX_DUP_RETRIES))
+    recs = pg.run_shard([d], "timing", "gen-train-mistral", cfg2, tmp_path / "t.jsonl", m)
+    assert recs[1]["dup_rejections"] == pg.MAX_DUP_RETRIES and recs[1]["duplicate"] and not recs[1]["validate_ok"]
+    # resume rebuilds the accepted list from the shard file: nothing regenerated
+    m2 = Mock()
+    pg.run_shard([d], "timing", "gen-train-mistral", cfg2, tmp_path / "t.jsonl", m2)
+    assert not m2.calls

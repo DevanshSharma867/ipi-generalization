@@ -35,7 +35,7 @@ nvidia-smi --query-gpu=name,memory.total,memory.used --format=csv
 
 gen() {  # gen GENERATOR BATCH_SIZE
   python scripts/gen_pairs.py generate --mode timing --generator "$1" --docs "$DOCS" --out_dir "$W/$1_bs$2" \
-    --batch_size "$2" --length_tokenizer deberta-v3-base
+    --batch_size "$2"   # length rules: V3 tokenizer at $HF_HOME/tokenizers_hpc/deberta_v2_ckpt (sha256-checked)
 }
 gen gen-eval-gemma 1
 gen gen-train-mistral 1

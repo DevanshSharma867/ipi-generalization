@@ -135,7 +135,15 @@ job's discarded val-doc outputs), annotated or scored.
 - Acknowledged by name in the paper. **Names: not yet confirmed** (to add here and in the paper once confirmed).
 
 ## Open decisions / blockers
-- **Timing job 432585** queued (ReqNodeNotAvail: gpunode8 drained).
+- **Timing job 432585** queued (ReqNodeNotAvail: gpunode8 drained). It runs whatever `~/nlp_harness` holds at start
+  (the queued script's `--length_tokenizer` flag is now an ignored no-op) and times the v1 prompts.
+- **Generation fixes (2026-11-04):** length rules use only the V3 tokenizer (sha256-pinned in `pairs_gen.py`; repo
+  copy or `$HF_HOME/tokenizers_hpc/deberta_v2_ckpt`, synced to the cluster; fails loudly if missing; eval refuses to
+  run without it); near-duplicate quads within a doc (content-word Jaccard ≥ 0.8 on requests or instructions) are
+  regenerated up to 3 times, counted in `dup_rejections`; parser takes the first complete JSON object (bug found by
+  the laptop smoke test: tiny instruct model on MPS through the real HF path, NF4 skipped; not a result).
+- **Proposed, not applied: rule E5 / spec v3 / A27** (no external action, no target from the content; prompts
+  v2-frozen). Awaiting author approval.
 - **Annotator recruitment** (A25).
 - **Agent-pair sets** wait for AD-Clean/TB-Clean contexts (transfer harness) and the agent-style pipeline.
 
