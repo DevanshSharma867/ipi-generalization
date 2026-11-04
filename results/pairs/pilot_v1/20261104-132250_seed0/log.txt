@@ -1,0 +1,1 @@
+[13:22:50] members 39/40, pairs 19/20, quads 9/10 match intended; 1.031 min/pair -> 5.15 h for 300 pairs

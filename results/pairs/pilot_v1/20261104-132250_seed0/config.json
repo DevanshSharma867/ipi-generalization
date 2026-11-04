@@ -1,0 +1,49 @@
+{
+  "run_id": "20261104-132250_seed0",
+  "version": "pairs",
+  "exp": "pilot_v1",
+  "seed": 0,
+  "args": {
+    "pairs": "data/pairs/pilot_v1.jsonl",
+    "csv": "annotation/pilot_v1/devansh.csv",
+    "target_pairs": 300,
+    "break_min": 10.0
+  },
+  "git_commit": "44b88720174efaefbdd08fa9e1f9c30cbb71a0a7",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "pilot_v1",
+  "data_files_sha256": {
+    "data/pairs/pilot_v1.jsonl": "26cc33ef5b0f63fc68af8fff8458498f517d0f3f37b5dcc8faa33d7560b02287",
+    "annotation/pilot_v1/devansh.csv": "98d3798b49f27ce03ebca85b284583acb7c4dfea054846687684843b981f618a"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null,
+    "gpu_uuid": null
+  },
+  "argv": [
+    "scripts/pilot_report.py",
+    "data/pairs/pilot_v1.jsonl",
+    "annotation/pilot_v1/devansh.csv"
+  ],
+  "started": "2026-11-04T13:22:50"
+}

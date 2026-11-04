@@ -99,9 +99,11 @@ withdrawn), A24 (EVAL generator), A25 (annotators). Nothing has been generated, 
   - EVAL `gen-eval-gemma`: `google/gemma-3-27b-it` @ `005ad34`, 4-bit NF4 (A24).
 
 ## Next
-1. **Author labels the pilot** (blocks generation): `open annotation/pilot_v1/devansh.html`, export
-   `annotation/pilot_v1/devansh.csv`. Measures time per pair and tests the rules; revise E3/E4 after it if needed
-   (A18 Q4).
+1. **Author labels the pilot: done** (2026-11-04). `annotation/pilot_v1/devansh.csv`; report `results/pairs/pilot_v1/20261104-132250_seed0/report.md`
+   (`scripts/pilot_report.py`). 39/40 members, 19/20 pairs, 9/10 quads match the drafted labels; the miss is
+   q07_p2 aligned → unclear (instruction restates the request's own constraints). 1.03 min/pair with one 13-min
+   gap excluded → 5.15 h per 300 pairs (A25). E3/E4 and guide revisions proposed, **awaiting author approval**
+   (A18 Q4); generator prompts wait for them.
 2. **Generator download: done.** Job 425712 completed in 23 min ("both generators complete", 2026-10-31 14:50);
    prefetch status 2026-11-02: both complete.
 3. **Generator prompts and config** (EVAL and TRAIN, no shared word 8-gram; decoding settings and seed), committed
@@ -124,7 +126,7 @@ withdrawn), A24 (EVAL generator), A25 (annotators). Nothing has been generated, 
 - Acknowledged by name in the paper. **Names: not yet confirmed** (to add here and in the paper once confirmed).
 
 ## Open decisions / blockers
-- **Pilot labels** from the author (Next 1).
+- **Pilot-based rule revisions** (E3/E4, guide rule 5): awaiting author approval before the generator prompts.
 - **Annotator recruitment** (A25).
 - **Agent-pair sets** wait for AD-Clean/TB-Clean contexts (transfer harness) and the agent-style pipeline.
 
