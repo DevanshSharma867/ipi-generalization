@@ -1,4 +1,4 @@
-# Status (updated 2026-11-02)
+# Status (updated 2026-11-04)
 
 # Transfer harness
 
@@ -63,14 +63,19 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
 ## Next
 1. **protectai-small-v2:** access granted and downloaded (2026-11-02), added to `jobs/transfer_scores_encoders.sh`.
    Jobs 429434 and 429443 both failed at start with `CUDA error: uncorrectable ECC error` on gpunode8 (the partition's
-   only node). Report the faulty GPU to the cluster admins, then `sbatch jobs/transfer_scores_encoders.sh` (finished
-   scores are skipped) and rerun `eval/transfer/transfer_metrics.py` with the new liuenv run; F021/F022 update via
-   `make_tables.py`.
+   only node). Once `jobs/gpu_probe.sh` passes: `sbatch jobs/transfer_scores_encoders.sh` (finished scores are
+   skipped), rerun `eval/transfer/transfer_metrics.py` with the new liuenv run; F021/F022 update via `make_tables.py`.
 2. **e. Results layout:** `results/transfer/<detector>/<set>/<run_id>`, which needs a nested-exp change in
    `src/runlog.py`.
 
 ## Open decisions / blockers
-- **GPU fault:** uncorrectable ECC errors on gpunode8 (jobs 429434, 429443); blocks all GPU jobs that land on that GPU.
+- **GPU fault (still open 2026-11-04):** uncorrectable ECC errors on gpunode8 (jobs 429434, 429443; card
+  `GPU-cfb39ac3-d342-8391-b482-bf2ce8a41587`). Admins drained the node (`sinfo`: `draining`, reason `ECC_Error`, root,
+  2026-11-03 11:33); it is the partition's only node, so no new GPU job starts until it is resumed. Probe job 432581
+  (`jobs/gpu_probe.sh`: per-GPU uncorrected ECC count + gpu_guard) is queued (`ReqNodeNotAvail`) and runs when the
+  node returns; read `logs/slurm_gpu_probe_432581.log` in `~/nlp_harness`.
+  Every GPU job now runs `jobs/lib/gpu_guard.sh` (via `job_env.sh`): it exits 3 before any work if the 1-tensor CUDA
+  test fails or the job lands on the bad UUID, and runlog records `hardware.gpu_uuid`.
 - **Revision pins:** Liu pins only Horizon. wolf-defender and prismor-1.5b changed days before his last commit:
   first suspects if Gate 2 mismatches (re-pin with a reason).
 - **VRAM cap:** MPS does not enforce `CUDA_MPS_PINNED_DEVICE_MEM_LIMIT` (smoke test, job 422476). Half-card VRAM
