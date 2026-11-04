@@ -1,0 +1,18 @@
+{
+ "docs": "timing_s0.jsonl",
+ "sha256": "b619e48bbb76aa3e1354d1df6f920ba10363f1d1b8499af2431bacb396d9dea6",
+ "mode": "timing",
+ "split": "val",
+ "split_seed": 0,
+ "n_per_task": "email=7,table=7,code=6",
+ "span_cap_tokens": {
+  "text": 30,
+  "code": 204
+ },
+ "counts": {
+  "email": 7,
+  "table": 7,
+  "code": 6
+ },
+ "builder": "src/data_pipeline_v3.py (in memory, pairs_gen.v3_docs); pre-freeze V3 split"
+}
