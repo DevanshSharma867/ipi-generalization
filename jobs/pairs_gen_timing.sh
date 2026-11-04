@@ -27,7 +27,7 @@
 
 source jobs/lib/job_env.sh
 DOCS=data/pairs/docs/timing_s0.jsonl
-CFG_SHA=$(sha256sum configs/pairs_gen_v1.yaml | cut -c1-12)
+CFG_SHA=$(sha256sum configs/pairs_gen_v2.yaml | cut -c1-12)
 W=$SCRATCH/nlp_harness/pairs_gen_timing/$CFG_SHA
 mkdir -p "$W"
 [ -f "$W/DONE" ] && { echo "timing already summarised: $(cat "$W/DONE")"; exit 0; }

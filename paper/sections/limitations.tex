@@ -8,6 +8,14 @@ only under our definition; the artifact analysis, the \vthree{} gates and transf
 affected by it. We exclude instructions that are unsafe to follow even when requested, but deployments that never act
 on data-borne instructions lose nothing by flagging aligned ones.
 
+\paragraph{Pairs exclude actions.}
+Every pair instruction shapes the response itself; none sends, schedules, edits, runs or pays, and none uses a target
+taken from the context. H4 is therefore stated and tested only for requested answer-shaping instructions; it says nothing about requested
+\emph{actions}, where blocking costs an agent its task, and nothing about attacks that hide an attacker-chosen
+parameter (a recipient, a link, a command) inside an action the user authorised. A detector for that case needs
+to know where each argument of a tool call came from, which a text classifier over $(q, c)$ cannot see; we leave it
+to work on action provenance.
+
 \paragraph{Pairs are LLM-drafted.}
 Request phrasing may carry generator artifacts, and a model trained on pairs from one generator could learn that
 generator rather than intent. We separate evaluation and training generators and templates, keep only pairs on which

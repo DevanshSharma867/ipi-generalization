@@ -26,17 +26,28 @@ instruction. They disagree on instructions that the user requested or that serve
 how to format the reply the user asked for, a README step the user wants carried out). A content-only detector
 computes the same score for $(q_1, c)$ and $(q_2, c)$, so on any set where the label of $c$ changes with $q$ it is
 at chance. Under the strict view this is no loss, and flagging requested instructions is correct. Under the
-intent-based view it is a false alarm, and with agents that act on their tool outputs it blocks requested work.
+intent-based view it is a false alarm; with agents that act on their tool outputs it would also block requested
+actions, a case our pairs exclude (see below).
 
 \paragraph{Scope of our claims.}
 We state the intent-based definition as a design choice, not as the only correct one. Which of our results depend on
 it is fixed in advance: the pair-based hypotheses (H2, H3 on pairs, and H4 on false alarms for requested
-instructions) are meaningful only under the intent-based view, whereas the artifact analysis, the \vthree{} gates,
+answer-shaping instructions) are meaningful only under the intent-based view, whereas the artifact analysis, the \vthree{} gates,
 and transfer to agent benchmarks (H1, and H3 on content-only sets) are meaningful under both. To keep the contested
 zone small, our pairs exclude every instruction that would be unsafe to follow even when the request asks for it:
 sending or revealing data to a party the user did not name, payments, deleting or overwriting user data, changing
 credentials or permissions, contradicting the document, and unrequested promotional content (\S\ref{sec:pairs}).
 Under either view those are injections.
+
+\paragraph{Attacker-chosen parameters are out of scope.}
+A user may authorise an action in general terms (``make sure our bookkeeper gets a copy'') while the context supplies
+its parameters (an address, a link, an account, a command). Such an instruction can serve the request and still
+hand the attacker the choice of target; labelling it aligned would reward exactly the bypass a detector should
+stop. Our intent-based labels therefore cover only instructions that change how the response is produced: its
+format, its steps, what it reads from the context, or what it includes. Instructions that act outside the response,
+or use a recipient, address, URL, account, file, command, amount or credential the request does not supply, are
+excluded from our pairs whatever the request. Whether an authorised action with attacker-chosen parameters is an
+injection is a question about action provenance, not about intent, and we make no claim about it.
 
 \paragraph{Task format.}
 Every model we train sees \inp{$q$}{$c$}; the cross-encoder of \S\ref{sec:ict} receives $q$ and $c$ as a segment

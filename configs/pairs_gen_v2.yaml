@@ -1,0 +1,30 @@
+status: v2-frozen
+# Intent-pair generation config (docs/pairs_spec.md v3 §8; paper_plan A18, A24, A26, A27). Frozen before any
+# generation call: a change is a new file and both versions are reported. v2 (A27): prompts v2 (rule E5);
+# decoding, seed and modes unchanged from pairs_gen_v1.yaml.
+# Repo and revision of each generator come from configs/detectors.yaml (role: generator), the single pin.
+spec_version: 3
+seed: 20261104            # per-quad seed = sha256("<seed>:<quad_id>"); positions/separators seeded from it too
+generators:
+  gen-eval-gemma:         # google/gemma-3-27b-it, A24
+    prompt: configs/prompts/pairs_eval_v2.txt
+    precision: nf4        # bitsandbytes 4-bit NF4, bf16 compute
+    model_class: image-text-to-text   # Gemma3ForConditionalGeneration; text-only input
+    decoding: {do_sample: true, temperature: 0.7, top_p: 0.95, max_new_tokens: 900}
+  gen-train-mistral:      # mistralai/Mistral-7B-Instruct-v0.3, A18 Q3
+    prompt: configs/prompts/pairs_train_v2.txt
+    precision: bf16
+    model_class: causal-lm
+    decoding: {do_sample: true, temperature: 0.8, top_p: 0.95, max_new_tokens: 900}
+modes:
+  eval:                   # V3 test docs of split seed 0 only (A18 Q1); quads per doc: spec §6
+    generators: [gen-eval-gemma]
+    split_seed: 0
+    quads_per_doc: {email: 2, code: 2, table: 1}
+  train:                  # V3 train docs; quads per doc: spec §8
+    generators: [gen-train-mistral]
+    quads_per_doc: {email: 6, code: 6, table: 3}
+  timing:                 # V3 val docs of split seed 0; outputs discarded (A24)
+    generators: [gen-eval-gemma, gen-train-mistral]
+    split_seed: 0
+    quads_per_doc: {email: 1, code: 1, table: 1}

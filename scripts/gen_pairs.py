@@ -1,7 +1,7 @@
 """
 gen_pairs.py
 ============
-Intent-pair generation with the pinned generators (configs/pairs_gen_v1.yaml; src/pairs_gen.py; spec v2 §8).
+Intent-pair generation with the pinned generators (configs/pairs_gen_v2.yaml, the default; v1 kept for the record; src/pairs_gen.py; spec v3 §8).
 
   docs     build a docs file (JSONL: doc_id, task, split, split_seed, context) from the V3 builder, in memory.
            Needs data/raw/BIPIA and the V3 tokenizer (laptop). Writes data/pairs/docs/<name>.jsonl + .manifest.json.
@@ -124,7 +124,7 @@ def hf_generator(g: dict, device: str = "cuda"):
 
 
 def cmd_generate(a):
-    cfg = pg.load_config()
+    cfg = pg.load_config(a.config)
     pg.check_generator(a.mode, a.generator, cfg)
     docs = pg.read_docs(a.docs)
     pg.check_docs(docs, a.mode, cfg)  # before loading any model
@@ -221,6 +221,7 @@ def main():
     g = sub.add_parser("generate")
     g.add_argument("--mode", required=True, choices=list(pg.MODE_SPLITS))
     g.add_argument("--generator", required=True)
+    g.add_argument("--config", type=Path, default=pg.CONFIG, help="generation config (default: the current version)")
     g.add_argument("--docs", required=True, type=Path)
     g.add_argument("--out_dir", required=True)
     g.add_argument("--shard", type=int, default=0)
