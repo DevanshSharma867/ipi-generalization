@@ -1,5 +1,8 @@
 # Findings log (numbers only)
 
+Commit hashes recorded before 2026-11-04 are pre-rewrite hashes, kept as the run manifests record them (the provenance
+gate checks them against `config.json`); `docs/commit_rewrites.md` maps them to the current history.
+
 A running log of what the committed results establish so far. Each entry `F<nnn>` opens with a provenance block
 (script, commit, seeds, data version, eval set, threshold protocol, date, source runs or files). Every number is a
 macro from `paper/numbers.tex` (written by `scripts/make_tables.py`), or from `paper/legacy_numbers.tex` for entries

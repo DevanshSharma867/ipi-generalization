@@ -5,7 +5,7 @@
 Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproduction in Liu's pinned env and ours).
 
 ## Done
-- **Step a, set build: Gate 1 PASS.** Run `results/transfer/set_build_gate1/20261030-124112_seed0` (commit `6c94421`),
+- **Step a, set build: Gate 1 PASS.** Run `results/transfer/set_build_gate1/20261030-124112_seed0` (commit `a0b9703`, pre-rewrite `6c94421`),
   data version `transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filescf00fcba`. All six sets match Liu's released score
   files (`5d0ae7c`) row for row and label for label, and the paper's set sizes. The manifest records envs, HF dataset
   revisions, and where each step ran.
@@ -29,7 +29,7 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   AD-Matched injected rows differ (273/432 for PIGuard): the set text differs, not the models. Run 3 (our env,
   transformers 5) shifts scores heavily: PG2 tokenizes differently; PIGuard and Horizon tokenize identically but
   still shift on BIPIA. Judge rows differ up to 0.77 vs Liu even in run 1 (bound 0.02); metrics mostly within tolerance.
-- **Gate 2 follow-up (jobs 424070–424072, commit `007c5a5`; F017, F018):**
+- **Gate 2 follow-up (jobs 424070–424072, commit `bc2f183`, pre-rewrite `007c5a5`; F017, F018):**
   - Batch test: scores do not depend on batch size (≤ 7e-6, published encoders in both envs; our 3 V2 DeBERTa
     checkpoints ≤ 3.6e-6). No batch-policy change needed; dynamic padding stays.
   - The transformers-5 shift is not padding: it is present at bs 1. Liu's env reproduces his files; ours does not.
