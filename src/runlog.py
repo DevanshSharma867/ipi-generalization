@@ -158,7 +158,8 @@ def _versions() -> Dict[str, Optional[str]]:
 
 def _hardware() -> Dict:
     hw = {"platform": platform.platform(), "machine": platform.machine(), "node": platform.node(),
-          "cpu_count": os.cpu_count(), "slurm_job_id": os.environ.get("SLURM_JOB_ID")}
+          "cpu_count": os.cpu_count(), "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+          "gpu_uuid": os.environ.get("GPU_UUID")}  # exported by jobs/lib/gpu_guard.sh
     if "torch" in sys.modules:  # only report devices when the run already uses torch
         torch = sys.modules["torch"]
         hw["cuda"] = torch.cuda.is_available()

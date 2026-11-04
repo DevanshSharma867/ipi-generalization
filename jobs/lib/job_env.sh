@@ -25,6 +25,7 @@ for m in ${MODULES:-}; do module load "$m"; done
 source "${VENV_PATH:-.venv}/bin/activate"
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONUNBUFFERED=1
 export CUDA_MPS_PINNED_DEVICE_MEM_LIMIT="0=48G"
+source "$(dirname "${BASH_SOURCE[0]}")/gpu_guard.sh"  # fail fast on a bad GPU; exports GPU_UUID for runlog
 echo "Job ${SLURM_JOB_ID:-local} on $(hostname) at $(date); commit $(git rev-parse HEAD); python $(command -v python)"
 
 if [ -z "${ALLOW_DIRTY:-}" ]; then
