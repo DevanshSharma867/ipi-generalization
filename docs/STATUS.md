@@ -86,8 +86,9 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
 
 # Intent pairs (C3)
 
-Plan: `docs/pairs_spec.md` v1; paper_plan A18 (construction, split seed 0 only, strict agreement), A21 (comparator (c)
-withdrawn), A24 (EVAL generator), A25 (annotators). Nothing has been generated, annotated or scored.
+Plan: `docs/pairs_spec.md` v2 (A26); paper_plan A18 (construction, split seed 0 only, strict agreement), A21 (comparator (c)
+withdrawn), A24 (EVAL generator), A25 (annotators), A26 (pilot-based label rules). Nothing has been generated (except the timing
+job's discarded val-doc outputs), annotated or scored.
 
 ## Done
 - Spec, annotation guide, `src/pairs.py` (validation, overlap class, complete quads), annotation page
@@ -99,22 +100,25 @@ withdrawn), A24 (EVAL generator), A25 (annotators). Nothing has been generated, 
   - EVAL `gen-eval-gemma`: `google/gemma-3-27b-it` @ `005ad34`, 4-bit NF4 (A24).
 
 ## Next
-1. **Author labels the pilot: done** (2026-11-04). `annotation/pilot_v1/devansh.csv`; report `results/pairs/pilot_v1/20261104-132250_seed0/report.md`
-   (`scripts/pilot_report.py`). 39/40 members, 19/20 pairs, 9/10 quads match the drafted labels; the miss is
-   q07_p2 aligned → unclear (instruction restates the request's own constraints). 1.03 min/pair with one 13-min
-   gap excluded → 5.15 h per 300 pairs (A25). E3/E4 and guide revisions proposed, **awaiting author approval**
-   (A18 Q4); generator prompts wait for them.
-2. **Generator download: done.** Job 425712 completed in 23 min ("both generators complete", 2026-10-31 14:50);
-   prefetch status 2026-11-02: both complete.
-3. **Generator prompts and config** (EVAL and TRAIN, no shared word 8-gram; decoding settings and seed), committed
-   before any generation.
-4. **20-document timing job** (`jobs/`, sbatch, ≤ 1 h, half card with `set_per_process_memory_fraction(0.5)`):
-   - Input: 20 V3 **val** docs of split seed 0 (7 email, 7 table, 6 code), never test docs. Outputs discarded,
-     never EVAL or TRAIN.
-   - Runs both generators: Gemma 27B NF4 (EVAL prompt) and Mistral 7B bf16 (TRAIN prompt).
-   - Records per generator: load time, prefill and decode tokens/s, s/quad, peak VRAM, the JSON-parse rate and the
-     `pairs.validate` pass rate. Extrapolates GPU-hours for about 210 EVAL V3 quads and about 3,141 TRAIN quads.
-   - Output: a runlog run under `results/pairs/gen_timing/`.
+1. **Author labels the pilot: done** (2026-11-04). `annotation/pilot_v1/devansh.csv`; report
+   `results/pairs/pilot_v1/20261104-132250_seed0/report.md` (`scripts/pilot_report.py`). 39/40 members, 19/20 pairs,
+   9/10 quads match the drafted labels; 1.03 min/pair → 5.15 h per 300 pairs (A25). **Revisions applied** as spec v2
+   (A26): restating the request's task or constraints is aligned (case 12b), case 12 narrowed, guide rule 5 and
+   example 11, notes only for unclear/low-confidence/suspect items. E3/E4 unchanged.
+2. **Generator download: done.** Job 425712 (2026-10-31); prefetch status 2026-11-02: both complete.
+3. **Generator prompts and config: done, v1-frozen** (2026-11-04), committed before any generation call:
+   `configs/pairs_gen_v1.yaml` (decoding, seed 20261104, quads per doc per mode; pins read from detectors.yaml),
+   `configs/prompts/pairs_eval_v1.txt` (Gemma) and `pairs_train_v1.txt` (Mistral), written independently, no shared
+   word 8-gram (`tests/test_pairs_gen.py`). Pipeline: `src/pairs_gen.py` (mode guards: eval = split-seed-0 test only,
+   train = train only, timing = val only; one quad per call; atomic resumable shards; per-quad raw output, parse and
+   validate result, revision, prompt and config sha256) and `scripts/gen_pairs.py` (`docs`, `generate`, `timing`).
+4. **Timing job submitted** (`jobs/pairs_gen_timing.sh`, job 432585), queued while gpunode8 is drained:
+   - Input `data/pairs/docs/timing_s0.jsonl` (20 val docs of split seed 0, 7 email / 7 table / 6 code; pre-freeze
+     split; manifest has its sha256 and the span caps). One quad per doc.
+   - Gemma NF4 batch 1, Mistral bf16 batch 1 and batch 8; half card. Writes `results/pairs/gen_timing/<run_id>/`;
+     generated text is deleted from scratch after the summary.
+   - Check: `squeue -u $USER`; log `~/nlp_harness/logs/slurm_pairs_timing_<job>.log`. Resume: resubmit (finished
+     quads skipped; exits at once once summarised).
 5. EVAL generation on split-seed-0 test docs after the V3 freeze (the test-doc list may move at the rebuild);
    TRAIN generation as ≤ 1 h sharded sbatch jobs.
 6. Annotation (A25), then κ per set, agreed quads (≥ 200 agreed pairs per set), P3 checks.
@@ -126,7 +130,7 @@ withdrawn), A24 (EVAL generator), A25 (annotators). Nothing has been generated, 
 - Acknowledged by name in the paper. **Names: not yet confirmed** (to add here and in the paper once confirmed).
 
 ## Open decisions / blockers
-- **Pilot-based rule revisions** (E3/E4, guide rule 5): awaiting author approval before the generator prompts.
+- **Timing job 432585** queued (ReqNodeNotAvail: gpunode8 drained).
 - **Annotator recruitment** (A25).
 - **Agent-pair sets** wait for AD-Clean/TB-Clean contexts (transfer harness) and the agent-style pipeline.
 
