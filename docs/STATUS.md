@@ -81,6 +81,11 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
 - **VRAM cap:** MPS does not enforce `CUDA_MPS_PINNED_DEVICE_MEM_LIMIT` (smoke test, job 422476). Half-card VRAM
   must be capped in code, e.g. `torch.cuda.set_per_process_memory_fraction(0.5)`.
 - **Frontier comparator (c):** withdrawn 2026-10-31 (A21, budget). No API key or scoring is needed.
+- **History rewrite (2026-11-04):** trailer removed from every commit message, trees identical; map in
+  `docs/commit_rewrites.md`. `~/nlp_harness` reset to the new main. **Cluster `~/nlp` and `~/nlp_probe` still hold the
+  old history and are not cleaned** (no local-only commits, but unique uncommitted work): `~/nlp` (main at `01d1c78`) has uncommitted edits from 2026-10-17 to `.gitignore`,
+  `src/evaluate.py`, `src/models/deberta.py`, `submit_train.sh`; `~/nlp_probe` has 11 untracked
+  `results/v2_probes/score_*` run dirs (2026-10-29). Author to decide (keep/diff/discard) before reset and worktree removal.
 - **Cluster notes:** the QoS needs `--gres=mps:50` even for CPU jobs; the template file
   `jobs/templates/mock_job_csisnlp18.sh` was never found, so the header is derived from the existing jobs.
 
