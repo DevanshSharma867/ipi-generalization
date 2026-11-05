@@ -46,7 +46,13 @@ DUP_JACCARD = 0.8      # near-duplicate threshold within a document (content-wor
 MAX_DUP_RETRIES = 3    # regenerations of a near-duplicate quad before it is kept as invalid
 # tokenizer.json of the V3 builder's tokenizer (data_pipeline_v3.TOKENIZER); the length rules use nothing else
 V3_TOKENIZER_SHA256 = "a29e21faec7433ee508590c7bee5dc869fddb335aacf11d53be766cf0fd81294"
-TASK_KIND = {"email": "an email", "table": "a table", "code": "a programming question and answer"}
+TASK_KIND = {"email": "an email", "table": "a table", "code": "a programming question and answer",
+             "agent": "the output of a tool that an AI assistant called while working on a user's task"}
+REGISTER = {"email": "text", "table": "text", "code": "code", "agent": "text"}  # span cap register per task
+AGENT_SETS = {"adclean": "agentdojo_benign_outputs.jsonl", "tbclean": "taubench_clean.jsonl"}
+POSITIVE_SETS = ("agentdojo_pairs.jsonl", "agentdojo_pairs_shift.jsonl", "taubench_eval.jsonl", "taubench_pairs.jsonl")
+AGENT_HALF_SEED = 0       # transfer_metrics.task_half seed; half 1 (evaluation half) is the agent EVAL "test" side
+REQUEST_BUDGET = 64       # DeBERTa-v3 tokens reserved for the request when screening a context for the 512 limit
 
 
 def sha256_file(path) -> str:
@@ -111,6 +117,26 @@ def v3_tokenizer():
     return AutoTokenizer.from_pretrained(str(path)), str(path)
 
 
+# E5 screen (spec v3 E5; an automatic pre-filter like the E4 lexicon, humans still decide): an instruction that
+# starts with an external-action verb, or names a URL, e-mail address or file path its aligned request does not.
+E5_ACTION = re.compile(r"^\W*(?:also\s+|then\s+|please\s+)?(send|forward|reply|email|e-mail|mail|post|schedule|book|save|"
+                       r"download|upload|run|execute|install|delete|cancel|pay|transfer|wire|purchase|buy|share|"
+                       r"invite|reset)\b", re.I)
+E5_TARGET = re.compile(r"(https?://\S+|www\.\S+|\b[\w.+-]+@[\w-]+\.[\w.]+\b|(?:^|\s)(?:~|\.{0,2})/[\w./-]+|"
+                       r"\b[\w-]+\.(?:pdf|csv|xlsx?|docx?|txt|json|py|sh|zip)\b)", re.I)
+
+
+def e5_screen(instruction: str, request_aligned: str) -> str:
+    """Reason string if the instruction fails the E5 screen, else ''."""
+    m = E5_ACTION.search(instruction)
+    if m:
+        return f"E5 screen: external-action verb {m.group(1)!r}"
+    for t in E5_TARGET.findall(instruction):
+        if t.strip().lower() not in request_aligned.lower():
+            return f"E5 screen: target {t.strip()!r} not supplied by the request"
+    return ""
+
+
 def near_duplicate(out: dict, earlier: List[dict]) -> str:
     """Reason string if a request or instruction of `out` near-duplicates one of an earlier quad's, else ''."""
     for e in earlier:
@@ -123,10 +149,74 @@ def near_duplicate(out: dict, earlier: List[dict]) -> str:
     return ""
 
 
+def task_half(cluster: str, seed: int = AGENT_HALF_SEED) -> int:
+    """0 = calibration half, 1 = evaluation half: eval/transfer/transfer_metrics.task_half, same formula."""
+    return int(hashlib.sha256(f"{seed}:{cluster}".encode()).hexdigest(), 16) % 2
+
+
+def agent_docs(sets_dir: Path, tok, cap: dict) -> tuple:
+    """(eligible docs, per-source exclusion counts) for agent-derived EVAL pairs (A25 second set), from AD-Clean and
+    TB-Clean. A doc is one clean tool output with its user task. Kept only if
+      - its user task is in the evaluation half of transfer_metrics' task split (seed 0): the agent EVAL "test" side;
+      - it overlaps no positive (injected) transfer row: neither the same (suite, task, step, function) nor its first
+        200 characters inside a positive's text;
+      - it has an internal insertion boundary (V3 boundaries) and fits 512 DeBERTa-v3 tokens with the longest
+        allowed instruction (span cap) and a REQUEST_BUDGET-token request;
+      - it is not a near-duplicate of a kept doc (data_pipeline_v3.near_dup_components, per source).
+    doc_id is <source>_<row index>; the source row is recorded."""
+    import pandas as pd
+    import data_pipeline_v3 as v3
+    from preprocess import build_combined_text
+    from probes import V3_BOUNDARIES, has_internal_boundary
+    sets_dir = Path(sets_dir)
+    pos = [json.loads(l) for f in POSITIVE_SETS for l in open(sets_dir / f, encoding="utf-8")]
+    pos = [r for r in pos if int(r.get("label", 0)) == 1]
+    pos_keys = {(r["suite"], r["task"], r["step"], r["function"]) for r in pos}
+    pos_text = "\n\x00".join(r["text"] for r in pos)
+    out, counts = [], {}
+    for src, fname in AGENT_SETS.items():
+        c = {"rows": 0, "calibration_half": 0, "overlaps_positive": 0, "no_boundary": 0, "too_long": 0,
+             "near_duplicate": 0}
+        cand = []
+        for i, line in enumerate(open(sets_dir / fname, encoding="utf-8")):
+            r = json.loads(line)
+            c["rows"] += 1
+            cluster = f"{r['suite']}/{r['task']}"
+            if task_half(cluster) != 1:
+                c["calibration_half"] += 1
+                continue
+            if (r["suite"], r["task"], r["step"], r["function"]) in pos_keys or r["text"][:200] in pos_text:
+                c["overlaps_positive"] += 1
+                continue
+            if not has_internal_boundary(r["text"], V3_BOUNDARIES):
+                c["no_boundary"] += 1
+                continue
+            n = len(tok(build_combined_text({"user_intent": "", "text": r["text"]}))["input_ids"])
+            if n + REQUEST_BUDGET + cap["text"] > 512:
+                c["too_long"] += 1
+                continue
+            cand.append({"doc_id": f"{src}_{i:05d}", "task": "agent", "split": "test", "split_seed": AGENT_HALF_SEED,
+                         "context": r["text"], "source_set": src, "source_file": fname, "source_row": i,
+                         "suite": r["suite"], "user_task": r["task"], "cluster": cluster, "step": r["step"],
+                         "function": r["function"], "user_request": r["user_request"],
+                         "split_def": f"transfer_metrics.task_half(seed {AGENT_HALF_SEED}) == 1 (evaluation half)"})
+        if cand:
+            comp = v3.near_dup_components(pd.DataFrame([{"doc_id": d["doc_id"], "task_type": src,
+                                                         "context": d["context"]} for d in cand]))
+            kept = [d for d in cand if comp[d["doc_id"]] == d["doc_id"]]
+            c["near_duplicate"] = len(cand) - len(kept)
+            cand = kept
+        c["eligible"] = len(cand)
+        c["eligible_user_tasks"] = len({d["cluster"] for d in cand})
+        counts[src] = c
+        out += cand
+    return out, counts
+
+
 def length_errors(p: dict, tok, cap: dict) -> list:
     """Spec §6 length rules that need the DeBERTa-v3 tokenizer: span cap of the register, 512 tokens per member."""
     from preprocess import build_combined_text
-    register = {"email": "text", "table": "text", "code": "code"}[p["task"]]
+    register = REGISTER[p["task"]]
     cost = len(tok("\n\n" + p["instruction"].strip() + "\n\n", add_special_tokens=False)["input_ids"])
     errors = [f"{p['pair_id']}: instruction over the {register} span cap ({cap[register]} tokens)"] \
         if cost > cap[register] else []
@@ -190,6 +280,9 @@ def quad_seed(seed: int, quad_id: str) -> int:
 
 def quads_for(docs: List[dict], mode: str, cfg: dict) -> List[dict]:
     per = cfg["modes"][mode]["quads_per_doc"]
+    missing = sorted({d["task"] for d in docs} - set(per))
+    if missing:
+        raise ValueError(f"config v{cfg.get('version')} mode {mode} sets no quads_per_doc for {missing}")
     return [{"quad_id": f"{mode}_s{d['split_seed']}_{d['doc_id']}_q{k}", "doc": d}
             for d in sorted(docs, key=lambda d: d["doc_id"]) for k in range(per[d["task"]])]
 
@@ -198,7 +291,8 @@ def to_pairs(q: dict, out: dict, mode: str, generator: str, seed: int) -> List[d
     """The quad's two pairs (spec §1), positions and separators drawn i.i.d. per pair with a per-quad seeded RNG."""
     import data_pipeline_v3 as v3
     d, rng = q["doc"], random.Random(f"{seed}:{q['quad_id']}:positions")
-    src = f"v3_{d['split']}@split_seed{d['split_seed']}"
+    src = (f"{d['source_set']}_row{d['source_row']}@evalhalf_seed{d['split_seed']}" if d.get("source_set")
+           else f"v3_{d['split']}@split_seed{d['split_seed']}")
     return [make_pair(f"{q['quad_id']}_p{k}", q["quad_id"], d, ins, ra, rs, rng.choice(v3.POSITIONS),
                       rng.choice(v3.SEPARATORS), source=src, generator=generator,
                       notes=json.dumps({"serves": why_s, "deviates": why_d}, ensure_ascii=False))
@@ -270,6 +364,8 @@ def run_shard(docs: List[dict], mode: str, generator: str, cfg: dict, out_path: 
                 try:
                     pairs = to_pairs(q, out, mode, generator, cfg["seed"])
                     errs = validate(pairs)
+                    errs += [f"{p['pair_id']}: {r}" for p in pairs
+                             for r in [e5_screen(p["instruction"], p["request_aligned"])] if r]
                     if tok is not None:
                         errs += [e for p in pairs for e in length_errors(p, tok, cap)]
                     rec.update(pairs=pairs, errors=errs, validate_ok=not errs)

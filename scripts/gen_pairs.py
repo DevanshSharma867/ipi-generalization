@@ -32,7 +32,32 @@ DOCS_DIR = ROOT / "data" / "pairs" / "docs"
 TARGET_QUADS = {"gen-eval-gemma": 210, "gen-train-mistral": 3141}  # spec §8 planning volumes (A18)
 
 
+def cmd_agent_docs(a):
+    """Agent-derived EVAL docs (AD-Clean, TB-Clean evaluation half). The docs JSONL holds transfer-set text, which
+    is not redistributed, so it goes under data/transfer/ (gitignored); the manifest (counts, hashes) is committed."""
+    tok, tok_path = pg.v3_tokenizer()
+    cap = {"text": a.span_cap_text, "code": 0}
+    docs, counts = pg.agent_docs(a.sets_dir, tok, cap)
+    out = ROOT / "data" / "transfer" / "pairs_docs" / f"eval_agent_s{pg.AGENT_HALF_SEED}.jsonl"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
+        for d in docs:
+            f.write(json.dumps(d, ensure_ascii=False) + "\n")
+    sets_manifest = json.loads((Path(a.sets_dir) / "manifest.json").read_text())
+    manifest = {"docs": str(out.relative_to(ROOT)), "sha256": pg.sha256_file(out), "mode": "eval", "split": "test",
+                "split_def": f"transfer_metrics.task_half(seed {pg.AGENT_HALF_SEED}) == 1", "split_seed": pg.AGENT_HALF_SEED,
+                "sets_data_version": sets_manifest.get("data_version"), "span_cap_tokens": {"text": a.span_cap_text},
+                "request_budget_tokens": pg.REQUEST_BUDGET, "length_tokenizer": tok_path, "counts": counts,
+                "doc_ids": [d["doc_id"] for d in docs]}
+    m = DOCS_DIR / f"eval_agent_s{pg.AGENT_HALF_SEED}.manifest.json"
+    m.write_text(json.dumps(manifest, indent=1) + "\n")
+    print(json.dumps(counts, indent=1))
+    print(f"wrote {out.relative_to(ROOT)} ({len(docs)} docs) and {m.relative_to(ROOT)}")
+
+
 def cmd_docs(a):
+    if a.source == "agent":
+        return cmd_agent_docs(a)
     mode_split = {"timing": "val", "eval": "test", "train": "train"}[a.mode]
     docs, _, cap = pg.v3_docs(a.split_seed)
     pool = sorted((d for d in docs.values() if d["split"] == mode_split), key=lambda d: d["doc_id"])
@@ -128,7 +153,10 @@ def cmd_generate(a):
     pg.check_generator(a.mode, a.generator, cfg)
     docs = pg.read_docs(a.docs)
     pg.check_docs(docs, a.mode, cfg)  # before loading any model
-    manifest = json.loads(Path(a.docs).with_suffix(".manifest.json").read_text())
+    mpath = Path(a.docs).with_suffix(".manifest.json")
+    if not mpath.exists():  # agent docs live under data/transfer/, their manifest under data/pairs/docs/
+        mpath = DOCS_DIR / mpath.name
+    manifest = json.loads(mpath.read_text())
     docs = pg.shard_docs(docs, a.shard, a.n_shards)
     out_dir = Path(a.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -218,6 +246,9 @@ def main():
     d.add_argument("--mode", required=True, choices=list(pg.MODE_SPLITS))
     d.add_argument("--split_seed", type=int, default=0)
     d.add_argument("--n_per_task", default="", help="e.g. email=7,table=7,code=6 (seeded sample); default all")
+    d.add_argument("--source", default="v3", choices=["v3", "agent"], help="agent: AD-Clean/TB-Clean EVAL docs")
+    d.add_argument("--sets_dir", type=Path, default=ROOT / "data" / "transfer" / "sets_adliu")
+    d.add_argument("--span_cap_text", type=int, default=30, help="V3 text span cap (tokens; timing_s0 manifest)")
     g = sub.add_parser("generate")
     g.add_argument("--mode", required=True, choices=list(pg.MODE_SPLITS))
     g.add_argument("--generator", required=True)

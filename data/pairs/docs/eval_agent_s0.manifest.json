@@ -1,0 +1,57 @@
+{
+ "docs": "data/transfer/pairs_docs/eval_agent_s0.jsonl",
+ "sha256": "0b91f4ae2b60024c9aa0f7091764f479c64b6c3f275ac6d994c513473b6dfc91",
+ "mode": "eval",
+ "split": "test",
+ "split_def": "transfer_metrics.task_half(seed 0) == 1",
+ "split_seed": 0,
+ "sets_data_version": "transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded",
+ "span_cap_tokens": {
+  "text": 30
+ },
+ "request_budget_tokens": 64,
+ "length_tokenizer": "/Users/devanshsharma/projects/nlp/hf_cache/tokenizers_hpc/deberta_v2_ckpt",
+ "counts": {
+  "adclean": {
+   "rows": 339,
+   "calibration_half": 169,
+   "overlaps_positive": 78,
+   "no_boundary": 56,
+   "too_long": 0,
+   "near_duplicate": 17,
+   "eligible": 19,
+   "eligible_user_tasks": 17
+  },
+  "tbclean": {
+   "rows": 1533,
+   "calibration_half": 789,
+   "overlaps_positive": 37,
+   "no_boundary": 707,
+   "too_long": 0,
+   "near_duplicate": 0,
+   "eligible": 0,
+   "eligible_user_tasks": 0
+  }
+ },
+ "doc_ids": [
+  "adclean_00007",
+  "adclean_00009",
+  "adclean_00013",
+  "adclean_00018",
+  "adclean_00041",
+  "adclean_00043",
+  "adclean_00048",
+  "adclean_00067",
+  "adclean_00090",
+  "adclean_00096",
+  "adclean_00120",
+  "adclean_00126",
+  "adclean_00158",
+  "adclean_00212",
+  "adclean_00257",
+  "adclean_00272",
+  "adclean_00273",
+  "adclean_00294",
+  "adclean_00295"
+ ]
+}
