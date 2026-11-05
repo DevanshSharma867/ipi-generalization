@@ -1,4 +1,4 @@
-# Status (updated 2026-11-04)
+# Status (updated 2026-11-05)
 
 # Transfer harness
 
@@ -69,13 +69,12 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
    `src/runlog.py`.
 
 ## Open decisions / blockers
-- **GPU fault (still open 2026-11-04):** uncorrectable ECC errors on gpunode8 (jobs 429434, 429443; card
-  `GPU-cfb39ac3-d342-8391-b482-bf2ce8a41587`). Admins drained the node (`sinfo`: `draining`, reason `ECC_Error`, root,
-  2026-11-03 11:33); it is the partition's only node, so no new GPU job starts until it is resumed. Probe job 432581
-  (`jobs/gpu_probe.sh`: per-GPU uncorrected ECC count + gpu_guard) is queued (`ReqNodeNotAvail`) and runs when the
-  node returns; read `logs/slurm_gpu_probe_432581.log` in `~/nlp_harness`.
-  Every GPU job now runs `jobs/lib/gpu_guard.sh` (via `job_env.sh`): it exits 3 before any work if the 1-tensor CUDA
-  test fails or the job lands on the bad UUID, and runlog records `hardware.gpu_uuid`.
+- **GPU fault (open, 2026-11-05):** gpunode8 is back in service (`mix`) but still serves the ECC card
+  `GPU-cfb39ac3-d342-8391-b482-bf2ce8a41587`: probe 432581 and pairs timing 432585 landed on it and the guard stopped
+  them (exit 3). `jobs/lib/gpu_guard.sh` now requeues a job that lands on that card (`scontrol requeue`, at most 5 times
+  via `SLURM_RESTART_COUNT`, then exit 3); other CUDA failures still exit 3. Every guarded job has `--requeue` and
+  `--open-mode=append`, so each attempt's UUID is in its log. Resubmitted 2026-11-05: `ts_encoders` 434238,
+  `pairs_timing` 434239. Admins to be asked to drain the card (email drafted by the author).
 - **Revision pins:** Liu pins only Horizon. wolf-defender and prismor-1.5b changed days before his last commit:
   first suspects if Gate 2 mismatches (re-pin with a reason).
 - **VRAM cap:** MPS does not enforce `CUDA_MPS_PINNED_DEVICE_MEM_LIMIT` (smoke test, job 422476). Half-card VRAM
