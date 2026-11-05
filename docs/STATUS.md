@@ -136,8 +136,9 @@ job's discarded val-doc outputs), annotated or scored.
    scoped to the V3-test pairs. Annotation rebalanced (~250 pairs, ~4.3 h per person). Config `pairs_gen_v3.yaml`
    (default) adds `agent: 2`. Docs: `gen_pairs.py docs --mode eval --source agent` (manifest committed, text under
    `data/transfer/pairs_docs/`).
-8. **PAIRS is idle until gpunode8 returns.** Then: timing job 432585 runs (it times the default config, v3 = v2
-   prompts); then EVAL (V3-test after the V3 freeze, plus agent docs) and TRAIN generation, both on v2 prompts.
+8. **PAIRS is idle until gpunode8 has a good card.** Timing job 432585 started 2026-11-04 23:06 on gpunode8 and
+   failed fast in `gpu_guard` (landed on the known-bad GPU `GPU-cfb39ac3…`; exit 3, nothing generated); probe 432581
+   failed the same way. Next: resubmit `sbatch jobs/pairs_gen_timing.sh` (times the default config, v3 = v2 prompts); then EVAL (V3-test after the V3 freeze, plus agent docs) and TRAIN generation, both on v2 prompts.
 
 ## Annotators (A25)
 - External annotators: not project members, fluent in English, independent of the design. The author adjudicates only.
