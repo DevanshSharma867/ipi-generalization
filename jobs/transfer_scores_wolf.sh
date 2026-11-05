@@ -16,6 +16,8 @@
 #SBATCH --account=bits
 #SBATCH --qos=gpu_csis_course
 #SBATCH --gres=mps:50
+#SBATCH --requeue
+#SBATCH --open-mode=append
 
 source jobs/lib/transfer_scores.sh
 "$OUR_PY" $DET --detectors wolf-defender --sets $SETNAMES --sets_dir "$SETS" --out "$W/wolf"

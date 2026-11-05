@@ -16,6 +16,8 @@
 #SBATCH --account=bits
 #SBATCH --qos=gpu_csis_course
 #SBATCH --gres=mps:50
+#SBATCH --requeue
+#SBATCH --open-mode=append
 
 set -uo pipefail
 echo "Job ${SLURM_JOB_ID:-local} on $(hostname) at $(date); commit $(git rev-parse HEAD)"

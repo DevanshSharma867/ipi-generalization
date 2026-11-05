@@ -17,6 +17,8 @@
 #SBATCH --account=bits
 #SBATCH --qos=gpu_csis_course
 #SBATCH --gres=mps:50
+#SBATCH --requeue
+#SBATCH --open-mode=append
 
 source jobs/lib/gate2_fu.sh
 "$OUR_PY" $FU envfix --work "$W" --device cuda

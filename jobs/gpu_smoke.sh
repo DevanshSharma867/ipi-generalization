@@ -16,6 +16,8 @@
 #SBATCH --account=bits
 #SBATCH --qos=gpu_csis_course
 #SBATCH --gres=mps:50
+#SBATCH --requeue
+#SBATCH --open-mode=append
 
 source jobs/lib/job_env.sh
 nvidia-smi --query-gpu=name,memory.total,memory.used,driver_version --format=csv

@@ -20,6 +20,8 @@
 #SBATCH --account=bits
 #SBATCH --qos=gpu_csis_course
 #SBATCH --gres=mps:50
+#SBATCH --requeue
+#SBATCH --open-mode=append
 
 source jobs/lib/job_env.sh
 export TORCHDYNAMO_DISABLE=1
