@@ -36,7 +36,7 @@ import yaml
 from pairs import make_pair, overlap, validate
 
 ROOT = Path(__file__).resolve().parent.parent
-CONFIG = ROOT / "configs" / "pairs_gen_v2.yaml"  # v1 (pre-E5) is kept for the record
+CONFIG = ROOT / "configs" / "pairs_gen_v3.yaml"  # v1 (pre-E5) and v2 (no agent quads) are kept for the record
 MIN_VERSION = {"eval": 2, "train": 2, "timing": 1}  # A27: EVAL and TRAIN generation use prompts v2 or later
 DETECTORS = ROOT / "configs" / "detectors.yaml"
 OUTPUT_KEYS = ("r1", "r2", "i1", "i2", "why_i1_serves_r1", "why_i1_deviates_r2", "why_i2_serves_r2",
@@ -70,8 +70,10 @@ def load_config(path: Path = CONFIG) -> dict:
         g["repo"], g["revision"] = pins[name]["repo"], pins[name]["revision"]
         g["prompt_path"] = ROOT / g["prompt"]
         g["prompt_sha256"] = sha256_file(g["prompt_path"])
-        if not g["prompt_path"].read_text(encoding="utf-8").startswith(f"# status: {cfg['status']}"):
-            raise ValueError(f"{g['prompt']}: header must start with '# status: {cfg['status']}' (the config's)")
+        pm = re.match(r"# status: v(\d+)-frozen\n", g["prompt_path"].read_text(encoding="utf-8"))
+        if not pm or int(pm.group(1)) > cfg["version"]:
+            raise ValueError(f"{g['prompt']}: header must be '# status: v<k>-frozen' with k <= the config's version")
+        g["prompt_version"] = int(pm.group(1))
     cfg["sha256"] = sha256_file(path)
     return cfg
 
@@ -239,8 +241,9 @@ def check_docs(docs: List[dict], mode: str, cfg: dict) -> None:
 
 
 def check_generator(mode: str, generator: str, cfg: dict) -> None:
-    if cfg["version"] < MIN_VERSION[mode]:
-        raise ValueError(f"mode {mode} needs config v{MIN_VERSION[mode]} or later (A27), got v{cfg['version']}")
+    low = min(cfg["version"], cfg["generators"][generator].get("prompt_version", cfg["version"]))
+    if low < MIN_VERSION[mode]:
+        raise ValueError(f"mode {mode} needs config and prompts v{MIN_VERSION[mode]} or later (A27), got v{low}")
     allowed = cfg["modes"][mode]["generators"]
     if generator not in allowed:
         raise ValueError(f"mode {mode} allows generators {allowed}, not {generator}")

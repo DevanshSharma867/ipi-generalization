@@ -54,18 +54,23 @@ def test_prompts_share_no_word_8gram(cfg):
 def test_v1_config_refused_for_eval_and_train(tmp_path):
     v1 = pg.load_config(pg.ROOT / "configs" / "pairs_gen_v1.yaml")
     assert v1["version"] == 1
-    with pytest.raises(ValueError, match="needs config v2"):
+    with pytest.raises(ValueError, match="needs config and prompts v2"):
         pg.check_generator("eval", "gen-eval-gemma", v1)
-    with pytest.raises(ValueError, match="needs config v2"):
+    with pytest.raises(ValueError, match="needs config and prompts v2"):
         pg.check_generator("train", "gen-train-mistral", v1)
+    v2 = pg.load_config(pg.ROOT / "configs" / "pairs_gen_v2.yaml")
+    pg.check_generator("eval", "gen-eval-gemma", v2)
+    with pytest.raises(ValueError, match="no quads_per_doc"):
+        pg.quads_for([{"doc_id": "a", "task": "agent", "split": "test", "split_seed": 0}], "eval", v2)
     pg.check_generator("timing", "gen-eval-gemma", v1)  # the queued timing job may use v1
 
 
 def test_prompts_frozen_and_carry_the_rules(cfg):
-    assert cfg["status"] == "v2-frozen" and cfg["spec_version"] == 3
+    assert cfg["status"] == "v3-frozen" and cfg["spec_version"] == 3
+    assert cfg["modes"]["eval"]["quads_per_doc"]["agent"] == 2  # A28
     for g in cfg["generators"].values():
         text = g["prompt_path"].read_text(encoding="utf-8")
-        assert text.startswith("# status: v2-frozen")
+        assert text.startswith("# status: v2-frozen") and g["prompt_version"] == 2
         assert "credential" in text or "secret" in text  # E5 rule present
         b = body(g["prompt_path"]).lower()
         assert "{{DOCUMENT}}" not in pg.build_prompt(text, {"task": "code", "context": "x"})
@@ -260,8 +265,7 @@ def test_e5_screen():
 def test_agent_docs_through_mock_generation(cfg, tmp_path):
     d = {"doc_id": "adclean_00000", "task": "agent", "split": "test", "split_seed": 0, "source_set": "adclean",
          "source_row": 0, "context": "- id: 1\n  title: Team sync\n- id: 2\n  title: Lunch with Sarah"}
-    with pytest.raises(ValueError, match="no quads_per_doc"):
-        pg.quads_for([d], "eval", cfg)
+    assert len(pg.quads_for([d], "eval", cfg)) == 2  # A28: 2 quads per agent doc
     cfg2 = {**cfg, "modes": {**cfg["modes"], "timing": {**cfg["modes"]["timing"],
                                                        "quads_per_doc": {"agent": 1}}}}
     rec = pg.run_shard([{**d, "split": "val"}], "timing", "gen-eval-gemma", cfg2, tmp_path / "a.jsonl", Mock())[0]

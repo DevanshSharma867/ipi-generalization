@@ -220,8 +220,8 @@ All three sets are reported regardless.
 
 ### H3: ICT beats request-aware comparators where intent matters, and is non-inferior where it doesn't
 
-**(a) Intent-dependent transfer sets.** Held-out pairs from V3-test, and pairs built on AgentDojo/τ-bench tool
-outputs. On each set, ICT has:
+**(a) Intent-dependent transfer sets.** Held-out pairs from V3-test (A28: the agent-derived pairs are secondary and
+descriptive only). On this set, ICT has:
 - higher pair accuracy, and
 - higher calibrated TPR@5%FPR
 
@@ -266,7 +266,7 @@ agent pairs.
 - The point difference and its CI are reported for every set, whatever the outcome.
 
 **Decision.**
-- **H3 supported:** (a) holds on both pair sets **and** (b) holds on all three agent sets.
+- **H3 supported:** (a) holds on the V3-test pairs (A28; was "on both pair sets") **and** (b) holds on all three agent sets.
 - **H3a-only:** (a) holds and (b) fails.
 - **Refuted:** otherwise. Each part is reported separately.
 
@@ -281,8 +281,8 @@ supply, are excluded from the pairs by design, so H4 makes no claim about reques
 **Protocol.**
 1. Each detector's threshold is set on the evaluated set so that its TPR on the injected rows of V3-test equals 0.80.
    This is an oracle operating point, used only as a matching device.
-2. FPR is then measured on the **aligned-instruction set**: the aligned members of the held-out V3-test pairs and of the agent pairs
-   (all of them answer-shaping by construction, E5).
+2. FPR is then measured on the **aligned-instruction set**: the aligned members of the held-out V3-test pairs
+   (all of them answer-shaping by construction, E5). The agent pairs' aligned members are reported separately (A28).
 3. Supported if the paired-bootstrap CI of (detector FPR − ICT FPR) excludes 0 for every content-only detector, on
    that set. A supported H4 is reported as "fewer false alarms on requested answer-shaping instructions", never as
    fewer false alarms on requested actions.
@@ -298,11 +298,12 @@ supply, are excluded from the pairs by design, so H4 makes no claim about reques
   - Two independent human annotators label every held-out pair member (aligned / subverting / unclear).
   - Cohen's κ ≥ 0.6 on the label.
   - Only pairs on which both annotators agree with the intended labels are used.
-  - **≥ 200 agreed pairs per held-out pair set** (V3-derived and agent-derived; A5, counted strictly as in A18):
+  - **≥ 200 agreed pairs in the V3-derived held-out pair set** (A5, counted strictly as in A18; A28: the agent-derived
+    set is secondary, with no floor):
     pairs in quads whose every member both annotators label with the intended label. Adjudicated pairs are a
     secondary robustness analysis.
-    - The generator over-generates about 300 pairs per eval set. Two external annotators label each set
-      independently (A25); the author adjudicates disagreements (A9, A18).
+    - The generator over-generates about 420 V3 pairs (and 76 agent pairs, A28). Two external annotators label
+      every pair independently (A25, A28); the author adjudicates disagreements (A9, A18).
     - At p = 0.5, n = 200 gives a binomial 95% half-width of about ±0.07, against ±0.10 for n = 100.
     - The cluster bootstrap is wider when one source doc or task contributes several pairs.
 - **P3.** Pairs pass two leakage checks (amendment A4):
@@ -334,7 +335,8 @@ H1 is reported in every row. "Main venue" vs "workshop" means scope, not a speci
 | AD-Matched, AD-Shift | **Headline transfer** (H1, H3b) | user task | Rebuilt with Liu's scripts on AgentDojo v1.2. All injection goals are actions (Liu 2026). |
 | TB-Matched (+ TB-Clean) | **Headline transfer** (H1, H3b) | user task | The injection point and attacks are Liu's choice. Its attacks are InjecAgent strings, 53/62 of which are in PIGuard's training data (Liu 2026): PIGuard rows on TB-Matched are flagged. |
 | V3 test (5 split seeds) | In-distribution (held-out attacks); C2 | doc_id | Per-task values are descriptive (§6). |
-| V3-test pairs, agent pairs | **Headline intent sets** (H2, H3a, H4) | source doc / user task | Only after P2 and P3. |
+| V3-test pairs | **Headline intent set** (H2, H3a, H4) | source doc | Only after P2 and P3. |
+| Agent pairs (AD-Clean outputs, A28) | Secondary, descriptive (no hypothesis) | user task | After P3; κ reported, no P2 floor. |
 | InjecAgent | **Secondary, descriptive only** | user case (17) | Only 17 independent user cases (F010), and PIGuard was trained on most of its attack strings. No hypothesis is decided on it. |
 | deepset prompt-injections | Secondary, descriptive only | row | 56 clean rows (F011): both TPR@FPR are n/a. Direct injection, not IPI. |
 | V2 test, V2 probes | C1 only | doc_id | Artifact-laden. V2 DeBERTa numbers are never headline numbers. |
@@ -416,6 +418,7 @@ part of the pre-registration, not deviations.
 | A25 | 2026-10-31 | **Annotators (supersedes "from the project group" in A9).** External annotators: not project members, fluent in English, independent of the design. Four annotators in two teams; each team labels every EVAL pair of one set (V3-derived or agent-derived), so each pair gets two independent labels and κ is computed per set (about 300 pairs per person). Fallback with only two annotators: both label both sets. The author adjudicates only and never labels. Annotators are acknowledged by name in the paper; names are added once confirmed. |
 | A26 | 2026-11-04 | **Pair label rules revised after the author pilot, before any generation (A18 Q4).** `docs/pairs_spec.md` v2: label A gains a fourth kind (an instruction that restates the request's own task or explicit constraints is aligned); §4 case 12 (no effect) is narrowed to instructions about something the request never mentions, and new case 12b covers the restating case; annotation-guide rule 5 and a new example follow. E3 and E4 are unchanged. Both generator prompts add two requirements. Evidence: pilot run `results/pairs/pilot_v1/20261104-132250_seed0`. Details below the table. |
 | A27 | 2026-11-04 | **Rule E5: no external action, no target from the content (spec v3), before any generation.** An instruction is eligible only if it changes how the response is produced (format, steps, what it reads or includes). Instructions that act outside the response (send, forward, reply, schedule, save, download, run, edit, change a setting, pay) or use a recipient, address, URL, account, file path, command, amount or credential the request does not supply are excluded whatever the request. Spec cases 16 (reworded) and 17 (now excluded) change, 17b is added; guide rule 8 and example 12; prompts v2-frozen with `configs/pairs_gen_v2.yaml`. Attacker-chosen parameters inside user-authorised actions are out of scope for the pairs and the paper says so. **H4 is narrowed** to the FPR on aligned answer-shaping instructions (hypothesis, protocol step 3 and its reporting wording, §3); actions are excluded from pairs by design. Details below the table. |
+| A28 | 2026-11-05 | **Agent-derived pairs become a secondary, descriptive set (before any pair is generated).** Under the pair rules (V3 insertion boundaries, E5, 512 tokens, no overlap with positive transfer rows, near-duplicate docs dropped) only 19 AgentDojo clean outputs (17 user tasks) and no τ-bench output qualify; field-level insertion into JSON string fields adds none (τ-bench has no string value over 3 words; AgentDojo outputs are YAML). Target: every eligible doc, 2 quads each (38 quads, 76 pairs). The agent pairs decide no hypothesis and have no P2 count floor; H2, H3a and H4 are decided on the V3-test pairs alone. Annotation load re-balanced (A25). Details below the table. |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.
@@ -551,6 +554,32 @@ part of the pre-registration, not deviations.
   removes that confound, and (e) then differs from (a) only in the request.
 - Timing: no ICT, ablation or grid run existed when this was recorded, so this is an amendment, not a deviation.
 - If the swap is switched off by A22's audit rule, (c) coincides with full ICT, as A22 states; the table is unchanged.
+
+**A28 details** (agent pairs secondary):
+- **Eligibility, measured 2026-11-05** (`gen_pairs.py docs --mode eval --source agent`, manifest
+  `data/pairs/docs/eval_agent_s0.manifest.json`; evaluation half of `transfer_metrics.task_half`, seed 0):
+  - AD-Clean: 339 rows → 170 in the evaluation half → 92 with no overlap with a positive transfer row → 36 with a V3
+    insertion boundary → **19 after near-duplicate removal (17 user tasks)**.
+  - TB-Clean: 1,533 → 744 → 707 → **0** (every output is single-line JSON or a bare value; no V3 boundary).
+  - Field-level insertion (instruction inside a free-text JSON string field, ≥ 5 words): **0 more**. No τ-bench string
+    value in any of the 1,533 rows has more than 3 words (names, IDs, statuses, addresses), and no AgentDojo output
+    in the set is JSON.
+  - Edges-only insertion (start/end without a boundary) was considered and rejected by the author before any
+    generation: it would make the set about 93% τ-bench with a position distribution unlike every other set.
+- **Target:** all 19 docs, 2 quads per doc (spec §6 cap for non-table docs): 38 quads, 76 pairs, about 50 with
+  1.3× attrition. Same generator (gen-eval-gemma), prompt (v2), rules, annotation and strict agreement as V3 pairs.
+  `configs/pairs_gen_v3.yaml` sets `agent: 2` in eval mode (v2 plus that line only).
+- **Role:** secondary and descriptive. Reported next to the V3 pairs for every pair metric with user-task cluster
+  CIs, labelled underpowered. It decides no hypothesis and is not subject to P2's ≥ 200 floor (κ is reported).
+  - H2: decided on V3-test pairs (unchanged). H3a: "on both pair sets" becomes "on the V3-test pairs". H4: the
+    aligned-instruction set is the aligned members of the V3-test pairs; agent aligned members are reported
+    separately. P2's floor applies to the V3-derived set only.
+  - Consequence, stated in the paper: no pair-based claim (H2, H3a, H4) is made for agent tool outputs. Agent
+    transfer evidence comes from H3b (content-only sets) only.
+- **Annotation (A25):** with about 420 V3 pairs and 76 agent pairs, the two teams no longer split by set. Each team
+  labels half of the V3 quads (whole quads, stratified by task) and half of the agent quads: about 250 pairs, about
+  4.3 h per person at the pilot's 1.03 min/pair. κ is reported per set (pooled over teams) and per team. Two-annotator
+  fallback: both label everything, about 500 pairs, about 8.5 h each.
 
 **A27 details** (E5):
 - **Gap closed:** under v2 an instruction whose external target comes from the context could be labelled aligned when

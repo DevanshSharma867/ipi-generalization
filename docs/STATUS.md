@@ -130,22 +130,19 @@ job's discarded val-doc outputs), annotated or scored.
 5. EVAL generation on split-seed-0 test docs after the V3 freeze (the test-doc list may move at the rebuild);
    TRAIN generation as ≤ 1 h sharded sbatch jobs.
 6. Annotation (A25), then κ per set, agreed quads (≥ 200 agreed pairs per set), P3 checks.
-7. **Agent-derived EVAL docs (A25 second set): loader done, target blocked** (2026-11-05).
-   `pairs_gen.agent_docs` / `gen_pairs.py docs --mode eval --source agent`: AD-Clean + TB-Clean, evaluation half of
-   `transfer_metrics.task_half` (seed 0) as the "test" side; excludes outputs sharing (suite, task, step, function)
-   with, or whose first 200 chars appear in, any positive transfer row; V3 insertion boundary required; 512-token
-   screen with span cap + 64-token request budget; near-duplicate docs dropped; source row recorded. Docs JSONL under
-   `data/transfer/pairs_docs/` (not redistributed); manifest `data/pairs/docs/eval_agent_s0.manifest.json`.
-   E5 screen (`e5_screen`) now runs on every generated pair.
-   - **Eligible: AD 19 docs (17 user tasks), TB 0** (τ-bench outputs are single-line JSON: no V3 boundary). 150
-     quads is not reachable under the current rules. Decision needed (see the 2026-11-05 report): edges-only
-     insertion for boundary-less outputs (spec amendment) or a reduced/underpowered agent set. No quads_per_doc for
-     `agent` is set in any config until then.
+7. **Agent-derived pairs: secondary set (A28, 2026-11-05).** Field-level JSON insertion added no docs (τ-bench has
+   no string value over 3 words; AgentDojo outputs are not JSON). Target: the 19 eligible AD-Clean docs (17 user tasks)
+   × 2 quads = 38 quads, 76 pairs, descriptive, user-task CIs; decides no hypothesis. H3(a), H4 and the P2 floor are
+   scoped to the V3-test pairs. Annotation rebalanced (~250 pairs, ~4.3 h per person). Config `pairs_gen_v3.yaml`
+   (default) adds `agent: 2`. Docs: `gen_pairs.py docs --mode eval --source agent` (manifest committed, text under
+   `data/transfer/pairs_docs/`).
+8. **PAIRS is idle until gpunode8 returns.** Then: timing job 432585 runs (it times the default config, v3 = v2
+   prompts); then EVAL (V3-test after the V3 freeze, plus agent docs) and TRAIN generation, both on v2 prompts.
 
 ## Annotators (A25)
 - External annotators: not project members, fluent in English, independent of the design. The author adjudicates only.
-- Four annotators in two teams; each team labels every EVAL pair of one set (V3-derived or agent-derived), about 300
-  pairs per person, κ per set. Fallback with two people: both label both sets.
+- Four annotators in two teams; each team labels half of the V3 quads and half of the agent quads (A28), about 250
+  pairs and 4.3 h per person, κ per set and per team. Fallback with two people: both label everything (~500 pairs, ~8.5 h).
 - Acknowledged by name in the paper. **Names: not yet confirmed** (to add here and in the paper once confirmed).
 
 ## Open decisions / blockers

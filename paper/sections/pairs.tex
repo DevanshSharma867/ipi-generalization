@@ -97,11 +97,13 @@ model's backbone. Training pairs are drafted by Mistral-7B-Instruct-v0.3 on \vth
 kept only if the same model, labelling each member blind to the intended label, agrees with both labels.
 \todo{evaluation-pair generator (zero-cost choice pending); exact model ids, revisions and generation dates}
 
-Evaluation pairs are written on the test documents of \vthree{} split seed 0, and on clean tool outputs of the agent
-benchmarks of \S\ref{sec:results}. Two annotators independently label every member of every evaluation pair as
+Evaluation pairs are written on the test documents of \vthree{} split seed 0. A small secondary set is written on
+clean AgentDojo tool outputs whose user tasks fall in the evaluation half and that share no output with a scored
+injected row; only 19 outputs qualify ($\tau$-bench outputs are single-line JSON with no free-text field to hold an
+instruction), so this set is descriptive and decides no hypothesis. Two annotators independently label every member of every evaluation pair as
 aligned, subverting or unclear, on pages that show no intended label, generator or overlap class, in a different
 order for each annotator. The pre-registered prerequisites are Cohen's $\kappa \geq 0.6$ over members and at least
-200 \emph{agreed} pairs per evaluation set, where a pair counts only if its whole quad is labelled as intended by both
+200 \emph{agreed} pairs in the \vthree{} evaluation set, where a pair counts only if its whole quad is labelled as intended by both
 annotators. If a set falls short, more pairs are generated and annotated under the same rules; the agreement rule is
 never relaxed. Pairs from adjudicated quads are a secondary robustness analysis. Two leakage checks are run and
 reported even though the construction implies them: models trained on the request alone must stay at or below 0.60

@@ -286,7 +286,8 @@ Horizon-Labs or Wolf Defender families, nor from the ICT backbone's (Microsoft).
 
 **Volume** (planning figures, not results):
 - **EVAL, V3:** about 1.3 × 322 = 420 pairs (210 quads) for one split seed (Q1).
-- **EVAL, agents:** about 300 pairs per agent set (A9).
+- **EVAL, agents:** 19 eligible AD-Clean docs (17 user tasks), 2 quads each: 38 quads, 76 pairs (paper_plan A28;
+  secondary set). TB-Clean contributes none (no insertion boundary, no free-text field).
 - **TRAIN, V3:** 6 quads per email/code doc and 3 per table doc over all 774 main docs = 6 × (77 + 96) + 3 × 701
   = 3,141 quads (6,282 pairs).
 - **TRAIN, synthetic tool outputs:** about 1,000 quads.

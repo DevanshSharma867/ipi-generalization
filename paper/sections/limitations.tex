@@ -16,6 +16,10 @@ parameter (a recipient, a link, a command) inside an action the user authorised.
 to know where each argument of a tool call came from, which a text classifier over $(q, c)$ cannot see; we leave it
 to work on action provenance.
 
+\paragraph{Pairs cover documents, not tool outputs.}
+Pair-based claims (H2, H3 on pairs, H4) cover document contexts only; agent tool outputs are covered by the
+content-only transfer sets, and our small agent pair set is descriptive.
+
 \paragraph{Pairs are LLM-drafted.}
 Request phrasing may carry generator artifacts, and a model trained on pairs from one generator could learn that
 generator rather than intent. We separate evaluation and training generators and templates, keep only pairs on which
