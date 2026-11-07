@@ -1,0 +1,11 @@
+\section{Inputs over detector max length}
+\label{app:transfer-truncation}
+
+\begin{table}[h]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/transfer_truncation.tex}}
+\caption{Fraction of each agent transfer set's rows longer than each published detector's max length (tokens).
+\emph{truncated}: tokens past the window are dropped; \emph{windowed}: every window is scored and the maximum taken;
+LLM judges read the whole input. Detectors are scored as released \citep{liu2026passing}.}
+\label{tab:transfer-truncation}
+\end{table}

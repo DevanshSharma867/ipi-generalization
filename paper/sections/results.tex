@@ -5,6 +5,11 @@
 released scripts of \citet{liu2026passing} (set build verified row for row: \val{TransferGateOneStatus}), \vthree{}
 test over five split seeds, \vthree{}-test pairs, and agent pairs, InjecAgent and deepset as descriptive sets. Detectors with
 pinned Hugging Face ids and revisions. Calibration pool for agent sets. Training details and seeds.}
+Published detectors are scored at their native maximum input length, as released and as in
+\citet{liu2026passing}; on TB-Matched, \val{TransferTruncTbevalHighN} of them (the 512-token classifiers ProtectAI v1,
+v2 and small v2, PIGuard, JasperLS and TestSavant large, and Prismor) truncate more than a quarter of the injected or
+clean rows (\val{TransferTruncProtectaiSmallVTwoLiuenvTbeval} of TB-Matched for the classifiers;
+Appendix~\ref{app:transfer-truncation}), so their TB-Matched numbers reflect truncated inputs.
 
 \section{Results}
 \label{sec:results}

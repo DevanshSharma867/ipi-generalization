@@ -952,14 +952,14 @@ The |AUROC − 0.5| column is a transparency metric, not a retroactive pass/fail
 id: F021
 status: full
 script: jobs/transfer_scores_{encoders,wolf,judges}.sh (eval/transfer/detectors.py, record_scores.py) -> eval/transfer/transfer_metrics.py
-commit: 86a0cee
+commit: a798dc1
 seeds: n/a (deterministic scoring; judges greedy); bootstrap seed 42, B = 1000
 data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded
 eval_set: AD-Matched, AD-Shift (recovered pairing), TB-Matched; negatives AD-Clean / TB-Clean; calibration pool (A3)
 threshold_protocol: calibrated (1%/5% FPR on the calibration pool, primary) and oracle (on the evaluated clean rows, MIN_CLEAN gates)
-date: 2026-11-07 (adds protectai-small-v2; encoder scores re-run 2026-11-06, job 434238, run 20261106-144044_seed0. Earlier versions 2026-11-02, run 20261102-115039_seed42, encoder run 20261031-182528_seed0; 2026-10-31, run 20261031-190127_seed42, which also listed the 4-bit judges)
+date: 2026-11-07 (re-rendered from run 20261107-210130_seed42, same numbers plus truncation marks, F023; adds protectai-small-v2; encoder scores re-run 2026-11-06, job 434238, run 20261106-144044_seed0. Earlier versions 2026-11-02, run 20261102-115039_seed42, encoder run 20261031-182528_seed0; 2026-10-31, run 20261031-190127_seed42, which also listed the 4-bit judges)
 source:
-- results/transfer/transfer_metrics/20261107-200228_seed42
+- results/transfer/transfer_metrics/20261107-210130_seed42
 upstream:
 - results/transfer/transfer_scores_liuenv/20261106-144044_seed0
 - results/transfer/transfer_scores_wolf/20261031-182747_seed0
@@ -998,6 +998,9 @@ the negatives are AD-Clean (A16). Clusters for every CI: user task. Full table: 
   threshold PIGuard still blocks {{TransferDetPiguardLiuenvAdcleanBlockCalibratedOnepctFpr}} of AD-Clean tasks.
   Every detector, at 0.5 and both calibrated thresholds, is in the run's `metrics.json` (`*_task_block_rate`).
 - Oracle TPR@1%FPR on AgentDojo is `n/a` (AD-Clean has 339 rows < 500); oracle TPR@5%FPR is reported per cell.
+- **Truncation (F023).** Detectors are scored at their native max length. A dagger in the table marks a cell where
+  more than 25% of the set's injected or clean rows were truncated: TB-Matched for the 512-token classifiers and
+  Prismor. Those numbers reflect truncated inputs.
 - No hypothesis is decided here: these are the published-detector baselines H1–H3 compare against.
 
 ## F022. Calibration transfer: realized FPR of the calibration-pool thresholds on the agent sets
@@ -1006,14 +1009,14 @@ the negatives are AD-Clean (A16). Clusters for every CI: user task. Full table: 
 id: F022
 status: full
 script: eval/transfer/transfer_metrics.py (task_halves; calibration-pool thresholds, paper_plan A3) -> scripts/make_tables.py
-commit: 86a0cee
+commit: a798dc1
 seeds: n/a (deterministic scores); task-half split seed 0 (sha256 of "0:<suite>/<task>"); bootstrap seed 42, B = 1000
 data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded
 eval_set: AD-Matched, AD-Shift, TB-Matched (negatives AD-Clean / TB-Clean); calibration pool (A3)
 threshold_protocol: calibrated on the calibration pool (primary) vs task-disjoint halves (secondary, A3; never decides)
 date: 2026-11-07 (adds protectai-small-v2; previous version 2026-11-02, run 20261102-115039_seed42)
 source:
-- results/transfer/transfer_metrics/20261107-200228_seed42
+- results/transfer/transfer_metrics/20261107-210130_seed42
 upstream:
 - results/transfer/transfer_scores_liuenv/20261106-144044_seed0
 - results/transfer/transfer_scores_wolf/20261031-182747_seed0
@@ -1053,4 +1056,48 @@ measures how far those thresholds miss their FPR target on the agent sets' real 
   thresholds sit too low there and calibrated TPR on AD comes with a realized FPR well above target. This is
   the A3 risk (paper_plan §8): every calibrated TPR is reported next to its realized FPR, and H1 still uses the pool
   (pre-registered); the halves protocol is reported, never decides.
+
+## F023. Published detectors: inputs over their max length on the agent transfer sets
+
+```finding
+id: F023
+status: full
+script: eval/transfer/transfer_metrics.py (over_max_len, from the score records) -> scripts/make_tables.py
+commit: a798dc1
+seeds: n/a (counts from deterministic scoring)
+data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded
+eval_set: AD-Matched, AD-Shift, TB-Matched, AD-Clean, TB-Clean, calibration pool (A3)
+threshold_protocol: n/a (no threshold; mark at > 25% of a set's injected or clean rows truncated, chosen 2026-11-07 with these fractions in view, display only)
+date: 2026-11-07
+source:
+- results/transfer/transfer_metrics/20261107-210130_seed42
+upstream:
+- results/transfer/transfer_scores_liuenv/20261106-144044_seed0
+- results/transfer/transfer_scores_wolf/20261031-182747_seed0
+- results/transfer/transfer_scores_judges_bf16/20261031-190043_seed0
+macros:
+- TransferTrunc*
+```
+
+Every published detector is scored at its native max length, as Liu (2026) does and as each detector ships
+(author decision 2026-11-07: scoring unchanged, truncation made visible). For each detector and set, the fraction of
+rows longer than the detector's window (tokens, its own tokenizer), recorded at scoring time
+(`eval/transfer/detectors.py`). How long rows are handled: **truncated** (classifiers and Prismor: tokens past the
+window are dropped), **windowed** (Prompt Guard, Sheltron: every window is scored, maximum taken; nothing is lost),
+or the whole input (LLM judges). Table: `paper/tables/transfer_truncation.tex`.
+
+- **TB-Matched is where truncation bites.** {{TransferTruncTbevalHighN}} truncating detectors drop tokens on more than
+  {{TransferTruncThreshold}} of TB-Matched's rows or its clean rows: the 512-token classifiers (ProtectAI v1
+  {{TransferTruncProtectaiVOneLiuenvTbeval}}, ProtectAI v2, ProtectAI small v2, PIGuard, JasperLS, TestSavant large,
+  all {{TransferTruncProtectaiSmallVTwoLiuenvTbeval}} of TB-Matched and {{TransferTruncProtectaiSmallVTwoLiuenvTbclean}}
+  of TB-Clean) and Prismor ({{TransferTruncPrismorOneFivebLiuenvTbeval}} / {{TransferTruncPrismorOneFivebLiuenvTbclean}}).
+  Their TB-Matched numbers in F021 reflect truncated inputs and are marked there (dagger).
+- **AgentDojo is mostly within the window:** {{TransferTruncAdmatchedHighN}} detectors above the mark on AD-Matched
+  and {{TransferTruncAdshiftHighN}} on AD-Shift; the 512-token classifiers truncate
+  {{TransferTruncProtectaiSmallVTwoLiuenvAdmatched}} of AD-Matched and {{TransferTruncProtectaiSmallVTwoLiuenvAdclean}}
+  of AD-Clean. The calibration pool is within every window except Prismor's ({{TransferTruncPrismorOneFivebLiuenvCalpool}}).
+- The 2,048-token detectors (Horizon, Wolf Defender, Qualifire Sentinel, Rogue Sentinel v2) truncate at most
+  {{TransferTruncHorizonBaseLiuenvAdmatched}} of any set.
+- Not tested: whether the dropped tokens contain the injection (position-dependent), so the effect on TPR is not
+  measured here; truncation on clean rows can also move FPR either way.
 

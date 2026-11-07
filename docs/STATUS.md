@@ -62,6 +62,12 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
     × 6 sets, at `7af1eba`); metrics `transfer_metrics/20261107-200228_seed42`. The other 18 detectors' values are
     unchanged. small-v2 on AD-Matched, calibrated 1%: TPR 0.266 [0.21, 0.33] at realized FPR 0.109 [0.08, 0.14].
     F022 at 1% on AgentDojo: 13/19 above target, median 0.062 (was 12/18, 0.052); half thresholds at 5%: 0.047 vs 0.118.
+  - **2026-11-07: truncation made visible (F023), scoring unchanged** (author decision: Liu's protocol, detectors as
+    shipped). `transfer_metrics.py` records each detector's fraction of rows over its max length per set
+    (run `transfer_metrics/20261107-210130_seed42`; all F021/F022 numbers identical). Table
+    `paper/tables/transfer_truncation.tex` (paper appendix); F021 cells with >25% of rows truncated carry a dagger.
+    7 detectors (512-token classifiers + Prismor) truncate 0.518–0.537 of TB-Matched and 0.344–0.371 of TB-Clean;
+    none exceeds 25% on AgentDojo. One sentence in the paper's setup. Paper not compiled (no LaTeX on the laptop).
   - CPU diagnostic (laptop; `results/transfer/gate2_followup_batch_cpu/`, not a reference) agrees: batch ≤ 6e-6
     for every model (our DeBERTa ≤ 1.8e-7); env shift identical in rows over 1e-3 and flips (46/9, 228/6, 389/34).
 
