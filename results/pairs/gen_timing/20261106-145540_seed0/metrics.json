@@ -1,0 +1,121 @@
+{
+  "runs": {
+    "gen-eval-gemma_bs1": {
+      "generator": "gen-eval-gemma",
+      "revision": "005ad3404e59d6023443cb575daa05336842228a",
+      "prompt_sha256": "85ad56719530a2c6cdb0129d6a69d7d4859beb3cc39fc54c94d1cbae0700f05f",
+      "config_sha256": "9734e7ae4c73f0ff91f447ca036c1ccca77bd320e01a6f6060e4462cf14d29a0",
+      "docs_sha256": "b619e48bbb76aa3e1354d1df6f920ba10363f1d1b8499af2431bacb396d9dea6",
+      "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "batch_size": 1,
+      "n_quads": 20,
+      "by_task": {
+        "email": 7,
+        "table": 7,
+        "code": 6
+      },
+      "load_s": 409.36,
+      "peak_vram_gb": 19.04,
+      "prefill_tok_s": 2066.5,
+      "decode_tok_s": 27.9,
+      "s_per_quad": 8.52,
+      "mean_new_tokens": 216.7,
+      "n_hit_max_new_tokens": 0,
+      "n_dup_rejections": 0,
+      "n_duplicate_kept_invalid": 0,
+      "json_parse_rate": 1.0,
+      "validate_pass_rate": 0.85,
+      "length_checked": true,
+      "error_kinds": {
+        "request lengths 19 and 8 words differ by more than 2.0x": 1,
+        "request lengths 8 and 19 words differ by more than 2.0x": 1,
+        "request lengths 15 and 7 words differ by more than 2.0x": 1,
+        "request lengths 7 and 15 words differ by more than 2.0x": 1,
+        "aligned request copies a 5-gram of the instruction": 1
+      },
+      "target_quads": 210,
+      "gpu_hours_target": 0.5,
+      "gpu_hours_target_per_valid": 0.58
+    },
+    "gen-train-mistral_bs1": {
+      "generator": "gen-train-mistral",
+      "revision": "c170c708c41dac9275d15a8fff4eca08d52bab71",
+      "prompt_sha256": "d297a7e663cd146da3e82b23162259cec053311b0b67e978836f3688a5a5cb0b",
+      "config_sha256": "9734e7ae4c73f0ff91f447ca036c1ccca77bd320e01a6f6060e4462cf14d29a0",
+      "docs_sha256": "b619e48bbb76aa3e1354d1df6f920ba10363f1d1b8499af2431bacb396d9dea6",
+      "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "batch_size": 1,
+      "n_quads": 20,
+      "by_task": {
+        "email": 7,
+        "table": 7,
+        "code": 6
+      },
+      "load_s": 70.63,
+      "peak_vram_gb": 15.0,
+      "prefill_tok_s": 10761.3,
+      "decode_tok_s": 68.8,
+      "s_per_quad": 3.61,
+      "mean_new_tokens": 239.5,
+      "n_hit_max_new_tokens": 0,
+      "n_dup_rejections": 0,
+      "n_duplicate_kept_invalid": 0,
+      "json_parse_rate": 0.9,
+      "validate_pass_rate": 0.3,
+      "length_checked": true,
+      "error_kinds": {
+        "aligned request copies a 5-gram of the instruction": 12,
+        "subverting request copies a 5-gram of the instruction": 5,
+        "instruction over the text span cap": 3,
+        "['why_i2_deviates_r1']": 1,
+        "request lengths 8 and 19 words differ by more than 2.0x": 1,
+        "request lengths 19 and 8 words differ by more than 2.0x": 1,
+        "no JSON object in output": 1,
+        "E5 screen: external-action verb 'Reply'": 1,
+        "instructions differ by more than 8 words": 1
+      },
+      "target_quads": 3141,
+      "gpu_hours_target": 3.15,
+      "gpu_hours_target_per_valid": 10.51
+    },
+    "gen-train-mistral_bs8": {
+      "generator": "gen-train-mistral",
+      "revision": "c170c708c41dac9275d15a8fff4eca08d52bab71",
+      "prompt_sha256": "d297a7e663cd146da3e82b23162259cec053311b0b67e978836f3688a5a5cb0b",
+      "config_sha256": "9734e7ae4c73f0ff91f447ca036c1ccca77bd320e01a6f6060e4462cf14d29a0",
+      "docs_sha256": "b619e48bbb76aa3e1354d1df6f920ba10363f1d1b8499af2431bacb396d9dea6",
+      "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "batch_size": 8,
+      "n_quads": 20,
+      "by_task": {
+        "email": 7,
+        "table": 7,
+        "code": 6
+      },
+      "load_s": 3.78,
+      "peak_vram_gb": 18.43,
+      "prefill_tok_s": 6133.7,
+      "decode_tok_s": 178.9,
+      "s_per_quad": 1.49,
+      "mean_new_tokens": 225.8,
+      "n_hit_max_new_tokens": 0,
+      "n_dup_rejections": 0,
+      "n_duplicate_kept_invalid": 0,
+      "json_parse_rate": 0.95,
+      "validate_pass_rate": 0.25,
+      "length_checked": true,
+      "error_kinds": {
+        "aligned request copies a 5-gram of the instruction": 14,
+        "subverting request copies a 5-gram of the instruction": 7,
+        "instructions differ by more than 8 words": 2,
+        "['why_i1_serves_r1', 'why_i1_deviates_r2', 'why_i2_serves_r2', 'why_i2_deviates_": 1,
+        "E5 screen: external-action verb 'Reply'": 1,
+        "instruction contains an injection marker": 1,
+        "instruction over the text span cap": 1
+      },
+      "target_quads": 3141,
+      "gpu_hours_target": 1.3,
+      "gpu_hours_target_per_valid": 5.21
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "run_id": "20261106-145540_seed0",
+  "version": "pairs",
+  "exp": "gen_timing",
+  "seed": 0,
+  "args": {
+    "runs": [
+      "gen-eval-gemma_bs1",
+      "gen-train-mistral_bs1",
+      "gen-train-mistral_bs8"
+    ]
+  },
+  "git_commit": "7af1eba4a10142b561ecaad5ea5bfdd5f46f9b38",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "b619e48bbb76",
+  "data_files_sha256": {},
+  "library_versions": {
+    "python": "3.11.13",
+    "numpy": "2.4.6",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.17.1",
+    "torch": "2.11.0+cu128",
+    "transformers": "5.20.1",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": null
+  },
+  "hardware": {
+    "platform": "Linux-4.18.0-553.109.1.el8_10.x86_64-x86_64-with-glibc2.28",
+    "machine": "x86_64",
+    "node": "gpunode8.sharanga.local",
+    "cpu_count": 64,
+    "slurm_job_id": "434239",
+    "gpu_uuid": "GPU-6ea41e3c-6794-cd9e-c431-59b5df85afa2"
+  },
+  "argv": [
+    "scripts/gen_pairs.py",
+    "timing",
+    "--run",
+    "/scratch/csisnlp_18/nlp_harness/pairs_gen_timing/5c4631cbfaa3/gen-eval-gemma_bs1",
+    "--run",
+    "/scratch/csisnlp_18/nlp_harness/pairs_gen_timing/5c4631cbfaa3/gen-train-mistral_bs1",
+    "--run",
+    "/scratch/csisnlp_18/nlp_harness/pairs_gen_timing/5c4631cbfaa3/gen-train-mistral_bs8"
+  ],
+  "started": "2026-11-06T14:55:41"
+}

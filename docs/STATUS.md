@@ -119,13 +119,18 @@ job's discarded val-doc outputs), annotated or scored.
    word 8-gram (`tests/test_pairs_gen.py`). Pipeline: `src/pairs_gen.py` (mode guards: eval = split-seed-0 test only,
    train = train only, timing = val only; one quad per call; atomic resumable shards; per-quad raw output, parse and
    validate result, revision, prompt and config sha256) and `scripts/gen_pairs.py` (`docs`, `generate`, `timing`).
-4. **Timing job submitted** (`jobs/pairs_gen_timing.sh`, job 432585), queued while gpunode8 is drained:
-   - Input `data/pairs/docs/timing_s0.jsonl` (20 val docs of split seed 0, 7 email / 7 table / 6 code; pre-freeze
-     split; manifest has its sha256 and the span caps). One quad per doc.
-   - Gemma NF4 batch 1, Mistral bf16 batch 1 and batch 8; half card. Writes `results/pairs/gen_timing/<run_id>/`;
-     generated text is deleted from scratch after the summary.
-   - Check: `squeue -u $USER`; log `~/nlp_harness/logs/slurm_pairs_timing_<job>.log`. Resume: resubmit (finished
-     quads skipped; exits at once once summarised).
+4. **Timing done: job 434239** (2026-11-06, gpunode8, good card `GPU-6ea41e3c…`, guard attempt 0, no requeue; 14:49;
+   commit 7af1eba; config v3 = v2 prompts; 20 val docs of split seed 0, one quad each). Run
+   `results/pairs/gen_timing/20261106-145540_seed0/` (operational numbers, not paper numbers; no findings entry).
+   - Gemma NF4 bs1: load 409 s, prefill 2,067 / decode 27.9 tok/s, 8.52 s/quad, peak 19.0 GB; parse 1.00, validate
+     0.85 (2 quads request-length ratio, 1 quad 5-gram copy); E5 0/20. 210 quads 0.50 GPU-h (0.58 per valid);
+     38 agent quads ~0.09 GPU-h (0.11 per valid); plus one 7-min load.
+   - Mistral bf16 bs1: 3.61 s/quad, 68.8 tok/s, 15.0 GB; parse 0.90, validate 0.30; bs8: 1.49 s/quad, 179 tok/s,
+     18.4 GB; parse 0.95, validate 0.25. Main failure: requests copy a 5-gram of the instruction (Q3). E5 'Reply'
+     1/20 per run. 3,141 quads: bs1 3.15 GPU-h (10.5 per valid), bs8 1.30 (5.2 per valid).
+   - Failure texts were deleted by design (A24); only error kinds survive. n = 20, so the rates are rough.
+   - Proposed, not applied: regenerate on validation failure (as for duplicates, counted) for both generators;
+     TRAIN prompt v3 (new version) with an explicit no-copy rule; re-time on val docs before TRAIN generation.
 5. EVAL generation on split-seed-0 test docs after the V3 freeze (the test-doc list may move at the rebuild);
    TRAIN generation as ≤ 1 h sharded sbatch jobs.
 6. Annotation (A25), then κ per set, agreed quads (≥ 200 agreed pairs per set), P3 checks.
@@ -135,9 +140,8 @@ job's discarded val-doc outputs), annotated or scored.
    scoped to the V3-test pairs. Annotation rebalanced (~250 pairs, ~4.3 h per person). Config `pairs_gen_v3.yaml`
    (default) adds `agent: 2`. Docs: `gen_pairs.py docs --mode eval --source agent` (manifest committed, text under
    `data/transfer/pairs_docs/`).
-8. **PAIRS is idle until gpunode8 has a good card.** Timing job 432585 started 2026-11-04 23:06 on gpunode8 and
-   failed fast in `gpu_guard` (landed on the known-bad GPU `GPU-cfb39ac3…`; exit 3, nothing generated); probe 432581
-   failed the same way. Next: resubmit `sbatch jobs/pairs_gen_timing.sh` (times the default config, v3 = v2 prompts); then EVAL (V3-test after the V3 freeze, plus agent docs) and TRAIN generation, both on v2 prompts.
+8. **Next:** decide the proposed regenerate-on-failure change and TRAIN prompt v3 (item 4); then EVAL (V3-test after
+   the V3 freeze, plus agent docs) and TRAIN generation.
 
 ## Annotators (A25)
 - External annotators: not project members, fluent in English, independent of the design. The author adjudicates only.
@@ -146,8 +150,6 @@ job's discarded val-doc outputs), annotated or scored.
 - Acknowledged by name in the paper. **Names: not yet confirmed** (to add here and in the paper once confirmed).
 
 ## Open decisions / blockers
-- **Timing job 432585** queued (ReqNodeNotAvail: gpunode8 drained). It runs whatever `~/nlp_harness` holds at start
-  (the queued script's `--length_tokenizer` flag is now an ignored no-op).
 - **Generation fixes (2026-11-04):** length rules use only the V3 tokenizer (sha256-pinned in `pairs_gen.py`; repo
   copy or `$HF_HOME/tokenizers_hpc/deberta_v2_ckpt`, synced to the cluster; fails loudly if missing; eval refuses to
   run without it); near-duplicate quads within a doc (content-word Jaccard ≥ 0.8 on requests or instructions) are
@@ -157,7 +159,6 @@ job's discarded val-doc outputs), annotated or scored.
   the context are excluded. Guide rule 8 + example 12; `configs/pairs_gen_v2.yaml` + prompts v2-frozen (now the
   default; `pairs_gen` refuses eval/train with v1). H4 narrowed in paper_plan §3 and the paper to aligned
   answer-shaping instructions. pairs_v0 items 0–23 marked excluded in data_provenance (file kept).
-  The queued timing job 432585 now loads the default config, so it times the v2 prompts.
 - **Annotator recruitment** (A25).
 - **Agent-pair sets** wait for AD-Clean/TB-Clean contexts (transfer harness) and the agent-style pipeline.
 
