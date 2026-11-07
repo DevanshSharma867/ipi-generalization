@@ -18,6 +18,10 @@ from the score run records of jobs/transfer_scores_*.sh (eval/transfer/record_sc
   rows, TPR and realized FPR on the evaluation half (MIN_CLEAN gates on the calibration half's clean rows). The
   calibration-pool thresholds are applied to the same evaluation half, so the two protocols' realized FPR compare
   like for like (calibration transfer).
+- Inputs over the detector's max length (per set, from the score records): the fraction of rows longer than the
+  detector's native window, and how such rows are handled (detectors.py): "truncated" (cls, prismor: tokens past the
+  window are dropped), "windowed" (Prompt Guard, Sheltron: every window is scored, maximum taken) or null (judges:
+  whole input). Scoring is unchanged (Liu's protocol, detectors as shipped); this only makes truncation visible.
 Clusters are user tasks (suite/task). B = 1000, seed 42 (src/metrics defaults).
 
     python eval/transfer/transfer_metrics.py --sets_dir data/transfer/sets_adliu \\
@@ -38,7 +42,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "eval" / "transfer"))
 
-from detectors import SETS  # noqa: E402
+from detectors import SETS, load_registry  # noqa: E402
 from metrics import calibrated_threshold, doc_cluster_bootstrap, tpr_at_fpr_protocols  # noqa: E402
 from runlog import start_run  # noqa: E402
 
@@ -46,6 +50,8 @@ EVAL = {"admatched": "adclean", "adshift": "adclean", "tbeval": None}  # eval se
 CLEAN_ONLY = ["adclean", "tbclean", "calpool"]
 BLOCK_SETS = ["adclean", "tbclean"]
 HALF_SEED = 0
+LONG_INPUTS = {"cls": "truncated", "prismor": "truncated", "seg": "windowed", "seg-pg1": "windowed",
+               "sheltron": "windowed"}  # registry kind -> handling of rows over max_len (judges: none)
 
 
 def frame(sets_dir, scores, det, s, neg):
@@ -112,7 +118,7 @@ def main():
     run = start_run(version="transfer", exp="transfer_metrics", seed=42,
                     args={"runs": [str(r.relative_to(ROOT)) for r in runs], "B": a.B, "sets_dir": a.sets_dir.name},
                     data_version=version, data_files=[manifest], allow_dirty=a.allow_dirty)
-    res = {}
+    res, registry = {}, load_registry()
     for r in runs:
         cfg = json.load(open(r / "config.json"))["args"]
         tag = r.parent.name.replace("transfer_scores_", "")
@@ -120,6 +126,13 @@ def main():
             key = f"{det}@{tag}"
             calib = json.load(open(r / "scores" / f"{det}__calpool.json"))["probs"]
             res[key] = {"calibration_pool": {"n": len(calib), "flag_at_0.5": float(np.mean(np.array(calib) >= 0.5))}}
+            entry = registry[det]
+            res[key]["over_max_len"] = {
+                "max_len": entry.get("max_len"), "handling": LONG_INPUTS.get(entry.get("kind")),
+                "fraction": {s: json.load(open(r / "scores" / f"{det}__{s}.json"))["truncated"]
+                             for s in [*EVAL, *CLEAN_ONLY]}}
+            run.log(f"{key:34s} over max_len ({res[key]['over_max_len']['handling']}): " + "  ".join(
+                f"{s} {'-' if f is None else f'{f:.3f}'}" for s, f in res[key]["over_max_len"]["fraction"].items()))
             for s, neg in EVAL.items():
                 d = frame(a.sets_dir, r / "scores", det, s, neg)
                 m = tpr_at_fpr_protocols(d, calib_clean_scores=calib, B=a.B, cluster_col="cluster",
