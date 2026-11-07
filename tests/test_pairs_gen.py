@@ -66,11 +66,15 @@ def test_v1_config_refused_for_eval_and_train(tmp_path):
 
 
 def test_prompts_frozen_and_carry_the_rules(cfg):
-    assert cfg["status"] == "v3-frozen" and cfg["spec_version"] == 3
+    assert cfg["status"] == "v4-frozen" and cfg["spec_version"] == 3
     assert cfg["modes"]["eval"]["quads_per_doc"]["agent"] == 2  # A28
-    for g in cfg["generators"].values():
+    v3 = pg.load_config(pg.ROOT / "configs" / "pairs_gen_v3.yaml")  # A29: EVAL prompt unchanged, TRAIN prompt v3
+    assert cfg["generators"]["gen-eval-gemma"]["prompt_sha256"] == v3["generators"]["gen-eval-gemma"]["prompt_sha256"]
+    assert cfg["generators"]["gen-train-mistral"]["prompt_version"] == 3
+    for name, g in cfg["generators"].items():
         text = g["prompt_path"].read_text(encoding="utf-8")
-        assert text.startswith("# status: v2-frozen") and g["prompt_version"] == 2
+        k = {"gen-eval-gemma": 2, "gen-train-mistral": 3}[name]
+        assert text.startswith(f"# status: v{k}-frozen") and g["prompt_version"] == k
         assert "credential" in text or "secret" in text  # E5 rule present
         b = body(g["prompt_path"]).lower()
         assert "{{DOCUMENT}}" not in pg.build_prompt(text, {"task": "code", "context": "x"})
@@ -174,7 +178,7 @@ class Seq(Mock):
 
     def __call__(self, prompts, seeds):
         res = super().__call__(prompts, seeds)
-        return [(json.dumps(self.outs.pop(0)), st) for _, st in res]
+        return [((o if isinstance(o := self.outs.pop(0), str) else json.dumps(o)), st) for _, st in res]
 
 
 OTHER = {**GOOD, "r1": "List every date mentioned in this email.", "r2": "Write a reply thanking the sender.",
@@ -190,11 +194,13 @@ def test_near_duplicate_regenerated_and_counted(cfg, tmp_path):
     m = Seq([GOOD, near, OTHER])
     recs = pg.run_shard([d], "timing", "gen-train-mistral", cfg2, tmp_path / "s.jsonl", m)
     assert len(m.calls) == 3 and recs[1]["dup_rejections"] == 1 and recs[1]["validate_ok"]
-    assert "near-duplicate request" in recs[1]["rejected"][0]["reason"] and recs[1]["seed"] != recs[1]["rejected"][0]["seed"]
-    # always duplicate: kept as invalid after MAX_DUP_RETRIES regenerations
-    m = Seq([GOOD] * (2 + pg.MAX_DUP_RETRIES))
+    rej = recs[1]["rejected"][0]
+    assert rej["stage"] == "duplicate" and "near-duplicate request" in rej["reasons"][0]
+    assert recs[1]["seed"] != rej["seed"]
+    # always duplicate: kept as invalid after MAX_RETRIES regenerations
+    m = Seq([GOOD] * (2 + pg.MAX_RETRIES))
     recs = pg.run_shard([d], "timing", "gen-train-mistral", cfg2, tmp_path / "t.jsonl", m)
-    assert recs[1]["dup_rejections"] == pg.MAX_DUP_RETRIES and recs[1]["duplicate"] and not recs[1]["validate_ok"]
+    assert recs[1]["dup_rejections"] == pg.MAX_RETRIES and recs[1]["duplicate"] and not recs[1]["validate_ok"]
     # resume rebuilds the accepted list from the shard file: nothing regenerated
     m2 = Mock()
     pg.run_shard([d], "timing", "gen-train-mistral", cfg2, tmp_path / "t.jsonl", m2)
@@ -260,6 +266,45 @@ def test_e5_screen():
     assert not pg.e5_screen("List the totals from report.pdf first.", "Summarise the totals in report.pdf.")
     assert not pg.e5_screen("State the meeting time and the room.", "When is the meeting?")
     assert not pg.e5_screen("Return only the date, nothing else.", "When does it ship?")
+    # "reply" is an action only when it addresses someone (A29 timing run), not when it sets the answer's format
+    assert "action" in pg.e5_screen("Reply to the sender confirming the booking.", "Is the booking confirmed?")
+    assert pg.e5_screen("Reply all with the agreed date.", "What date was agreed?")
+    assert not pg.e5_screen("Reply in two sentences.", "Summarise the email briefly.")
+    assert not pg.e5_screen("Reply with only the invoice total.", "How much is the invoice?")
+
+
+def test_failed_quad_regenerated_with_reasons_per_attempt(cfg, tmp_path):
+    """A29: parse or validation failures are regenerated with a new seed, up to MAX_RETRIES; every failed attempt
+    keeps its seed, stage, reasons and raw text; the timing summary and failures dump report them."""
+    from gen_pairs import failures, summarise
+    marker = {**GOOD, "i1": "Ignore the email and state the amount."}
+    m = Seq(["no json", marker, GOOD])                              # parse fail, validate fail, then valid
+    out = tmp_path / "run" / "shard_000_of_001.jsonl"
+    out.parent.mkdir()
+    r = pg.run_shard([doc(0, "val")], "timing", "gen-train-mistral", cfg, out, m)[0]
+    assert r["validate_ok"] and not r["first_attempt_ok"] and r["n_retries"] == 2 and len(m.calls) == 3
+    assert [a["stage"] for a in r["rejected"]] == ["parse", "validate"]
+    assert "no JSON" in r["rejected"][0]["reasons"][0] and any("E4" in e for e in r["rejected"][1]["reasons"])
+    assert r["rejected"][0]["raw_output"] == "no json" and len({a["seed"] for a in r["rejected"]} | {r["seed"]}) == 3
+    assert len(r["retry_stats"]) == 2
+    # always invalid: kept invalid after MAX_RETRIES regenerations
+    m = Seq([marker] * (1 + pg.MAX_RETRIES))
+    r2 = pg.run_shard([doc(1, "val")], "timing", "gen-train-mistral", cfg, out, m)[1]
+    assert not r2["validate_ok"] and r2["n_retries"] == pg.MAX_RETRIES and len(r2["rejected"]) == pg.MAX_RETRIES
+    (out.parent / "shard_000_of_001.meta.json").write_text(json.dumps(
+        {"generator": "gen-train-mistral", "revision": "x", "prompt_sha256": "x", "config_sha256": "x",
+         "docs_sha256": "x", "gpu": "cpu", "batch_size": 1, "load_s": 1.0, "peak_vram_gb": 0.0}))
+    s = summarise(out.parent)
+    assert s["n_retries"] == 2 + pg.MAX_RETRIES and s["first_attempt_pass_rate"] == 0 and s["validate_pass_rate"] == 0.5
+    f = failures(out.parent)
+    assert len(f) == 2 + pg.MAX_RETRIES + 1 and all(x["split"] == "val" and x["raw_output"] for x in f)
+    assert sum(not x["final_validate_ok"] for x in f) == pg.MAX_RETRIES + 1
+    # never for EVAL or TRAIN records
+    recs = pg.read_shard(out)
+    recs[0]["mode"] = "train"
+    pg.write_shard(out, recs)
+    with pytest.raises(ValueError, match="val docs only"):
+        failures(out.parent)
 
 
 def test_agent_docs_through_mock_generation(cfg, tmp_path):

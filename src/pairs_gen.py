@@ -15,9 +15,11 @@ One quad per generator call. A quad record (one JSON line in its shard file) hol
 validation result, the generator revision and the prompt and config hashes; shard files are rewritten atomically
 (tmp file + os.replace) after every batch, and a resubmit skips quads already in the file.
 
-Near-duplicates: a parsed quad whose request or instruction is a near-duplicate (content-word Jaccard, pairs.overlap,
->= DUP_JACCARD) of a request or instruction of an earlier quad on the same document is rejected and regenerated
-with a new seed, up to MAX_DUP_RETRIES times; rejections are counted in the record.
+Retries (A29): a quad that fails to parse, near-duplicates an earlier valid quad on the same document (a request or
+instruction with content-word Jaccard >= DUP_JACCARD, pairs.overlap) or fails validation (pairs.validate, the E5
+screen, the length rules) is regenerated with a new seed (sha256 of "<seed>:<quad_id>#retry<k>"), up to MAX_RETRIES
+times. Every failed attempt (seed, stage, reasons, raw output) is kept in the record's "rejected" list; the last
+attempt is the record's result.
 
 Length rules (spec §6) use the V3 tokenizer only (`v3_tokenizer`, sha256-pinned); eval mode refuses to run without it.
 """
@@ -36,14 +38,14 @@ import yaml
 from pairs import make_pair, overlap, validate
 
 ROOT = Path(__file__).resolve().parent.parent
-CONFIG = ROOT / "configs" / "pairs_gen_v3.yaml"  # v1 (pre-E5) and v2 (no agent quads) are kept for the record
+CONFIG = ROOT / "configs" / "pairs_gen_v4.yaml"  # v1 (pre-E5), v2 (no agent quads), v3 (TRAIN prompt v2) kept
 MIN_VERSION = {"eval": 2, "train": 2, "timing": 1}  # A27: EVAL and TRAIN generation use prompts v2 or later
 DETECTORS = ROOT / "configs" / "detectors.yaml"
 OUTPUT_KEYS = ("r1", "r2", "i1", "i2", "why_i1_serves_r1", "why_i1_deviates_r2", "why_i2_serves_r2",
                "why_i2_deviates_r1")
 MODE_SPLITS = {"eval": {"test"}, "train": {"train"}, "timing": {"val"}}
 DUP_JACCARD = 0.8      # near-duplicate threshold within a document (content-word Jaccard)
-MAX_DUP_RETRIES = 3    # regenerations of a near-duplicate quad before it is kept as invalid
+MAX_RETRIES = 3        # regenerations of a failed quad (parse, near-duplicate or validation; A29) before it is kept invalid
 # tokenizer.json of the V3 builder's tokenizer (data_pipeline_v3.TOKENIZER); the length rules use nothing else
 V3_TOKENIZER_SHA256 = "a29e21faec7433ee508590c7bee5dc869fddb335aacf11d53be766cf0fd81294"
 TASK_KIND = {"email": "an email", "table": "a table", "code": "a programming question and answer",
@@ -121,7 +123,7 @@ def v3_tokenizer():
 
 # E5 screen (spec v3 E5; an automatic pre-filter like the E4 lexicon, humans still decide): an instruction that
 # starts with an external-action verb, or names a URL, e-mail address or file path its aligned request does not.
-E5_ACTION = re.compile(r"^\W*(?:also\s+|then\s+|please\s+)?(send|forward|reply|email|e-mail|mail|post|schedule|book|save|"
+E5_ACTION = re.compile(r"^\W*(?:also\s+|then\s+|please\s+)?(send|forward|reply(?=\s+(?:to|all)\b)|email|e-mail|mail|post|schedule|book|save|"
                        r"download|upload|run|execute|install|delete|cancel|pay|transfer|wire|purchase|buy|share|"
                        r"invite|reset)\b", re.I)
 E5_TARGET = re.compile(r"(https?://\S+|www\.\S+|\b[\w.+-]+@[\w-]+\.[\w.]+\b|(?:^|\s)(?:~|\.{0,2})/[\w./-]+|"
@@ -329,9 +331,9 @@ def run_shard(docs: List[dict], mode: str, generator: str, cfg: dict, out_path: 
     template = g["prompt_path"].read_text(encoding="utf-8")
     records = read_shard(out_path)
     done = {r["quad_id"] for r in records}
-    accepted = defaultdict(list)  # doc_id -> parsed, non-duplicate quads so far (for the near-duplicate check)
+    accepted = defaultdict(list)  # doc_id -> valid quads so far (for the near-duplicate check)
     for r in records:
-        if r["parse_ok"] and not r.get("duplicate"):
+        if r["validate_ok"]:
             accepted[r["doc_id"]].append({"quad_id": r["quad_id"], "out": r["parsed"]})
     todo = [q for q in quads_for(docs, mode, cfg) if q["quad_id"] not in done]
     for i in range(0, len(todo), batch_size):
@@ -345,39 +347,49 @@ def run_shard(docs: List[dict], mode: str, generator: str, cfg: dict, out_path: 
                    "prompt_sha256": g["prompt_sha256"], "config_sha256": cfg["sha256"], "seed": s,
                    "batch": [b["quad_id"] for b in batch], "raw_output": text, "stats": stats,
                    "parse_ok": False, "parse_error": "", "validate_ok": False, "errors": [], "pairs": [],
-                   "parsed": None, "duplicate": "", "dup_rejections": 0, "rejected": [], "retry_stats": []}
-            out = _parse(rec, text)
-            while out is not None and rec["dup_rejections"] < MAX_DUP_RETRIES:
-                reason = near_duplicate(out, accepted[q["doc"]["doc_id"]])
-                if not reason:
-                    break
-                rec["dup_rejections"] += 1
-                rec["rejected"].append({"seed": rec["seed"], "raw_output": rec["raw_output"], "reason": reason})
-                rec["seed"] = quad_seed(cfg["seed"], f"{q['quad_id']}#retry{rec['dup_rejections']}")
+                   "parsed": None, "duplicate": "", "first_attempt_ok": False, "n_retries": 0, "dup_rejections": 0,
+                   "rejected": [], "retry_stats": [], "length_checked": tok is not None}
+            stage = _attempt(rec, q, mode, generator, cfg, accepted, tok, cap)
+            rec["first_attempt_ok"] = not stage
+            while stage and rec["n_retries"] < MAX_RETRIES:  # any failure: regenerate with a new seed (A29)
+                rec["rejected"].append({"attempt": rec["n_retries"], "seed": rec["seed"], "stage": stage,
+                                        "reasons": [rec["parse_error"]] if stage == "parse" else rec["errors"],
+                                        "raw_output": rec["raw_output"]})
+                rec["dup_rejections"] += stage == "duplicate"
+                rec["n_retries"] += 1
+                rec["seed"] = quad_seed(cfg["seed"], f"{q['quad_id']}#retry{rec['n_retries']}")
                 rec["raw_output"], st = generate_fn([build_prompt(template, q["doc"])], [rec["seed"]])[0]
                 rec["retry_stats"].append(st)
-                out = _parse(rec, rec["raw_output"])
-            if out is not None:
-                rec["duplicate"] = near_duplicate(out, accepted[q["doc"]["doc_id"]])
-                if rec["duplicate"]:
-                    rec["errors"] = [f"{rec['duplicate']} after {MAX_DUP_RETRIES} retries"]
-                else:
-                    accepted[q["doc"]["doc_id"]].append({"quad_id": q["quad_id"], "out": out})
-            if out is not None and not rec["duplicate"]:
-                try:
-                    pairs = to_pairs(q, out, mode, generator, cfg["seed"])
-                    errs = validate(pairs)
-                    errs += [f"{p['pair_id']}: {r}" for p in pairs
-                             for r in [e5_screen(p["instruction"], p["request_aligned"])] if r]
-                    if tok is not None:
-                        errs += [e for p in pairs for e in length_errors(p, tok, cap)]
-                    rec.update(pairs=pairs, errors=errs, validate_ok=not errs)
-                except Exception as e:  # e.g. no insertion boundary: a build failure, recorded, not fatal
-                    rec["errors"] = [f"build: {type(e).__name__}: {e}"[:300]]
-            rec["length_checked"] = tok is not None
+                stage = _attempt(rec, q, mode, generator, cfg, accepted, tok, cap)
+            if rec["validate_ok"]:
+                accepted[q["doc"]["doc_id"]].append({"quad_id": q["quad_id"], "out": rec["parsed"]})
             records.append(rec)
         write_shard(out_path, records)
     return records
+
+
+def _attempt(rec: dict, q: dict, mode: str, generator: str, cfg: dict, accepted, tok, cap) -> str:
+    """Parse, near-duplicate check, build and validate rec["raw_output"] into rec. Returns the failed stage
+    ("parse", "duplicate", "validate") or "" if the quad is valid."""
+    rec.update(validate_ok=False, errors=[], pairs=[], duplicate="")
+    out = _parse(rec, rec["raw_output"])
+    if out is None:
+        return "parse"
+    rec["duplicate"] = near_duplicate(out, accepted[q["doc"]["doc_id"]])
+    if rec["duplicate"]:
+        rec["errors"] = [rec["duplicate"]]
+        return "duplicate"
+    try:
+        pairs = to_pairs(q, out, mode, generator, cfg["seed"])
+        errs = validate(pairs)
+        errs += [f"{p['pair_id']}: {r}" for p in pairs
+                 for r in [e5_screen(p["instruction"], p["request_aligned"])] if r]
+        if tok is not None:
+            errs += [e for p in pairs for e in length_errors(p, tok, cap)]
+    except Exception as e:  # e.g. no insertion boundary: a build failure, recorded, not fatal
+        errs, pairs = [f"build: {type(e).__name__}: {e}"[:300]], []
+    rec.update(pairs=pairs, errors=errs, validate_ok=not errs)
+    return "validate" if errs else ""
 
 
 def _parse(rec: dict, text: str) -> Optional[dict]:

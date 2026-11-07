@@ -1,14 +1,15 @@
 #!/bin/bash
 # ==============================================================================
-# SLURM: pair-generation timing job (paper_plan A24; STATUS "Intent pairs", Next 4; docs/pairs_spec.md v2 §8).
+# SLURM: pair-generation timing job (paper_plan A24, A29; STATUS "Intent pairs"; docs/pairs_spec.md v3 §8).
 # 20 V3 val docs of split seed 0 (data/pairs/docs/timing_s0.jsonl: 7 email, 7 table, 6 code), one quad each, with
 #   1. gen-eval-gemma    (Gemma 3 27B NF4, EVAL prompt), batch 1 (the EVAL setting: per-quad seed)
 #   2. gen-train-mistral (Mistral 7B bf16, TRAIN prompt), batch 1 and batch 8
 # Half a card: torch.cuda.set_per_process_memory_fraction(0.5) in scripts/gen_pairs.py, and the MPS VRAM cap from
 # jobs/lib/job_env.sh (which also runs the GPU guard). Records load time, prefill/decode tok/s, s/quad, peak VRAM,
 # JSON-parse and pairs.validate rates and the GPU-hour extrapolation (~210 EVAL, ~3,141 TRAIN quads) as a runlog
-# run results/pairs/gen_timing/<run_id>/. Generated text stays on scratch and is deleted after the summary; it is
-# never used as EVAL or TRAIN pairs.
+# run results/pairs/gen_timing/<run_id>/. Failed quads are regenerated up to 3 times (A29); the raw text of every
+# failed attempt is copied to <run>/failures.jsonl (val docs only; see its manifest.json). All other generated text
+# stays on scratch and is deleted after the summary; none of it is ever used as EVAL or TRAIN pairs.
 # Resumable: shards under $W skip finished quads; a resubmit after the summary exits at once ($W/DONE).
 # Submit from the repo root (~/nlp_harness): sbatch jobs/pairs_gen_timing.sh
 # ==============================================================================
@@ -29,7 +30,7 @@
 
 source jobs/lib/job_env.sh
 DOCS=data/pairs/docs/timing_s0.jsonl
-CFG_SHA=$(sha256sum configs/pairs_gen_v2.yaml | cut -c1-12)
+CFG_SHA=$(cat configs/pairs_gen_v4.yaml src/pairs_gen.py scripts/gen_pairs.py | sha256sum | cut -c1-12)  # default config + code
 W=$SCRATCH/nlp_harness/pairs_gen_timing/$CFG_SHA
 mkdir -p "$W"
 [ -f "$W/DONE" ] && { echo "timing already summarised: $(cat "$W/DONE")"; exit 0; }

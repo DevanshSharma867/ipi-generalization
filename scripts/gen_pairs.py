@@ -1,7 +1,7 @@
 """
 gen_pairs.py
 ============
-Intent-pair generation with the pinned generators (configs/pairs_gen_v2.yaml, the default; v1 kept for the record; src/pairs_gen.py; spec v3 §8).
+Intent-pair generation with the pinned generators (configs/pairs_gen_v4.yaml, the default; v1-v3 kept for the record; src/pairs_gen.py; spec v3 §8).
 
   docs     build a docs file (JSONL: doc_id, task, split, split_seed, context) from the V3 builder, in memory.
            Needs data/raw/BIPIA and the V3 tokenizer (laptop). Writes data/pairs/docs/<name>.jsonl + .manifest.json.
@@ -10,8 +10,8 @@ Intent-pair generation with the pinned generators (configs/pairs_gen_v2.yaml, th
              python scripts/gen_pairs.py generate --mode timing --generator gen-eval-gemma \
                  --docs data/pairs/docs/timing_s0.jsonl --out_dir <dir> [--shard 0 --n_shards 1] [--batch_size 1]
   timing   summarise generate runs (load time, prefill/decode tok/s, s/quad, peak VRAM, parse and validate
-           rates, GPU-hour extrapolation) into a runlog run results/pairs/gen_timing/<run_id>/. No generated text
-           is copied into the run.
+           rates, retries, GPU-hour extrapolation) into a runlog run results/pairs/gen_timing/<run_id>/. Only the
+           raw text of failed attempts is copied (failures.jsonl + manifest.json; val docs only, A29).
              python scripts/gen_pairs.py timing --run <out_dir> [--run <out_dir> ...]
 """
 
@@ -192,18 +192,22 @@ def summarise(out_dir: Path) -> dict:
         raise ValueError(f"{out_dir}: no shard records or meta")
     m = metas[0]
     batches = list({tuple(r["batch"]): r["stats"] for r in recs}.values())  # one entry per generate call
-    batches += [s for r in recs for s in r.get("retry_stats", [])]          # near-duplicate regenerations
+    batches += [s for r in recs for s in r.get("retry_stats", [])]          # regenerations (A29)
     gen_s = sum(s["batch_s"] for s in batches)
     pre_s = sum(s["prefill_s"] for s in batches)
     dec_s = sum(s["decode_s"] for s in batches)
     n, n_parse, n_valid = len(recs), sum(r["parse_ok"] for r in recs), sum(r["validate_ok"] for r in recs)
     s_quad = gen_s / n
     target = TARGET_QUADS[m["generator"]]
-    err_kinds = {}
+    err_kinds, attempt_kinds = {}, {}
     for r in recs:
         for e in ([r["parse_error"]] if r["parse_error"] else []) + r["errors"]:
             k = e.split(": ", 1)[-1].split("(")[0].strip()[:80]
             err_kinds[k] = err_kinds.get(k, 0) + 1
+        for a in r.get("rejected", []):
+            for e in a.get("reasons", [a.get("reason", "")]):
+                k = e.split(": ", 1)[-1].split("(")[0].strip()[:80]
+                attempt_kinds[k] = attempt_kinds.get(k, 0) + 1
     return {
         "generator": m["generator"], "revision": m["revision"], "prompt_sha256": m["prompt_sha256"],
         "config_sha256": m["config_sha256"], "docs_sha256": m["docs_sha256"], "gpu": m["gpu"],
@@ -217,21 +221,53 @@ def summarise(out_dir: Path) -> dict:
         "n_hit_max_new_tokens": sum(r["stats"]["hit_max_new_tokens"] for r in recs),
         "n_dup_rejections": sum(r.get("dup_rejections", 0) for r in recs),
         "n_duplicate_kept_invalid": sum(bool(r.get("duplicate")) for r in recs),
+        "n_retries": sum(r.get("n_retries", 0) for r in recs),
+        "first_attempt_pass_rate": round(sum(r.get("first_attempt_ok", False) for r in recs) / n, 4),
         "json_parse_rate": round(n_parse / n, 4), "validate_pass_rate": round(n_valid / n, 4),
         "length_checked": all(r.get("length_checked") for r in recs),
-        "error_kinds": dict(sorted(err_kinds.items(), key=lambda kv: -kv[1])),
+        "error_kinds": dict(sorted(err_kinds.items(), key=lambda kv: -kv[1])),           # final attempts
+        "rejected_attempt_error_kinds": dict(sorted(attempt_kinds.items(), key=lambda kv: -kv[1])),
         "target_quads": target,
         "gpu_hours_target": round(target * s_quad / 3600, 2),
         "gpu_hours_target_per_valid": round(target * s_quad / 3600 / (n_valid / n), 2) if n_valid else None,
     }
 
 
+def failures(out_dir: Path) -> list:
+    """Raw text of every failed attempt (the final failure and each rejected retry) of a TIMING run. Timing runs
+    use val docs only; refuses anything else, so EVAL and TRAIN text can never land in a results directory."""
+    rows = []
+    for r in (r for p in sorted(out_dir.glob("shard_*.jsonl")) for r in pg.read_shard(p)):
+        if r["mode"] != "timing" or r["split"] != "val":
+            raise ValueError(f"{r['quad_id']}: failures are kept for timing runs on val docs only")
+        base = {"run": out_dir.name, "quad_id": r["quad_id"], "doc_id": r["doc_id"], "task": r["task"],
+                "split": r["split"], "split_seed": r["split_seed"], "generator": r["generator"],
+                "final_validate_ok": r["validate_ok"]}
+        rows += [{**base, **a} for a in r.get("rejected", [])]
+        if not r["validate_ok"]:
+            rows.append({**base, "attempt": r.get("n_retries", 0), "seed": r["seed"],
+                         "stage": "parse" if not r["parse_ok"] else "duplicate" if r["duplicate"] else "validate",
+                         "reasons": [r["parse_error"]] if not r["parse_ok"] else r["errors"],
+                         "raw_output": r["raw_output"]})
+    return rows
+
+
 def cmd_timing(a):
     runs = {Path(r).name: summarise(Path(r)) for r in a.run}
+    fails = [f for r in a.run for f in failures(Path(r))]
     run = start_run(version="pairs", exp="gen_timing", seed=0, args={"runs": list(runs)},
                     data_version=next(iter(runs.values()))["docs_sha256"][:12], allow_dirty=a.allow_dirty)
+    fpath = run.dir / "failures.jsonl"
+    fpath.write_text("".join(json.dumps(f, ensure_ascii=False) + "\n" for f in fails), encoding="utf-8")
+    (run.dir / "manifest.json").write_text(json.dumps({
+        "failures.jsonl": {"rows": len(fails), "sha256": pg.sha256_file(fpath),
+                           "content": "raw generator output of every failed attempt (final failures and rejected "
+                                      "retries) of this timing run, with stage and reasons",
+                           "docs": "V3 val docs of split seed 0 only (timing mode, enforced by gen_pairs.failures); "
+                                   "never EVAL or TRAIN pairs, never used for training or scoring"}}, indent=1) + "\n")
     for k, v in runs.items():
-        run.log(f"{k}: {v['s_per_quad']} s/quad, parse {v['json_parse_rate']}, validate {v['validate_pass_rate']}, "
+        run.log(f"{k}: {v['s_per_quad']} s/quad, parse {v['json_parse_rate']}, validate {v['validate_pass_rate']} "
+                f"(first attempt {v['first_attempt_pass_rate']}, {v['n_retries']} retries), "
                 f"{v['gpu_hours_target']} GPU-h for {v['target_quads']} quads ({v['gpu_hours_target_per_valid']} per valid)")
     run.save_metrics({"runs": runs})
     run.finish()
