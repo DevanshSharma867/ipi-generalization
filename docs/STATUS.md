@@ -134,7 +134,7 @@ job's discarded val-doc outputs), annotated or scored.
    - **A29 applied (2026-11-07):** a failed quad (parse, near-duplicate, validation) is regenerated with a new seed up
      to 3 times, every attempt's stage, reasons and text in the record; TRAIN prompt `pairs_train_v3.txt` + config
      `pairs_gen_v4.yaml` (default; EVAL prompt unchanged); E5 flags "reply" only as "reply to/all". Re-timing on the same
-     20 val docs: job RETIME_JOB (keeps failed-attempt text in `<run>/failures.jsonl`, val only). Target: Mistral
+     20 val docs: job 437312 (keeps failed-attempt text in `<run>/failures.jsonl`, val only). Target: Mistral
      validate ≥ 0.6 after retries, Gemma ≥ 0.85.
 5. EVAL generation on split-seed-0 test docs after the V3 freeze (the test-doc list may move at the rebuild);
    TRAIN generation as ≤ 1 h sharded sbatch jobs.
@@ -145,7 +145,7 @@ job's discarded val-doc outputs), annotated or scored.
    scoped to the V3-test pairs. Annotation rebalanced (~250 pairs, ~4.3 h per person). Config `pairs_gen_v3.yaml`
    (default) adds `agent: 2`. Docs: `gen_pairs.py docs --mode eval --source agent` (manifest committed, text under
    `data/transfer/pairs_docs/`).
-8. **Next:** read the re-timing run (job RETIME_JOB). EVAL and TRAIN generation wait for the V3 freeze.
+8. **Next:** read the re-timing run (job 437312). EVAL and TRAIN generation wait for the V3 freeze.
 
 ## Annotators (A25)
 - External annotators: not project members, fluent in English, independent of the design. The author adjudicates only.
