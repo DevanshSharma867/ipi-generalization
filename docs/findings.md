@@ -623,11 +623,11 @@ The |AUROC − 0.5| column is a transparency metric, not a retroactive pass/fail
 
 ## F021. Published detectors on the agent transfer sets: calibrated and oracle protocols
 
-> **F021** · status **`full`** · 2026-11-02 (first version 2026-10-31, run 20261031-190127_seed42, superseded since it also listed the 4-bit judges) · data `transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded` · eval `AD-Matched, AD-Shift (recovered pairing), TB-Matched; negatives AD-Clean / TB-Clean; calibration pool (A3)` · threshold: calibrated (1%/5% FPR on the calibration pool, primary) and oracle (on the evaluated clean rows, MIN_CLEAN gates) · seeds: n/a (deterministic scoring; judges greedy); bootstrap seed 42, B = 1000  
-> script `jobs/transfer_scores_{encoders,wolf,judges}.sh (eval/transfer/detectors.py, record_scores.py) -> eval/transfer/transfer_metrics.py` @ `ae2502c` · source: `results/transfer/transfer_metrics/20261102-115039_seed42`
+> **F021** · status **`full`** · 2026-11-07 (adds protectai-small-v2; encoder scores re-run 2026-11-06, job 434238, run 20261106-144044_seed0. Earlier versions 2026-11-02, run 20261102-115039_seed42, encoder run 20261031-182528_seed0; 2026-10-31, run 20261031-190127_seed42, which also listed the 4-bit judges) · data `transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded` · eval `AD-Matched, AD-Shift (recovered pairing), TB-Matched; negatives AD-Clean / TB-Clean; calibration pool (A3)` · threshold: calibrated (1%/5% FPR on the calibration pool, primary) and oracle (on the evaluated clean rows, MIN_CLEAN gates) · seeds: n/a (deterministic scoring; judges greedy); bootstrap seed 42, B = 1000  
+> script `jobs/transfer_scores_{encoders,wolf,judges}.sh (eval/transfer/detectors.py, record_scores.py) -> eval/transfer/transfer_metrics.py` @ `86a0cee` · source: `results/transfer/transfer_metrics/20261107-200228_seed42`
 
-Every published detector Liu (2026) scored, except protectai-small-v2 (access granted 2026-11-02; its scoring job
-failed twice on an uncorrectable GPU ECC error, jobs 429434/429443), scored in his environment (Wolf Defender in ours,
+Every published detector Liu (2026) scored, including protectai-small-v2 (access granted 2026-11-02; scored
+2026-11-06 by job 434238 after two jobs failed on a faulty GPU), scored in his environment (Wolf Defender in ours,
 transformers 5.20.1, as he did), plus his two LLM judges with his Yes/No rule.
 **Judge precision: bf16** (A20; author decision 2026-11-02). Every published-detector baseline and every H3
 comparison uses the bf16 judges. The 4-bit NF4 judges (Liu's setting) are reported only for the Liu reproduction
@@ -659,30 +659,30 @@ the negatives are AD-Clean (A16). Clusters for every CI: user task. Full table: 
 
 ## F022. Calibration transfer: realized FPR of the calibration-pool thresholds on the agent sets
 
-> **F022** · status **`full`** · 2026-11-02 · data `transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded` · eval `AD-Matched, AD-Shift, TB-Matched (negatives AD-Clean / TB-Clean); calibration pool (A3)` · threshold: calibrated on the calibration pool (primary) vs task-disjoint halves (secondary, A3; never decides) · seeds: n/a (deterministic scores); task-half split seed 0 (sha256 of "0:<suite>/<task>"); bootstrap seed 42, B = 1000  
-> script `eval/transfer/transfer_metrics.py (task_halves; calibration-pool thresholds, paper_plan A3) -> scripts/make_tables.py` @ `ae2502c` · source: `results/transfer/transfer_metrics/20261102-115039_seed42`
+> **F022** · status **`full`** · 2026-11-07 (adds protectai-small-v2; previous version 2026-11-02, run 20261102-115039_seed42) · data `transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded` · eval `AD-Matched, AD-Shift, TB-Matched (negatives AD-Clean / TB-Clean); calibration pool (A3)` · threshold: calibrated on the calibration pool (primary) vs task-disjoint halves (secondary, A3; never decides) · seeds: n/a (deterministic scores); task-half split seed 0 (sha256 of "0:<suite>/<task>"); bootstrap seed 42, B = 1000  
+> script `eval/transfer/transfer_metrics.py (task_halves; calibration-pool thresholds, paper_plan A3) -> scripts/make_tables.py` @ `86a0cee` · source: `results/transfer/transfer_metrics/20261107-200228_seed42`
 
 The calibration pool (1,140 synthetic clean tool outputs, F019) fixes every agent-set threshold (A3). This entry
 measures how far those thresholds miss their FPR target on the agent sets' real clean outputs, for the
-`\TransferCaltransferAdmatchedOnepctFprN` = 18 detectors of F021 (bf16 judges).
+`\TransferCaltransferAdmatchedOnepctFprN` = 19 detectors of F021 (bf16 judges).
 
 - **AgentDojo (AD-Clean negatives; AD-Matched and AD-Shift share them, so their FPR rows are identical).** At the 1%
-  target, `\TransferCaltransferAdmatchedOnepctFprAbove` = 12 of `\TransferCaltransferAdmatchedOnepctFprN` = 18 detectors
+  target, `\TransferCaltransferAdmatchedOnepctFprAbove` = 13 of `\TransferCaltransferAdmatchedOnepctFprN` = 19 detectors
   have a realized-FPR CI entirely above 1% and `\TransferCaltransferAdmatchedOnepctFprBelow` = 1 entirely below; median
-  realized FPR `\TransferCaltransferAdmatchedOnepctFprMedian` = 0.052. At 5%:
-  `\TransferCaltransferAdmatchedFivepctFprAbove` = 11 above, `\TransferCaltransferAdmatchedFivepctFprBelow` = 3 below,
-  median `\TransferCaltransferAdmatchedFivepctFprMedian` = 0.117.
+  realized FPR `\TransferCaltransferAdmatchedOnepctFprMedian` = 0.062. At 5%:
+  `\TransferCaltransferAdmatchedFivepctFprAbove` = 12 above, `\TransferCaltransferAdmatchedFivepctFprBelow` = 3 below,
+  median `\TransferCaltransferAdmatchedFivepctFprMedian` = 0.124.
 - **τ-bench (TB-Clean negatives).** At 1%: `\TransferCaltransferTbevalOnepctFprAbove` = 10 above,
-  `\TransferCaltransferTbevalOnepctFprBelow` = 6 below, median `\TransferCaltransferTbevalOnepctFprMedian` = 0.020. At 5%:
+  `\TransferCaltransferTbevalOnepctFprBelow` = 6 below, median `\TransferCaltransferTbevalOnepctFprMedian` = 0.016. At 5%:
   `\TransferCaltransferTbevalFivepctFprAbove` = 8 above, `\TransferCaltransferTbevalFivepctFprBelow` = 6 below, median
-  `\TransferCaltransferTbevalFivepctFprMedian` = 0.056. The miss is smaller on τ-bench than on AgentDojo.
+  `\TransferCaltransferTbevalFivepctFprMedian` = 0.050. The miss is smaller on τ-bench than on AgentDojo.
 - **In-domain contrast (secondary protocol, task-disjoint halves).** Each set's user tasks are split 50/50 by a
   seeded hash; thresholds from the calibration half's clean rows, evaluated on the other half, next to the pool
   threshold on the same evaluation half. At 5% on AgentDojo the median realized FPR is
-  `\TransferCaltransferAdmatchedFivepctFprHalvesTaskHalfMedian` = 0.053 with in-domain thresholds against
+  `\TransferCaltransferAdmatchedFivepctFprHalvesTaskHalfMedian` = 0.047 with in-domain thresholds against
   `\TransferCaltransferAdmatchedFivepctFprHalvesCalibrationPoolMedian` = 0.118 with the pool's; on τ-bench at 1%,
   `\TransferCaltransferTbevalOnepctFprHalvesTaskHalfMedian` = 0.008 against
-  `\TransferCaltransferTbevalOnepctFprHalvesCalibrationPoolMedian` = 0.019. Example: PIGuard on AgentDojo at 5%,
+  `\TransferCaltransferTbevalOnepctFprHalvesCalibrationPoolMedian` = 0.015. Example: PIGuard on AgentDojo at 5%,
   `\TransferDetPiguardLiuenvAdmatchedHalvesTaskHalfFivepctFprFpr` = 0.047 (in-domain) vs
   `\TransferDetPiguardLiuenvAdmatchedHalvesCalibrationPoolFivepctFprFpr` = 0.206 (pool).
 - In-domain TPR@1%FPR on AgentDojo is `n/a` for every detector: the calibration half has 169 AD-Clean rows (< 500,

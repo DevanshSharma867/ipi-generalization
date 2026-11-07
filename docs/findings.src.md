@@ -952,16 +952,16 @@ The |AUROC − 0.5| column is a transparency metric, not a retroactive pass/fail
 id: F021
 status: full
 script: jobs/transfer_scores_{encoders,wolf,judges}.sh (eval/transfer/detectors.py, record_scores.py) -> eval/transfer/transfer_metrics.py
-commit: ae2502c
+commit: 86a0cee
 seeds: n/a (deterministic scoring; judges greedy); bootstrap seed 42, B = 1000
 data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded
 eval_set: AD-Matched, AD-Shift (recovered pairing), TB-Matched; negatives AD-Clean / TB-Clean; calibration pool (A3)
 threshold_protocol: calibrated (1%/5% FPR on the calibration pool, primary) and oracle (on the evaluated clean rows, MIN_CLEAN gates)
-date: 2026-11-02 (first version 2026-10-31, run 20261031-190127_seed42, superseded since it also listed the 4-bit judges)
+date: 2026-11-07 (adds protectai-small-v2; encoder scores re-run 2026-11-06, job 434238, run 20261106-144044_seed0. Earlier versions 2026-11-02, run 20261102-115039_seed42, encoder run 20261031-182528_seed0; 2026-10-31, run 20261031-190127_seed42, which also listed the 4-bit judges)
 source:
-- results/transfer/transfer_metrics/20261102-115039_seed42
+- results/transfer/transfer_metrics/20261107-200228_seed42
 upstream:
-- results/transfer/transfer_scores_liuenv/20261031-182528_seed0
+- results/transfer/transfer_scores_liuenv/20261106-144044_seed0
 - results/transfer/transfer_scores_wolf/20261031-182747_seed0
 - results/transfer/transfer_scores_judges_bf16/20261031-190043_seed0
 macros:
@@ -969,8 +969,8 @@ macros:
 - "!TransferDet*Halves*"
 ```
 
-Every published detector Liu (2026) scored, except protectai-small-v2 (access granted 2026-11-02; its scoring job
-failed twice on an uncorrectable GPU ECC error, jobs 429434/429443), scored in his environment (Wolf Defender in ours,
+Every published detector Liu (2026) scored, including protectai-small-v2 (access granted 2026-11-02; scored
+2026-11-06 by job 434238 after two jobs failed on a faulty GPU), scored in his environment (Wolf Defender in ours,
 transformers 5.20.1, as he did), plus his two LLM judges with his Yes/No rule.
 **Judge precision: bf16** (A20; author decision 2026-11-02). Every published-detector baseline and every H3
 comparison uses the bf16 judges. The 4-bit NF4 judges (Liu's setting) are reported only for the Liu reproduction
@@ -1006,16 +1006,16 @@ the negatives are AD-Clean (A16). Clusters for every CI: user task. Full table: 
 id: F022
 status: full
 script: eval/transfer/transfer_metrics.py (task_halves; calibration-pool thresholds, paper_plan A3) -> scripts/make_tables.py
-commit: ae2502c
+commit: 86a0cee
 seeds: n/a (deterministic scores); task-half split seed 0 (sha256 of "0:<suite>/<task>"); bootstrap seed 42, B = 1000
 data_version: transfer-bib5d0ae7c-agentdojo0.1.34-tb59a200c-filesfb0afded
 eval_set: AD-Matched, AD-Shift, TB-Matched (negatives AD-Clean / TB-Clean); calibration pool (A3)
 threshold_protocol: calibrated on the calibration pool (primary) vs task-disjoint halves (secondary, A3; never decides)
-date: 2026-11-02
+date: 2026-11-07 (adds protectai-small-v2; previous version 2026-11-02, run 20261102-115039_seed42)
 source:
-- results/transfer/transfer_metrics/20261102-115039_seed42
+- results/transfer/transfer_metrics/20261107-200228_seed42
 upstream:
-- results/transfer/transfer_scores_liuenv/20261031-182528_seed0
+- results/transfer/transfer_scores_liuenv/20261106-144044_seed0
 - results/transfer/transfer_scores_wolf/20261031-182747_seed0
 - results/transfer/transfer_scores_judges_bf16/20261031-190043_seed0
 macros:

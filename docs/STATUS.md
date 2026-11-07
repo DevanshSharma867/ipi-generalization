@@ -1,4 +1,4 @@
-# Status (updated 2026-11-05)
+# Status (updated 2026-11-07)
 
 # Transfer harness
 
@@ -57,15 +57,16 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   - **Secondary protocol (task-disjoint halves) and calibration transfer: F022.** The pool's thresholds miss their
     target on AgentDojo for most detectors (1% target: 12/18 with the realized-FPR CI above 1%, median 0.052); with
     in-domain half thresholds the median realized FPR at 5% is 0.053 vs 0.118 with the pool's on the same half.
+  - **2026-11-07: protectai-small-v2 added (F021/F022 now 19 detectors).** Encoders re-run by job 434238 (2026-11-06,
+    good card `GPU-6ea41e3c…` on gpunode8, no requeue) → `transfer_scores_liuenv/20261106-144044_seed0` (16 detectors
+    × 6 sets, at `7af1eba`); metrics `transfer_metrics/20261107-200228_seed42`. The other 18 detectors' values are
+    unchanged. small-v2 on AD-Matched, calibrated 1%: TPR 0.266 [0.21, 0.33] at realized FPR 0.109 [0.08, 0.14].
+    F022 at 1% on AgentDojo: 13/19 above target, median 0.062 (was 12/18, 0.052); half thresholds at 5%: 0.047 vs 0.118.
   - CPU diagnostic (laptop; `results/transfer/gate2_followup_batch_cpu/`, not a reference) agrees: batch ≤ 6e-6
     for every model (our DeBERTa ≤ 1.8e-7); env shift identical in rows over 1e-3 and flips (46/9, 228/6, 389/34).
 
 ## Next
-1. **protectai-small-v2:** access granted and downloaded (2026-11-02), added to `jobs/transfer_scores_encoders.sh`.
-   Jobs 429434 and 429443 both failed at start with `CUDA error: uncorrectable ECC error` on gpunode8 (the partition's
-   only node). Once `jobs/gpu_probe.sh` passes: `sbatch jobs/transfer_scores_encoders.sh` (finished scores are
-   skipped), rerun `eval/transfer/transfer_metrics.py` with the new liuenv run; F021/F022 update via `make_tables.py`.
-2. **e. Results layout:** `results/transfer/<detector>/<set>/<run_id>`, which needs a nested-exp change in
+1. **e. Results layout:** `results/transfer/<detector>/<set>/<run_id>`, which needs a nested-exp change in
    `src/runlog.py`.
 
 ## Open decisions / blockers
@@ -74,7 +75,8 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
   them (exit 3). `jobs/lib/gpu_guard.sh` now requeues a job that lands on that card (`scontrol requeue`, at most 5 times
   via `SLURM_RESTART_COUNT`, then exit 3); other CUDA failures still exit 3. Every guarded job has `--requeue` and
   `--open-mode=append`, so each attempt's UUID is in its log. Resubmitted 2026-11-05: `ts_encoders` 434238,
-  `pairs_timing` 434239. Admins to be asked to drain the card (email drafted by the author).
+  `pairs_timing` 434239. Admins to be asked to drain the card (email drafted by the author). 434238 got a good card
+  on its first attempt (no requeue), so the requeue path is still untested on the cluster.
 - **Revision pins:** Liu pins only Horizon. wolf-defender and prismor-1.5b changed days before his last commit:
   first suspects if Gate 2 mismatches (re-pin with a reason).
 - **VRAM cap:** MPS does not enforce `CUDA_MPS_PINNED_DEVICE_MEM_LIMIT` (smoke test, job 422476). Half-card VRAM
@@ -129,8 +131,11 @@ job's discarded val-doc outputs), annotated or scored.
      18.4 GB; parse 0.95, validate 0.25. Main failure: requests copy a 5-gram of the instruction (Q3). E5 'Reply'
      1/20 per run. 3,141 quads: bs1 3.15 GPU-h (10.5 per valid), bs8 1.30 (5.2 per valid).
    - Failure texts were deleted by design (A24); only error kinds survive. n = 20, so the rates are rough.
-   - Proposed, not applied: regenerate on validation failure (as for duplicates, counted) for both generators;
-     TRAIN prompt v3 (new version) with an explicit no-copy rule; re-time on val docs before TRAIN generation.
+   - **A29 applied (2026-11-07):** a failed quad (parse, near-duplicate, validation) is regenerated with a new seed up
+     to 3 times, every attempt's stage, reasons and text in the record; TRAIN prompt `pairs_train_v3.txt` + config
+     `pairs_gen_v4.yaml` (default; EVAL prompt unchanged); E5 flags "reply" only as "reply to/all". Re-timing on the same
+     20 val docs: job RETIME_JOB (keeps failed-attempt text in `<run>/failures.jsonl`, val only). Target: Mistral
+     validate ≥ 0.6 after retries, Gemma ≥ 0.85.
 5. EVAL generation on split-seed-0 test docs after the V3 freeze (the test-doc list may move at the rebuild);
    TRAIN generation as ≤ 1 h sharded sbatch jobs.
 6. Annotation (A25), then κ per set, agreed quads (≥ 200 agreed pairs per set), P3 checks.
@@ -140,8 +145,7 @@ job's discarded val-doc outputs), annotated or scored.
    scoped to the V3-test pairs. Annotation rebalanced (~250 pairs, ~4.3 h per person). Config `pairs_gen_v3.yaml`
    (default) adds `agent: 2`. Docs: `gen_pairs.py docs --mode eval --source agent` (manifest committed, text under
    `data/transfer/pairs_docs/`).
-8. **Next:** decide the proposed regenerate-on-failure change and TRAIN prompt v3 (item 4); then EVAL (V3-test after
-   the V3 freeze, plus agent docs) and TRAIN generation.
+8. **Next:** read the re-timing run (job RETIME_JOB). EVAL and TRAIN generation wait for the V3 freeze.
 
 ## Annotators (A25)
 - External annotators: not project members, fluent in English, independent of the design. The author adjudicates only.
