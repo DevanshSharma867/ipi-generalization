@@ -159,7 +159,15 @@ job's discarded val-doc outputs), annotated or scored.
    scoped to the V3-test pairs. Annotation rebalanced (~250 pairs, ~4.3 h per person). Config `pairs_gen_v3.yaml`
    (default) adds `agent: 2`. Docs: `gen_pairs.py docs --mode eval --source agent` (manifest committed, text under
    `data/transfer/pairs_docs/`).
-8. **Next:** read the re-timing run (job 437312). EVAL and TRAIN generation wait for the V3 freeze.
+8. **Re-timing done: job 437312** (2026-11-09, gpunode8, commit d22ba09; run `results/pairs/gen_timing/20261109-094809_seed0`,
+   cluster only; operational numbers, no findings entry). Validate rate after retries: Mistral bs1 0.75 (first attempt
+   0.45, 27 retries, 8.18 s/quad), bs8 0.80 (first attempt 0.35, 26 retries, 6.29 s/quad, 18.7 GB); Gemma 0.95 (first
+   attempt 0.85, 10.49 s/quad). Both A29 targets met. Remaining Mistral failures: request copies an instruction 5-gram.
+9. **TRAIN generation submitted (2026-11-11):** split-seed-0 TRAIN docs only, `data/pairs/docs/train_s0.jsonl` (609 docs:
+   50 email, 491 table, 68 code; identical to the frozen `data/v3/split_seed_0` train docs, checked by `gen_pairs.py docs`).
+   2,181 quads, Mistral bs8, `jobs/pairs_gen_train.sh` as 8 array tasks of ~273 quads (~0.5 h each, ~4 GPU-h), after the
+   V3 baselines. Output on the cluster: `data/pairs/train_gen/v4_s0_<code sha>/`. Expected ~1,750 valid quads before the
+   self-consistency filter (spec §8), which is not implemented yet. EVAL generation (Gemma, test docs) not yet submitted.
 
 ## Annotators (A25)
 - External annotators: not project members, fluent in English, independent of the design. The author adjudicates only.

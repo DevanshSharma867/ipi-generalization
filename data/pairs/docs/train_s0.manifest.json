@@ -1,0 +1,19 @@
+{
+ "docs": "train_s0.jsonl",
+ "sha256": "142bd65e1f5371a66e1a1a5b98ed727b10977a2355ba1a01f2cf368864b7e379",
+ "mode": "train",
+ "split": "train",
+ "split_seed": 0,
+ "n_per_task": "",
+ "span_cap_tokens": {
+  "text": 30,
+  "code": 204
+ },
+ "counts": {
+  "email": 50,
+  "table": 491,
+  "code": 68
+ },
+ "builder": "src/data_pipeline_v3.py (in memory, pairs_gen.v3_docs)",
+ "frozen_check": "data/v3/split_seed_0: same train docs (609; 0 frozen train docs have no main context, long slice only)"
+}

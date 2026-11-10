@@ -66,6 +66,17 @@ def cmd_docs(a):
         rng = random.Random(f"pairs_docs:{a.mode}:{a.split_seed}")
         pool = sorted([d for t, n in want.items() for d in rng.sample([d for d in pool if d["task"] == t], int(n))],
                       key=lambda d: d["doc_id"])
+    frozen_dir = ROOT / "data" / "v3" / f"split_seed_{a.split_seed}"
+    frozen = "absent"
+    if frozen_dir.is_dir():  # since v3-frozen: the in-memory split must equal the frozen build's split
+        import pandas as pd
+        fz = pd.concat([pd.read_csv(f, usecols=["doc_id", "split"]) for f in sorted(frozen_dir.glob("*.csv"))])
+        want = set(fz.loc[fz["split"] == mode_split, "doc_id"])
+        got = {d["doc_id"] for d in docs.values() if d["split"] == mode_split}
+        if got - want or (fz.loc[fz["split"] != mode_split, "doc_id"].isin(got)).any():
+            sys.exit(f"{mode_split} docs differ from {frozen_dir}: {sorted(got ^ want)[:10]}")
+        frozen = (f"{frozen_dir.relative_to(ROOT)}: same {mode_split} docs ({len(got)}; "
+                  f"{len(want - got)} frozen {mode_split} docs have no main context, long slice only)")
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     out = DOCS_DIR / f"{a.mode}_s{a.split_seed}.jsonl"
     with open(out, "w", encoding="utf-8") as f:
@@ -74,7 +85,7 @@ def cmd_docs(a):
     manifest = {"docs": out.name, "sha256": pg.sha256_file(out), "mode": a.mode, "split": mode_split,
                 "split_seed": a.split_seed, "n_per_task": a.n_per_task, "span_cap_tokens": cap,
                 "counts": {t: sum(d["task"] == t for d in pool) for t in ("email", "table", "code")},
-                "builder": "src/data_pipeline_v3.py (in memory, pairs_gen.v3_docs); pre-freeze V3 split"}
+                "builder": "src/data_pipeline_v3.py (in memory, pairs_gen.v3_docs)", "frozen_check": frozen}
     out.with_suffix(".manifest.json").write_text(json.dumps(manifest, indent=1) + "\n")
     print(f"wrote {out.relative_to(ROOT)}: {manifest['counts']}")
 
