@@ -66,7 +66,7 @@ def test_v1_config_refused_for_eval_and_train(tmp_path):
 
 
 def test_prompts_frozen_and_carry_the_rules(cfg):
-    assert cfg["status"] == "v4-frozen" and cfg["spec_version"] == 3
+    assert cfg["status"] == "v5-frozen" and cfg["spec_version"] == 3
     assert cfg["modes"]["eval"]["quads_per_doc"]["agent"] == 2  # A28
     v3 = pg.load_config(pg.ROOT / "configs" / "pairs_gen_v3.yaml")  # A29: EVAL prompt unchanged, TRAIN prompt v3
     assert cfg["generators"]["gen-eval-gemma"]["prompt_sha256"] == v3["generators"]["gen-eval-gemma"]["prompt_sha256"]
@@ -320,3 +320,128 @@ def test_agent_docs_through_mock_generation(cfg, tmp_path):
     rec = pg.run_shard([{**d, "split": "val", "doc_id": "adclean_00001"}], "timing", "gen-eval-gemma", cfg2,
                        tmp_path / "b.jsonl", Mock(send))[0]
     assert not rec["validate_ok"] and any("E5 screen" in e for e in rec["errors"])
+
+
+# ─── v5 (A32): val mode and the self-consistency filter ──────────────────────
+
+def test_v5_only_adds_val_mode_and_selfcheck(cfg):
+    v4 = pg.load_config(pg.ROOT / "configs" / "pairs_gen_v4.yaml")
+    for name, g in v4["generators"].items():  # generators, prompts and decoding unchanged
+        assert {k: cfg["generators"][name][k] for k in ("prompt_sha256", "decoding", "precision", "revision")} == \
+            {k: g[k] for k in ("prompt_sha256", "decoding", "precision", "revision")}
+    assert {k: v for k, v in cfg["modes"].items() if k != "val"} == v4["modes"] and cfg["seed"] == v4["seed"]
+    assert cfg["modes"]["val"] == {"generators": ["gen-train-mistral"], "split_seed": 0,
+                                   "quads_per_doc": v4["modes"]["train"]["quads_per_doc"]}
+    assert "selfcheck" not in v4 and cfg["selfcheck"]["modes"] == ["train", "val"]
+    with pytest.raises(ValueError, match="has no mode val"):
+        pg.check_generator("val", "gen-train-mistral", v4)
+
+
+def test_val_mode_guards(cfg, tmp_path):
+    for split in ("train", "test"):
+        with pytest.raises(ValueError, match="refused"):
+            pg.run_shard([doc(0, split)], "val", "gen-train-mistral", cfg, tmp_path / "s.jsonl", Mock())
+    with pytest.raises(ValueError, match="split seed 0"):
+        pg.run_shard([doc(0, "val", split_seed=1)], "val", "gen-train-mistral", cfg, tmp_path / "s.jsonl", Mock())
+    with pytest.raises(ValueError, match="allows generators"):
+        pg.run_shard([doc(0, "val")], "val", "gen-eval-gemma", cfg, tmp_path / "s.jsonl", Mock())
+    qs = pg.quads_for([doc(0, "val"), doc(1, "val", task="table")], "val", cfg)
+    assert len(qs) == 6 + 3 and qs[0]["quad_id"].startswith("val_s0_")
+
+
+def test_selfcheck_prompt_frozen_blind_and_separate(cfg):
+    sc = cfg["selfcheck"]
+    text = sc["prompt_path"].read_text(encoding="utf-8")
+    assert text.startswith("# status: v1-frozen") and sc["repo"] and sc["revision"]
+    w = lambda t: re.findall(r"[a-z0-9_]+", t.lower())
+    grams = lambda ws: {tuple(ws[i:i + 8]) for i in range(len(ws) - 7)}
+    sc_body = pg.selfcheck_prompt(text, {"task": "email", "request": "", "instruction": "", "context": ""})
+    assert not grams(w(sc_body)) & grams(w(body(cfg["generators"]["gen-eval-gemma"]["prompt_path"])))
+    why = {k: f"rationale {k} zzq" for k in GOOD if k.startswith("why_")}
+    rec = pg.run_shard([doc(0, "val")], "val", "gen-train-mistral", cfg, Path(pytest.importorskip("tempfile")
+                       .mkdtemp()) / "s.jsonl", Mock(json.dumps({**GOOD, **why})))[0]
+    pair = rec["pairs"][0]
+    ms = pg.selfcheck_members(pair)
+    assert [m["intended"] for m in ms] == [0, 1]
+    prompts = [pg.selfcheck_prompt(text, m) for m in ms]
+    for m, q in zip(ms, prompts):
+        assert "{{" not in q and m["request"] in q and pair["instruction"] in q and pair["context"] in q
+        assert "aligned" not in q.lower() and "subverting" not in q.lower() and "intended" not in q.lower()
+        assert all(v not in q for v in json.loads(pair["notes"]).values())  # rationales never shown
+    assert prompts[0].replace(ms[0]["request"], "R") == prompts[1].replace(ms[1]["request"], "R")
+
+
+def test_selfcheck_decide():
+    p = {"pair_id": "x_p1", "quad_id": "x", "doc_id": "d", "task": "email"}
+    assert pg.selfcheck_decide(p, [(-0.1, -2.0), (-3.0, -0.2)])["kept"]
+    d = pg.selfcheck_decide(p, [(-2.0, -0.1), (-3.0, -0.2)])
+    assert not d["kept"] and d["reason"] == "aligned member labelled subverting" and d["predicted"] == [1, 1]
+    assert pg.selfcheck_decide(p, [(-0.1, -2.0), (-0.1, -2.0)])["reason"] == "subverting member labelled aligned"
+    assert pg.selfcheck_decide(p, [(-2.0, -0.1), (-0.1, -2.0)])["reason"] == "both members labelled wrong"
+    assert pg.selfcheck_decide(p, [(-1.0, -1.0), (-2.0, -1.0)])["predicted"] == [1, 1]  # tie counts as B
+    s = pg.selfcheck_summary([pg.selfcheck_decide(p, [(-0.1, -2.0), (-3.0, -0.2)]), d])
+    assert s["n_pairs"] == 2 and s["n_kept"] == 1 and s["removed_by_reason"] == {d["reason"]: 1}
+
+
+class FakeScorer:
+    """A for the aligned member, B for the subverting one, except for prompts containing `flip`."""
+    def __init__(self, flip=None):
+        self.calls, self.flip = 0, flip
+
+    def __call__(self, prompts):
+        self.calls += 1
+        out = []
+        for i, q in enumerate(prompts):
+            a = i % 2 == 0
+            if self.flip and self.flip in q:
+                a = not a
+            out.append((-0.1, -3.0) if a else (-3.0, -0.1))
+        return out
+
+
+def test_selfcheck_on_generated_dir_resumes_and_refuses(cfg, tmp_path, monkeypatch):
+    import gen_pairs
+    docs = [doc(0, "val"), doc(1, "val")]
+    dfile = tmp_path / "val_s0.jsonl"
+    dfile.write_text("".join(json.dumps(d) + "\n" for d in docs))
+    out_dir = tmp_path / "gen"
+    out_dir.mkdir()
+    meta = {"mode": "val", "docs": str(dfile), "docs_sha256": "x"}
+    pg.run_shard(docs[:1], "val", "gen-train-mistral", cfg, out_dir / "shard_000_of_001.jsonl", Mock())
+    (out_dir / "shard_000_of_001.meta.json").write_text(json.dumps(meta))
+    monkeypatch.setattr(gen_pairs, "ROOT", Path("/"))
+    with pytest.raises(ValueError, match="not generated yet"):
+        gen_pairs.generated_pairs(out_dir, cfg)
+    pg.run_shard(docs, "val", "gen-train-mistral", cfg, out_dir / "shard_000_of_001.jsonl", Mock())
+    pairs, mode, _ = gen_pairs.generated_pairs(out_dir, cfg)
+    assert mode == "val" and pairs  # near-duplicate quads of the same mock are retried and kept invalid
+    f = FakeScorer(flip=GOOD["r2"])
+    dec = gen_pairs.selfcheck_score(pairs, f, cfg["selfcheck"]["prompt_path"].read_text(), 3,
+                                    tmp_path / "sc.jsonl")
+    assert len(dec) == len(pairs) and not any(d["kept"] for d in dec)  # every pair has r2 as one member
+    f2 = FakeScorer()
+    again = gen_pairs.selfcheck_score(pairs, f2, cfg["selfcheck"]["prompt_path"].read_text(), 3, tmp_path / "sc.jsonl")
+    assert f2.calls == 0 and again == dec  # resumed from the file
+    assert "Spanish" not in (tmp_path / "sc.jsonl").read_text()  # decisions carry no text
+    for r in (json.loads(l) for l in (out_dir / "shard_000_of_001.jsonl").read_text().splitlines()):
+        assert r["mode"] == "val"
+    bad = tmp_path / "evalgen"
+    bad.mkdir()
+    (bad / "shard_000_of_001.jsonl").write_text(json.dumps({"mode": "eval", "quad_id": "q", "validate_ok": True,
+                                                            "pairs": []}) + "\n")
+    (bad / "shard_000_of_001.meta.json").write_text(json.dumps({**meta, "mode": "eval"}))
+    with pytest.raises(ValueError, match="covers"):
+        gen_pairs.generated_pairs(bad, cfg)
+
+
+def test_selfcheck_dry_run_pairs_from_failures(cfg):
+    from gen_pairs import failure_pairs
+    d = doc(0, "val")
+    row = {"run": "gen-train-mistral_bs1", "quad_id": f"timing_s0_{d['doc_id']}_q0", "doc_id": d["doc_id"],
+           "split": "val", "generator": "gen-train-mistral", "attempt": 1, "stage": "validate",
+           "final_validate_ok": True, "raw_output": json.dumps(GOOD)}
+    pairs, extra, skipped = failure_pairs([row, {**row, "attempt": 2, "raw_output": "no json"}], {d["doc_id"]: d}, cfg)
+    assert len(pairs) == 2 and skipped == {"gen-train-mistral: parse": 1}
+    assert pairs[0]["pair_id"].endswith("#gen-train-mistral_bs1#a1") and extra[pairs[0]["pair_id"]]["attempt"] == 1
+    with pytest.raises(ValueError, match="val docs only"):
+        failure_pairs([{**row, "split": "train"}], {d["doc_id"]: d}, cfg)

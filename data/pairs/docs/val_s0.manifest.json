@@ -1,0 +1,19 @@
+{
+ "docs": "val_s0.jsonl",
+ "sha256": "eeb22282dfe29a6e851309739f7bc06077e9ba049227042da1d3c2e1bc879e85",
+ "mode": "val",
+ "split": "val",
+ "split_seed": 0,
+ "n_per_task": "",
+ "span_cap_tokens": {
+  "text": 30,
+  "code": 204
+ },
+ "counts": {
+  "email": 13,
+  "table": 105,
+  "code": 14
+ },
+ "builder": "src/data_pipeline_v3.py (in memory, pairs_gen.v3_docs)",
+ "frozen_check": "data/v3/split_seed_0: same val docs (132; 0 frozen val docs have no main context, long slice only)"
+}

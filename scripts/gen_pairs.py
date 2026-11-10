@@ -13,9 +13,16 @@ Intent-pair generation with the pinned generators (configs/pairs_gen_v4.yaml, th
            rates, retries, GPU-hour extrapolation) into a runlog run results/pairs/gen_timing/<run_id>/. Only the
            raw text of failed attempts is copied (failures.jsonl + manifest.json; val docs only, A29).
              python scripts/gen_pairs.py timing --run <out_dir> [--run <out_dir> ...]
+  selfcheck  spec §8 TRAIN-side filter (A32; config v5+): the TRAIN generator labels each member of each valid pair
+           blind (prefill only, A vs B) and a pair is kept only if both members get their intended label.
+           --in_dir: a finished train/val generate dir -> <in_dir>/selfcheck.jsonl (resumable) + selfcheck.meta.json.
+           --failures: dry run on a timing run's failed attempts (val docs) -> results/pairs/selfcheck_dryrun/<run_id>/.
+             python scripts/gen_pairs.py selfcheck --in_dir data/pairs/val_gen/<dir>
+             python scripts/gen_pairs.py selfcheck --failures results/pairs/gen_timing/<run>/failures.jsonl
 """
 
 import argparse
+from collections import defaultdict
 import json
 import random
 import statistics
@@ -58,7 +65,7 @@ def cmd_agent_docs(a):
 def cmd_docs(a):
     if a.source == "agent":
         return cmd_agent_docs(a)
-    mode_split = {"timing": "val", "eval": "test", "train": "train"}[a.mode]
+    mode_split = {"timing": "val", "eval": "test", "train": "train", "val": "val"}[a.mode]
     docs, _, cap = pg.v3_docs(a.split_seed)
     pool = sorted((d for d in docs.values() if d["split"] == mode_split), key=lambda d: d["doc_id"])
     if a.n_per_task:
@@ -90,14 +97,13 @@ def cmd_docs(a):
     print(f"wrote {out.relative_to(ROOT)}: {manifest['counts']}")
 
 
-def hf_generator(g: dict, device: str = "cuda"):
-    """(generate_fn, load stats, peak-memory fn) for one generator dict (repo, revision, precision, model_class,
-    decoding); batches with left padding, one seed per call. On CUDA the process is capped at half the card (A24)."""
+def load_hf(g: dict, device: str = "cuda"):
+    """(tokenizer, model, load stats, peak-memory fn) for one generator dict (repo, revision, precision,
+    model_class); left padding. On CUDA the process is capped at half the card (A24)."""
     import torch
     import transformers
-    from transformers import AutoTokenizer, BitsAndBytesConfig, StoppingCriteria, StoppingCriteriaList
+    from transformers import AutoTokenizer, BitsAndBytesConfig
     cuda = device == "cuda"
-    sync = torch.cuda.synchronize if cuda else (lambda: None)
     if cuda:
         torch.cuda.set_per_process_memory_fraction(0.5)
         torch.cuda.reset_peak_memory_stats()
@@ -118,6 +124,17 @@ def hf_generator(g: dict, device: str = "cuda"):
         model = model.to(device)
     peak = (lambda: round(torch.cuda.max_memory_allocated() / 1e9, 2)) if cuda else (lambda: None)
     load = {"load_s": round(time.time() - t0, 2), "vram_after_load_gb": peak()}
+    return tok, model, load, peak
+
+
+def hf_generator(g: dict, device: str = "cuda"):
+    """(generate_fn, load stats, peak-memory fn) for one generator dict (load_hf plus decoding); batches with left
+    padding, one seed per call."""
+    import torch
+    from transformers import StoppingCriteria, StoppingCriteriaList
+    cuda = device == "cuda"
+    sync = torch.cuda.synchronize if cuda else (lambda: None)
+    tok, model, load, peak = load_hf(g, device)
     dec = g["decoding"]
 
     class FirstToken(StoppingCriteria):  # records when the first new token exists (prefill + 1 step)
@@ -286,6 +303,131 @@ def cmd_timing(a):
     print(f"wrote {run.dir.relative_to(ROOT)}")
 
 
+# ─── self-consistency filter (spec §8; A32) ─────────────────────────────────
+
+def hf_scorer(g: dict, device: str = "cuda"):
+    """(score_fn, load stats, peak-memory fn): score_fn(prompts) -> [(logp "A", logp "B")] of the next token after
+    the chat template's generation prompt. Prefill only, no sampling; each letter's logp sums its token variants."""
+    import torch
+    tok, model, load, peak = load_hf(g, device)
+    ids = {L: sorted({i for t in (L, "\u2581" + L) for i in [tok.convert_tokens_to_ids(t)]
+                      if isinstance(i, int) and i != tok.unk_token_id}) for L in pg.SELFCHECK_LETTERS}
+    if not all(ids.values()):
+        raise RuntimeError(f"no vocabulary token for a label letter: {ids}")
+
+    def score_fn(prompts):
+        chats = [tok.apply_chat_template([{"role": "user", "content": p}], add_generation_prompt=True, tokenize=False)
+                 for p in prompts]
+        enc = tok(chats, return_tensors="pt", padding=True, add_special_tokens=False).to(model.device)
+        with torch.no_grad():
+            lp = torch.log_softmax(model(**enc, logits_to_keep=1).logits[:, -1].float(), dim=-1)
+        return [tuple(float(torch.logsumexp(lp[i, ids[L]], 0)) for L in pg.SELFCHECK_LETTERS)
+                for i in range(len(prompts))]
+    return score_fn, {**load, "letter_token_ids": ids}, peak
+
+
+def selfcheck_score(pairs: list, score_fn, template: str, batch_size: int, out_path: Path, extra=None) -> list:
+    """Decisions for `pairs` (pairs_gen.selfcheck_decide), appended to out_path (JSONL, no text) after every batch;
+    pair_ids already in out_path are skipped, so a rerun resumes."""
+    done = {d["pair_id"]: d for d in pg.read_shard(out_path)}
+    todo = [p for p in pairs if p["pair_id"] not in done]
+    for i in range(0, len(todo), batch_size):
+        chunk = todo[i:i + batch_size]
+        members = [m for p in chunk for m in pg.selfcheck_members(p)]
+        scores = score_fn([pg.selfcheck_prompt(template, m) for m in members])
+        with open(out_path, "a", encoding="utf-8") as f:
+            for k, p in enumerate(chunk):
+                d = {**pg.selfcheck_decide(p, scores[2 * k:2 * k + 2]), **((extra or {}).get(p["pair_id"], {}))}
+                done[p["pair_id"]] = d
+                f.write(json.dumps(d, ensure_ascii=False) + "\n")
+    return [done[p["pair_id"]] for p in pairs]
+
+
+def generated_pairs(in_dir: Path, cfg: dict) -> tuple:
+    """(valid pairs, mode, docs sha256) of a finished generate output dir. Refuses a mode the filter does not
+    cover (eval: humans label every EVAL pair) and an unfinished dir (fewer quads than its docs file asks for)."""
+    recs = [r for p in sorted(in_dir.glob("shard_*.jsonl")) for r in pg.read_shard(p)]
+    metas = [json.loads(p.read_text()) for p in sorted(in_dir.glob("shard_*.meta.json"))]
+    if not recs or not metas:
+        raise ValueError(f"{in_dir}: no shard records or meta")
+    modes = {r["mode"] for r in recs} | {m["mode"] for m in metas}
+    if len(modes) != 1 or next(iter(modes)) not in cfg["selfcheck"]["modes"]:
+        raise ValueError(f"{in_dir}: modes {sorted(modes)}; the self-check covers {cfg['selfcheck']['modes']} only")
+    mode = next(iter(modes))
+    docs_files = {(m["docs"], m["docs_sha256"]) for m in metas}
+    if len(docs_files) != 1:
+        raise ValueError(f"{in_dir}: shards from different docs files {docs_files}")
+    docs_path, docs_sha = next(iter(docs_files))
+    want = {q["quad_id"] for q in pg.quads_for(pg.read_docs(ROOT / docs_path), mode, cfg)}
+    have = {r["quad_id"] for r in recs}
+    if want != have:
+        raise ValueError(f"{in_dir}: {len(want - have)} quads not generated yet, {len(have - want)} unexpected")
+    return [p for r in recs if r["validate_ok"] for p in r["pairs"]], mode, docs_sha
+
+
+def failure_pairs(rows: list, docs: dict, cfg: dict) -> tuple:
+    """Dry run input: pairs rebuilt from the failed attempts of a timing run (val docs only), one id per attempt;
+    plus counts of attempts that do not parse or build."""
+    pairs, extra, skipped = [], {}, defaultdict(int)
+    for r in rows:
+        if r["split"] != "val" or not r["quad_id"].startswith("timing_"):
+            raise ValueError(f"{r['quad_id']}: the dry run uses timing failures on val docs only")
+        out = pg._parse({}, r["raw_output"])
+        if out is None:
+            skipped[f"{r['generator']}: parse"] += 1
+            continue
+        try:
+            built = pg.to_pairs({"quad_id": r["quad_id"], "doc": docs[r["doc_id"]]}, out, "timing", r["generator"],
+                                cfg["seed"])
+        except Exception:  # no insertion boundary for this instruction
+            skipped[f"{r['generator']}: build"] += 1
+            continue
+        for p in built:
+            p["pair_id"] = f"{p['pair_id']}#{r['run']}#a{r['attempt']}"
+            pairs.append(p)
+            extra[p["pair_id"]] = {"run": r["run"], "generator": r["generator"], "attempt": r["attempt"],
+                                   "failed_stage": r["stage"], "final_validate_ok": r["final_validate_ok"]}
+    return pairs, extra, dict(skipped)
+
+
+def cmd_selfcheck(a):
+    cfg = pg.load_config(a.config)
+    sc = cfg["selfcheck"]
+    g = cfg["generators"][sc["generator"]]
+    template = sc["prompt_path"].read_text(encoding="utf-8")
+    info = {"generator": sc["generator"], "repo": sc["repo"], "revision": sc["revision"],
+            "prompt": sc["prompt"], "prompt_sha256": sc["prompt_sha256"], "config_sha256": cfg["sha256"]}
+    if a.failures:  # dry run on a timing run's failed attempts (val docs); labels and counts only, no text
+        rows = [json.loads(l) for l in open(a.failures, encoding="utf-8") if l.strip()]
+        docs = {d["doc_id"]: d for d in pg.read_docs(a.docs)}
+        pairs, extra, skipped = failure_pairs(rows, docs, cfg)
+        run = start_run(version="pairs", exp="selfcheck_dryrun", seed=0, args={**vars(a), **info},
+                        data_version=pg.sha256_file(a.failures)[:12], data_files=[a.failures, a.docs],
+                        allow_dirty=a.allow_dirty)
+        score_fn, load, _ = hf_scorer(g, a.device)
+        t0 = time.time()
+        dec = selfcheck_score(pairs, score_fn, template, a.batch_size, run.dir / "decisions.jsonl", extra)
+        by = {k: pg.selfcheck_summary([d for d in dec if d["run"] == k]) for k in sorted({d["run"] for d in dec})}
+        metrics = {**info, **load, "score_s": round(time.time() - t0, 2), "attempt_rows": len(rows),
+                   "not_scored": skipped, "all": pg.selfcheck_summary(dec), "by_run": by,
+                   "note": "pairs rebuilt from FAILED generation attempts (the valid timing pairs were deleted by "
+                           "design, A24): not representative of TRAIN pairs; dry run only, no threshold is set from it"}
+        run.save_metrics(metrics)
+        run.log(json.dumps(metrics["all"]))
+        run.finish()
+        print(json.dumps(metrics, indent=1))
+        return
+    in_dir = Path(a.in_dir)
+    pairs, mode, docs_sha = generated_pairs(in_dir, cfg)
+    score_fn, load, peak = hf_scorer(g, a.device)
+    t0 = time.time()
+    dec = selfcheck_score(pairs, score_fn, template, a.batch_size, in_dir / "selfcheck.jsonl")
+    meta = {**info, **load, "mode": mode, "docs_sha256": docs_sha, "score_s": round(time.time() - t0, 2),
+            "peak_vram_gb": peak(), **pg.selfcheck_summary(dec)}
+    (in_dir / "selfcheck.meta.json").write_text(json.dumps(meta, indent=1) + "\n")
+    print(json.dumps(meta, indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -309,8 +451,16 @@ def main():
     g.add_argument("--no_length_check", action="store_true", help="skip the §6 length rules (not allowed in eval)")
     t = add_run_args(sub.add_parser("timing"))
     t.add_argument("--run", action="append", required=True)
+    c = add_run_args(sub.add_parser("selfcheck"))
+    c.add_argument("--config", type=Path, default=pg.CONFIG, help="config with a selfcheck section (v5 or later)")
+    src = c.add_mutually_exclusive_group(required=True)
+    src.add_argument("--in_dir", help="a finished train/val generate output dir; writes selfcheck.jsonl + .meta.json")
+    src.add_argument("--failures", type=Path, help="dry run: a timing run's failures.jsonl (val docs only)")
+    c.add_argument("--docs", type=Path, default=DOCS_DIR / "timing_s0.jsonl", help="docs file of --failures")
+    c.add_argument("--batch_size", type=int, default=8, help="pairs per forward batch (two members each)")
+    c.add_argument("--device", default="cuda")
     a = ap.parse_args()
-    {"docs": cmd_docs, "generate": cmd_generate, "timing": cmd_timing}[a.cmd](a)
+    {"docs": cmd_docs, "generate": cmd_generate, "timing": cmd_timing, "selfcheck": cmd_selfcheck}[a.cmd](a)
 
 
 if __name__ == "__main__":

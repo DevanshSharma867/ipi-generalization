@@ -167,7 +167,13 @@ job's discarded val-doc outputs), annotated or scored.
    50 email, 491 table, 68 code; identical to the frozen `data/v3/split_seed_0` train docs, checked by `gen_pairs.py docs`).
    2,181 quads, Mistral bs8, `jobs/pairs_gen_train.sh` as 8 array tasks of ~273 quads (~0.5 h each, ~4 GPU-h), after the
    V3 baselines. Output on the cluster: `data/pairs/train_gen/v4_s0_<code sha>/`. Expected ~1,750 valid quads before the
-   self-consistency filter (spec §8), which is not implemented yet. EVAL generation (Gemma, test docs) not yet submitted.
+   self-consistency filter (spec §8). EVAL generation (Gemma, test docs) not yet submitted.
+10. **A32 (2026-11-11):** config v5 adds mode `val` (TRAIN generator/prompt on the 132 split-seed-0 val docs, 477 quads:
+   ICT selection pairs, A22) and the spec §8 self-consistency filter (`gen_pairs.py selfcheck`, prompt
+   `pairs_selfcheck_v1.txt`, prefill-only A/B; TRAIN and val pairs only). Jobs: `jobs/pairs_gen_val.sh` (2 shards),
+   `jobs/pairs_selfcheck.sh` (dry run on the re-timing failures, then val; TRAIN after 443655). `jobs/agent_v2_rebuild.sh`
+   rebuilds agent_v2 split seed 0 on the cluster and checks it against the committed manifest (laptop rebuild matched).
+   Still missing before ICT: an export of kept pairs to the `--train_pairs`/`--val_pairs` files.
 
 ## Annotators (A25)
 - External annotators: not project members, fluent in English, independent of the design. The author adjudicates only.

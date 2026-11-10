@@ -38,12 +38,12 @@ import yaml
 from pairs import make_pair, overlap, validate
 
 ROOT = Path(__file__).resolve().parent.parent
-CONFIG = ROOT / "configs" / "pairs_gen_v4.yaml"  # v1 (pre-E5), v2 (no agent quads), v3 (TRAIN prompt v2) kept
-MIN_VERSION = {"eval": 2, "train": 2, "timing": 1}  # A27: EVAL and TRAIN generation use prompts v2 or later
+CONFIG = ROOT / "configs" / "pairs_gen_v5.yaml"  # v1 (pre-E5), v2 (no agent quads), v3 (TRAIN prompt v2), v4 kept
+MIN_VERSION = {"eval": 2, "train": 2, "timing": 1, "val": 2}  # A27: prompts v2 or later (val mode: config v5+, A32)
 DETECTORS = ROOT / "configs" / "detectors.yaml"
 OUTPUT_KEYS = ("r1", "r2", "i1", "i2", "why_i1_serves_r1", "why_i1_deviates_r2", "why_i2_serves_r2",
                "why_i2_deviates_r1")
-MODE_SPLITS = {"eval": {"test"}, "train": {"train"}, "timing": {"val"}}
+MODE_SPLITS = {"eval": {"test"}, "train": {"train"}, "timing": {"val"}, "val": {"val"}}  # val: A32 (ICT selection)
 DUP_JACCARD = 0.8      # near-duplicate threshold within a document (content-word Jaccard)
 MAX_RETRIES = 3        # regenerations of a failed quad (parse, near-duplicate or validation; A29) before it is kept invalid
 # tokenizer.json of the V3 builder's tokenizer (data_pipeline_v3.TOKENIZER); the length rules use nothing else
@@ -76,6 +76,12 @@ def load_config(path: Path = CONFIG) -> dict:
         if not pm or int(pm.group(1)) > cfg["version"]:
             raise ValueError(f"{g['prompt']}: header must be '# status: v<k>-frozen' with k <= the config's version")
         g["prompt_version"] = int(pm.group(1))
+    if "selfcheck" in cfg:  # v5+ (A32): the TRAIN-side self-consistency filter
+        sc = cfg["selfcheck"]
+        sc["prompt_path"] = ROOT / sc["prompt"]
+        sc["prompt_sha256"] = sha256_file(sc["prompt_path"])
+        g = cfg["generators"][sc["generator"]]
+        sc["repo"], sc["revision"] = g["repo"], g["revision"]
     cfg["sha256"] = sha256_file(path)
     return cfg
 
@@ -243,6 +249,8 @@ def check_docs(docs: List[dict], mode: str, cfg: dict) -> None:
 
 
 def check_generator(mode: str, generator: str, cfg: dict) -> None:
+    if mode not in cfg["modes"]:
+        raise ValueError(f"config v{cfg['version']} has no mode {mode}")
     low = min(cfg["version"], cfg["generators"][generator].get("prompt_version", cfg["version"]))
     if low < MIN_VERSION[mode]:
         raise ValueError(f"mode {mode} needs config and prompts v{MIN_VERSION[mode]} or later (A27), got v{low}")
@@ -401,6 +409,53 @@ def _parse(rec: dict, text: str) -> Optional[dict]:
         return None
     rec.update(parse_ok=True, parse_error="", parsed=out)
     return out
+
+
+# ─── self-consistency filter (spec §8, TRAIN side; A32) ──────────────────────
+
+SELFCHECK_LETTERS = ("A", "B")  # A = aligned (0), B = subverting (1), as in configs/prompts/pairs_selfcheck_v1.txt
+SELFCHECK_REASONS = {(1, 1): "", (0, 1): "aligned member labelled subverting",
+                     (1, 0): "subverting member labelled aligned", (0, 0): "both members labelled wrong"}
+
+
+def selfcheck_members(pair: dict) -> List[dict]:
+    """The pair's two members (aligned = 0, subverting = 1) as blind labelling items. `intended` is kept for the
+    decision and never reaches the prompt."""
+    return [{"pair_id": pair["pair_id"], "role": role, "intended": y, "task": pair["task"],
+             "request": pair[f"request_{role}"], "context": pair["context"], "instruction": pair["instruction"]}
+            for role, y in (("aligned", 0), ("subverting", 1))]
+
+
+def selfcheck_prompt(template: str, member: dict) -> str:
+    """The self-check prompt file minus its '#' header lines, filled with one member (document last)."""
+    body = "\n".join(l for l in template.splitlines() if not l.startswith("# ")).strip()
+    return (body.replace("{{TASK_KIND}}", TASK_KIND[member["task"]]).replace("{{REQUEST}}", member["request"])
+            .replace("{{INSTRUCTION}}", member["instruction"]).replace("{{DOCUMENT}}", member["context"]))
+
+
+def selfcheck_decide(pair: dict, scores: List[tuple]) -> dict:
+    """Decision for one pair from its members' (logp A, logp B), in selfcheck_members order. A member's label is the
+    more likely letter (a tie counts as B); the pair is kept only if both members get their intended label."""
+    pred = [0 if a > b else 1 for a, b in scores]
+    ok = tuple(int(p == y) for p, y in zip(pred, (0, 1)))
+    return {"pair_id": pair["pair_id"], "quad_id": pair["quad_id"], "doc_id": pair["doc_id"], "task": pair["task"],
+            "intended": [0, 1], "predicted": pred, "logp": [[round(a, 4), round(b, 4)] for a, b in scores],
+            "kept": all(ok), "reason": SELFCHECK_REASONS[ok]}
+
+
+def selfcheck_summary(decisions: List[dict]) -> dict:
+    n = len(decisions)
+    kept = sum(d["kept"] for d in decisions)
+    reasons = defaultdict(int)
+    for d in decisions:
+        if not d["kept"]:
+            reasons[d["reason"]] += 1
+    return {"n_pairs": n, "n_kept": kept, "n_removed": n - kept, "removed_rate": round((n - kept) / n, 4) if n else None,
+            "removed_by_reason": dict(sorted(reasons.items())),
+            "member_label_A_rate": round(sum(p == 0 for d in decisions for p in d["predicted"]) / (2 * n), 4) if n else None,
+            "by_task": {t: {"n": sum(d["task"] == t for d in decisions),
+                            "kept": sum(d["kept"] for d in decisions if d["task"] == t)}
+                        for t in sorted({d["task"] for d in decisions})}}
 
 
 def shard_docs(docs: List[dict], shard: int, n_shards: int) -> List[dict]:
