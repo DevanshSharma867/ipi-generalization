@@ -49,6 +49,8 @@ STATIC_FROZEN = [
     "data/processed", "checkpoints/tfidf_lr_model.pkl",
     "results/scores", "results/deberta_predictions", "results/confusion_matrices",
 ]
+# Frozen at tag v3-frozen (data only; V3 results stay writable under new run directories)
+V3_FROZEN = ["data/v3", "data/benign/benign_v3.json"]
 
 PRED_COLUMNS = [
     "id", "doc_id", "split_seed", "task", "label", "attack_category", "attack_source",
@@ -88,8 +90,8 @@ def frozen_paths() -> list:
     listed = _git("ls-tree", "-r", "--name-only", FROZEN_TAG, "--", "results", "data/processed",
                   "checkpoints/tfidf_lr_model.pkl").splitlines()
     if not listed:
-        return list(STATIC_FROZEN)
-    paths = set(STATIC_FROZEN)
+        return list(STATIC_FROZEN) + V3_FROZEN
+    paths = set(STATIC_FROZEN) | set(V3_FROZEN)
     for p in listed:
         paths.add(p)
         parts = p.split("/")
@@ -119,7 +121,7 @@ def predictions_file(run_dir) -> Optional[Path]:
 
 def assert_not_frozen(path) -> None:
     if is_frozen(path):
-        raise PermissionError(f"Refusing to write to frozen V2 path: {path} (frozen at tag {FROZEN_TAG})")
+        raise PermissionError(f"Refusing to write to frozen path: {path} (frozen at tag {FROZEN_TAG} or v3-frozen)")
 
 
 def validate_predictions(df: pd.DataFrame) -> pd.DataFrame:

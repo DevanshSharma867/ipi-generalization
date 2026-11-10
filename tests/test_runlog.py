@@ -15,14 +15,15 @@ import runlog
 
 @pytest.mark.parametrize("path", ["data/processed/test.csv", "data/processed", "checkpoints/tfidf_lr_model.pkl",
                                   "results/tfidf_lr_results.json", "results/scores/new.csv",
-                                  "results/deberta_predictions/x/y.csv", "results"])
+                                  "results/deberta_predictions/x/y.csv", "results",
+                                  "data/v3/split_seed_0/train.csv", "data/benign/benign_v3.json"])
 def test_frozen_paths_refused(path):
     with pytest.raises(PermissionError):
         runlog.assert_not_frozen(ROOT / path)
 
 
 @pytest.mark.parametrize("path", ["results/v3/exp/run/metrics.json", "results/v2_std/x.csv", "results/REGISTRY.md",
-                                  "data/v3/train.csv", "checkpoints/v3/model.pkl"])
+                                  "data/v4/train.csv", "checkpoints/v3/model.pkl"])
 def test_new_paths_allowed(path):
     runlog.assert_not_frozen(ROOT / path)
 
