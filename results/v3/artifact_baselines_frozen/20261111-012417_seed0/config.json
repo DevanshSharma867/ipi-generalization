@@ -1,0 +1,129 @@
+{
+  "run_id": "20261111-012417_seed0",
+  "version": "v3",
+  "exp": "artifact_baselines_frozen",
+  "seed": 0,
+  "args": {
+    "dataset": "v3",
+    "split_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "data_dir": "data/v3",
+    "eval_split": "test",
+    "n_tokens": 30,
+    "site_tokens": 15,
+    "tfidf": {
+      "analyzer": "word",
+      "ngram_range": [
+        1,
+        3
+      ],
+      "max_features": 50000,
+      "sublinear_tf": true,
+      "min_df": 2,
+      "strip_accents": "unicode",
+      "token_pattern": "\\b\\w+\\b"
+    },
+    "lr": {
+      "C": 1.0,
+      "solver": "lbfgs",
+      "max_iter": 1000,
+      "class_weight": "balanced",
+      "random_state": 42,
+      "n_jobs": -1
+    },
+    "span_features": [
+      "n_words",
+      "n_chars",
+      "ends_q",
+      "ends_dot",
+      "ends_excl",
+      "has_quote",
+      "has_digit",
+      "has_newline_or_code_char",
+      "cap_ratio"
+    ],
+    "gate": 0.6,
+    "gates": [
+      "position_oracle",
+      "first_para_rule",
+      "prefix30_masked_tfidf_lr",
+      "suffix30_masked_tfidf_lr",
+      "insertion_site_tfidf_lr",
+      "length_lr",
+      "span_form_you_lr",
+      "second_person_lr",
+      "boundary_kind_lr"
+    ],
+    "bootstrap": {
+      "B": 1000,
+      "seed": 42
+    }
+  },
+  "git_commit": "57344a65510e94cc2a5aab20b5d60cd9d7093002",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "v3",
+  "data_files_sha256": {
+    "data/v3/split_seed_0/train.csv": "d1e5a3ed6cc76bfb41becc25ca909fc2b49b4031bdd1c1931dbad587578a5048",
+    "data/v3/split_seed_0/test.csv": "51e0aa1e574007cb0016195ad515e5a9f6c75af0c8d3fc7da6383e90c6def248",
+    "data/v3/split_seed_0/manifest.json": "7d4800f65af88056e8d03c85e7c624d0da5136ef91e81f74e98e25ba7314509b",
+    "data/v3/split_seed_1/train.csv": "9c0ad3821ad66d5a643af64388be2ffbf0fb88142d779fb5c07776e4b5e2b8dd",
+    "data/v3/split_seed_1/test.csv": "722d96d92563973e9c6e6c197ecaa2097753e8c5dfea18bc4d18750245c66fbf",
+    "data/v3/split_seed_1/manifest.json": "2ec75fd46331b0b9b36b3ab185dc9768d290d99d26a2e7dcadb58fcddf05a4a4",
+    "data/v3/split_seed_2/train.csv": "c6f1965b96bd746b5e83f67687c98d37175c2be280b1e6531726f378dceac6cf",
+    "data/v3/split_seed_2/test.csv": "3fd267fc8ecfba5514bab11a98f8b64db7704807234afc984cf46a1587bb0ea1",
+    "data/v3/split_seed_2/manifest.json": "b0a802ad45fc27d4e8c32d74f12f0ab1c5397ce4fe704a2306e6b239579444f2",
+    "data/v3/split_seed_3/train.csv": "ad652533fc74662dbf4b898cd156e57639f06b10bc0d87b35994797e825abfe6",
+    "data/v3/split_seed_3/test.csv": "8ae6b3cbfc4960a1246a37713ebf45fffba839409e908c086b5c7080f10c1525",
+    "data/v3/split_seed_3/manifest.json": "da456b3eddf6df3579dfdc45caf48dbe47d544373a2cef6e7dec810ab14c2ef7",
+    "data/v3/split_seed_4/train.csv": "93db7ac0585f36ef6ea3588dff3b36658174cc16203b3e4ccf275970c68efacb",
+    "data/v3/split_seed_4/test.csv": "6b5ce4d24319d29274fb61b784327e9dee4768b707eba591e20511609563faef",
+    "data/v3/split_seed_4/manifest.json": "70b6f2fcb9a34e0cd23b6aa1b05e08276adbb31c7a779e570a0e4a694fc9be4f"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null,
+    "gpu_uuid": null
+  },
+  "argv": [
+    "scripts/artifact_baselines.py",
+    "--dataset",
+    "v3",
+    "--split_seeds",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "--data_dir",
+    "data/v3",
+    "--data_version",
+    "v3",
+    "--exp",
+    "artifact_baselines_frozen"
+  ],
+  "started": "2026-11-11T01:24:17"
+}
