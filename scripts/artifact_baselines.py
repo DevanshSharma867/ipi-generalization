@@ -223,7 +223,7 @@ def main():
     seeds = a.split_seeds or [a.split_seed]
     loaded = {s: load(a.dataset, a.data_dir, s, a.eval_split) for s in (seeds if a.dataset == "v3" else [None])}
     files = [f for v in loaded.values() for f in v[2]]
-    dname = Path(a.data_dir).name  # agent data keeps its own results folder; every other v3 build goes to results/v3
+dname = Path(a.data_dir).name  # agent data keeps its own results folder; every other v3 build goes to results/v3
 version = "v2_probes" if a.dataset == "v2" else dname if dname.startswith("agent_") else "v3"
     run = start_run(version=version, exp=a.exp, seed=42 if a.dataset == "v2" else seeds[0],
                     args={"dataset": a.dataset, "split_seeds": seeds if a.dataset == "v3" else None,
