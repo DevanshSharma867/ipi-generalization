@@ -9,7 +9,11 @@
 #        ABLATION=full TRAIN_PAIRS=... VAL_PAIRS=... sbatch jobs/ict_train.sh
 #        ABLATION=a VAL_PAIRS=... sbatch jobs/ict_train.sh
 # VAL_PAIRS: held-out TRAIN-side pairs on val docs (selection), never EVAL pairs. AGENT_DIR defaults to
-# data/agent_v1/split_seed_<SPLIT> (src/agent_pipeline.py); AGENT_PAIRS is optional.
+# data/agent_v2/split_seed_<SPLIT> (src/agent_pipeline.py; agent_v2 is the set cleared for ICT training, deviations
+# 2026-10-31); AGENT_PAIRS is optional.
+# Ablation (a) (A23: V3 + agent-style rows, no pairs, no margin, so no request swap) needs no TRAIN_PAIRS but still
+# needs VAL_PAIRS and configs/ict_hparams.json (both from steps 1-2). Prepared, not submitted:
+#        ABLATION=a VAL_PAIRS=<val pairs .jsonl> sbatch jobs/ict_train.sh
 # Prerequisites: frozen V3 split, agent-style data, TRAIN pairs, the backbone in HF_HOME at its pin.
 # Resumable: state.pt under checkpoints/ict/<exp>/ is picked up by a resubmit; a task whose run already finished
 # cleanly is skipped. Time is a placeholder until a 1-seed timing run (ModernBERT-large needs more).
@@ -37,7 +41,7 @@ ABLATION=${ABLATION:-full}
 BACKBONE=${BACKBONE:-deberta-v3-base}
 SPLIT=${SPLIT:-0}
 SPLIT_DIR=data/v3/split_seed_$SPLIT
-AGENT_DIR=${AGENT_DIR:-data/agent_v1/split_seed_$SPLIT}
+AGENT_DIR=${AGENT_DIR:-data/agent_v2/split_seed_$SPLIT}
 TASK=${SLURM_ARRAY_TASK_ID:-0}
 if [ -n "${GRID:-}" ]; then
   SEED=0; GRID_INDEX=$TASK; EXP=ict_grid; ABLATION=full
