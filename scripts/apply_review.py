@@ -9,6 +9,12 @@ The hand-review sheet review/benign_pool_review.csv (make_review_sheet.py) is al
 benign | ambiguous | drop, and a changed `text` cell is an edit. An item relabelled benign -> ambiguous moves to the
 ambiguous slice; ambiguous -> benign goes to the test pool if int(sha256(id)) % 3 == 0, else train_val
 (deterministic, never reviewer-chosen).
+The external full review (2026-11-10, docs/deviations.md) fills the same sheet with reviewer_label keep | edit | drop
+and puts edited text in reviewer_note:
+  - proposed benign: keep / drop as labelled; edit -> reviewer_note replaces the whole text, except in the code
+    register, where it replaces only the lead-in line before the code block (the code is kept unchanged);
+  - proposed ambiguous: "drop" means "model-directed, not human-addressed", i.e. it CONFIRMS the item for the
+    ambiguous eval slice (kept there, never added to the benign pool). Any other label on an ambiguous item fails.
 Every draft item must be reviewed (pass --allow_unreviewed to drop unreviewed items instead of failing).
 form_tags are recomputed; the output records the sha256 of the draft and of the review CSV.
 
@@ -52,6 +58,45 @@ def from_pool_review(rows, draft_items):
         elif lab == "benign" and pool == "ambiguous":
             pool = "test" if int(hashlib.sha256(i.encode()).hexdigest(), 16) % 3 == 0 else "train_val"
         out.append({"id": i, "keep_edit_drop": d, "edited_text": text if d == "edit" else "", "split_pool": pool})
+    return out, problems
+
+
+def from_external_review(rows, draft_items):
+    """keep/edit/drop sheet (external full review) -> rows in the review_sheet schema, or a list of problems."""
+    by_id = {it["id"]: it for it in draft_items}
+    out, problems = [], []
+    for r in rows:
+        i, lab, note = r["id"], (r.get("reviewer_label") or "").strip().lower(), (r.get("reviewer_note") or "").strip()
+        if i not in by_id:
+            problems.append(f"{i}: not in the draft")
+            continue
+        it = by_id[i]
+        if r.get("text", "") != it["text"]:
+            problems.append(f"{i}: text cell differs from the draft (edits go in reviewer_note)")
+            continue
+        if it["split_pool"] == "ambiguous":
+            if lab != "drop":
+                problems.append(f"{i}: ambiguous item labelled {lab!r} (only 'drop' = confirmed ambiguous is defined)")
+                continue
+            out.append({"id": i, "keep_edit_drop": "keep", "edited_text": "", "split_pool": "ambiguous"})
+            continue
+        if lab not in ("keep", "edit", "drop"):
+            problems.append(f"{i}: reviewer_label {lab!r} (expected keep/edit/drop)")
+            continue
+        text = ""
+        if lab == "edit":
+            if not note:
+                problems.append(f"{i}: edit without reviewer_note")
+                continue
+            if it["register"] == "code":
+                head, sep, code = it["text"].partition("\n```")
+                if not sep:
+                    problems.append(f"{i}: code item without a code block")
+                    continue
+                text = note + sep + code
+            else:
+                text = note
+        out.append({"id": i, "keep_edit_drop": lab, "edited_text": text, "split_pool": it["split_pool"]})
     return out, problems
 
 
@@ -100,7 +145,9 @@ def main():
     draft = json.load(open(a.draft))["items"]
     problems = []
     if rows and "reviewer_label" in rows[0]:
-        rows, problems = from_pool_review(rows, draft)
+        labels = {(r.get("reviewer_label") or "").strip().lower() for r in rows}
+        conv = from_external_review if labels & {"keep", "edit"} else from_pool_review
+        rows, problems = conv(rows, draft)
     items, more = apply(rows, draft, a.allow_unreviewed)
     problems += more
     if problems:
