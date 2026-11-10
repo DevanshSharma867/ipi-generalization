@@ -39,7 +39,8 @@ LIU_COMMIT = "5d0ae7c438a7b01be2ac0a2e8bc943e45c8f851f"
 # Liu's set keys (score_many.SETS) for the rebuilt files in data/transfer/sets
 SETS = {"general": "corpus.jsonl", "adclean": "agentdojo_benign_outputs.jsonl", "admatched": "agentdojo_pairs.jsonl",
         "adshift": "agentdojo_pairs_shift.jsonl", "bipia": "bipia_pairs.jsonl", "tbeval": "taubench_eval.jsonl",
-        "tbclean": "taubench_clean.jsonl", "calpool": "calibration_pool.jsonl"}  # last two: sets_adliu.py
+        "tbclean": "taubench_clean.jsonl", "calpool": "calibration_pool.jsonl",  # last two: sets_adliu.py
+        "v3all": "v3_all.jsonl"}  # scripts/v3_detector_sets.py (paper_plan A30)
 # Sheltron input variants (Liu scores them as separate detectors on one model)
 SHELTRON = {"sheltron": "plain", "sheltron-taskaware": "task", "sheltron-generic": "generic"}
 BS = 16

@@ -34,6 +34,7 @@ def main():
     ap.add_argument("--sets", nargs="+", required=True)
     ap.add_argument("--scorer_py", required=True)
     ap.add_argument("--note", default="")
+    ap.add_argument("--version", default="transfer", help="results/<version>/<exp> (v3 for the V3 detector scores)")
     ap.add_argument("--allow-dirty", dest="allow_dirty", action="store_true")
     a = ap.parse_args()
     reg, manifest = load_registry(), a.sets_dir / "manifest.json"
@@ -42,7 +43,7 @@ def main():
     if missing:
         sys.exit(f"missing score files: {missing}")
     env = env_versions(a.scorer_py)
-    run = start_run(version="transfer", exp=a.exp, seed=0,
+    run = start_run(version=a.version, exp=a.exp, seed=0,
                     args={"detectors": a.detectors, "sets": a.sets, "sets_dir": a.sets_dir.name,
                           "out": "<scratch>/" + a.out.name, "note": a.note,
                           "revisions": {d: reg[d]["revision"] for d in a.detectors},

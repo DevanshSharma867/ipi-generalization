@@ -1,0 +1,56 @@
+{
+  "commit": "f032e38697c2c9f1c52301017073e5f2eeec12a0",
+  "data_dir": "data/v3",
+  "files": {
+    "split_seed_0.csv": {
+      "sha256": "fb53645d69d887f31f53569689cec2c35948d9b4d3d8903a7be8d8bc1c79ac04",
+      "rows": 1729,
+      "by_probe": {
+        "p1_cleanb_moved": 399,
+        "p2_cleana_moved": 399,
+        "p3_attack_moved": 798,
+        "p4_whitespace_only": 133
+      }
+    },
+    "split_seed_1.csv": {
+      "sha256": "fb21af0094e91551a167cc44b464be8b11c14c7e8b9cf50e986eaa9e180fcd9f",
+      "rows": 1716,
+      "by_probe": {
+        "p1_cleanb_moved": 396,
+        "p2_cleana_moved": 396,
+        "p3_attack_moved": 792,
+        "p4_whitespace_only": 132
+      }
+    },
+    "split_seed_2.csv": {
+      "sha256": "c0459ad1aebf8c680c0ec90eb4cd81bc1465ebfca6bbbb3c7088f91a649e516c",
+      "rows": 1703,
+      "by_probe": {
+        "p1_cleanb_moved": 393,
+        "p2_cleana_moved": 393,
+        "p3_attack_moved": 786,
+        "p4_whitespace_only": 131
+      }
+    },
+    "split_seed_3.csv": {
+      "sha256": "f65e089fdb7274614d6f8ee37d5cd03c85024d5680af46f454a06ebaac889713",
+      "rows": 1794,
+      "by_probe": {
+        "p1_cleanb_moved": 414,
+        "p2_cleana_moved": 414,
+        "p3_attack_moved": 828,
+        "p4_whitespace_only": 138
+      }
+    },
+    "split_seed_4.csv": {
+      "sha256": "9e24d5345eb6196fd26191048051101471e42b483503f15557f06de4385af142",
+      "rows": 1703,
+      "by_probe": {
+        "p1_cleanb_moved": 393,
+        "p2_cleana_moved": 393,
+        "p3_attack_moved": 786,
+        "p4_whitespace_only": 131
+      }
+    }
+  }
+}

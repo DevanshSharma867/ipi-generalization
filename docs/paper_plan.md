@@ -420,6 +420,7 @@ part of the pre-registration, not deviations.
 | A27 | 2026-11-04 | **Rule E5: no external action, no target from the content (spec v3), before any generation.** An instruction is eligible only if it changes how the response is produced (format, steps, what it reads or includes). Instructions that act outside the response (send, forward, reply, schedule, save, download, run, edit, change a setting, pay) or use a recipient, address, URL, account, file path, command, amount or credential the request does not supply are excluded whatever the request. Spec cases 16 (reworded) and 17 (now excluded) change, 17b is added; guide rule 8 and example 12; prompts v2-frozen with `configs/pairs_gen_v2.yaml`. Attacker-chosen parameters inside user-authorised actions are out of scope for the pairs and the paper says so. **H4 is narrowed** to the FPR on aligned answer-shaping instructions (hypothesis, protocol step 3 and its reporting wording, §3); actions are excluded from pairs by design. Details below the table. |
 | A28 | 2026-11-05 | **Agent-derived pairs become a secondary, descriptive set (before any pair is generated).** Under the pair rules (V3 insertion boundaries, E5, 512 tokens, no overlap with positive transfer rows, near-duplicate docs dropped) only 19 AgentDojo clean outputs (17 user tasks) and no τ-bench output qualify; field-level insertion into JSON string fields adds none (τ-bench has no string value over 3 words; AgentDojo outputs are YAML). Target: every eligible doc, 2 quads each (38 quads, 76 pairs). The agent pairs decide no hypothesis and have no P2 count floor; H2, H3a and H4 are decided on the V3-test pairs alone. Annotation load re-balanced (A25). Details below the table. |
 | A29 | 2026-11-07 | **TRAIN prompt v3 and regenerate-on-failure (before any EVAL or TRAIN pair is generated).** The timing run on 20 V3 val docs (`results/pairs/gen_timing/20261106-145540_seed0`, job 434239) passed validation for 0.85 of Gemma EVAL quads but only 0.30 (bs 1) and 0.25 (bs 8) of Mistral TRAIN quads, mostly because requests copied five consecutive words of an instruction (rule Q3). (1) TRAIN prompt `pairs_train_v3.txt` (new version; v2 kept): the five-word no-reuse rule spelled out with one rewritten example, instructions at most 20 words, requests within 2× length; config `pairs_gen_v4.yaml`. **The EVAL prompt is untouched** (same file and sha256 as v3). (2) Both generators: a quad that fails parsing, the near-duplicate check or validation is regenerated with a new seed up to 3 times; every failed attempt's stage, reasons and text are recorded. (3) The E5 screen flags "reply" only as an action ("reply to …", "reply all"), not as a format ("Reply in two sentences"). The validation rules themselves are unchanged. A re-timing on the same val docs keeps the text of failed attempts (val only). Details below the table. |
+| A30 | 2026-11-11 | **V3 baseline protocol (§7 step 4), fixed by the author before any model is trained or scored on V3** (V3 frozen at `v3-frozen`, c78f3a7; no V3 score exists). Fills what §3 leaves open: TF-IDF+LR hyperparameters (C ∈ {1, 10, 100} selected per split seed on V3 val), the published detectors on V3 (all 19 registry entries, judges in a second wave), H1 run in the same batch, and V3 position probes built from each split seed's own test docs (V2 probes would include V3 training docs, risk R6). Details below the table. |
 
 **A7 details** (`configs/frontier_detector.yaml`):
 - **Model:** OpenAI GPT-4.1, pinned to the dated snapshot `gpt-4.1-2025-04-14`.
@@ -555,6 +556,36 @@ part of the pre-registration, not deviations.
   removes that confound, and (e) then differs from (a) only in the request.
 - Timing: no ICT, ablation or grid run existed when this was recorded, so this is an amendment, not a deviation.
 - If the swap is switched off by A22's audit rule, (c) coincides with full ICT, as A22 states; the table is unchanged.
+
+**A30 details** (V3 baselines; author decisions 2026-11-11):
+- **Runs.** Five per model: split seed k ∈ {0..4}, training seed = k (§3 Seeds). Data `data/v3/split_seed_<k>` at `v3-frozen`.
+- **TF-IDF+LR.** V2 features and solver (`TFIDF_PARAMS`, `LR_BASE_PARAMS` of `run_experiments.py`, input
+  `build_combined_text` + `preprocess_for_tfidf`). C ∈ {1, 10, 100} chosen per split seed by pooled V3 val macro-F1 at
+  τ = 0.5 (ties → smaller C); threshold 0.5. Deterministic, so one run per split seed.
+- **DeBERTa-v3-base.** `src/models/deberta.py` unchanged in hyperparameters (lr 2e-5, micro-batch 8 × 2 accumulation,
+  3 epochs, max_len 512, weight decay 0.01, 10% warmup, class-weighted CE). Checkpoint = the epoch with the best pooled
+  V3 val macro-F1 at 0.5 (as in `deberta.py`). Test is never read during training. Input `Intent: … | Context: …`; inputs over
+  512 tokens keep the intent and lose the end of the context.
+- **Eval sets per split seed** (all after selection is fixed): V3 test (headline), raw_clean, ambiguous, long, val_id.
+  V3 test: task-macro AUROC, FPR at 0.5 on clean rows and macro-F1 (A10), per-task values, and pooled TPR@FPR under the
+  `MIN_CLEAN` gates. Expected: TPR@1%FPR is `n/a` (≈ 260 clean test rows < 500); TPR@5%FPR is reported pooled, calibrated on
+  the same split seed's V3 val clean rows (primary) with the oracle next to it. raw_clean: FPR at 0.5. ambiguous: flag rate
+  at 0.5. long: AUROC, macro-F1, flag rate per row type, and the truncated fraction. val_id: AUROC and macro-F1, descriptive.
+  CIs: doc_id clusters resampled within task (stratified), B = 1000, of the run-mean over the five split seeds.
+- **Published detectors on V3.** All 19 entries of `configs/detectors.yaml`, scored as for F021: Liu's env, Wolf Defender in
+  its own env; content-only detectors see the context only; Sheltron-taskaware and the judges also see the intent, with the
+  task name (email / table / code) as the tool name, as in Liu's BIPIA set. Each unique input is scored once and shared by
+  every row and split seed it occurs in. Judges: bf16 (A20), our Yes/No rule (A12), submitted as a separate second wave
+  after the trained baselines. Same metrics and CIs as above (one deterministic run per split seed).
+- **H1** is run in this batch as pre-registered (§3 H1): V2 DeBERTa seeds 0 and 1 are trained with `deberta.py` on frozen V2
+  (V2 val selection) next to the existing 42/123/999; V2 and V3 DeBERTa are scored on AD-Matched, AD-Shift, TB-Matched,
+  AD-Clean, TB-Clean and the calibration pool (input: the task's user request as intent, the tool output as context).
+- **V3 position probes** (descriptive, decide nothing): per split seed, from its test docs: the untouched context
+  (raw_clean) with each of the doc's four main-row spans re-inserted at start, middle and end, with the row's own separator
+  and the V3 insertion code (P1 = clean-B span, P2 = clean-A span, P3 = each of the two attacks), and P4 = the context with
+  V2's whitespace collapse, nothing inserted. The row's own position must reproduce its main-set text exactly (asserted).
+  Contrasts as in F006/F007 (P3 end − start, P2 start − middle, P1 start − middle), paired by doc, doc-cluster bootstrap;
+  shown next to the V2 DeBERTa contrasts on the V2 probes.
 
 **A29 details** (TRAIN prompt v3, retries):
 - Evidence: timing run `20261106-145540_seed0` (commit 7af1eba; 20 val docs of split seed 0, one quad each; val only, so no

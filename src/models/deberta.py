@@ -60,7 +60,7 @@ from sklearn.metrics import (
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from preprocess import get_deberta_data, build_combined_text
+from preprocess import get_deberta_data, build_combined_text, load_split
 from metrics import legacy_metrics
 
 
@@ -243,8 +243,14 @@ def train(
     test_task: Optional[str] = None,
     train_subsample: Optional[int] = None,
     verbose: bool = True,
+    skip_test: bool = False,
+    resume: bool = False,
 ) -> Tuple[Any, Any, Dict[str, float]]:
-    """Fine-tune DeBERTa for IPI binary classification with dynamic padding and grad accumulation."""
+    """Fine-tune DeBERTa for IPI binary classification with dynamic padding and grad accumulation.
+
+    skip_test: never read test.csv (V3 runs: test is scored separately after selection, scripts/score_baselines.py).
+    resume: training state (model, optimizer, scheduler, RNG, best-so-far) is saved to <output_dir>/state.pt after each
+    epoch; with resume=True a run restarts from it (same result as an uninterrupted run). Hyperparameters unchanged."""
     set_all_seeds(seed)
 
     model_path = resolve_model_name_or_path(model_name)
@@ -277,7 +283,11 @@ def train(
     # Load data
     if verbose:
         print(f"Loading datasets from {data_dir}...")
-    train_df, val_df, test_df = get_deberta_data(data_dir)
+    if skip_test:
+        train_df, val_df = load_split(data_dir, "train"), load_split(data_dir, "val")
+        test_df = val_df.iloc[:0]
+    else:
+        train_df, val_df, test_df = get_deberta_data(data_dir)
 
     # Apply LOTO task filtering if specified
     if test_task:
@@ -326,8 +336,25 @@ def train(
 
     best_val_f1 = -1.0
     best_metrics = {}
+    start_epoch = 1
+    state_path = os.path.join(output_dir, "state.pt")
+    if resume and os.path.exists(state_path):
+        st = torch.load(state_path, map_location="cpu", weights_only=False)
+        model.load_state_dict(st["model"])
+        optimizer.load_state_dict(st["optimizer"])
+        scheduler.load_state_dict(st["scheduler"])
+        torch.set_rng_state(st["rng_torch"])
+        if torch.cuda.is_available() and st.get("rng_cuda") is not None:
+            torch.cuda.set_rng_state_all(st["rng_cuda"])
+        if st.get("rng_mps") is not None:
+            torch.mps.set_rng_state(st["rng_mps"])
+        np.random.set_state(st["rng_numpy"])
+        random.setstate(st["rng_python"])
+        best_val_f1, best_metrics, start_epoch = st["best_val_f1"], st["best_metrics"], st["epoch"] + 1
+        if verbose:
+            print(f"Resumed from {state_path}: epoch {st['epoch']} done, best val F1 macro {best_val_f1:.4f}")
 
-    for epoch in range(1, num_epochs + 1):
+    for epoch in range(start_epoch, num_epochs + 1):
         model.train()
         epoch_loss = 0.0
         start = time.time()
@@ -380,6 +407,22 @@ def train(
             save_split_predictions_csv(val_df, val_preds, val_probs, os.path.join(output_dir, "val_predictions.csv"))
             if verbose:
                 print(f"  ✓ New best val F1 macro: {best_val_f1:.4f} → Saved to {output_dir}")
+        if resume:
+            tmp = state_path + ".tmp"
+            torch.save({"model": model.state_dict(), "optimizer": optimizer.state_dict(),
+                        "scheduler": scheduler.state_dict(), "rng_torch": torch.get_rng_state(),
+                        "rng_cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
+                        "rng_mps": torch.mps.get_rng_state() if device.type == "mps" else None,
+                        "rng_numpy": np.random.get_state(), "rng_python": random.getstate(),
+                        "best_val_f1": best_val_f1, "best_metrics": best_metrics, "epoch": epoch}, tmp)
+            os.replace(tmp, state_path)
+
+    if skip_test:
+        with open(os.path.join(output_dir, "metrics.json"), "w") as f:
+            json.dump(best_metrics, f, indent=2)
+        if resume and os.path.exists(state_path):
+            os.remove(state_path)  # the best checkpoint is saved; the optimizer state is no longer needed
+        return None, tokenizer, best_metrics
 
     # Evaluate best model on test set
     if verbose:
@@ -498,6 +541,13 @@ def main():
     parser.add_argument("--text", type=str, default="", help="Text for --mode predict")
     parser.add_argument("--intent", type=str, default="", help="User intent for --mode predict")
     parser.add_argument("--output", default=None, help="Path to save summary JSON")
+    parser.add_argument("--run_exp", default=None,
+                        help="log the run with src/runlog.py as results/<run_version>/<run_exp>/; the run resumes "
+                             "from <output_dir>/state.pt if present")
+    parser.add_argument("--run_version", default="v3")
+    parser.add_argument("--data_version", default=None)
+    parser.add_argument("--skip_test", action="store_true", help="never read test.csv (scored after selection)")
+    parser.add_argument("--allow-dirty", dest="allow_dirty", action="store_true")
     args = parser.parse_args()
 
     # Determine output directory
@@ -514,6 +564,22 @@ def main():
 
     os.makedirs(out_dir, exist_ok=True)
     os.makedirs("results", exist_ok=True)
+
+    if args.mode == "train" and args.run_exp:
+        from runlog import start_run
+        files = [os.path.join(args.data_dir, f"{s}.csv") for s in ("train", "val")]
+        run = start_run(version=args.run_version, exp=args.run_exp, seed=args.seed,
+                        args={**vars(args), "output_dir": out_dir, "max_length": 512, "weight_decay": 0.01,
+                              "warmup_frac": 0.1, "selection": "best pooled val macro-F1 at 0.5 over epochs"},
+                        data_version=args.data_version or args.data_dir, data_files=files,
+                        allow_dirty=args.allow_dirty)
+        _, _, metrics = train(data_dir=args.data_dir, output_dir=out_dir, model_name=args.model_name,
+                              num_epochs=args.epochs, batch_size=args.batch_size,
+                              grad_accum_steps=args.grad_accum_steps, learning_rate=args.lr, seed=args.seed,
+                              skip_test=args.skip_test, resume=True)
+        run.save_metrics({**metrics, "checkpoint": out_dir}, headline=("val_f1_macro", metrics["val_f1_macro"]))
+        run.finish()
+        return
 
     if args.mode == "train":
         epochs = 1 if args.quick else args.epochs
