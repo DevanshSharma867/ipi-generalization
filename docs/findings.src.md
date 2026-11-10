@@ -1101,3 +1101,100 @@ or the whole input (LLM judges). Table: `paper/tables/transfer_truncation.tex`.
 - Not tested: whether the dropped tokens contain the injection (position-dependent), so the effect on TPR is not
   measured here; truncation on clean rows can also move FPR either way.
 
+## F024. V3 frozen build: content-free gates (split seeds 0–4, reviewed benign pool)
+
+```finding
+id: F024
+status: full
+script: scripts/artifact_baselines.py --dataset v3 --split_seeds 0 1 2 3 4
+commit: 57344a6
+seeds: split_seeds 0-4 (one build each); probes deterministic; bootstrap B=1000 seed 42
+data_version: v3 (tag v3-frozen; data/v3 committed at 57344a6; built by src/data_pipeline_v3.py, last changed at 4cdae64, from data/benign/benign_v3.json, externally reviewed)
+eval_set: v3 test split of each split seed (rows with an inserted span); probes trained on the same seed's train split
+threshold_protocol: default tau=0.50 (learned probes); fixed rule; gate = macro-F1 <= 0.60
+date: '2026-11-11'
+source: results/v3/artifact_baselines_frozen/20261111-012417_seed0
+cluster: doc_id
+macros:
+- VThreeFrozenGate*
+- VThreeFrozenGates*
+- VThreeFrozenPositionOracle*
+- VThreeFrozenFirstParaRule*
+- VThreeFrozenPrefixThreeZero*
+- VThreeFrozenSuffixThreeZero*
+- VThreeFrozenInsertionSite*
+- VThreeFrozenLength*
+- VThreeFrozenSpanForm*
+- VThreeFrozenSecondPerson*
+- VThreeFrozenBoundaryKind*
+- VThreeFrozenSpanContent*
+```
+
+Part of claim C1/C2 (V3 removes the V2 construction artifacts). Gates of the frozen V3 build (`data/v3`, tag
+`v3-frozen`), built from the benign pool after the external full review (docs/deviations.md, 2026-11-11). Supersedes
+F013 (draft pool) for every use. Gate rule (v3_design §8, decision R2): pass = pooled macro-F1 ≤
+{{VThreeFrozenGateThreshold}} on every split seed **and** per-task mean over seeds ≤ {{VThreeFrozenGateThreshold}}.
+Overall: {{VThreeFrozenGatesStatus}}. Rows marked "diag" are reported diagnostics, not gates (decision R1). Full table:
+`paper/tables/v3_frozen_gates.tex`. The same build in a scratch folder before the freeze
+(`results/v3/artifact_baselines_reviewed/20261111-004117_seed0`, same commit of the builder, byte-identical CSVs) gave
+identical metrics and predictions; only the `eval_set` label differs (`v3_reviewed_test`).
+
+| Probe | What it uses | Pooled macro-F1, range over seeds | EmailQA mean | TableQA mean | CodeQA mean | Gate |
+|---|---|---|---|---|---|---|
+| position_oracle | LR on position, separator, boundary_kind, relative offset | {{VThreeFrozenPositionOraclePooledMin}}–{{VThreeFrozenPositionOraclePooledMax}} | {{VThreeFrozenPositionOracleTaskMeanEmail}} | {{VThreeFrozenPositionOracleTaskMeanTable}} | {{VThreeFrozenPositionOracleTaskMeanCode}} | {{VThreeFrozenPositionOracleStatus}} |
+| first_para_rule | first paragraph ≤ 30 words → injected; untrained | {{VThreeFrozenFirstParaRulePooledMin}}–{{VThreeFrozenFirstParaRulePooledMax}} | {{VThreeFrozenFirstParaRuleTaskMeanEmail}} | {{VThreeFrozenFirstParaRuleTaskMeanTable}} | {{VThreeFrozenFirstParaRuleTaskMeanCode}} | {{VThreeFrozenFirstParaRuleStatus}} |
+| prefix30_masked_tfidf_lr | first 30 words, span removed | {{VThreeFrozenPrefixThreeZeroMaskedTfidfLrPooledMin}}–{{VThreeFrozenPrefixThreeZeroMaskedTfidfLrPooledMax}} | {{VThreeFrozenPrefixThreeZeroMaskedTfidfLrTaskMeanEmail}} | {{VThreeFrozenPrefixThreeZeroMaskedTfidfLrTaskMeanTable}} | {{VThreeFrozenPrefixThreeZeroMaskedTfidfLrTaskMeanCode}} | {{VThreeFrozenPrefixThreeZeroMaskedTfidfLrStatus}} |
+| suffix30_masked_tfidf_lr | last 30 words, span removed | {{VThreeFrozenSuffixThreeZeroMaskedTfidfLrPooledMin}}–{{VThreeFrozenSuffixThreeZeroMaskedTfidfLrPooledMax}} | {{VThreeFrozenSuffixThreeZeroMaskedTfidfLrTaskMeanEmail}} | {{VThreeFrozenSuffixThreeZeroMaskedTfidfLrTaskMeanTable}} | {{VThreeFrozenSuffixThreeZeroMaskedTfidfLrTaskMeanCode}} | {{VThreeFrozenSuffixThreeZeroMaskedTfidfLrStatus}} |
+| insertion_site_tfidf_lr | ~15 tokens each side of the insertion point, span removed | {{VThreeFrozenInsertionSiteTfidfLrPooledMin}}–{{VThreeFrozenInsertionSiteTfidfLrPooledMax}} | {{VThreeFrozenInsertionSiteTfidfLrTaskMeanEmail}} | {{VThreeFrozenInsertionSiteTfidfLrTaskMeanTable}} | {{VThreeFrozenInsertionSiteTfidfLrTaskMeanCode}} | {{VThreeFrozenInsertionSiteTfidfLrStatus}} |
+| length_lr | chars, words, tokens of the full input | {{VThreeFrozenLengthLrPooledMin}}–{{VThreeFrozenLengthLrPooledMax}} | {{VThreeFrozenLengthLrTaskMeanEmail}} | {{VThreeFrozenLengthLrTaskMeanTable}} | {{VThreeFrozenLengthLrTaskMeanCode}} | {{VThreeFrozenLengthLrStatus}} |
+| span_form_you_lr | span-form features + contains you/your | {{VThreeFrozenSpanFormYouLrPooledMin}}–{{VThreeFrozenSpanFormYouLrPooledMax}} | {{VThreeFrozenSpanFormYouLrTaskMeanEmail}} | {{VThreeFrozenSpanFormYouLrTaskMeanTable}} | {{VThreeFrozenSpanFormYouLrTaskMeanCode}} | {{VThreeFrozenSpanFormYouLrStatus}} |
+| second_person_lr | contains you/your only | {{VThreeFrozenSecondPersonLrPooledMin}}–{{VThreeFrozenSecondPersonLrPooledMax}} | {{VThreeFrozenSecondPersonLrTaskMeanEmail}} | {{VThreeFrozenSecondPersonLrTaskMeanTable}} | {{VThreeFrozenSecondPersonLrTaskMeanCode}} | {{VThreeFrozenSecondPersonLrStatus}} |
+| boundary_kind_lr | boundary kind only | {{VThreeFrozenBoundaryKindLrPooledMin}}–{{VThreeFrozenBoundaryKindLrPooledMax}} | {{VThreeFrozenBoundaryKindLrTaskMeanEmail}} | {{VThreeFrozenBoundaryKindLrTaskMeanTable}} | {{VThreeFrozenBoundaryKindLrTaskMeanCode}} | {{VThreeFrozenBoundaryKindLrStatus}} |
+| prefix30_tfidf_lr | first 30 words, unmasked (diagnostic) | {{VThreeFrozenPrefixThreeZeroTfidfLrPooledMin}}–{{VThreeFrozenPrefixThreeZeroTfidfLrPooledMax}} | {{VThreeFrozenPrefixThreeZeroTfidfLrTaskMeanEmail}} | {{VThreeFrozenPrefixThreeZeroTfidfLrTaskMeanTable}} | {{VThreeFrozenPrefixThreeZeroTfidfLrTaskMeanCode}} | {{VThreeFrozenPrefixThreeZeroTfidfLrStatus}} |
+| suffix30_tfidf_lr | last 30 words, unmasked (diagnostic) | {{VThreeFrozenSuffixThreeZeroTfidfLrPooledMin}}–{{VThreeFrozenSuffixThreeZeroTfidfLrPooledMax}} | {{VThreeFrozenSuffixThreeZeroTfidfLrTaskMeanEmail}} | {{VThreeFrozenSuffixThreeZeroTfidfLrTaskMeanTable}} | {{VThreeFrozenSuffixThreeZeroTfidfLrTaskMeanCode}} | {{VThreeFrozenSuffixThreeZeroTfidfLrStatus}} |
+| span_content_tfidf | inserted span text (content ceiling; diagnostic) | {{VThreeFrozenSpanContentTfidfPooledMin}}–{{VThreeFrozenSpanContentTfidfPooledMax}} | {{VThreeFrozenSpanContentTfidfTaskMeanEmail}} | {{VThreeFrozenSpanContentTfidfTaskMeanTable}} | {{VThreeFrozenSpanContentTfidfTaskMeanCode}} | {{VThreeFrozenSpanContentTfidfStatus}} |
+| span_form_lr | 9 span-form features, no you/your (diagnostic) | {{VThreeFrozenSpanFormLrPooledMin}}–{{VThreeFrozenSpanFormLrPooledMax}} | {{VThreeFrozenSpanFormLrTaskMeanEmail}} | {{VThreeFrozenSpanFormLrTaskMeanTable}} | {{VThreeFrozenSpanFormLrTaskMeanCode}} | {{VThreeFrozenSpanFormLrStatus}} |
+
+- The content ceiling `span_content_tfidf` (span text alone) is high on CodeQA (per-task mean
+  {{VThreeFrozenSpanContentTfidfTaskMeanCode}}): code attacks and benign code items remain lexically separable
+  (the attack-indicative tokens in the form report include `server`, `smtp`, `psutil`, `gmail`). This is content,
+  not a construction artifact, but code results measure a lexically easy task.
+- Unmasked prefix-30 and suffix-30 diagnostics exceed 0.60 on some seeds or tasks. They see the inserted span
+  itself, so they are content probes, not content-free gates; the span-masked versions sit at 0.3333 (constant
+  prediction) on every seed.
+
+## F025. V3 frozen build: integrity checks (split seeds 0–4, reviewed benign pool)
+
+```finding
+id: F025
+status: full
+script: scripts/v3_integrity.py --split_seeds 0 1 2 3 4
+commit: 57344a6
+seeds: split_seeds 0-4
+data_version: v3 (tag v3-frozen; data/v3 committed at 57344a6; built by src/data_pipeline_v3.py, last changed at 4cdae64, from data/benign/benign_v3.json, externally reviewed)
+eval_set: all written CSVs of each split seed (train/val/test, val_id, raw_clean, ambiguous, long)
+threshold_protocol: n/a (assertions)
+date: '2026-11-11'
+source: results/v3/integrity_frozen/20261111-014556_seed0
+macros:
+- VThreeFrozenIntegrity*
+```
+
+Frozen V3 build (`data/v3`, tag `v3-frozen`); supersedes F014. Identical to the scratch pre-freeze run `results/v3/integrity_reviewed/20261111-010256_seed0`. Independent re-read of the written CSVs: doc_id, exact text, near-duplicate component, attack string, benign item
+and donor text disjoint across train/val/test; train/val attack categories disjoint; test attacks only from the test
+files; donor docs from the same task and split; ambiguous items never used as clean A; exact 1:1 balance per
+task × split; 4 rows (2 injected) per doc; eval-slice rows belong to their split's docs; ≤ 512 DeBERTa-v3 tokens
+per main, val_id, raw_clean and ambiguous row (re-tokenized; the stored count matches); every span recoverable from
+its offset. Overall: {{VThreeFrozenIntegrityStatus}}.
+
+| Split seed | Integrity | Main rows | val_id | raw_clean | ambiguous | long |
+|---|---|---|---|---|---|---|
+| 0 | {{VThreeFrozenIntegritySeedZeroStatus}} | {{VThreeFrozenIntegritySeedZeroRowsMain}} | {{VThreeFrozenIntegritySeedZeroRowsValId}} | {{VThreeFrozenIntegritySeedZeroRowsRawClean}} | {{VThreeFrozenIntegritySeedZeroRowsAmbiguous}} | {{VThreeFrozenIntegritySeedZeroRowsLong}} |
+| 1 | {{VThreeFrozenIntegritySeedOneStatus}} | {{VThreeFrozenIntegritySeedOneRowsMain}} | {{VThreeFrozenIntegritySeedOneRowsValId}} | {{VThreeFrozenIntegritySeedOneRowsRawClean}} | {{VThreeFrozenIntegritySeedOneRowsAmbiguous}} | {{VThreeFrozenIntegritySeedOneRowsLong}} |
+| 2 | {{VThreeFrozenIntegritySeedTwoStatus}} | {{VThreeFrozenIntegritySeedTwoRowsMain}} | {{VThreeFrozenIntegritySeedTwoRowsValId}} | {{VThreeFrozenIntegritySeedTwoRowsRawClean}} | {{VThreeFrozenIntegritySeedTwoRowsAmbiguous}} | {{VThreeFrozenIntegritySeedTwoRowsLong}} |
+| 3 | {{VThreeFrozenIntegritySeedThreeStatus}} | {{VThreeFrozenIntegritySeedThreeRowsMain}} | {{VThreeFrozenIntegritySeedThreeRowsValId}} | {{VThreeFrozenIntegritySeedThreeRowsRawClean}} | {{VThreeFrozenIntegritySeedThreeRowsAmbiguous}} | {{VThreeFrozenIntegritySeedThreeRowsLong}} |
+| 4 | {{VThreeFrozenIntegritySeedFourStatus}} | {{VThreeFrozenIntegritySeedFourRowsMain}} | {{VThreeFrozenIntegritySeedFourRowsValId}} | {{VThreeFrozenIntegritySeedFourRowsRawClean}} | {{VThreeFrozenIntegritySeedFourRowsAmbiguous}} | {{VThreeFrozenIntegritySeedFourRowsLong}} |
+
+Main rows per task/split differ slightly across seeds (the total is the same); split seed 0: EmailQA {{VThreeFrozenIntegritySeedZeroMainEmailTrain}} / {{VThreeFrozenIntegritySeedZeroMainEmailVal}} /
+{{VThreeFrozenIntegritySeedZeroMainEmailTest}}, TableQA {{VThreeFrozenIntegritySeedZeroMainTableTrain}} / {{VThreeFrozenIntegritySeedZeroMainTableVal}} / {{VThreeFrozenIntegritySeedZeroMainTableTest}}, CodeQA
+{{VThreeFrozenIntegritySeedZeroMainCodeTrain}} / {{VThreeFrozenIntegritySeedZeroMainCodeVal}} / {{VThreeFrozenIntegritySeedZeroMainCodeTest}} (train / val / test).

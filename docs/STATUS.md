@@ -99,16 +99,13 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
 - **Cluster notes:** the QoS needs `--gres=mps:50` even for CPU jobs; the template file
   `jobs/templates/mock_job_csisnlp18.sh` was never found, so the header is derived from the existing jobs.
 
-# V3 freeze (benign pool)
-- **2026-11-11: external full review applied** (`review/benign_pool_review.csv`; unreviewed sheet kept as
-  `review/benign_pool_review_draft.csv`; protocol change in `docs/deviations.md`). Benign 357 keep, 4 edit, 0 drop;
-  60 ambiguous confirmed for the ambiguous slice. `data/benign/benign_v3.json` (commit `f075264`).
-- Re-checked on the reviewed pool at `f075264`, data version `v3-prefreeze-reviewedpool` (builds in `<scratch>/v3_reviewed`):
-  form report `results/v3/benign_draft_check/20261111-002913_seed0`; gates PASS
-  `results/v3/artifact_baselines_reviewed/20261111-004117_seed0`; integrity PASS (seeds 0-4)
-  `results/v3/integrity_reviewed/20261111-010256_seed0`. No findings entry yet (F013/F014 say the freeze rebuild is
-  re-gated as a new entry).
-- **Next:** author confirms, then rebuild into `data/v3`, findings entries, tag `v3-frozen`. Not tagged.
+# V3 freeze
+- **2026-11-11: `v3-frozen` tagged at `c78f3a7`** (pushed). `data/v3/split_seed_{0..4}` built from the externally
+  reviewed pool (`data/benign/benign_v3.json`; 357 keep, 4 edit, 0 benign drops, 60 ambiguous confirmed). Byte-identical
+  to the pre-freeze scratch build; gates PASS (F024), integrity PASS (F025), identical to the scratch runs.
+  Datasheet: `docs/v3_datasheet.md`. Deviations logged 2026-11-11 (review protocol, its correction, hand-edited run
+  records, benign pool assignment fixed at drafting).
+- **Next:** V3 baselines; pairs EVAL generation on split-seed-0 test docs; ICT training.
 
 # Intent pairs (C3)
 

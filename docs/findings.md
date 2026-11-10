@@ -27,7 +27,7 @@ not `docs/findings.md`. Deviations from the pre-registered protocol: `docs/devia
   freezing before results cannot be shown; V2 judge results carry this caveat. V3 will use a new judge prompt committed
   separately before any scoring.
 
-Entries by status: full 17, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
+Entries by status: full 19, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
 
 ## F001. V2 TF-IDF+LR headline table (Phase 2 Table III)
 
@@ -723,3 +723,64 @@ or the whole input (LLM judges). Table: `paper/tables/transfer_truncation.tex`.
 - Not tested: whether the dropped tokens contain the injection (position-dependent), so the effect on TPR is not
   measured here; truncation on clean rows can also move FPR either way.
 
+## F024. V3 frozen build: content-free gates (split seeds 0–4, reviewed benign pool)
+
+> **F024** · status **`full`** · 2026-11-11 · data `v3 (tag v3-frozen; data/v3 committed at 57344a6; built by src/data_pipeline_v3.py, last changed at 4cdae64, from data/benign/benign_v3.json, externally reviewed)` · eval `v3 test split of each split seed (rows with an inserted span); probes trained on the same seed's train split` · threshold: default tau=0.50 (learned probes); fixed rule; gate = macro-F1 <= 0.60 · seeds: split_seeds 0-4 (one build each); probes deterministic; bootstrap B=1000 seed 42  
+> script `scripts/artifact_baselines.py --dataset v3 --split_seeds 0 1 2 3 4` @ `57344a6` · source: `results/v3/artifact_baselines_frozen/20261111-012417_seed0` · bootstrap clusters: doc_id
+
+Part of claim C1/C2 (V3 removes the V2 construction artifacts). Gates of the frozen V3 build (`data/v3`, tag
+`v3-frozen`), built from the benign pool after the external full review (docs/deviations.md, 2026-11-11). Supersedes
+F013 (draft pool) for every use. Gate rule (v3_design §8, decision R2): pass = pooled macro-F1 ≤
+`\VThreeFrozenGateThreshold` = 0.60 on every split seed **and** per-task mean over seeds ≤ `\VThreeFrozenGateThreshold` = 0.60.
+Overall: `\VThreeFrozenGatesStatus` = PASS. Rows marked "diag" are reported diagnostics, not gates (decision R1). Full table:
+`paper/tables/v3_frozen_gates.tex`. The same build in a scratch folder before the freeze
+(`results/v3/artifact_baselines_reviewed/20261111-004117_seed0`, same commit of the builder, byte-identical CSVs) gave
+identical metrics and predictions; only the `eval_set` label differs (`v3_reviewed_test`).
+
+| Probe | What it uses | Pooled macro-F1, range over seeds | EmailQA mean | TableQA mean | CodeQA mean | Gate |
+|---|---|---|---|---|---|---|
+| position_oracle | LR on position, separator, boundary_kind, relative offset | `\VThreeFrozenPositionOraclePooledMin` = 0.4552–`\VThreeFrozenPositionOraclePooledMax` = 0.5096 | `\VThreeFrozenPositionOracleTaskMeanEmail` = 0.5433 | `\VThreeFrozenPositionOracleTaskMeanTable` = 0.4816 | `\VThreeFrozenPositionOracleTaskMeanCode` = 0.4301 | `\VThreeFrozenPositionOracleStatus` = PASS |
+| first_para_rule | first paragraph ≤ 30 words → injected; untrained | `\VThreeFrozenFirstParaRulePooledMin` = 0.4443–`\VThreeFrozenFirstParaRulePooledMax` = 0.4652 | `\VThreeFrozenFirstParaRuleTaskMeanEmail` = 0.4713 | `\VThreeFrozenFirstParaRuleTaskMeanTable` = 0.4265 | `\VThreeFrozenFirstParaRuleTaskMeanCode` = 0.4823 | `\VThreeFrozenFirstParaRuleStatus` = PASS |
+| prefix30_masked_tfidf_lr | first 30 words, span removed | `\VThreeFrozenPrefixThreeZeroMaskedTfidfLrPooledMin` = 0.3333–`\VThreeFrozenPrefixThreeZeroMaskedTfidfLrPooledMax` = 0.3333 | `\VThreeFrozenPrefixThreeZeroMaskedTfidfLrTaskMeanEmail` = 0.3333 | `\VThreeFrozenPrefixThreeZeroMaskedTfidfLrTaskMeanTable` = 0.3333 | `\VThreeFrozenPrefixThreeZeroMaskedTfidfLrTaskMeanCode` = 0.3333 | `\VThreeFrozenPrefixThreeZeroMaskedTfidfLrStatus` = PASS |
+| suffix30_masked_tfidf_lr | last 30 words, span removed | `\VThreeFrozenSuffixThreeZeroMaskedTfidfLrPooledMin` = 0.3333–`\VThreeFrozenSuffixThreeZeroMaskedTfidfLrPooledMax` = 0.3333 | `\VThreeFrozenSuffixThreeZeroMaskedTfidfLrTaskMeanEmail` = 0.3333 | `\VThreeFrozenSuffixThreeZeroMaskedTfidfLrTaskMeanTable` = 0.3333 | `\VThreeFrozenSuffixThreeZeroMaskedTfidfLrTaskMeanCode` = 0.3333 | `\VThreeFrozenSuffixThreeZeroMaskedTfidfLrStatus` = PASS |
+| insertion_site_tfidf_lr | ~15 tokens each side of the insertion point, span removed | `\VThreeFrozenInsertionSiteTfidfLrPooledMin` = 0.4961–`\VThreeFrozenInsertionSiteTfidfLrPooledMax` = 0.5105 | `\VThreeFrozenInsertionSiteTfidfLrTaskMeanEmail` = 0.4720 | `\VThreeFrozenInsertionSiteTfidfLrTaskMeanTable` = 0.5075 | `\VThreeFrozenInsertionSiteTfidfLrTaskMeanCode` = 0.4638 | `\VThreeFrozenInsertionSiteTfidfLrStatus` = PASS |
+| length_lr | chars, words, tokens of the full input | `\VThreeFrozenLengthLrPooledMin` = 0.4985–`\VThreeFrozenLengthLrPooledMax` = 0.5062 | `\VThreeFrozenLengthLrTaskMeanEmail` = 0.3333 | `\VThreeFrozenLengthLrTaskMeanTable` = 0.5024 | `\VThreeFrozenLengthLrTaskMeanCode` = 0.3827 | `\VThreeFrozenLengthLrStatus` = PASS |
+| span_form_you_lr | span-form features + contains you/your | `\VThreeFrozenSpanFormYouLrPooledMin` = 0.5342–`\VThreeFrozenSpanFormYouLrPooledMax` = 0.5620 | `\VThreeFrozenSpanFormYouLrTaskMeanEmail` = 0.5101 | `\VThreeFrozenSpanFormYouLrTaskMeanTable` = 0.5528 | `\VThreeFrozenSpanFormYouLrTaskMeanCode` = 0.5277 | `\VThreeFrozenSpanFormYouLrStatus` = PASS |
+| second_person_lr | contains you/your only | `\VThreeFrozenSecondPersonLrPooledMin` = 0.4732–`\VThreeFrozenSecondPersonLrPooledMax` = 0.4942 | `\VThreeFrozenSecondPersonLrTaskMeanEmail` = 0.5179 | `\VThreeFrozenSecondPersonLrTaskMeanTable` = 0.4935 | `\VThreeFrozenSecondPersonLrTaskMeanCode` = 0.3232 | `\VThreeFrozenSecondPersonLrStatus` = PASS |
+| boundary_kind_lr | boundary kind only | `\VThreeFrozenBoundaryKindLrPooledMin` = 0.4505–`\VThreeFrozenBoundaryKindLrPooledMax` = 0.4954 | `\VThreeFrozenBoundaryKindLrTaskMeanEmail` = 0.5101 | `\VThreeFrozenBoundaryKindLrTaskMeanTable` = 0.4711 | `\VThreeFrozenBoundaryKindLrTaskMeanCode` = 0.4256 | `\VThreeFrozenBoundaryKindLrStatus` = PASS |
+| prefix30_tfidf_lr | first 30 words, unmasked (diagnostic) | `\VThreeFrozenPrefixThreeZeroTfidfLrPooledMin` = 0.5775–`\VThreeFrozenPrefixThreeZeroTfidfLrPooledMax` = 0.6259 | `\VThreeFrozenPrefixThreeZeroTfidfLrTaskMeanEmail` = 0.5944 | `\VThreeFrozenPrefixThreeZeroTfidfLrTaskMeanTable` = 0.5993 | `\VThreeFrozenPrefixThreeZeroTfidfLrTaskMeanCode` = 0.6263 | `\VThreeFrozenPrefixThreeZeroTfidfLrStatus` = diag |
+| suffix30_tfidf_lr | last 30 words, unmasked (diagnostic) | `\VThreeFrozenSuffixThreeZeroTfidfLrPooledMin` = 0.5798–`\VThreeFrozenSuffixThreeZeroTfidfLrPooledMax` = 0.6122 | `\VThreeFrozenSuffixThreeZeroTfidfLrTaskMeanEmail` = 0.5557 | `\VThreeFrozenSuffixThreeZeroTfidfLrTaskMeanTable` = 0.5990 | `\VThreeFrozenSuffixThreeZeroTfidfLrTaskMeanCode` = 0.6306 | `\VThreeFrozenSuffixThreeZeroTfidfLrStatus` = diag |
+| span_content_tfidf | inserted span text (content ceiling; diagnostic) | `\VThreeFrozenSpanContentTfidfPooledMin` = 0.8021–`\VThreeFrozenSpanContentTfidfPooledMax` = 0.8257 | `\VThreeFrozenSpanContentTfidfTaskMeanEmail` = 0.7953 | `\VThreeFrozenSpanContentTfidfTaskMeanTable` = 0.7980 | `\VThreeFrozenSpanContentTfidfTaskMeanCode` = 0.9785 | `\VThreeFrozenSpanContentTfidfStatus` = diag |
+| span_form_lr | 9 span-form features, no you/your (diagnostic) | `\VThreeFrozenSpanFormLrPooledMin` = 0.5401–`\VThreeFrozenSpanFormLrPooledMax` = 0.5714 | `\VThreeFrozenSpanFormLrTaskMeanEmail` = 0.5040 | `\VThreeFrozenSpanFormLrTaskMeanTable` = 0.5690 | `\VThreeFrozenSpanFormLrTaskMeanCode` = 0.5456 | `\VThreeFrozenSpanFormLrStatus` = diag |
+
+- The content ceiling `span_content_tfidf` (span text alone) is high on CodeQA (per-task mean
+  `\VThreeFrozenSpanContentTfidfTaskMeanCode` = 0.9785): code attacks and benign code items remain lexically separable
+  (the attack-indicative tokens in the form report include `server`, `smtp`, `psutil`, `gmail`). This is content,
+  not a construction artifact, but code results measure a lexically easy task.
+- Unmasked prefix-30 and suffix-30 diagnostics exceed 0.60 on some seeds or tasks. They see the inserted span
+  itself, so they are content probes, not content-free gates; the span-masked versions sit at 0.3333 (constant
+  prediction) on every seed.
+
+## F025. V3 frozen build: integrity checks (split seeds 0–4, reviewed benign pool)
+
+> **F025** · status **`full`** · 2026-11-11 · data `v3 (tag v3-frozen; data/v3 committed at 57344a6; built by src/data_pipeline_v3.py, last changed at 4cdae64, from data/benign/benign_v3.json, externally reviewed)` · eval `all written CSVs of each split seed (train/val/test, val_id, raw_clean, ambiguous, long)` · threshold: n/a (assertions) · seeds: split_seeds 0-4  
+> script `scripts/v3_integrity.py --split_seeds 0 1 2 3 4` @ `57344a6` · source: `results/v3/integrity_frozen/20261111-014556_seed0`
+
+Frozen V3 build (`data/v3`, tag `v3-frozen`); supersedes F014. Identical to the scratch pre-freeze run `results/v3/integrity_reviewed/20261111-010256_seed0`. Independent re-read of the written CSVs: doc_id, exact text, near-duplicate component, attack string, benign item
+and donor text disjoint across train/val/test; train/val attack categories disjoint; test attacks only from the test
+files; donor docs from the same task and split; ambiguous items never used as clean A; exact 1:1 balance per
+task × split; 4 rows (2 injected) per doc; eval-slice rows belong to their split's docs; ≤ 512 DeBERTa-v3 tokens
+per main, val_id, raw_clean and ambiguous row (re-tokenized; the stored count matches); every span recoverable from
+its offset. Overall: `\VThreeFrozenIntegrityStatus` = PASS.
+
+| Split seed | Integrity | Main rows | val_id | raw_clean | ambiguous | long |
+|---|---|---|---|---|---|---|
+| 0 | `\VThreeFrozenIntegritySeedZeroStatus` = PASS | `\VThreeFrozenIntegritySeedZeroRowsMain` = 3496 | `\VThreeFrozenIntegritySeedZeroRowsValId` = 264 | `\VThreeFrozenIntegritySeedZeroRowsRawClean` = 265 | `\VThreeFrozenIntegritySeedZeroRowsAmbiguous` = 265 | `\VThreeFrozenIntegritySeedZeroRowsLong` = 56 |
+| 1 | `\VThreeFrozenIntegritySeedOneStatus` = PASS | `\VThreeFrozenIntegritySeedOneRowsMain` = 3496 | `\VThreeFrozenIntegritySeedOneRowsValId` = 278 | `\VThreeFrozenIntegritySeedOneRowsRawClean` = 271 | `\VThreeFrozenIntegritySeedOneRowsAmbiguous` = 271 | `\VThreeFrozenIntegritySeedOneRowsLong` = 56 |
+| 2 | `\VThreeFrozenIntegritySeedTwoStatus` = PASS | `\VThreeFrozenIntegritySeedTwoRowsMain` = 3496 | `\VThreeFrozenIntegritySeedTwoRowsValId` = 272 | `\VThreeFrozenIntegritySeedTwoRowsRawClean` = 267 | `\VThreeFrozenIntegritySeedTwoRowsAmbiguous` = 267 | `\VThreeFrozenIntegritySeedTwoRowsLong` = 56 |
+| 3 | `\VThreeFrozenIntegritySeedThreeStatus` = PASS | `\VThreeFrozenIntegritySeedThreeRowsMain` = 3496 | `\VThreeFrozenIntegritySeedThreeRowsValId` = 262 | `\VThreeFrozenIntegritySeedThreeRowsRawClean` = 269 | `\VThreeFrozenIntegritySeedThreeRowsAmbiguous` = 269 | `\VThreeFrozenIntegritySeedThreeRowsLong` = 56 |
+| 4 | `\VThreeFrozenIntegritySeedFourStatus` = PASS | `\VThreeFrozenIntegritySeedFourRowsMain` = 3496 | `\VThreeFrozenIntegritySeedFourRowsValId` = 274 | `\VThreeFrozenIntegritySeedFourRowsRawClean` = 268 | `\VThreeFrozenIntegritySeedFourRowsAmbiguous` = 268 | `\VThreeFrozenIntegritySeedFourRowsLong` = 56 |
+
+Main rows per task/split differ slightly across seeds (the total is the same); split seed 0: EmailQA `\VThreeFrozenIntegritySeedZeroMainEmailTrain` = 200 / `\VThreeFrozenIntegritySeedZeroMainEmailVal` = 52 /
+`\VThreeFrozenIntegritySeedZeroMainEmailTest` = 56, TableQA `\VThreeFrozenIntegritySeedZeroMainTableTrain` = 1964 / `\VThreeFrozenIntegritySeedZeroMainTableVal` = 420 / `\VThreeFrozenIntegritySeedZeroMainTableTest` = 420, CodeQA
+`\VThreeFrozenIntegritySeedZeroMainCodeTrain` = 272 / `\VThreeFrozenIntegritySeedZeroMainCodeVal` = 56 / `\VThreeFrozenIntegritySeedZeroMainCodeTest` = 56 (train / val / test).
