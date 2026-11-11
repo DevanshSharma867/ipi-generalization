@@ -207,7 +207,7 @@ def cmd_generate(a):
     if a.no_length_check and a.mode == "eval":
         sys.exit("eval mode always runs the length check")
     tok, tok_path = (None, "") if a.no_length_check else pg.v3_tokenizer()  # fails loudly if missing
-    generate_fn, load, peak = hf_generator(g)
+    generate_fn, load, peak = hf_generator(g, a.device)
     t0 = time.time()
     recs = pg.run_shard(docs, a.mode, a.generator, cfg, out_path, generate_fn, batch_size=a.batch_size, tok=tok,
                         cap=manifest["span_cap_tokens"])
@@ -457,6 +457,7 @@ def main():
     g.add_argument("--batch_size", type=int, default=1)
     g.add_argument("--length_tokenizer", default="", help="deprecated, ignored: the length rules use the V3 tokenizer")
     g.add_argument("--no_length_check", action="store_true", help="skip the §6 length rules (not allowed in eval)")
+    g.add_argument("--device", default="cuda", help="cuda (cluster, Kaggle); cpu only for a code-path dry run")
     t = add_run_args(sub.add_parser("timing"))
     t.add_argument("--run", action="append", required=True)
     c = add_run_args(sub.add_parser("selfcheck"))
