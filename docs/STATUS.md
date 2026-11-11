@@ -109,6 +109,11 @@ Plan: paper_plan §3, A16–A17 (Liu 2026 sets as headline transfer; reproductio
 
 # Intent pairs (C3)
 
+> **DO NOT EDIT `src/pairs_gen.py`, `scripts/gen_pairs.py` or `configs/pairs_gen_v4.yaml` until all 8 shards of job 443655
+> (TRAIN pair generation) have finished.** Each shard writes to `data/pairs/train_gen/v4_s0_<sha256 of those three files>/`,
+> computed when the shard starts: a change in between splits the shards across two folders and breaks the export.
+> Same for `configs/pairs_gen_v5.yaml` while the val shards (443671) run. Put new code in other files.
+
 Plan: `docs/pairs_spec.md` v3 (A26, A27); paper_plan A18 (construction, split seed 0 only, strict agreement), A21 (comparator (c)
 withdrawn), A24 (EVAL generator), A25 (annotators), A26 (pilot-based label rules). Nothing has been generated (except the timing
 job's discarded val-doc outputs), annotated or scored.
@@ -173,7 +178,11 @@ job's discarded val-doc outputs), annotated or scored.
    `pairs_selfcheck_v1.txt`, prefill-only A/B; TRAIN and val pairs only). Jobs: `jobs/pairs_gen_val.sh` (2 shards),
    `jobs/pairs_selfcheck.sh` (dry run on the re-timing failures, then val; TRAIN after 443655). `jobs/agent_v2_rebuild.sh`
    rebuilds agent_v2 split seed 0 on the cluster and checks it against the committed manifest (laptop rebuild matched).
-   Still missing before ICT: an export of kept pairs to the `--train_pairs`/`--val_pairs` files.
+   Export of kept pairs: `scripts/export_pairs.py` (job `jobs/pairs_export.sh`) -> `data/pairs/ict_s0/{train,val}_pairs.jsonl`.
+11. **ICT chain (2026-11-11), all afterok:** TRAIN self-check -> export -> 12-run grid -> `jobs/ict_select.sh` (writes,
+   commits and pushes `configs/ict_hparams.json`; non-grid ICT jobs refuse without the committed file) -> (a) seeds 0-4
+   -> full seeds 0-4 -> (c) seeds 0-4. Job ids in the chain table below this list. Generated pair folders and exports are
+   gitignored (untracked outputs made the tree dirty, so later shards would have refused to start).
 
 ## Annotators (A25)
 - External annotators: not project members, fluent in English, independent of the design. The author adjudicates only.

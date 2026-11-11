@@ -4,7 +4,7 @@
 # Order (A22):
 #   1. Grid, full ICT, training seed 0, one array task per grid point (12):
 #        GRID=1 TRAIN_PAIRS=... VAL_PAIRS=... sbatch --array=0-11 jobs/ict_train.sh
-#   2. python src/models/ict.py select   (login node) -> configs/ict_hparams.json; commit it.
+#   2. sbatch jobs/ict_select.sh -> configs/ict_hparams.json, committed and pushed (non-grid runs refuse without it).
 #   3. Full ICT and ablations a-e, training seeds 0-4 on split seed 0, with the selected hyperparameters:
 #        ABLATION=full TRAIN_PAIRS=... VAL_PAIRS=... sbatch jobs/ict_train.sh
 #        ABLATION=a VAL_PAIRS=... sbatch jobs/ict_train.sh
@@ -64,6 +64,11 @@ for d in Path("results/v3", exp).glob(f"*_seed{seed}"):
 sys.exit(1)
 PY
 
+if [ -z "$GRID_INDEX" ]; then  # A22: every non-grid run uses the committed grid choice (jobs/ict_select.sh)
+  git ls-files --error-unmatch configs/ict_hparams.json >/dev/null 2>&1 && git diff --quiet HEAD -- configs/ict_hparams.json \
+    || { echo "configs/ict_hparams.json missing or uncommitted: run jobs/ict_select.sh first (A22)"; exit 1; }
+  echo "hyperparameters: $(git log -1 --format=%h -- configs/ict_hparams.json) $(tr -d '\n ' < configs/ict_hparams.json | cut -c1-120)"
+fi
 ARGS=(--split_dir "$SPLIT_DIR" --val_pairs "$VAL_PAIRS" --ablation "$ABLATION" --backbone "$BACKBONE" --seed "$SEED")
 [ -n "$GRID_INDEX" ] && ARGS+=(--grid_index "$GRID_INDEX")
 [ -d "$AGENT_DIR" ] && ARGS+=(--agent_dir "$AGENT_DIR")
