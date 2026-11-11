@@ -1,0 +1,43 @@
+{
+  "checkpoint": "/kaggle/input/datasets/devansh1sharma/ipi-assets/ipi-assets/v2_ckpts/deberta_s123",
+  "model": "deberta",
+  "n_unique_inputs": 4652,
+  "sets": {
+    "adclean": {
+      "n": 339,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.10029498525073746,
+      "frac_over_512_tokens": 0.07669616519174041
+    },
+    "admatched": {
+      "n": 1017,
+      "n_injected": 432,
+      "flag_rate_at_0.5": 0.11799410029498525,
+      "frac_over_512_tokens": 0.10029498525073746
+    },
+    "adshift": {
+      "n": 1695,
+      "n_injected": 720,
+      "flag_rate_at_0.5": 0.14041297935103245,
+      "frac_over_512_tokens": 0.11209439528023599
+    },
+    "calpool": {
+      "n": 1140,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.037719298245614034,
+      "frac_over_512_tokens": 0.0
+    },
+    "tbclean": {
+      "n": 1533,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.19373776908023482,
+      "frac_over_512_tokens": 0.5609915198956295
+    },
+    "tbeval": {
+      "n": 2117,
+      "n_injected": 584,
+      "flag_rate_at_0.5": 0.22437411431270665,
+      "frac_over_512_tokens": 0.6811525743977327
+    }
+  }
+}

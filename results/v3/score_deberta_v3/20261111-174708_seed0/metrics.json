@@ -1,0 +1,103 @@
+{
+  "checkpoint": "checkpoints/v3/deberta_v3/split_seed_0_seed0",
+  "model": "deberta",
+  "n_unique_inputs": 7753,
+  "sets": {
+    "adclean": {
+      "n": 339,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.168141592920354,
+      "frac_over_512_tokens": 0.07669616519174041
+    },
+    "admatched": {
+      "n": 1017,
+      "n_injected": 432,
+      "flag_rate_at_0.5": 0.16617502458210423,
+      "frac_over_512_tokens": 0.10029498525073746
+    },
+    "adshift": {
+      "n": 1695,
+      "n_injected": 720,
+      "flag_rate_at_0.5": 0.16519174041297935,
+      "frac_over_512_tokens": 0.11209439528023599
+    },
+    "calpool": {
+      "n": 1140,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.05701754385964912,
+      "frac_over_512_tokens": 0.0
+    },
+    "tbclean": {
+      "n": 1533,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.030006523157208087,
+      "frac_over_512_tokens": 0.5609915198956295
+    },
+    "tbeval": {
+      "n": 2117,
+      "n_injected": 584,
+      "flag_rate_at_0.5": 0.038734057628719884,
+      "frac_over_512_tokens": 0.6811525743977327
+    },
+    "v3_ambiguous": {
+      "n": 265,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.1660377358490566,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3_long": {
+      "n": 56,
+      "n_injected": 28,
+      "flag_rate_at_0.5": 0.35714285714285715,
+      "frac_over_512_tokens": 0.5892857142857143
+    },
+    "v3_raw_clean": {
+      "n": 265,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.033962264150943396,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3_test": {
+      "n": 532,
+      "n_injected": 266,
+      "flag_rate_at_0.5": 0.4793233082706767,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3_val": {
+      "n": 528,
+      "n_injected": 264,
+      "flag_rate_at_0.5": 0.5,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3_val_id": {
+      "n": 264,
+      "n_injected": 264,
+      "flag_rate_at_0.5": 1.0,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3probe_p1_cleanb_moved": {
+      "n": 399,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.007518796992481203,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3probe_p2_cleana_moved": {
+      "n": 399,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.010025062656641603,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3probe_p3_attack_moved": {
+      "n": 798,
+      "n_injected": 798,
+      "flag_rate_at_0.5": 0.9423558897243107,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3probe_p4_whitespace_only": {
+      "n": 133,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.03759398496240601,
+      "frac_over_512_tokens": 0.0
+    }
+  }
+}

@@ -1,0 +1,17 @@
+[17:45:06] scoring 11567 rows with deberta checkpoints/v3/deberta_v3/split_seed_3_seed3
+[17:50:45] adclean                      n=  339 flag@0.5=0.056 over512=0.077
+[17:50:45] admatched                    n= 1017 flag@0.5=0.051 over512=0.100
+[17:50:45] adshift                      n= 1695 flag@0.5=0.054 over512=0.112
+[17:50:45] calpool                      n= 1140 flag@0.5=0.032 over512=0.000
+[17:50:45] tbclean                      n= 1533 flag@0.5=0.022 over512=0.561
+[17:50:45] tbeval                       n= 2117 flag@0.5=0.031 over512=0.681
+[17:50:45] v3_ambiguous                 n=  269 flag@0.5=0.164 over512=0.000
+[17:50:45] v3_long                      n=   56 flag@0.5=0.393 over512=0.589
+[17:50:45] v3_raw_clean                 n=  269 flag@0.5=0.004 over512=0.000
+[17:50:45] v3_test                      n=  552 flag@0.5=0.460 over512=0.000
+[17:50:45] v3_val                       n=  524 flag@0.5=0.498 over512=0.000
+[17:50:45] v3_val_id                    n=  262 flag@0.5=1.000 over512=0.000
+[17:50:45] v3probe_p1_cleanb_moved      n=  414 flag@0.5=0.000 over512=0.000
+[17:50:45] v3probe_p2_cleana_moved      n=  414 flag@0.5=0.014 over512=0.000
+[17:50:45] v3probe_p3_attack_moved      n=  828 flag@0.5=0.907 over512=0.000
+[17:50:45] v3probe_p4_whitespace_only   n=  138 flag@0.5=0.000 over512=0.000

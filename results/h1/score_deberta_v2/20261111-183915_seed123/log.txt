@@ -1,0 +1,7 @@
+[18:39:15] scoring 7841 rows with deberta /kaggle/input/datasets/devansh1sharma/ipi-assets/ipi-assets/v2_ckpts/deberta_s123
+[18:43:13] adclean                      n=  339 flag@0.5=0.100 over512=0.077
+[18:43:13] admatched                    n= 1017 flag@0.5=0.118 over512=0.100
+[18:43:13] adshift                      n= 1695 flag@0.5=0.140 over512=0.112
+[18:43:13] calpool                      n= 1140 flag@0.5=0.038 over512=0.000
+[18:43:13] tbclean                      n= 1533 flag@0.5=0.194 over512=0.561
+[18:43:13] tbeval                       n= 2117 flag@0.5=0.224 over512=0.681

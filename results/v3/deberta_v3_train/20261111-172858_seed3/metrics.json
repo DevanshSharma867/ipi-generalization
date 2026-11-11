@@ -1,0 +1,9 @@
+{
+  "val_accuracy": 0.9904580152671756,
+  "val_f1_macro": 0.990457980515342,
+  "val_f1_injected": 0.9904397705544933,
+  "val_precision": 0.9923371647509579,
+  "val_recall": 0.9885496183206107,
+  "val_roc_auc": 0.9997814812656605,
+  "checkpoint": "checkpoints/v3/deberta_v3/split_seed_3_seed3"
+}

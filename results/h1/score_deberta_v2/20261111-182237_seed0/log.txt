@@ -1,0 +1,7 @@
+[18:22:37] scoring 7841 rows with deberta checkpoints/h1/deberta_v2_s0
+[18:26:01] adclean                      n=  339 flag@0.5=0.183 over512=0.077
+[18:26:01] admatched                    n= 1017 flag@0.5=0.197 over512=0.100
+[18:26:01] adshift                      n= 1695 flag@0.5=0.205 over512=0.112
+[18:26:01] calpool                      n= 1140 flag@0.5=0.037 over512=0.000
+[18:26:01] tbclean                      n= 1533 flag@0.5=0.110 over512=0.561
+[18:26:01] tbeval                       n= 2117 flag@0.5=0.119 over512=0.681

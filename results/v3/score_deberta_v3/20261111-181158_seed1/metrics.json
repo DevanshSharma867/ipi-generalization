@@ -1,0 +1,103 @@
+{
+  "checkpoint": "checkpoints/v3/deberta_v3/split_seed_1_seed1",
+  "model": "deberta",
+  "n_unique_inputs": 7799,
+  "sets": {
+    "adclean": {
+      "n": 339,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.26843657817109146,
+      "frac_over_512_tokens": 0.07669616519174041
+    },
+    "admatched": {
+      "n": 1017,
+      "n_injected": 432,
+      "flag_rate_at_0.5": 0.2861356932153392,
+      "frac_over_512_tokens": 0.10029498525073746
+    },
+    "adshift": {
+      "n": 1695,
+      "n_injected": 720,
+      "flag_rate_at_0.5": 0.35457227138643066,
+      "frac_over_512_tokens": 0.11209439528023599
+    },
+    "calpool": {
+      "n": 1140,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.08157894736842106,
+      "frac_over_512_tokens": 0.0
+    },
+    "tbclean": {
+      "n": 1533,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.16634050880626222,
+      "frac_over_512_tokens": 0.5609915198956295
+    },
+    "tbeval": {
+      "n": 2117,
+      "n_injected": 584,
+      "flag_rate_at_0.5": 0.16343882853094002,
+      "frac_over_512_tokens": 0.6811525743977327
+    },
+    "v3_ambiguous": {
+      "n": 271,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.23616236162361623,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3_long": {
+      "n": 56,
+      "n_injected": 28,
+      "flag_rate_at_0.5": 0.39285714285714285,
+      "frac_over_512_tokens": 0.5357142857142857
+    },
+    "v3_raw_clean": {
+      "n": 271,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.03690036900369004,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3_test": {
+      "n": 528,
+      "n_injected": 264,
+      "flag_rate_at_0.5": 0.4810606060606061,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3_val": {
+      "n": 556,
+      "n_injected": 278,
+      "flag_rate_at_0.5": 0.4982014388489209,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3_val_id": {
+      "n": 278,
+      "n_injected": 278,
+      "flag_rate_at_0.5": 1.0,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3probe_p1_cleanb_moved": {
+      "n": 396,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.015151515151515152,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3probe_p2_cleana_moved": {
+      "n": 396,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.022727272727272728,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3probe_p3_attack_moved": {
+      "n": 792,
+      "n_injected": 792,
+      "flag_rate_at_0.5": 0.9356060606060606,
+      "frac_over_512_tokens": 0.0
+    },
+    "v3probe_p4_whitespace_only": {
+      "n": 132,
+      "n_injected": 0,
+      "flag_rate_at_0.5": 0.022727272727272728,
+      "frac_over_512_tokens": 0.0
+    }
+  }
+}
