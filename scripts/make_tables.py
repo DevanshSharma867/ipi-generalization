@@ -306,6 +306,50 @@ def table_v3_gates(stage="prefreeze"):
             put(macro_name(*p, "main", k), str(n))
 
 
+def macros_v3_sanity():
+    """Read-only sanity checks of the V3 DeBERTa result (scripts/v3_sanity.py): attack-string overlap, test F1
+    without near-duplicates, per-attack-string recall, span style probe, val overlap."""
+    m, src = latest_metrics("v3_sanity", version="v3")
+    if m is None:
+        return
+    p = ("v3", "sanity")
+    a = m["attack_strings"].values()
+    for s in ("train", "val", "test", "val_id"):
+        u = [v["unique"][s] for v in a]
+        put(macro_name(*p, "unique", s, "min"), str(min(u)))
+        put(macro_name(*p, "unique", s, "max"), str(max(u)))
+    put(macro_name(*p, "test", "exact", "in", "train"), str(max(v["test_exact_in_train"] for v in a)))
+    put(macro_name(*p, "test", "near", "dups"), str(max(v["test_near_dup_of_train"] for v in a)))
+    num(max(v["test_max_jaccard_to_train"]["max"] for v in a), *p, "test", "max", "jaccard", digits=2)
+    vv = m["val"].values()
+    put(macro_name(*p, "val", "exact", "in", "train"), str(max(v["val_exact_in_train"] for v in vv)))
+    put(macro_name(*p, "val", "near", "dups"), str(max(v["val_near_dup_of_train"] for v in vv)))
+    num(max(v["val_max_jaccard_to_train"] for v in vv), *p, "val", "max", "jaccard", digits=2)
+    put(macro_name(*p, "val", "shared", "categories"), str(max(len(v["val_categories_shared_with_train"]) for v in vv)))
+    f1s = [v["deberta_val_f1_macro"] for v in vv]
+    num(min(f1s), *p, "val", "f", "one", "min")
+    num(max(f1s), *p, "val", "f", "one", "max")
+    f = m["deberta_test_f1"]
+    for which in ("all", "near_dups_removed"):
+        for agg in ("task_macro", "pooled"):
+            cell(f[which][agg], *p, "test", "f", "one", which, agg, digits=4)
+    put(macro_name(*p, "test", "rows", "kept"), str(f["near_dups_removed"]["n_rows"]))
+    put(macro_name(*p, "test", "rows", "all"), str(f["near_dups_removed"]["n_rows_all"]))
+    r = m["per_attack_recall"]
+    put(macro_name(*p, "attack", "strings"), str(r["n_strings"]))
+    cell({"point": r["recall_run_mean"], "ci": r["ci_by_attack_string"]}, *p, "attack", "recall", digits=4)
+    num(r["string_recall"]["min"], *p, "attack", "recall", "min")
+    put(macro_name(*p, "attack", "below", "half"), str(r["string_recall"]["n_below_0.5"]))
+    put(macro_name(*p, "attack", "perfect"), str(r["string_recall"]["n_equal_1"]))
+    sp = m["style_probe"]
+    for v in ("clean_a_only", "clean_a_and_b"):
+        cell(sp[v]["f1_macro_pooled"], *p, "style", v, "f", "one", digits=4)
+        cell(sp[v]["auroc_pooled"], *p, "style", v, "auroc", digits=4)
+    for g, v in sp["clean_a_only_by_feature_group"].items():
+        cell(v["f1_macro_pooled"], *p, "style", "group", g, "f", "one", digits=4)
+        cell(v["auroc_pooled"], *p, "style", "group", g, "auroc", digits=4)
+
+
 TRANSFER_SETS = {"agentdojo_benign_outputs.jsonl": "ad_clean", "agentdojo_pairs.jsonl": "ad_matched",
                  "agentdojo_pairs_shift.jsonl": "ad_shift", "taubench_eval.jsonl": "tb_matched",
                  "bipia_pairs.jsonl": "bipia", "corpus.jsonl": "general"}
@@ -869,6 +913,7 @@ def main():
     tables_tpr_protocols()
     table_v3_gates("prefreeze")
     table_v3_gates("frozen")
+    macros_v3_sanity()
     macros_transfer_gate1()
     macros_transfer_gate2()
     table_transfer_detectors()

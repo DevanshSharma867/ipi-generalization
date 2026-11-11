@@ -1,0 +1,73 @@
+{
+  "run_id": "20261112-010439_seed42",
+  "version": "v3",
+  "exp": "v3_sanity",
+  "seed": 42,
+  "args": {
+    "jaccard": 0.5,
+    "ngram": 5,
+    "B": 1000,
+    "seed": 42,
+    "score_runs": {
+      "3": "results/v3/score_deberta_v3/20261111-174506_seed3",
+      "0": "results/v3/score_deberta_v3/20261111-174708_seed0",
+      "4": "results/v3/score_deberta_v3/20261111-180717_seed4",
+      "1": "results/v3/score_deberta_v3/20261111-181158_seed1",
+      "2": "results/v3/score_deberta_v3/20261111-183653_seed2"
+    },
+    "train_runs": {
+      "0": "results/v3/deberta_v3_train/20261111-172858_seed0",
+      "3": "results/v3/deberta_v3_train/20261111-172858_seed3",
+      "4": "results/v3/deberta_v3_train/20261111-175057_seed4",
+      "1": "results/v3/deberta_v3_train/20261111-175345_seed1",
+      "2": "results/v3/deberta_v3_train/20261111-181836_seed2"
+    }
+  },
+  "git_commit": "600357612b47b9cecab328425d3deceebbd213d8",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "v3",
+  "data_files_sha256": {
+    "/Users/devanshsharma/projects/nlp/results/v3/score_deberta_v3/20261111-174506_seed3/predictions.csv.gz": "28fd0d9287d02e94fb746957ba8ea191079eb62b56e1eac81787a8a8aaac0836",
+    "/Users/devanshsharma/projects/nlp/results/v3/score_deberta_v3/20261111-174708_seed0/predictions.csv.gz": "d358f0339325a09c7e159ec6a6df70cf501149eb9c6a69d17be870880731edb1",
+    "/Users/devanshsharma/projects/nlp/results/v3/score_deberta_v3/20261111-180717_seed4/predictions.csv.gz": "9571fff241a31fedf45f358a76115db32438b0739d8e9e3a38d1f475630cafb1",
+    "/Users/devanshsharma/projects/nlp/results/v3/score_deberta_v3/20261111-181158_seed1/predictions.csv.gz": "af88fcce026c5275fac8cf6212de82d48e1a7f317d0cee08683fea15ddb43c1b",
+    "/Users/devanshsharma/projects/nlp/results/v3/score_deberta_v3/20261111-183653_seed2/predictions.csv.gz": "5dc245986949c4e7117f908138a0099c0d862a78be45b226d045bcfcb2e437c8",
+    "/Users/devanshsharma/projects/nlp/results/v3/deberta_v3_train/20261111-172858_seed0/metrics.json": "842d0f9cd16dfb2ccba437d523f55307998c146c3320c36af51839e6edb6ef34",
+    "/Users/devanshsharma/projects/nlp/results/v3/deberta_v3_train/20261111-172858_seed3/metrics.json": "af5247cc18da5c50cb0674524bfbe7a0c75110803b254bf8b210e244e9316ee2",
+    "/Users/devanshsharma/projects/nlp/results/v3/deberta_v3_train/20261111-175057_seed4/metrics.json": "14dca96c28b78672eb37e0e0c9434bf74fd814af7348d6cbb581a9fe013af4df",
+    "/Users/devanshsharma/projects/nlp/results/v3/deberta_v3_train/20261111-175345_seed1/metrics.json": "97fda137cba6b8513c9b5aa0469711b9ed204ca8e7870fb707bf9f2970215841",
+    "/Users/devanshsharma/projects/nlp/results/v3/deberta_v3_train/20261111-181836_seed2/metrics.json": "b1f351d1c58d2e8645ce00a5f995b2fbcfbd10d7d778c17fa8cb748dc5582639"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null,
+    "gpu_uuid": null,
+    "cuda_visible_devices": null,
+    "kaggle": null,
+    "gpu_name": null,
+    "gpu_driver": null
+  },
+  "argv": [
+    "scripts/v3_sanity.py"
+  ],
+  "started": "2026-11-12T01:04:39"
+}

@@ -27,7 +27,7 @@ not `docs/findings.md`. Deviations from the pre-registered protocol: `docs/devia
   freezing before results cannot be shown; V2 judge results carry this caveat. V3 will use a new judge prompt committed
   separately before any scoring.
 
-Entries by status: full 19, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
+Entries by status: full 20, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
 
 ## F001. V2 TF-IDF+LR headline table (Phase 2 Table III)
 
@@ -784,3 +784,52 @@ its offset. Overall: `\VThreeFrozenIntegrityStatus` = PASS.
 Main rows per task/split differ slightly across seeds (the total is the same); split seed 0: EmailQA `\VThreeFrozenIntegritySeedZeroMainEmailTrain` = 200 / `\VThreeFrozenIntegritySeedZeroMainEmailVal` = 52 /
 `\VThreeFrozenIntegritySeedZeroMainEmailTest` = 56, TableQA `\VThreeFrozenIntegritySeedZeroMainTableTrain` = 1964 / `\VThreeFrozenIntegritySeedZeroMainTableVal` = 420 / `\VThreeFrozenIntegritySeedZeroMainTableTest` = 420, CodeQA
 `\VThreeFrozenIntegritySeedZeroMainCodeTrain` = 272 / `\VThreeFrozenIntegritySeedZeroMainCodeVal` = 56 / `\VThreeFrozenIntegritySeedZeroMainCodeTest` = 56 (train / val / test).
+
+## F026. V3 DeBERTa sanity checks: attack-string overlap, per-attack recall, span style probe, val overlap
+
+> **F026** · status **`full`** · 2026-11-12 · data `v3 (tag v3-frozen)` · eval `V3 test (and val, for overlap) of each split seed; style probe trained on each seed's train spans` · threshold: default 0.5 (DeBERTa and the style probe) · seeds: split_seeds 0-4 (one V3 DeBERTa run each, training seed = split seed); style probe LR random_state 0; bootstrap B=1000 seed 42  
+> script `scripts/v3_sanity.py` @ `19cb0b8` · source: `results/v3/v3_sanity/20261112-010736_seed42` · bootstrap clusters: doc_id (stratified by task); attack string for the per-attack recall CI
+
+Read-only checks of the V3 DeBERTa result (runs trained and scored on Kaggle, 2× Tesla T4, fp32, commit f5780ad;
+docs/deviations.md 2026-11-11). Nothing in the data or the models was changed.
+
+**1. Attack strings.** Unique attack strings per split seed: train `\VThreeSanityUniqueTrainMin` = 100–`\VThreeSanityUniqueTrainMax` = 100,
+val `\VThreeSanityUniqueValMin` = 25–`\VThreeSanityUniqueValMax` = 25, test `\VThreeSanityUniqueTestMin` = 103–`\VThreeSanityUniqueTestMax` = 103
+(val_id, train-category attacks on val docs: `\VThreeSanityUniqueValIdMin` = 85–`\VThreeSanityUniqueValIdMax` = 87). Test strings
+found exactly in train: `\VThreeSanityTestExactInTrain` = 0; with a train near-duplicate (char 5-gram Jaccard ≥ 0.5 after
+lowercasing and whitespace collapse): `\VThreeSanityTestNearDups` = 0 on every seed (largest Jaccard to any train string
+`\VThreeSanityTestMaxJaccard` = 0.38). Removing near-duplicates therefore removes no row (`\VThreeSanityTestRowsKept` = 2660 of
+`\VThreeSanityTestRowsAll` = 2660 kept), and test macro-F1 is unchanged: task-macro `\VThreeSanityTestFOneAllTaskMacro` = 0.9626 [0.95, 0.97],
+pooled `\VThreeSanityTestFOneAllPooled` = 0.9628 [0.95, 0.97] (near-duplicates removed: `\VThreeSanityTestFOneNearDupsRemovedTaskMacro` = 0.9626 [0.95, 0.97],
+`\VThreeSanityTestFOneNearDupsRemovedPooled` = 0.9628 [0.95, 0.97]).
+
+**2. Per-attack-string recall** (V3 test rows of all split seeds, threshold 0.5): `\VThreeSanityAttackStrings` = 125 test attack
+strings; run-mean recall `\VThreeSanityAttackRecall` = 0.9363 [0.90, 0.97] with the CI from resampling attack strings (not rows).
+`\VThreeSanityAttackPerfect` = 109 strings are always detected, `\VThreeSanityAttackBelowHalf` = 5 have recall below 0.5, the
+lowest is `\VThreeSanityAttackRecallMin` = 0.0625. Per-category recall and the worst strings are in the run's metrics.json: the
+misses are short answer-shaping requests (sentiment classification, Base16 output, "reply in German", task
+automation), i.e. text attacks whose wording is close to a benign request.
+
+**3. Span style probe (no content words).** A logistic regression on the inserted span alone, with function-word rates
+(NLTK English stopword list, which includes you/your/me/my/can), punctuation and newline rates, casing, word / char /
+sentence lengths and digit rate, trained per seed on train spans (benign-pool clean-A items vs attacks), scores on
+test: macro-F1 `\VThreeSanityStyleCleanAOnlyFOne` = 0.7955 [0.78, 0.81], AUROC `\VThreeSanityStyleCleanAOnlyAuroc` = 0.9005 [0.89, 0.91]. With clean-B spans
+among the negatives (the rows of the span-form gate): macro-F1 `\VThreeSanityStyleCleanAAndBFOne` = 0.7776 [0.76, 0.79], AUROC
+`\VThreeSanityStyleCleanAAndBAuroc` = 0.8645 [0.85, 0.88]. By feature group (clean A only): function words
+`\VThreeSanityStyleGroupFunctionWordsFOne` = 0.7610 [0.74, 0.78] (AUROC `\VThreeSanityStyleGroupFunctionWordsAuroc` = 0.8755 [0.86, 0.89]), punctuation
+`\VThreeSanityStyleGroupPunctuationFOne` = 0.6117 [0.59, 0.63] (AUROC `\VThreeSanityStyleGroupPunctuationAuroc` = 0.6377 [0.61, 0.66]), casing and length
+`\VThreeSanityStyleGroupCasingLengthFOne` = 0.6137 [0.59, 0.63] (AUROC `\VThreeSanityStyleGroupCasingLengthAuroc` = 0.6648 [0.64, 0.69]).
+- This is far above the span-form gate (span_form_you_lr, 9 form features + you/your; pooled range in F024) and
+  close to the span-content ceiling (span_content_tfidf, all words; F024).
+  The V3 gates did not include a function-word probe; V3 passes the pre-registered gates but the inserted spans are
+  separable by function-word and punctuation style.
+- Function words carry part of what makes a span an instruction to the model (requests addressed to the assistant
+  vs remarks addressed to a human reader), so this probe is not purely content-free; the largest coefficients
+  (metrics.json) mix request-style words with format cues (underscores and double quotes lean benign, "!" and "/"
+  lean attack). Whether this is an artifact or the task's signal is not settled by this check.
+
+**4. Val (held-out categories).** Val attack strings found exactly in train: `\VThreeSanityValExactInTrain` = 0;
+near-duplicates: `\VThreeSanityValNearDups` = 0 (largest Jaccard `\VThreeSanityValMaxJaccard` = 0.24); val categories shared
+with train: `\VThreeSanityValSharedCategories` = 0. V3 DeBERTa val macro-F1 per split seed (the selection metric) ranges
+`\VThreeSanityValFOneMin` = 0.9799–`\VThreeSanityValFOneMax` = 1.0000, so it is not 1.0 on every seed, and the high values do not come
+from val attacks repeating train attacks. (Test shares one category with train, Language Translation, known risk R5.)
