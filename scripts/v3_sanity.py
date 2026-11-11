@@ -10,7 +10,7 @@ Sanity checks on the V3 DeBERTa result (read-only: no data or model is changed).
    rows and with the injected rows whose attack has a train near-duplicate removed.
 2. Per-attack-string recall on V3 test at 0.5 (rows of all split seeds), its distribution and per category; overall
    recall with a 95% CI from resampling attack strings (clusters = attack strings, B = 1000).
-3. Style probe on the inserted span alone: logistic regression on style features without content words
+3. Style probe on the inserted span alone (also by feature group: function words, punctuation, casing and length): logistic regression on style features without content words
    (function-word rates from the NLTK English stopword list, punctuation and newline rates, casing, word / char /
    sentence lengths, digit rate), trained per split seed on train spans (benign-pool clean-A items vs attacks) and
    scored on that seed's test spans; also the variant with clean-B spans among the negatives (the same rows as the
@@ -43,6 +43,7 @@ from runlog import add_run_args, start_run  # noqa: E402
 from v3_baselines_report import boot, latest_runs, run_mean, task_macro  # noqa: E402
 
 SEEDS = range(5)
+TOP_COEFS = []
 JACCARD = 0.5
 B, SEED = 1000, 42
 
@@ -103,14 +104,32 @@ def style_features(spans):
     return pd.DataFrame(rows).fillna(0.0)
 
 
-def style_probe(main, with_clean_b):
+GROUPS = {"all": None, "function_words": "fw_", "punctuation": "p_",
+          "casing_length": ("upper_char", "title_word", "caps_word", "starts_upper", "n_words", "n_chars",
+                            "mean_word_len", "n_sents", "mean_sent_words", "digit", "space")}
+
+
+def select(X, group):
+    g = GROUPS[group]
+    if g is None:
+        return X
+    cols = [c for c in X.columns if c.startswith(g)] if isinstance(g, str) else list(g)
+    return X[cols]
+
+
+def style_probe(main, with_clean_b, group="all"):
     def pick(split):
         d = main[(main["split"] == split) & (main["row_type"].isin(["injected", "clean_a"] + (["clean_b"] if with_clean_b else [])))]
         return d.reset_index(drop=True)
     tr, te = pick("train"), pick("test")
     clf = make_pipeline(StandardScaler(), LogisticRegression(max_iter=5000, class_weight="balanced", random_state=0))
-    clf.fit(style_features(tr["span_text"]), tr["label"].astype(int))
-    p = clf.predict_proba(style_features(te["span_text"]))[:, 1]
+    clf.fit(select(style_features(tr["span_text"]), group), tr["label"].astype(int))
+    p = clf.predict_proba(select(style_features(te["span_text"]), group))[:, 1]
+    if group == "all" and not with_clean_b:  # the ten largest standardized coefficients, for interpretation
+        lr = clf[-1]
+        cols = select(style_features(tr["span_text"].head(1)), group).columns
+        top = sorted(zip(cols, lr.coef_[0]), key=lambda x: -abs(x[1]))[:10]
+        TOP_COEFS.append([(c, float(w)) for c, w in top])
     return pd.DataFrame({"doc_id": te["doc_id"], "task": te["task_type"], "label": te["label"].astype(int),
                          "prob": p, "pred": (p >= 0.5).astype(int)})
 
@@ -135,6 +154,7 @@ def main():
     out = {"attack_strings": {}, "val": {}, "style_probe": {}}
     test_frames, nodup_frames, strings = [], [], []
     probes = {False: [], True: []}
+    groups = {g: [] for g in GROUPS if g != "all"}
     for k in SEEDS:
         main_, vid = load(k)
         inj = main_[main_["row_type"] == "injected"]
@@ -165,6 +185,8 @@ def main():
         strings.append(p[p["label"] == 1])
         for cb in (False, True):
             probes[cb].append(style_probe(main_, cb).assign(run=k))
+        for g in groups:
+            groups[g].append(style_probe(main_, False, g).assign(run=k))
     test, nodup = pd.concat(test_frames, ignore_index=True), pd.concat(nodup_frames, ignore_index=True)
     out["deberta_test_f1"] = {
         "all": {"task_macro": boot(test, run_mean(task_macro(macro_f1))), "pooled": boot(test, run_mean(macro_f1))},
@@ -198,6 +220,10 @@ def main():
             "f1_macro_task_macro": boot(d, run_mean(task_macro(macro_f1))),
             "per_task_f1": {t: boot(d[d["task"] == t].reset_index(drop=True), run_mean(macro_f1), None)
                             for t in ("code", "email", "table")}}
+    out["style_probe"]["clean_a_only_by_feature_group"] = {
+        g: {"f1_macro_pooled": boot(d, run_mean(macro_f1)), "auroc_pooled": boot(d, run_mean(auroc))}
+        for g, d in ((g, pd.concat(f, ignore_index=True)) for g, f in groups.items())}
+    out["style_probe"]["clean_a_only_top_coefficients_by_seed"] = TOP_COEFS
     run.save_metrics(out, headline=("style_probe_clean_a_only_f1", out["style_probe"]["clean_a_only"]["f1_macro_pooled"]["point"]))
     run.finish()
 
