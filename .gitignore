@@ -29,3 +29,7 @@ data/agent_v2/split_seed_*/*.csv
 
 # Model checkpoints (tracked exceptions such as checkpoints/tfidf_lr_model.pkl stay tracked)
 checkpoints/
+# Generated pair records on the cluster (TRAIN-side, A32): shards, self-check decisions, exported ICT pair files
+data/pairs/train_gen/
+data/pairs/val_gen/
+data/pairs/ict_s0/
