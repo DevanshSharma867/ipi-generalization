@@ -184,6 +184,15 @@ def hf_generator(g: dict, device: str = "cuda"):
     return generate_fn, load, peak
 
 
+def gpu_names(device: str):
+    """Every visible GPU's name on CUDA (the fp16 TRAIN generator spans both Kaggle T4s), else the device string."""
+    import torch
+    if device != "cuda" or not torch.cuda.is_available():
+        return device
+    names = [torch.cuda.get_device_name(i) for i in range(torch.cuda.device_count())]
+    return names[0] if len(names) == 1 else names
+
+
 def cmd_generate(a):
     cfg = pg.load_config(a.config)
     pg.check_generator(a.mode, a.generator, cfg)
@@ -215,7 +224,7 @@ def cmd_generate(a):
             "prompt_sha256": g["prompt_sha256"], "config_sha256": cfg["sha256"], "docs": str(a.docs),
             "docs_sha256": manifest["sha256"], "mode": a.mode, "batch_size": a.batch_size, "n_quads": len(recs),
             "generated_this_call": len(todo), "generate_s": round(time.time() - t0, 2),
-            "peak_vram_gb": peak(), "gpu": __import__("torch").cuda.get_device_name(0),
+            "peak_vram_gb": peak(), "gpu": gpu_names(a.device),
             "length_tokenizer": tok_path}
     (out_dir / f"{out_path.stem}.meta.json").write_text(json.dumps(meta, indent=1) + "\n")
     print(json.dumps(meta))
