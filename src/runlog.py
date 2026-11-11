@@ -158,10 +158,28 @@ def _versions() -> Dict[str, Optional[str]]:
     return out
 
 
+def _gpu_name() -> Dict:
+    """GPU type and driver from nvidia-smi (independent of torch, so every run records its hardware); the first
+    visible device is the one a single-GPU run uses."""
+    try:
+        out = subprocess.run(["nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader"],
+                             capture_output=True, text=True, timeout=30).stdout.strip().splitlines()
+    except (OSError, subprocess.SubprocessError):
+        return {"gpu_name": None, "gpu_driver": None}
+    vis = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if vis and vis.split(",")[0].isdigit() and int(vis.split(",")[0]) < len(out):
+        out = [out[int(vis.split(",")[0])]] + out
+    name, _, driver = (out[0].partition(", ") if out else (None, None, None))
+    return {"gpu_name": name or None, "gpu_driver": driver or None}
+
+
 def _hardware() -> Dict:
     hw = {"platform": platform.platform(), "machine": platform.machine(), "node": platform.node(),
           "cpu_count": os.cpu_count(), "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
-          "gpu_uuid": os.environ.get("GPU_UUID")}  # exported by jobs/lib/gpu_guard.sh
+          "gpu_uuid": os.environ.get("GPU_UUID"),  # exported by jobs/lib/gpu_guard.sh
+          "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
+          "kaggle": os.environ.get("KAGGLE_KERNEL_RUN_TYPE")}  # set inside Kaggle notebooks
+    hw.update(_gpu_name())
     if "torch" in sys.modules:  # only report devices when the run already uses torch
         torch = sys.modules["torch"]
         hw["cuda"] = torch.cuda.is_available()

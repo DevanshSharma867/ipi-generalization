@@ -104,16 +104,22 @@ def load_hf(g: dict, device: str = "cuda"):
     import transformers
     from transformers import AutoTokenizer, BitsAndBytesConfig
     cuda = device == "cuda"
+    # fp16 (pairs_gen_v6, Kaggle T4s): whole cards, the model spread over every visible GPU; otherwise the
+    # cluster's half-card cap (A24) on one GPU
+    multi = cuda and g["precision"] == "fp16"
     if cuda:
-        torch.cuda.set_per_process_memory_fraction(0.5)
-        torch.cuda.reset_peak_memory_stats()
+        for i in range(torch.cuda.device_count() if multi else 1):
+            if not multi:
+                torch.cuda.set_per_process_memory_fraction(0.5)
+            torch.cuda.reset_peak_memory_stats(i)
     t0 = time.time()
     tok = AutoTokenizer.from_pretrained(g["repo"], revision=g["revision"])
     tok.padding_side = "left"
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
-    kw = dict(revision=g["revision"], device_map={"": 0 if cuda else "cpu"},  # MPS: load on CPU, then move
-              dtype={"nf4": torch.bfloat16, "bf16": torch.bfloat16, "fp32": torch.float32}[g["precision"]])
+    kw = dict(revision=g["revision"], device_map="auto" if multi else {"": 0 if cuda else "cpu"},  # MPS: CPU, then move
+              dtype={"nf4": torch.bfloat16, "bf16": torch.bfloat16, "fp16": torch.float16,
+                     "fp32": torch.float32}[g["precision"]])
     if g["precision"] == "nf4":
         kw["quantization_config"] = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
                                                        bnb_4bit_compute_dtype=torch.bfloat16)
@@ -122,7 +128,9 @@ def load_hf(g: dict, device: str = "cuda"):
     model = cls.from_pretrained(g["repo"], **kw).eval()
     if not cuda:
         model = model.to(device)
-    peak = (lambda: round(torch.cuda.max_memory_allocated() / 1e9, 2)) if cuda else (lambda: None)
+    ndev = torch.cuda.device_count() if multi else 1
+    peak = (lambda: round(sum(torch.cuda.max_memory_allocated(i) for i in range(ndev)) / 1e9, 2)) if cuda \
+        else (lambda: None)
     load = {"load_s": round(time.time() - t0, 2), "vram_after_load_gb": peak()}
     return tok, model, load, peak
 

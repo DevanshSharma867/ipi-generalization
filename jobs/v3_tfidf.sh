@@ -22,20 +22,5 @@
 
 source jobs/lib/job_env.sh
 [ -e nltk_data ] || ln -s "$HOME/nlp/nltk_data" nltk_data   # stopwords + wordnet for preprocess_for_tfidf (gitignored)
-done_run() {
-  python - "$@" <<'PY'
-import json, sys
-from pathlib import Path
-exp, seed = sys.argv[1:]
-for d in Path("results", "v3", exp).glob(f"*_seed{seed}"):
-    if (d / "finished.json").exists() and not json.loads((d / "config.json").read_text())["git_dirty"]:
-        sys.exit(0)
-sys.exit(1)
-PY
-}
-for K in 0 1 2 3 4; do
-  done_run tfidf_v3_train $K || python scripts/tfidf_v3.py --split_seed $K
-  done_run score_tfidf_v3 $K || python scripts/score_baselines.py --model tfidf \
-      --ckpt checkpoints/v3/tfidf_lr/split_seed_$K.pkl --exp score_tfidf_v3 --seed $K --model_name tfidf_v3_s$K \
-      --v3_split_dir data/v3/split_seed_$K --probes data/v3_probes/split_seed_$K.csv
-done
+source jobs/lib/v3_tfidf_steps.sh
+v3_tfidf_steps
