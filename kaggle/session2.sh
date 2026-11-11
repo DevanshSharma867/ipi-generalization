@@ -6,12 +6,14 @@
 # skipped). A time budget (BUDGET_S, default 10 h 40 min) stops new work in time to package; the state is zipped
 # after every step. To continue in a new session, attach the previous version's output (session2_results.zip) as
 # input: it is restored first. Needs the HF_TOKEN secret (Mistral is gated). Run from the repo root after setup.
-set -uo pipefail
-ASSETS=${ASSETS:-/kaggle/input/ipi-assets}
-export PAIRS_V3_TOKENIZER=$ASSETS/tokenizers_hpc/deberta_v2_ckpt HF_HOME=/tmp/hf_home
+# Outputs are zipped on exit, also after a failure; exits non-zero unless every step finished.
+set -euo pipefail
+: "${ASSETS:?set ASSETS}"
+export PAIRS_V3_TOKENIZER=$ASSETS/tokenizers_hpc/deberta_v2_ckpt HF_HOME=${HF_HOME:-/tmp/hf_home}
+trap 'bash kaggle/package.sh session2 || echo "packaging failed"' EXIT
 CFG=configs/pairs_gen_v6.yaml
 START=$(date +%s); BUDGET=${BUDGET_S:-38400}
-PREV=$(ls /kaggle/input/*/session2_results.zip 2>/dev/null | head -1)
+PREV=$(find "${KAGGLE_ROOT:-/kaggle}/input" -name session2_results.zip 2>/dev/null | head -1)
 [ -n "$PREV" ] && { echo "restoring $PREV"; unzip -qo "$PREV"; }
 CODE_SHA=$(cat $CFG src/pairs_gen.py scripts/gen_pairs.py | sha256sum | cut -c1-12)
 VAL=data/pairs/val_gen/v6_s0_$CODE_SHA; TRAIN=data/pairs/train_gen/v6_s0_$CODE_SHA
@@ -21,7 +23,9 @@ step() {  # step NAME CMD...: run with the time left, log, then package
   local left=$(( BUDGET - $(date +%s) + START ))
   [ $left -gt 900 ] || { echo "$(date -Is) budget exhausted before $name"; return 99; }
   echo "$(date -Is) $name start (${left}s left)"
-  timeout $left "$@" >> "logs/kaggle_s2_$name.log" 2>&1; local rc=$?
+  local rc=0
+  timeout $left "$@" >> "logs/kaggle_s2_$name.log" 2>&1 || rc=$?
+  [ $rc = 0 ] || tail -20 "logs/kaggle_s2_$name.log"
   echo "$(date -Is) $name exit $rc"
   bash kaggle/package.sh session2 > /dev/null
   return $rc
@@ -34,5 +38,4 @@ for k in 0 1 2 3 4 5 6 7; do step train_gen_$k bash kaggle/gen_shard.sh train da
 [ $ok = 1 ] && { step export bash -c "python scripts/export_pairs.py --in_root data/pairs/train_gen \
   --out data/pairs/ict_s0/train_pairs.jsonl && python scripts/export_pairs.py --in_root data/pairs/val_gen \
   --out data/pairs/ict_s0/val_pairs.jsonl" || ok=0; }
-bash kaggle/package.sh session2
-[ $ok = 1 ] && echo "SESSION 2 COMPLETE" || echo "SESSION 2 INCOMPLETE: rerun with this output attached"
+if [ $ok = 1 ]; then echo "SESSION 2 COMPLETE"; else echo "SESSION 2 INCOMPLETE: rerun with this output attached"; exit 1; fi
