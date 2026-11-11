@@ -74,7 +74,7 @@ def main():
     commit = sh("git", "rev-parse", "HEAD")
     if sh("git", "status", "--porcelain", "--untracked-files=no"):
         raise SystemExit("commit first: tracked files are modified")
-    if commit not in sh("git", "branch", "-r", "--contains", commit):
+    if not sh("git", "branch", "-r", "--contains", commit):
         raise SystemExit(f"push {commit} first")
     assets, nbs = a.dest / "ipi-assets", a.dest / "notebooks"
     assets.mkdir(parents=True, exist_ok=True)
