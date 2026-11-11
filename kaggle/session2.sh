@@ -21,12 +21,12 @@ mkdir -p "$VAL" "$TRAIN" logs
 step() {  # step NAME CMD...: run with the time left, log, then package
   local name=$1; shift
   local left=$(( BUDGET - $(date +%s) + START ))
-  [ $left -gt 900 ] || { echo "$(date -Is) budget exhausted before $name"; return 99; }
-  echo "$(date -Is) $name start (${left}s left)"
+  [ $left -gt 900 ] || { echo "$(date "+%Y-%m-%dT%H:%M:%S") budget exhausted before $name"; return 99; }
+  echo "$(date "+%Y-%m-%dT%H:%M:%S") $name start (${left}s left)"
   local rc=0
   timeout $left "$@" >> "logs/kaggle_s2_$name.log" 2>&1 || rc=$?
   [ $rc = 0 ] || tail -20 "logs/kaggle_s2_$name.log"
-  echo "$(date -Is) $name exit $rc"
+  echo "$(date "+%Y-%m-%dT%H:%M:%S") $name exit $rc"
   bash kaggle/package.sh session2 > /dev/null
   return $rc
 }

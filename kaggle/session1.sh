@@ -13,9 +13,9 @@ queue() {  # queue GPU TASK...: one task after another on one GPU; a failed task
   local gpu=$1; shift
   ( export CUDA_VISIBLE_DEVICES=$gpu
     for t in "$@"; do
-      echo "$(date -Is) gpu $gpu task $t start"
-      if ( set -e; v3_baseline_task "$t" ) >> "logs/kaggle_s1_task$t.log" 2>&1; then echo "$(date -Is) task $t done"
-      else echo "$(date -Is) task $t FAILED"; echo "$t" >> logs/kaggle_s1_failed; tail -20 "logs/kaggle_s1_task$t.log"; fi
+      echo "$(date "+%Y-%m-%dT%H:%M:%S") gpu $gpu task $t start"
+      if ( set -e; v3_baseline_task "$t" ) >> "logs/kaggle_s1_task$t.log" 2>&1; then echo "$(date "+%Y-%m-%dT%H:%M:%S") task $t done"
+      else echo "$(date "+%Y-%m-%dT%H:%M:%S") task $t FAILED"; echo "$t" >> logs/kaggle_s1_failed; tail -20 "logs/kaggle_s1_task$t.log"; fi
     done )
 }
 TASKS0=${TASKS0:-"0 1 2 7"}; TASKS1=${TASKS1:-"3 4 5 6 8 9"}
