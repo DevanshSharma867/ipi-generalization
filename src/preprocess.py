@@ -17,6 +17,7 @@ import string
 import pandas as pd
 import numpy as np
 from typing import List, Tuple, Optional, Dict
+import os
 from pathlib import Path
 
 import nltk
@@ -24,8 +25,11 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-# Configure local workspace nltk_data path
-local_nltk_data = (Path(__file__).parent.parent / "nltk_data").resolve()
+# NLTK data: $NLTK_DATA if set (Kaggle: the dataset copy, docs/deviations.md 2026-11-11), else the repo's
+# nltk_data/; either is used exclusively, so the cluster's archives are the ones read. Only without both is
+# anything downloaded.
+local_nltk_data = Path(os.environ["NLTK_DATA"]) if os.environ.get("NLTK_DATA") else \
+    (Path(__file__).parent.parent / "nltk_data").resolve()
 if local_nltk_data.exists():
     nltk.data.path = [str(local_nltk_data)]
 else:

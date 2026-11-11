@@ -30,8 +30,16 @@ bad = [f for f, h in want.items() if not os.path.exists(os.path.join(root, f))
        or hashlib.sha256(open(os.path.join(root, f), "rb").read()).hexdigest() != h]
 sys.exit(f"NLTK archives missing or different from the cluster's: {bad}") if bad else print("nltk archives match the cluster")
 PY
-python -c "import nltk; [nltk.data.find(r) for r in ('corpora/wordnet', 'corpora/stopwords', 'tokenizers/punkt_tab')]; \
-from nltk.stem import WordNetLemmatizer; assert WordNetLemmatizer().lemmatize('running', 'v') == 'run'; print('nltk ok')"
+python - <<'PY'
+import sys
+sys.path.insert(0, "src")
+import nltk
+import preprocess  # sets nltk.data.path to $NLTK_DATA only
+assert nltk.data.path == [__import__("os").environ["NLTK_DATA"]], nltk.data.path
+out = preprocess.preprocess_for_tfidf(["The emails were running and attached files"])
+assert out == ["email running attached file"], out  # the cluster's output for this sentence
+print("nltk ok:", out)
+PY
 mkdir -p data/transfer
 [ -d data/transfer/sets_adliu ] || cp -r "$ASSETS/sets_adliu" data/transfer/sets_adliu
 if [ "$MODE" = session1 ]; then
