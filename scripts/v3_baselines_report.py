@@ -3,6 +3,8 @@ v3_baselines_report.py
 ======================
 Metrics of the V3 baselines (paper_plan §3, §7 step 4, A10, A16, A30, A31) from the scoring runs:
 
+  Runs are the ones listed in configs/canonical_runs.json (never the latest on disk).
+
   ours        results/v3/score_{tfidf,deberta}_v3/<run>/predictions.csv.gz (one run per split seed)
   detectors   results/v3/v3_detscores_*/<run>/scores/<det>__v3all.json, mapped back to V3 rows with
               scripts/v3_detector_sets.py's v3_map.csv (rebuilt here from data/v3; its data_version must match
@@ -49,6 +51,7 @@ from runlog import add_run_args, start_run  # noqa: E402
 
 TASKS = ("code", "email", "table")
 B, SEED = 1000, 42
+CANONICAL = ROOT / "configs" / "canonical_runs.json"
 OURS = {"tfidf_v3": "score_tfidf_v3", "deberta_v3": "score_deberta_v3"}
 H1_SETS = {"admatched": "adclean", "adshift": "adclean", "tbeval": None}
 CONTRASTS = [("p3_end_minus_start", "p3_attack_moved", "end", "start"),
@@ -58,18 +61,23 @@ CONTRASTS = [("p3_end_minus_start", "p3_attack_moved", "end", "start"),
 
 # ─── loading ──────────────────────────────────────────────────────────────────
 
-def latest_runs(version, exp):
-    """{seed: run_dir} of the latest finished, clean run per seed."""
+def canonical_runs(version, exp):
+    """{seed: run_dir} from configs/canonical_runs.json (the accepted run per seed; Kaggle runs for the moved jobs),
+    never the latest run on disk. Each listed run must exist, be finished and clean, and carry its seed."""
+    listed = json.loads(CANONICAL.read_text()).get(f"{version}/{exp}", {})
     out = {}
-    for d in sorted((ROOT / "results" / version / exp).glob("*_seed*")):
+    for seed, rel in listed.items():
+        d = ROOT / rel
         cfg = json.loads((d / "config.json").read_text())
-        if (d / "finished.json").exists() and not cfg["git_dirty"]:
-            out[int(d.name.rsplit("_seed", 1)[1])] = d
+        if not (d / "finished.json").exists() or cfg["git_dirty"] or not d.name.endswith(f"_seed{seed}") \
+                or d.parent.name != exp or d.parent.parent.name != version:
+            raise ValueError(f"{CANONICAL.name}: {rel} is not a finished clean {version}/{exp} run of seed {seed}")
+        out[int(seed)] = d
     return out
 
 
 def our_predictions(exp):
-    runs = latest_runs("v3", exp)
+    runs = canonical_runs("v3", exp)
     frames = [pd.read_csv(d / "predictions.csv.gz", keep_default_na=False).assign(run=k) for k, d in runs.items()]
     return (pd.concat(frames, ignore_index=True) if frames else None), runs
 
@@ -292,9 +300,8 @@ def main():
         sources[name] = {str(k): str(d.relative_to(ROOT)) for k, d in runs.items()}
     det_version = None
     if not a.no_detectors:
-        det_runs = [max((ROOT / "results/v3" / e).glob("*_seed0")) for e in
-                    ("v3_detscores_liuenv", "v3_detscores_wolf", "v3_detscores_judges_bf16")
-                    if (ROOT / "results/v3" / e).exists()]
+        det_runs = [d for e in ("v3_detscores_liuenv", "v3_detscores_wolf", "v3_detscores_judges_bf16")
+                    for d in canonical_runs("v3", e).values()]
         dets, dsrc, det_version = detector_predictions(det_runs)
         models.update(dets)
         sources.update(dsrc)
@@ -323,7 +330,7 @@ def main():
 
 
 def our_predictions_version(version, exp):
-    runs = latest_runs(version, exp)
+    runs = canonical_runs(version, exp)
     frames = [pd.read_csv(d / "predictions.csv.gz", keep_default_na=False).assign(run=k) for k, d in runs.items()]
     return pd.concat(frames, ignore_index=True), runs
 

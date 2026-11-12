@@ -2,7 +2,7 @@
 v3_sanity.py
 ============
 Sanity checks on the V3 DeBERTa result (read-only: no data or model is changed). Inputs: data/v3/split_seed_<k>
-(v3-frozen) and the latest clean results/v3/score_deberta_v3/<run> per split seed.
+(v3-frozen) and the canonical results/v3/score_deberta_v3/<run> per split seed (configs/canonical_runs.json).
 
 1. Attack strings: unique injected span texts per split (train, val, val_id, test) and split seed; exact and
    near-duplicate overlap of test (and val) attack strings with the train attack strings (char 5-gram Jaccard
@@ -40,7 +40,7 @@ sys.path[:0] = [str(ROOT / "src"), str(ROOT / "scripts")]
 import preprocess  # noqa: E402,F401  (sets the NLTK data path: the repo copy, as for TF-IDF)
 from metrics import _resample_indices  # noqa: E402
 from runlog import add_run_args, start_run  # noqa: E402
-from v3_baselines_report import boot, latest_runs, run_mean, task_macro  # noqa: E402
+from v3_baselines_report import boot, canonical_runs, run_mean, task_macro  # noqa: E402
 
 SEEDS = range(5)
 TOP_COEFS = []
@@ -130,7 +130,7 @@ def style_probe(main, with_clean_b, group="all"):
         cols = select(style_features(tr["span_text"].head(1)), group).columns
         top = sorted(zip(cols, lr.coef_[0]), key=lambda x: -abs(x[1]))[:10]
         TOP_COEFS.append([(c, float(w)) for c, w in top])
-    return pd.DataFrame({"doc_id": te["doc_id"], "task": te["task_type"], "label": te["label"].astype(int),
+    return pd.DataFrame({"id": te["id"], "doc_id": te["doc_id"], "task": te["task_type"], "label": te["label"].astype(int),
                          "prob": p, "pred": (p >= 0.5).astype(int)})
 
 
@@ -141,8 +141,8 @@ def auroc(d):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a = add_run_args(ap).parse_args()
-    runs = latest_runs("v3", "score_deberta_v3")
-    trains = latest_runs("v3", "deberta_v3_train")
+    runs = canonical_runs("v3", "score_deberta_v3")
+    trains = canonical_runs("v3", "deberta_v3_train")
     if sorted(runs) != list(SEEDS) or sorted(trains) != list(SEEDS):
         sys.exit(f"need V3 DeBERTa scoring and training runs for split seeds 0-4: {sorted(runs)} {sorted(trains)}")
     files = [d / "predictions.csv.gz" for d in runs.values()] + [d / "metrics.json" for d in trains.values()]

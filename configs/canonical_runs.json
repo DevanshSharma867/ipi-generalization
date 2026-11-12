@@ -1,0 +1,28 @@
+{
+ "_comment": "The one run per seed that reports and analyses read (scripts/v3_baselines_report.py canonical_runs). Moved jobs: the Kaggle runs (docs/deviations.md 2026-11-11). Entries are added by hand when a run is accepted, never chosen as the latest per seed; an experiment that is not listed has no canonical run.",
+ "v3/deberta_v3_train": {
+  "0": "results/v3/deberta_v3_train/20261111-172858_seed0",
+  "1": "results/v3/deberta_v3_train/20261111-175345_seed1",
+  "2": "results/v3/deberta_v3_train/20261111-181836_seed2",
+  "3": "results/v3/deberta_v3_train/20261111-172858_seed3",
+  "4": "results/v3/deberta_v3_train/20261111-175057_seed4"
+ },
+ "v3/score_deberta_v3": {
+  "0": "results/v3/score_deberta_v3/20261111-174708_seed0",
+  "1": "results/v3/score_deberta_v3/20261111-181158_seed1",
+  "2": "results/v3/score_deberta_v3/20261111-183653_seed2",
+  "3": "results/v3/score_deberta_v3/20261111-174506_seed3",
+  "4": "results/v3/score_deberta_v3/20261111-180717_seed4"
+ },
+ "h1/deberta_v2_train": {
+  "0": "results/h1/deberta_v2_train/20261111-181308_seed0",
+  "1": "results/h1/deberta_v2_train/20261111-182612_seed1"
+ },
+ "h1/score_deberta_v2": {
+  "0": "results/h1/score_deberta_v2/20261111-182237_seed0",
+  "1": "results/h1/score_deberta_v2/20261111-183544_seed1",
+  "42": "results/h1/score_deberta_v2/20261111-184323_seed42",
+  "123": "results/h1/score_deberta_v2/20261111-183915_seed123",
+  "999": "results/h1/score_deberta_v2/20261111-184319_seed999"
+ }
+}
