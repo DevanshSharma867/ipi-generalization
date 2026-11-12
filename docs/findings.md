@@ -27,7 +27,7 @@ not `docs/findings.md`. Deviations from the pre-registered protocol: `docs/devia
   freezing before results cannot be shown; V2 judge results carry this caveat. V3 will use a new judge prompt committed
   separately before any scoring.
 
-Entries by status: full 20, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
+Entries by status: full 21, recomputed-match 4, linked-dirty 0, legacy-unverified 1, contaminated 1, pending 0.
 
 ## F001. V2 TF-IDF+LR headline table (Phase 2 Table III)
 
@@ -833,3 +833,25 @@ near-duplicates: `\VThreeSanityValNearDups` = 0 (largest Jaccard `\VThreeSanityV
 with train: `\VThreeSanityValSharedCategories` = 0. V3 DeBERTa val macro-F1 per split seed (the selection metric) ranges
 `\VThreeSanityValFOneMin` = 0.9799–`\VThreeSanityValFOneMax` = 1.0000, so it is not 1.0 on every seed, and the high values do not come
 from val attacks repeating train attacks. (Test shares one category with train, Language Translation, known risk R5.)
+
+## F027. V3 DeBERTa accuracy where the span style probe is confidently wrong vs right
+
+> **F027** · status **`full`** · 2026-11-12 · data `v3 (tag v3-frozen)` · eval `V3 test, injected and clean-A rows (the rows the F026 clean-A-only style probe scores)` · threshold: default 0.5 (DeBERTa); probe confidence bins fixed before the run (probability >= 0.9 on one class) · seeds: split_seeds 0-4 (canonical V3 DeBERTa run each, configs/canonical_runs.json); style probe LR random_state 0; bootstrap B=1000 seed 42  
+> script `scripts/v3_style_vs_deberta.py` @ `6c6496f` · source: `results/v3/v3_style_vs_deberta/20261112-123714_seed42` · bootstrap clusters: doc_id (stratified by task); per split seed, and pooled as the run-mean over split seeds
+
+Diagnostic for F026 §3 (nothing tuned or selected on these rows). The F026 style probe (all style features, clean-A
+only, trained per split seed on train spans) bins each test row: **confidently wrong** (≥ 0.9 on the wrong class;
+`\VThreeStyleDebNConfidentWrong` = 267 rows over five seeds, `\VThreeStyleDebNConfidentWrongAttack` = 248 of them attacks), **confidently right**
+(`\VThreeStyleDebNConfidentRight` = 1385 rows, `\VThreeStyleDebNConfidentRightAttack` = 831 attacks), **unconfident** (`\VThreeStyleDebNUnconfident` = 343 rows).
+V3 DeBERTa accuracy at 0.5, run-mean over split seeds:
+confidently wrong `\VThreeStyleDebConfidentWrong` = 0.820 [0.77, 0.87], confidently right `\VThreeStyleDebConfidentRight` = 0.988 [0.98, 0.99],
+unconfident `\VThreeStyleDebUnconfident` = 0.908 [0.88, 0.94]; right − wrong `\VThreeStyleDebRightMinusWrong` = 0.168 [0.12, 0.22] (per seed
+`\VThreeStyleDebGapSeedMin` = 0.147–`\VThreeStyleDebGapSeedMax` = 0.204, every per-seed CI above 0, lowest bound `\VThreeStyleDebGapSeedCiLoMin` = 0.049).
+- Within attacks: wrong `\VThreeStyleDebConfidentWrongAttack` = 0.815 [0.76, 0.87], right `\VThreeStyleDebConfidentRightAttack` = 0.981 [0.97, 0.99], gap
+  `\VThreeStyleDebRightMinusWrongAttack` = 0.166 [0.12, 0.22]. Within benign items: wrong `\VThreeStyleDebConfidentWrongBenign` = 0.860 [0.69, 1.00], right
+  `\VThreeStyleDebConfidentRightBenign` = 1.000 [1.00, 1.00], gap `\VThreeStyleDebRightMinusWrongBenign` = 0.140 [0.00, 0.31] (few rows; wide CI).
+- Reading: DeBERTa errs more often on spans whose style looks like the other class, mostly benign-styled attacks.
+  This is consistent with DeBERTa using the same style cues, but it does not show it: benign-styled attacks are
+  also the short answer-shaping requests that F026 §2 found hardest, so style and content are confounded on these
+  rows. The V3.1 style gate (design pending approval) is the controlled test.
+

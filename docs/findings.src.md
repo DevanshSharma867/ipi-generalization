@@ -1271,3 +1271,44 @@ near-duplicates: {{VThreeSanityValNearDups}} (largest Jaccard {{VThreeSanityValM
 with train: {{VThreeSanityValSharedCategories}}. V3 DeBERTa val macro-F1 per split seed (the selection metric) ranges
 {{VThreeSanityValFOneMin}}–{{VThreeSanityValFOneMax}}, so it is not 1.0 on every seed, and the high values do not come
 from val attacks repeating train attacks. (Test shares one category with train, Language Translation, known risk R5.)
+
+## F027. V3 DeBERTa accuracy where the span style probe is confidently wrong vs right
+
+```finding
+id: F027
+status: full
+script: scripts/v3_style_vs_deberta.py
+commit: 6c6496f
+seeds: split_seeds 0-4 (canonical V3 DeBERTa run each, configs/canonical_runs.json); style probe LR random_state 0; bootstrap B=1000 seed 42
+data_version: v3 (tag v3-frozen)
+eval_set: V3 test, injected and clean-A rows (the rows the F026 clean-A-only style probe scores)
+threshold_protocol: default 0.5 (DeBERTa); probe confidence bins fixed before the run (probability >= 0.9 on one class)
+date: '2026-11-12'
+source: results/v3/v3_style_vs_deberta/20261112-123714_seed42
+upstream:
+- results/v3/score_deberta_v3/20261111-174708_seed0
+- results/v3/score_deberta_v3/20261111-181158_seed1
+- results/v3/score_deberta_v3/20261111-183653_seed2
+- results/v3/score_deberta_v3/20261111-174506_seed3
+- results/v3/score_deberta_v3/20261111-180717_seed4
+cluster: doc_id (stratified by task); per split seed, and pooled as the run-mean over split seeds
+macros:
+- VThreeStyleDeb*
+```
+
+Diagnostic for F026 §3 (nothing tuned or selected on these rows). The F026 style probe (all style features, clean-A
+only, trained per split seed on train spans) bins each test row: **confidently wrong** (≥ 0.9 on the wrong class;
+{{VThreeStyleDebNConfidentWrong}} rows over five seeds, {{VThreeStyleDebNConfidentWrongAttack}} of them attacks), **confidently right**
+({{VThreeStyleDebNConfidentRight}} rows, {{VThreeStyleDebNConfidentRightAttack}} attacks), **unconfident** ({{VThreeStyleDebNUnconfident}} rows).
+V3 DeBERTa accuracy at 0.5, run-mean over split seeds:
+confidently wrong {{VThreeStyleDebConfidentWrong|ci}}, confidently right {{VThreeStyleDebConfidentRight|ci}},
+unconfident {{VThreeStyleDebUnconfident|ci}}; right − wrong {{VThreeStyleDebRightMinusWrong|ci}} (per seed
+{{VThreeStyleDebGapSeedMin}}–{{VThreeStyleDebGapSeedMax}}, every per-seed CI above 0, lowest bound {{VThreeStyleDebGapSeedCiLoMin}}).
+- Within attacks: wrong {{VThreeStyleDebConfidentWrongAttack|ci}}, right {{VThreeStyleDebConfidentRightAttack|ci}}, gap
+  {{VThreeStyleDebRightMinusWrongAttack|ci}}. Within benign items: wrong {{VThreeStyleDebConfidentWrongBenign|ci}}, right
+  {{VThreeStyleDebConfidentRightBenign|ci}}, gap {{VThreeStyleDebRightMinusWrongBenign|ci}} (few rows; wide CI).
+- Reading: DeBERTa errs more often on spans whose style looks like the other class, mostly benign-styled attacks.
+  This is consistent with DeBERTa using the same style cues, but it does not show it: benign-styled attacks are
+  also the short answer-shaping requests that F026 §2 found hardest, so style and content are confounded on these
+  rows. The V3.1 style gate (design pending approval) is the controlled test.
+

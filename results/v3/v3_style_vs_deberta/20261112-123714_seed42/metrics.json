@@ -1,0 +1,607 @@
+{
+  "conf": 0.9,
+  "per_seed": {
+    "0": {
+      "acc_confident_wrong": {
+        "point": 0.7884615384615384,
+        "ci": [
+          0.679199634814364,
+          0.8936170212765957
+        ]
+      },
+      "acc_confident_wrong_label0": {
+        "point": 0.5,
+        "ci": [
+          0.0,
+          1.0
+        ]
+      },
+      "acc_confident_wrong_label1": {
+        "point": 0.8,
+        "ci": [
+          0.6938775510204082,
+          0.9024742026266417
+        ]
+      },
+      "acc_confident_right": {
+        "point": 0.9929078014184397,
+        "ci": [
+          0.9822048169801728,
+          1.0
+        ]
+      },
+      "acc_confident_right_label0": {
+        "point": 1.0,
+        "ci": [
+          1.0,
+          1.0
+        ]
+      },
+      "acc_confident_right_label1": {
+        "point": 0.9880239520958084,
+        "ci": [
+          0.9700553711853401,
+          1.0
+        ]
+      },
+      "acc_unconfident": {
+        "point": 0.9846153846153847,
+        "ci": [
+          0.9491306253652835,
+          1.0
+        ]
+      },
+      "acc_unconfident_label0": {
+        "point": 1.0,
+        "ci": [
+          1.0,
+          1.0
+        ]
+      },
+      "acc_unconfident_label1": {
+        "point": 0.9795918367346939,
+        "ci": [
+          0.9318181818181818,
+          1.0
+        ]
+      },
+      "acc_right_minus_wrong": {
+        "point": 0.20444626295690127,
+        "ci": [
+          0.10059921004069423,
+          0.313754517286596
+        ]
+      },
+      "acc_right_minus_wrong_label0": {
+        "point": 0.5,
+        "ci": [
+          0.0,
+          1.0
+        ]
+      },
+      "acc_right_minus_wrong_label1": {
+        "point": 0.18802395209580836,
+        "ci": [
+          0.08214065006952781,
+          0.2941183659092379
+        ]
+      }
+    },
+    "1": {
+      "acc_confident_wrong": {
+        "point": 0.8148148148148148,
+        "ci": [
+          0.7048876745598057,
+          0.9074074074074074
+        ]
+      },
+      "acc_confident_wrong_label0": {
+        "point": 0.8,
+        "ci": [
+          0.3697916666666667,
+          1.0
+        ]
+      },
+      "acc_confident_wrong_label1": {
+        "point": 0.8163265306122449,
+        "ci": [
+          0.7021276595744681,
+          0.9111111111111111
+        ]
+      },
+      "acc_confident_right": {
+        "point": 0.9890510948905109,
+        "ci": [
+          0.975609756097561,
+          1.0
+        ]
+      },
+      "acc_confident_right_label0": {
+        "point": 1.0,
+        "ci": [
+          1.0,
+          1.0
+        ]
+      },
+      "acc_confident_right_label1": {
+        "point": 0.9815950920245399,
+        "ci": [
+          0.9597266943399154,
+          1.0
+        ]
+      },
+      "acc_unconfident": {
+        "point": 0.9264705882352942,
+        "ci": [
+          0.8571428571428571,
+          0.9850746268656716
+        ]
+      },
+      "acc_unconfident_label0": {
+        "point": 0.875,
+        "ci": [
+          0.6998076923076922,
+          1.0
+        ]
+      },
+      "acc_unconfident_label1": {
+        "point": 0.9423076923076923,
+        "ci": [
+          0.8666666666666667,
+          1.0
+        ]
+      },
+      "acc_right_minus_wrong": {
+        "point": 0.17423628007569614,
+        "ci": [
+          0.08226137706855793,
+          0.28514424847562236
+        ]
+      },
+      "acc_right_minus_wrong_label0": {
+        "point": 0.19999999999999996,
+        "ci": [
+          0.0,
+          0.6302083333333334
+        ]
+      },
+      "acc_right_minus_wrong_label1": {
+        "point": 0.16526856141229496,
+        "ci": [
+          0.06598409152855608,
+          0.2850455197356113
+        ]
+      }
+    },
+    "2": {
+      "acc_confident_wrong": {
+        "point": 0.8490566037735849,
+        "ci": [
+          0.75,
+          0.9365079365079365
+        ]
+      },
+      "acc_confident_wrong_label0": {
+        "point": 1.0,
+        "ci": [
+          1.0,
+          1.0
+        ]
+      },
+      "acc_confident_wrong_label1": {
+        "point": 0.8297872340425532,
+        "ci": [
+          0.7169811320754716,
+          0.9286330049261083
+        ]
+      },
+      "acc_confident_right": {
+        "point": 0.9963636363636363,
+        "ci": [
+          0.988804922019118,
+          1.0
+        ]
+      },
+      "acc_confident_right_label0": {
+        "point": 1.0,
+        "ci": [
+          1.0,
+          1.0
+        ]
+      },
+      "acc_confident_right_label1": {
+        "point": 0.9939393939393939,
+        "ci": [
+          0.9810096347657825,
+          1.0
+        ]
+      },
+      "acc_unconfident": {
+        "point": 0.8307692307692308,
+        "ci": [
+          0.746268656716418,
+          0.9152542372881356
+        ]
+      },
+      "acc_unconfident_label0": {
+        "point": 0.8666666666666667,
+        "ci": [
+          0.6666666666666666,
+          1.0
+        ]
+      },
+      "acc_unconfident_label1": {
+        "point": 0.82,
+        "ci": [
+          0.7111111111111111,
+          0.92
+        ]
+      },
+      "acc_right_minus_wrong": {
+        "point": 0.1473070325900514,
+        "ci": [
+          0.060737812272617056,
+          0.25
+        ]
+      },
+      "acc_right_minus_wrong_label0": {
+        "point": 0.0,
+        "ci": [
+          0.0,
+          0.0
+        ]
+      },
+      "acc_right_minus_wrong_label1": {
+        "point": 0.16415215989684073,
+        "ci": [
+          0.06379654255319148,
+          0.2778218694885361
+        ]
+      }
+    },
+    "3": {
+      "acc_confident_wrong": {
+        "point": 0.8148148148148148,
+        "ci": [
+          0.6999528301886792,
+          0.9074494949494949
+        ]
+      },
+      "acc_confident_wrong_label0": {
+        "point": 1.0,
+        "ci": [
+          1.0,
+          1.0
+        ]
+      },
+      "acc_confident_wrong_label1": {
+        "point": 0.803921568627451,
+        "ci": [
+          0.6862472766884532,
+          0.9047619047619048
+        ]
+      },
+      "acc_confident_right": {
+        "point": 0.9787985865724381,
+        "ci": [
+          0.9613966896038684,
+          0.992908427937749
+        ]
+      },
+      "acc_confident_right_label0": {
+        "point": 1.0,
+        "ci": [
+          1.0,
+          1.0
+        ]
+      },
+      "acc_confident_right_label1": {
+        "point": 0.9651162790697675,
+        "ci": [
+          0.9371185410334347,
+          0.9883040935672515
+        ]
+      },
+      "acc_unconfident": {
+        "point": 0.8701298701298701,
+        "ci": [
+          0.7974591818015043,
+          0.9403204565408253
+        ]
+      },
+      "acc_unconfident_label0": {
+        "point": 0.9166666666666666,
+        "ci": [
+          0.7931034482758621,
+          1.0
+        ]
+      },
+      "acc_unconfident_label1": {
+        "point": 0.8490566037735849,
+        "ci": [
+          0.7543859649122807,
+          0.9355010295126972
+        ]
+      },
+      "acc_right_minus_wrong": {
+        "point": 0.16398377175762335,
+        "ci": [
+          0.06693885160328109,
+          0.2807588457257369
+        ]
+      },
+      "acc_right_minus_wrong_label0": {
+        "point": 0.0,
+        "ci": [
+          0.0,
+          0.0
+        ]
+      },
+      "acc_right_minus_wrong_label1": {
+        "point": 0.16119471044231648,
+        "ci": [
+          0.05281697456986899,
+          0.27933018444321633
+        ]
+      }
+    },
+    "4": {
+      "acc_confident_wrong": {
+        "point": 0.8333333333333334,
+        "ci": [
+          0.7169670515347789,
+          0.9355010295126972
+        ]
+      },
+      "acc_confident_wrong_label0": {
+        "point": 1.0,
+        "ci": [
+          1.0,
+          1.0
+        ]
+      },
+      "acc_confident_wrong_label1": {
+        "point": 0.8235294117647058,
+        "ci": [
+          0.6976744186046512,
+          0.932231638418079
+        ]
+      },
+      "acc_confident_right": {
+        "point": 0.985239852398524,
+        "ci": [
+          0.9692077464788732,
+          0.996415770609319
+        ]
+      },
+      "acc_confident_right_label0": {
+        "point": 1.0,
+        "ci": [
+          1.0,
+          1.0
+        ]
+      },
+      "acc_confident_right_label1": {
+        "point": 0.975609756097561,
+        "ci": [
+          0.9486842105263158,
+          0.9940476190476191
+        ]
+      },
+      "acc_unconfident": {
+        "point": 0.9264705882352942,
+        "ci": [
+          0.859375,
+          0.9838709677419355
+        ]
+      },
+      "acc_unconfident_label0": {
+        "point": 0.8571428571428571,
+        "ci": [
+          0.6875,
+          1.0
+        ]
+      },
+      "acc_unconfident_label1": {
+        "point": 0.9574468085106383,
+        "ci": [
+          0.8913043478260869,
+          1.0
+        ]
+      },
+      "acc_right_minus_wrong": {
+        "point": 0.1519065190651906,
+        "ci": [
+          0.04899597951046517,
+          0.2686037909094813
+        ]
+      },
+      "acc_right_minus_wrong_label0": {
+        "point": 0.0,
+        "ci": [
+          0.0,
+          0.0
+        ]
+      },
+      "acc_right_minus_wrong_label1": {
+        "point": 0.1520803443328551,
+        "ci": [
+          0.04222288598983894,
+          0.28152865129280225
+        ]
+      }
+    }
+  },
+  "counts": {
+    "0": {
+      "confident_wrong": {
+        "rows": 52,
+        "label1": 50
+      },
+      "confident_right": {
+        "rows": 282,
+        "label1": 167
+      },
+      "unconfident": {
+        "rows": 65,
+        "label1": 49
+      }
+    },
+    "1": {
+      "confident_wrong": {
+        "rows": 54,
+        "label1": 49
+      },
+      "confident_right": {
+        "rows": 274,
+        "label1": 163
+      },
+      "unconfident": {
+        "rows": 68,
+        "label1": 52
+      }
+    },
+    "2": {
+      "confident_wrong": {
+        "rows": 53,
+        "label1": 47
+      },
+      "confident_right": {
+        "rows": 275,
+        "label1": 165
+      },
+      "unconfident": {
+        "rows": 65,
+        "label1": 50
+      }
+    },
+    "3": {
+      "confident_wrong": {
+        "rows": 54,
+        "label1": 51
+      },
+      "confident_right": {
+        "rows": 283,
+        "label1": 172
+      },
+      "unconfident": {
+        "rows": 77,
+        "label1": 53
+      }
+    },
+    "4": {
+      "confident_wrong": {
+        "rows": 54,
+        "label1": 51
+      },
+      "confident_right": {
+        "rows": 271,
+        "label1": 164
+      },
+      "unconfident": {
+        "rows": 68,
+        "label1": 47
+      }
+    },
+    "all": {
+      "confident_wrong": {
+        "rows": 267,
+        "label1": 248
+      },
+      "confident_right": {
+        "rows": 1385,
+        "label1": 831
+      },
+      "unconfident": {
+        "rows": 343,
+        "label1": 251
+      }
+    }
+  },
+  "pooled_run_mean": {
+    "acc_confident_wrong": {
+      "point": 0.8200962210396172,
+      "ci": [
+        0.7706060843763961,
+        0.8684479179749143
+      ]
+    },
+    "acc_confident_wrong_label0": {
+      "point": 0.86,
+      "ci": [
+        0.6857142857142857,
+        1.0
+      ]
+    },
+    "acc_confident_wrong_label1": {
+      "point": 0.814712949009391,
+      "ci": [
+        0.7644297626395793,
+        0.8652601498114436
+      ]
+    },
+    "acc_confident_right": {
+      "point": 0.9884721943287099,
+      "ci": [
+        0.9829804857646534,
+        0.9936447205147712
+      ]
+    },
+    "acc_confident_right_label0": {
+      "point": 1.0,
+      "ci": [
+        1.0,
+        1.0
+      ]
+    },
+    "acc_confident_right_label1": {
+      "point": 0.9808568946454141,
+      "ci": [
+        0.971805171418047,
+        0.9894284547693702
+      ]
+    },
+    "acc_unconfident": {
+      "point": 0.9076911323970147,
+      "ci": [
+        0.8768316461755908,
+        0.9364898307681429
+      ]
+    },
+    "acc_unconfident_label0": {
+      "point": 0.903095238095238,
+      "ci": [
+        0.8400220955698621,
+        0.9603191856452725
+      ]
+    },
+    "acc_unconfident_label1": {
+      "point": 0.9096805882653218,
+      "ci": [
+        0.8751655492389175,
+        0.9431816262415185
+      ]
+    },
+    "acc_right_minus_wrong": {
+      "point": 0.1683759732890927,
+      "ci": [
+        0.120302134816646,
+        0.21846055452234459
+      ]
+    },
+    "acc_right_minus_wrong_label0": {
+      "point": 0.14,
+      "ci": [
+        0.0,
+        0.3142857142857143
+      ]
+    },
+    "acc_right_minus_wrong_label1": {
+      "point": 0.1661439456360232,
+      "ci": [
+        0.11572394557562474,
+        0.218270941121957
+      ]
+    }
+  }
+}

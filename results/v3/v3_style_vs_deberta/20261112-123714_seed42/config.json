@@ -1,0 +1,61 @@
+{
+  "run_id": "20261112-123714_seed42",
+  "version": "v3",
+  "exp": "v3_style_vs_deberta",
+  "seed": 42,
+  "args": {
+    "conf": 0.9,
+    "B": 1000,
+    "seed": 42,
+    "probe": "v3_sanity.style_probe(all, clean_a_only)",
+    "deberta_runs": {
+      "0": "results/v3/score_deberta_v3/20261111-174708_seed0",
+      "1": "results/v3/score_deberta_v3/20261111-181158_seed1",
+      "2": "results/v3/score_deberta_v3/20261111-183653_seed2",
+      "3": "results/v3/score_deberta_v3/20261111-174506_seed3",
+      "4": "results/v3/score_deberta_v3/20261111-180717_seed4"
+    }
+  },
+  "git_commit": "6c6496f349b6886ff91d8cfc3467b1ea9082de40",
+  "git_dirty": false,
+  "allow_dirty": false,
+  "data_version": "v3",
+  "data_files_sha256": {
+    "/Users/devanshsharma/projects/nlp/results/v3/score_deberta_v3/20261111-174708_seed0/predictions.csv.gz": "d358f0339325a09c7e159ec6a6df70cf501149eb9c6a69d17be870880731edb1",
+    "/Users/devanshsharma/projects/nlp/results/v3/score_deberta_v3/20261111-181158_seed1/predictions.csv.gz": "af88fcce026c5275fac8cf6212de82d48e1a7f317d0cee08683fea15ddb43c1b",
+    "/Users/devanshsharma/projects/nlp/results/v3/score_deberta_v3/20261111-183653_seed2/predictions.csv.gz": "5dc245986949c4e7117f908138a0099c0d862a78be45b226d045bcfcb2e437c8",
+    "/Users/devanshsharma/projects/nlp/results/v3/score_deberta_v3/20261111-174506_seed3/predictions.csv.gz": "28fd0d9287d02e94fb746957ba8ea191079eb62b56e1eac81787a8a8aaac0836",
+    "/Users/devanshsharma/projects/nlp/results/v3/score_deberta_v3/20261111-180717_seed4/predictions.csv.gz": "9571fff241a31fedf45f358a76115db32438b0739d8e9e3a38d1f475630cafb1"
+  },
+  "library_versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3",
+    "datasets": "5.1.0",
+    "nltk": "3.10.3",
+    "sentencepiece": "0.2.2",
+    "accelerate": "1.15.0",
+    "captum": "0.9.0"
+  },
+  "hardware": {
+    "platform": "macOS-15.6-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "node": "Devanshs-MacBook-Air.local",
+    "cpu_count": 10,
+    "slurm_job_id": null,
+    "gpu_uuid": null,
+    "cuda_visible_devices": null,
+    "kaggle": null,
+    "gpu_name": null,
+    "gpu_driver": null
+  },
+  "argv": [
+    "scripts/v3_style_vs_deberta.py"
+  ],
+  "started": "2026-11-12T12:37:14"
+}

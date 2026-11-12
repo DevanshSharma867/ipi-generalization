@@ -1,0 +1,5 @@
+[12:37:14] seed 0: {'confident_wrong': {'rows': 52, 'label1': 50}, 'confident_right': {'rows': 282, 'label1': 167}, 'unconfident': {'rows': 65, 'label1': 49}}
+[12:37:14] seed 1: {'confident_wrong': {'rows': 54, 'label1': 49}, 'confident_right': {'rows': 274, 'label1': 163}, 'unconfident': {'rows': 68, 'label1': 52}}
+[12:37:14] seed 2: {'confident_wrong': {'rows': 53, 'label1': 47}, 'confident_right': {'rows': 275, 'label1': 165}, 'unconfident': {'rows': 65, 'label1': 50}}
+[12:37:15] seed 3: {'confident_wrong': {'rows': 54, 'label1': 51}, 'confident_right': {'rows': 283, 'label1': 172}, 'unconfident': {'rows': 77, 'label1': 53}}
+[12:37:15] seed 4: {'confident_wrong': {'rows': 54, 'label1': 51}, 'confident_right': {'rows': 271, 'label1': 164}, 'unconfident': {'rows': 68, 'label1': 47}}

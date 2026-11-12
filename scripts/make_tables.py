@@ -350,6 +350,28 @@ def macros_v3_sanity():
         cell(v["auroc_pooled"], *p, "style", "group", g, "auroc", digits=4)
 
 
+def macros_v3_style_vs_deberta():
+    """V3 DeBERTa test accuracy where the F026 style probe is confidently wrong vs right
+    (scripts/v3_style_vs_deberta.py), run-mean over split seeds, overall and by label."""
+    m, src = latest_metrics("v3_style_vs_deberta", version="v3")
+    if m is None:
+        return
+    p = ("v3", "style", "deb")
+    r = m["pooled_run_mean"]
+    for b in ("confident_wrong", "confident_right", "unconfident", "right_minus_wrong"):
+        for suffix, lab in (("", ""), ("_label1", "attack"), ("_label0", "benign")):
+            cell(r[f"acc_{b}{suffix}"], *p, b, lab, digits=3)
+    per = [v["acc_right_minus_wrong"]["point"] for v in m["per_seed"].values()]
+    num(min(per), *p, "gap", "seed", "min", digits=3)
+    num(max(per), *p, "gap", "seed", "max", digits=3)
+    lo = [v["acc_right_minus_wrong"]["ci"][0] for v in m["per_seed"].values()]
+    num(min(lo), *p, "gap", "seed", "ci", "lo", "min", digits=3)
+    c = m["counts"]["all"]
+    for b in ("confident_wrong", "confident_right", "unconfident"):
+        put(macro_name(*p, "n", b), str(c[b]["rows"]))
+        put(macro_name(*p, "n", b, "attack"), str(c[b]["label1"]))
+
+
 TRANSFER_SETS = {"agentdojo_benign_outputs.jsonl": "ad_clean", "agentdojo_pairs.jsonl": "ad_matched",
                  "agentdojo_pairs_shift.jsonl": "ad_shift", "taubench_eval.jsonl": "tb_matched",
                  "bipia_pairs.jsonl": "bipia", "corpus.jsonl": "general"}
@@ -914,6 +936,7 @@ def main():
     table_v3_gates("prefreeze")
     table_v3_gates("frozen")
     macros_v3_sanity()
+    macros_v3_style_vs_deberta()
     macros_transfer_gate1()
     macros_transfer_gate2()
     table_transfer_detectors()
