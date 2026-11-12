@@ -3,7 +3,7 @@
 # after a failure; exits non-zero on failure.
 set -euo pipefail
 : "${ASSETS:?set ASSETS}"
-export NLTK_DATA=$ASSETS/nltk_data
+export NLTK_DATA=/tmp/nltk_data  # extracted by kaggle/setup.sh
 trap 'bash kaggle/package.sh tfidf || echo "packaging failed"' EXIT
 mkdir -p logs
 source jobs/lib/v3_tfidf_steps.sh

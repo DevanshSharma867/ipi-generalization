@@ -4,7 +4,7 @@
 # on exit, also after a failure. Exits non-zero if any task failed. Re-running skips finished runs.
 set -euo pipefail
 : "${ASSETS:?set ASSETS}"
-export NLTK_DATA=$ASSETS/nltk_data BASE=/tmp/hf/deberta-v3-base AGENT_DIR=data/transfer/sets_adliu
+export NLTK_DATA=/tmp/nltk_data BASE=/tmp/hf/deberta-v3-base AGENT_DIR=data/transfer/sets_adliu
 export V2_CKPT_ROOT=$ASSETS/v2_ckpts
 trap 'bash kaggle/package.sh session1 || echo "packaging failed"' EXIT
 source jobs/lib/v3_baseline_task.sh

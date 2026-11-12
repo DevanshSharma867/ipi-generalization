@@ -8,7 +8,9 @@ Builds the folder to upload to Kaggle for the moved jobs (docs/deviations.md 202
       COMMIT.txt
       sets_adliu/                 agent transfer sets + calibration pool (cluster: data/transfer/sets_adliu)
       v2_ckpts/deberta_s{42,123,999}/  existing V2 DeBERTa checkpoints (cluster: ~/nlp/checkpoints), no CSVs
-      nltk_data/                  stopwords, wordnet, punkt (TF-IDF preprocessing)
+      nltk_data.tar               the repo's nltk_data/ (stopwords, wordnet, punkt; TF-IDF preprocessing) as one
+                                  deterministic tar: Kaggle extracts every .zip on upload, so the NLTK zips cannot
+                                  be shipped as files; kaggle/setup.sh checks its sha256 and extracts it to /tmp
       tokenizers_hpc/deberta_v2_ckpt/  the V3 tokenizer (pair length rules; sha256-checked by src/pairs_gen.py)
   <dest>/notebooks/{session1,tfidf,session2}.ipynb   with COMMIT filled in
 
@@ -18,9 +20,12 @@ The cluster files are fetched with rsync (ssh host bits-hpc). COMMIT must be pus
 """
 
 import argparse
+import hashlib
 import json
+import re
 import shutil
 import subprocess
+import tarfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -39,6 +44,26 @@ NOTEBOOKS = {
 }
 
 
+NLTK_TAR_SHA256 = re.search(r'^NLTK_TAR_SHA256=([0-9a-f]{64})$', (ROOT / "kaggle/setup.sh").read_text(), re.M).group(1)
+
+
+def nltk_tar(src: Path, out: Path) -> str:
+    """Deterministic tar of src (sorted entries, zero mtime/owner, fixed modes) -> sha256 hex."""
+    with tarfile.open(out, "w", format=tarfile.USTAR_FORMAT) as tf:
+        for f in sorted([src, *src.rglob("*")]):
+            if f.name == ".DS_Store":
+                continue
+            ti = tf.gettarinfo(str(f), arcname=str(Path("nltk_data") / f.relative_to(src)))
+            ti.mtime, ti.uid, ti.gid, ti.uname, ti.gname = 0, 0, 0, "", ""
+            ti.mode = 0o755 if f.is_dir() else 0o644
+            if f.is_file():
+                with open(f, "rb") as fh:
+                    tf.addfile(ti, fh)
+            else:
+                tf.addfile(ti)
+    return hashlib.sha256(out.read_bytes()).hexdigest()
+
+
 def cell(kind, src):
     c = {"cell_type": kind, "metadata": {}, "source": src}
     if kind == "code":
@@ -55,7 +80,7 @@ bundles = sorted(glob.glob(f"{{KR}}/input/**/repo.bundle", recursive=True))
 assert len(bundles) == 1, f"expected one repo.bundle under {{KR}}/input, found {{bundles}}"
 ASSETS = os.path.dirname(bundles[0])
 os.environ["ASSETS"] = ASSETS
-os.environ["NLTK_DATA"] = os.path.join(ASSETS, "nltk_data")
+os.environ["NLTK_DATA"] = "/tmp/nltk_data"  # extracted from nltk_data.tar by kaggle/setup.sh
 {secret}
 def run(cmd, cwd=None):
     \"\"\"Run a command, stream its output into the notebook, raise CalledProcessError on a non-zero exit.\"\"\"
@@ -117,10 +142,16 @@ def main():
     nbs.mkdir(parents=True, exist_ok=True)
     sh("git", "bundle", "create", str(assets / "repo.bundle"), "HEAD", "main")
     (assets / "COMMIT.txt").write_text(commit + "\n")
-    for src, dst in ((ROOT / "nltk_data", assets / "nltk_data"),
-                     (ROOT / "hf_cache/tokenizers_hpc/deberta_v2_ckpt", assets / "tokenizers_hpc/deberta_v2_ckpt")):
-        shutil.rmtree(dst, ignore_errors=True)
-        shutil.copytree(src, dst)  # whole tree: wordnet exists only as wordnet.zip (as on the cluster)
+    shutil.rmtree(assets / "nltk_data", ignore_errors=True)  # older builds shipped the tree (Kaggle extracts its zips)
+    digest = nltk_tar(ROOT / "nltk_data", assets / "nltk_data.tar")
+    if digest != NLTK_TAR_SHA256:
+        raise SystemExit(f"nltk_data.tar sha256 {digest} != {NLTK_TAR_SHA256} pinned in kaggle/setup.sh")
+    dst = assets / "tokenizers_hpc/deberta_v2_ckpt"
+    shutil.rmtree(dst, ignore_errors=True)
+    shutil.copytree(ROOT / "hf_cache/tokenizers_hpc/deberta_v2_ckpt", dst)
+    zips = sorted(str(z.relative_to(assets)) for z in assets.rglob("*.zip"))
+    if zips:  # Kaggle would extract them on upload
+        raise SystemExit(f"zip files in the upload folder: {zips}")
     if not a.skip_cluster:
         sh("rsync", "-a", "bits-hpc:nlp_harness/data/transfer/sets_adliu/", str(assets / "sets_adliu") + "/")
         for s in (42, 123, 999):

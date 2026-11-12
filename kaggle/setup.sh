@@ -4,15 +4,21 @@
 # Needs ASSETS (the dataset folder holding repo.bundle; set by notebook cell 1).
 # - pins the libraries that affect scores to the cluster env's versions (transformers, tokenizers, scikit-learn,
 #   pandas, ...); torch stays Kaggle's own build (constraint file: pip may not replace it); versions -> logs/
-# - NLTK data is read from $ASSETS/nltk_data via NLTK_DATA (nothing is put in the repo); the archives must match
-#   the cluster's copies (sha256 below)
+# - NLTK data ships as $ASSETS/nltk_data.tar (Kaggle extracts every .zip on upload, so the NLTK zips cannot be
+#   uploaded as files); its sha256 is checked, it is extracted to /tmp/nltk_data and read from there via NLTK_DATA
+#   (nothing is put in the repo); the archives inside must match the cluster's copies (sha256 below)
 # - copies the agent transfer sets to data/transfer/sets_adliu (gitignored)
 # - session1: downloads microsoft/deberta-v3-base at snapshot 8ccc9b6 (the V2 runs' base) to /tmp/hf
 # - fails unless the git tree is clean (src/runlog.py refuses dirty trees)
 set -euo pipefail
 MODE=${1:?usage: setup.sh session1|tfidf|session2}
 : "${ASSETS:?set ASSETS to the dataset folder holding repo.bundle}"
-export NLTK_DATA=$ASSETS/nltk_data
+# sha256 of the deterministic tar written by kaggle/make_upload.py (which refuses to build a different one)
+NLTK_TAR_SHA256=6714cf30ddf49c08eceac0df83e5ce60deefbc78541ea1bb424d7a5042c2157b
+[ -f "$ASSETS/nltk_data.tar" ] || { echo "missing $ASSETS/nltk_data.tar"; exit 1; }
+echo "$NLTK_TAR_SHA256  $ASSETS/nltk_data.tar" | sha256sum -c - || { echo "nltk_data.tar sha256 mismatch"; exit 1; }
+rm -rf /tmp/nltk_data && tar -xf "$ASSETS/nltk_data.tar" -C /tmp
+export NLTK_DATA=/tmp/nltk_data
 mkdir -p logs
 python -c "import torch; print('torch==' + torch.__version__.split('+')[0])" > /tmp/torch_constraint.txt
 pip install -q -c /tmp/torch_constraint.txt transformers==5.20.1 tokenizers==0.23.3 scikit-learn==1.9.1 \
